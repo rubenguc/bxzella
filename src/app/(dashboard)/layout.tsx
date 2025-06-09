@@ -1,5 +1,6 @@
 import AppHeader from "@/components/layout/app-header";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Main } from "@/components/layout/main";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +25,7 @@ export default function RootLayout({
         )}
       >
         <AppHeader fixed />
-        {children}
+        <Main>{children}</Main>
       </div>
     </SidebarProvider>
   );
