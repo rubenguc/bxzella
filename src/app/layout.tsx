@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/context/theme-context";
 
 export const metadata: Metadata = {
   title: "bxzella",
@@ -16,12 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>
-          <Providers>{children}</Providers>
-          <Toaster position="top-center" richColors />
-        </body>
-      </html>
+      <ThemeProvider>
+        <html lang="en">
+          <body>
+            <Providers>{children}</Providers>
+            <Toaster position="top-center" richColors />
+          </body>
+        </html>
+      </ThemeProvider>
     </ClerkProvider>
   );
 }

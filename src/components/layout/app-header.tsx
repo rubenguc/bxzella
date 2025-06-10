@@ -4,8 +4,8 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeSwitch } from "../theme-switcher";
-import { ThemeProvider } from "@/context/theme-context";
 import { ProfileDropdown } from "../profile-dropdown";
+import { AccountsSelector } from "@/features/accounts/components/AccountsSelector";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;
@@ -33,24 +33,22 @@ export default function AppHeader({
   }, []);
 
   return (
-    <ThemeProvider>
-      <header
-        className={cn(
-          "bg-background flex h-16 items-center gap-3 p-4 sm:gap-4 border-b",
-          fixed && "header-fixed peer/header fixed z-50 w-[inherit] rounded-md",
-          offset > 10 && fixed ? "shadow-sm" : "shadow-none",
-          className,
-        )}
-        {...props}
-      >
-        <SidebarTrigger variant="outline" className="scale-125 sm:scale-100" />
-        <div className="ml-auto flex items-center space-x-4">
-          {/* <Search /> */}
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </header>
-    </ThemeProvider>
+    <header
+      className={cn(
+        "bg-background flex h-16 items-center gap-3 p-4 sm:gap-4 border-b",
+        fixed && "header-fixed peer/header fixed z-50 w-[inherit] rounded-md",
+        offset > 10 && fixed ? "shadow-sm" : "shadow-none",
+        className,
+      )}
+      {...props}
+    >
+      <SidebarTrigger variant="outline" className="scale-125 sm:scale-100" />
+      <div className="ml-auto flex items-center space-x-4">
+        <AccountsSelector />
+        <ThemeSwitch />
+        <ProfileDropdown />
+      </div>
+    </header>
   );
 }
 

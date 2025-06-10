@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { useUserConfigStore } from "@/store/user-config-store";
+import { createContext, useContext, useEffect } from "react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -25,21 +26,19 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, _setTheme] = useState<Theme>();
-  // () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+  const { theme, setTheme } = useUserConfigStore();
 
   useEffect(() => {
     const root = window.document.documentElement;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = (theme: Theme) => {
-      root.classList.remove("light", "dark"); // Remove existing theme classes
+      root.classList.remove("light", "dark");
       const systemTheme = mediaQuery.matches ? "dark" : "light";
       const effectiveTheme = theme === "system" ? systemTheme : theme;
-      root.classList.add(effectiveTheme); // Add the new theme class
+      root.classList.add(effectiveTheme);
     };
 
     const handleChange = () => {
@@ -54,11 +53,6 @@ export function ThemeProvider({
 
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme]);
-
-  const setTheme = (theme: Theme) => {
-    localStorage.setItem(storageKey, theme);
-    _setTheme(theme);
-  };
 
   const value = {
     theme,
