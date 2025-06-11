@@ -39,7 +39,7 @@ export async function makeRequest({
   path: string;
   apiKey: string;
   secretKey: string;
-  payload?: Record<string, string>;
+  payload?: Record<string, any>;
 }): Promise<any> {
   const timestamp = new Date().getTime();
   const sign = CryptoJS.enc.Hex.stringify(
