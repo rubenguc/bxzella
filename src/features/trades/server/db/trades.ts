@@ -124,14 +124,20 @@ export async function getTradesByAccountUID(
   uid: string,
   page: number,
   limit: number,
-): Promise<ITradeModel[]> {
+) {
   const skip = (page - 1) * limit;
-  const trades = await TradeModel.find({
+  const total = await TradeModel.countDocuments({ accountUID: uid });
+  const totalPages = Math.ceil(total / limit);
+
+  const data = await TradeModel.find({
     accountUID: uid,
   })
     .sort({ updateTime: -1 })
     .skip(skip)
     .limit(limit);
 
-  return trades;
+  return {
+    data,
+    totalPages,
+  };
 }
