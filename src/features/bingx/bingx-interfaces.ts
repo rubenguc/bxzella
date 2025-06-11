@@ -21,24 +21,25 @@ export type UserBalanceResponse = GenericResponse<
 
 export type UserPositionResponse = GenericResponse<
   {
-    symbol: string;
-    positionId: string;
-    positionSide: string;
-    isolated: boolean;
+    currency: string;
     positionAmt: string;
     availableAmt: string;
-    unrealizedProfit: string;
-    realisedProfit: string;
+    positionSide: string;
+    isolated: boolean;
+    avgPrice: string;
     initialMargin: string;
     margin: string;
-    avgPrice: string;
-    liquidationPrice: number;
     leverage: number;
-    positionValue: string;
-    markPrice: string;
-    riskRate: string;
-    maxMarginReduction: string;
+    unrealizedProfit: string;
+    realisedProfit: string;
+    liquidationPrice: number;
     pnlRatio: string;
+    maxMarginReduction: string;
+    riskRate: string;
+    markPrice: string;
+    positionValue: string;
+    onlyOnePosition: boolean;
+    createTime: number;
     updateTime: number;
   }[]
 >;

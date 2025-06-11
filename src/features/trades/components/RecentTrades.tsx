@@ -1,13 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,16 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTablePagination } from "@/components/data-table-pagination";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { ITradeModel } from "../model/trades";
-import { Badge } from "@/components/ui/badge";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
+import { checkLongPosition, checkWin } from "@/utils/trade-utils";
+import { useQuery } from "@tanstack/react-query";
 import {
-  checkLongPosition,
-  checkWin,
-  transformSymbol,
-} from "@/utils/trade-utils";
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 async function fetchTrades(uid: string, page: number, limit?: number) {
   const res = await fetch(
@@ -34,10 +28,10 @@ async function fetchTrades(uid: string, page: number, limit?: number) {
   return res.json();
 }
 
-export function TradesTable({}) {
+export function RecentTrades() {
   const { selectedAccountId } = useUserConfigStore();
 
-  const columns: ColumnDef<ITradeModel>[] = [
+  const columns: ColumnDef[] = [
     {
       header: "Open date",
       accessorKey: "openTime",
@@ -58,7 +52,7 @@ export function TradesTable({}) {
       header: "Symbol",
       accessorKey: "symbol",
       cell: ({ row }) => {
-        const symbol = transformSymbol(row.original.symbol);
+        const symbol = (row.getValue("symbol") as string).split("-")?.[0] || "";
         return <div className="font-medium">{symbol}</div>;
       },
       meta: {
@@ -93,35 +87,6 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Closed date",
-      accessorKey: "updateTime",
-      cell: ({ row }) => {
-        const updateTime = row.getValue("updateTime") as string;
-        return (
-          <div className="font-medium">
-            {transformTimeToLocalDate(updateTime)}
-          </div>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: "Avg Entry price",
-      accessorKey: "avgPrice",
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: "Avg Exit price",
-      accessorKey: "avgClosePrice",
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
       header: "Position PnL",
       accessorKey: "netProfit",
       cell: ({ row }) => {
@@ -137,53 +102,11 @@ export function TradesTable({}) {
         className: "text-center",
       },
     },
-    {
-      header: "Realised PnL",
-      accessorKey: "realisedProfit",
-      cell: ({ row }) => {
-        const netProfit = row.getValue("realisedProfit") as string;
-        const isWin = checkWin(netProfit);
-        return (
-          <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit}
-          </div>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: "Result",
-      cell: ({ row }) => {
-        const netProfit = row.getValue("netProfit") as string;
-        const isWin = checkWin(netProfit);
-        return (
-          <Badge variant={isWin ? "green-filled" : "red-filled"}>
-            {isWin ? "Win" : "Loss"}
-          </Badge>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
   ];
 
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "accounts",
-      selectedAccountId,
-      pagination.pageIndex,
-      pagination.pageSize,
-    ],
-    queryFn: () =>
-      fetchTrades(selectedAccountId, pagination.pageIndex, pagination.pageSize),
+    queryKey: ["accounts", selectedAccountId],
+    queryFn: () => fetchTrades(selectedAccountId, 0, 10),
     enabled: !!selectedAccountId,
   });
 
@@ -191,17 +114,14 @@ export function TradesTable({}) {
     data: data?.data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    pageCount: data?.totalPages,
-    state: {
-      pagination,
-    },
-    onPaginationChange: setPagination,
   });
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent trades</CardTitle>
+      </CardHeader>
+      <CardContent className="px-1">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -210,7 +130,7 @@ export function TradesTable({}) {
                   return (
                     <TableHead
                       key={header.id}
-                      colSpan={header.colSpan}
+                      aria-colspan={header.colSpan}
                       className={header.column.columnDef.meta?.className ?? ""}
                     >
                       {header.isPlaceholder
@@ -258,8 +178,7 @@ export function TradesTable({}) {
             )}
           </TableBody>
         </Table>
-      </div>
-      <DataTablePagination table={table} />
-    </div>
+      </CardContent>
+    </Card>
   );
 }

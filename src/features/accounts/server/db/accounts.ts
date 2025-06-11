@@ -27,6 +27,16 @@ export async function getAccountById(id: string) {
   });
 }
 
+export async function getAccountByIdWithCredentials(id: string) {
+  return await AccountModel.findById(id, {
+    _id: 1,
+    name: 1,
+    uid: 1,
+    apiKey: 1,
+    secretKey: 1,
+  });
+}
+
 export async function getAccountsByUserId(
   userId: string,
   page: number,

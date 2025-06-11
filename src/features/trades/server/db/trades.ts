@@ -141,3 +141,126 @@ export async function getTradesByAccountUID(
     totalPages,
   };
 }
+
+export function getTradesStatistic(
+  accountUID: string,
+  startDate: number,
+  endDate: number,
+) {
+  return TradeModel.aggregate([
+    {
+      $match: {
+        accountUID,
+        openTime: { $gte: startDate, $lte: endDate },
+      },
+    },
+
+    {
+      $addFields: {
+        numericNetProfit: {
+          $convert: {
+            input: "$netProfit",
+            to: "double",
+            onError: 0,
+          },
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: null,
+        totalTrades: { $sum: 1 },
+        totalWin: {
+          $sum: {
+            $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0],
+          },
+        },
+        totalLoss: {
+          $sum: {
+            $cond: [{ $lt: ["$numericNetProfit", 0] }, 1, 0],
+          },
+        },
+        sumWin: {
+          $sum: {
+            $cond: [{ $gt: ["$numericNetProfit", 0] }, "$numericNetProfit", 0],
+          },
+        },
+        sumLoss: {
+          $sum: {
+            $cond: [{ $lt: ["$numericNetProfit", 0] }, "$numericNetProfit", 0],
+          },
+        },
+        netPnL: { $sum: "$numericNetProfit" },
+      },
+    },
+
+    {
+      $project: {
+        profitFactor: {
+          value: {
+            $cond: [
+              { $eq: [{ $abs: "$sumLoss" }, 0] },
+              "$sumWin",
+              {
+                $divide: ["$sumWin", { $abs: "$sumLoss" }],
+              },
+            ],
+          },
+          sumWin: "$sumWin",
+          sumLoss: { $abs: "$sumLoss" },
+        },
+        tradeWin: {
+          value: {
+            $multiply: [
+              {
+                $divide: [
+                  "$totalWin",
+                  { $cond: [{ $eq: ["$totalTrades", 0] }, 1, "$totalTrades"] },
+                ],
+              },
+              100,
+            ],
+          },
+          totalWin: "$totalWin",
+          totalLoss: "$totalLoss",
+        },
+        avgWinLoss: {
+          value: {
+            $cond: [
+              {
+                $and: [{ $ne: ["$totalWin", 0] }, { $ne: ["$totalLoss", 0] }],
+              },
+              {
+                $divide: [
+                  { $divide: ["$sumWin", "$totalWin"] },
+                  {
+                    $divide: [{ $abs: "$sumLoss" }, "$totalLoss"],
+                  },
+                ],
+              },
+              0,
+            ],
+          },
+          avgWin: {
+            $cond: [
+              { $eq: ["$totalWin", 0] },
+              0,
+              { $divide: ["$sumWin", "$totalWin"] },
+            ],
+          },
+          avgLoss: {
+            $cond: [
+              { $eq: ["$totalLoss", 0] },
+              0,
+              {
+                $divide: [{ $abs: "$sumLoss" }, "$totalLoss"],
+              },
+            ],
+          },
+        },
+        netPnL: "$netPnL",
+      },
+    },
+  ]);
+}
