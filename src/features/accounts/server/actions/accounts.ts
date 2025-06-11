@@ -39,11 +39,11 @@ export async function createAccount(unsafeData: z.infer<typeof accountSchema>) {
 
   const { userId, validatedData, accountBalance } = processingResult;
   await createAccountDb({
+    ...validatedData,
     userId,
     uid: accountBalance!.shortUid,
     apiKey: encryptData(validatedData!.apiKey),
     secretKey: encryptData(validatedData!.secretKey),
-    ...validatedData,
   });
 }
 
@@ -57,11 +57,11 @@ export async function updateAccount(
 
   const { userId, validatedData, accountBalance } = processingResult;
   await updateAccountDb(id, {
+    ...validatedData,
     userId,
     uid: accountBalance!.shortUid,
     apiKey: encryptData(validatedData.apiKey),
     secretKey: encryptData(validatedData.secretKey),
-    ...validatedData,
   });
 }
 
