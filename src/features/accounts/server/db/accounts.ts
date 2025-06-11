@@ -19,27 +19,31 @@ export async function getAccountByUID(uid: string) {
   return await AccountModel.findOne({ uid });
 }
 
+export async function getAccountById(id: string) {
+  return await AccountModel.findById(id, {
+    _id: 1,
+    name: 1,
+    uid: 1,
+  });
+}
+
 export async function getAccountsByUserId(
   userId: string,
   page: number,
   limit: number,
 ) {
   const skip = page * limit;
-  const totalAccounts = await AccountModel.countDocuments({ userId });
-  const pageCount = Math.ceil(totalAccounts / limit);
+  const total = await AccountModel.countDocuments({ userId });
+  const totalPages = Math.ceil(total / limit);
 
-  const accounts = await AccountModel.find(
-    { userId },
-    { _id: 1, name: 1, uid: 1 },
-  )
+  const data = await AccountModel.find({ userId }, { _id: 1, name: 1, uid: 1 })
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
 
   return {
-    accounts,
-    pageCount,
-    totalAccounts,
+    data,
+    totalPages,
   };
 }
