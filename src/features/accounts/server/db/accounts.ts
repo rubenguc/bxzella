@@ -15,6 +15,10 @@ export async function deleteAccountDb(id: string) {
   return await AccountModel.findByIdAndDelete(id);
 }
 
+export async function getAccountByUID(uid: string) {
+  return await AccountModel.findOne({ uid });
+}
+
 export async function getAccountsByUserId(
   userId: string,
   page: number,
