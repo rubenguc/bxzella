@@ -11,6 +11,11 @@ export const sidebarItems = {
           icon: House,
         },
         {
+          title: "Trades",
+          url: "/trades",
+          icon: House,
+        },
+        {
           title: "Accounts",
           url: "/accounts",
           icon: House,
