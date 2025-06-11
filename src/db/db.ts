@@ -13,7 +13,6 @@ export default async function connectDB() {
     const opts = {
       bufferCommands: false,
     };
-    console.log(process.env.MONGODB_URI);
     cached.promise = mongoose.connect(process.env.MONGODB_URI, opts);
   }
 

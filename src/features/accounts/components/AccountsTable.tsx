@@ -66,11 +66,11 @@ export function AccountsTable({}) {
   });
 
   const table = useReactTable({
-    data: data?.accounts ?? [],
+    data: data?.data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
-    pageCount: data?.pageCount ?? -1,
+    pageCount: data?.totalPages,
     state: {
       pagination,
     },
