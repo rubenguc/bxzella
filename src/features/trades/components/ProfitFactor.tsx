@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+// import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface ProfitFactorProps {
   profitFactor: {
@@ -22,7 +22,7 @@ export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
             <p>{t("profit_factor")}</p>
             <p>{formatDecimal(profitFactor?.value || 0)}</p>
           </div>
-          {profitFactor?.value && (
+          {/* {profitFactor?.value && (
             <div className="w-40 h-40 scale-30 -translate-y-12">
               <ResponsiveContainer>
                 <PieChart>
@@ -47,7 +47,7 @@ export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>

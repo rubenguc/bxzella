@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+// import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface AvgWinLossProps {
   avgWinLoss: { value: number; avgWin: number; avgLoss: number };
@@ -18,7 +18,7 @@ export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
             <p>{t("avg_win_loss")}</p>
             <p>{formatDecimal(avgWinLoss?.value || 0)}</p>
           </div>
-          {avgWinLoss?.value && (
+          {/* {avgWinLoss?.value && (
             <div className="w-40 h-40 scale-40 -translate-y-10">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -47,7 +47,7 @@ export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+// import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface TradeWinPercentageProps {
   tradeWin: {
@@ -22,7 +22,7 @@ export function TradeWinPercentage({ tradeWin }: TradeWinPercentageProps) {
             <p>{t("trade_win_percentage")}</p>
             <p>{formatDecimal(tradeWin?.value || 0)}</p>
           </div>
-          {tradeWin?.value > 0 && (
+          {/* {tradeWin?.value > 0 && (
             <div className="w-40 h-40 scale-40 -translate-y-10">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -49,7 +49,7 @@ export function TradeWinPercentage({ tradeWin }: TradeWinPercentageProps) {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>
