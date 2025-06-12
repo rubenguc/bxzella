@@ -1,0 +1,73 @@
+{
+  "sidebar": {
+    "home": "Inicio",
+    "trades": "Operaciones",
+    "accounts": "Cuentas"
+  },
+  "header": {
+    "select_account": "Seleccionar Cuenta",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "log_out": "Cerrar Sesión"
+  },
+  "trade_info": {
+    "open_date": "Fecha de Apertura",
+    "position": "Posición",
+    "leverage": "Apalancamiento",
+    "symbol": "Símbolo",
+    "volume": "Volumen",
+    "closed_date": "Fecha de Cierre",
+    "avg_entry_price": "Precio Promedio de Entrada",
+    "avg_exit_price": "Precio Promedio de Salida",
+    "position_pnl": "Ganancia/Pérdida de Posición",
+    "realised_pnl": "Ganancia/Pérdida Realizada",
+    "result": "Resultado"
+  },
+  "common_messages": {
+    "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
+    "this_cannot_be_undone": "Esta acción no se puede deshacer.",
+    "warning": "Advertencia",
+    "be_carefull": "Por favor, ten cuidado, esta operación no se puede revertir.",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "continue": "Continuar"
+  },
+  "dashboard": {
+    "statistics": {
+      "net_pnl": "Ganancia Neta",
+      "profit_factor": "Factor de Ganancia",
+      "trade_win_percentage": "Porcentaje de Operaciones Ganadoras",
+      "avg_win_loss": "Promedio Ganancia/Pérdida por Operación"
+    },
+    "open_positions": {
+      "open_positions": "Posiciones Abiertas",
+      "open_positions_description": "posiciones actualmente abiertas, estas no dependen del rango de tiempo",
+      "no_open_positions": "No hay posiciones abiertas"
+    }
+  },
+  "trades": {
+    "header": "Operaciones",
+    "description": "Puedes ver todas tus operaciones cerradas",
+    "no_trades": "No hay operaciones"
+  },
+  "accounts": {
+    "header": "Cuentas",
+    "description": "Administra tus cuentas aquí",
+    "add_account": "Agregar Cuenta",
+    "name": "Nombre",
+    "uid": "UID",
+    "no_accounts": "No hay cuentas",
+    "add_new_account": "Agregar Nueva Cuenta",
+    "edit_account": "Editar Cuenta",
+    "api_key": "Clave API",
+    "secret_key": "Clave Secreta",
+    "save_changes": "Guardar Cambios",
+    "delete_account": "Eliminar Cuenta",
+    "account_saved_message": "Cuenta guardada exitosamente",
+    "account_updated_message": "Cuenta actualizada exitosamente",
+    "account_deleted_message": "Cuenta eliminada exitosamente",
+    "account_error_message": "Ocurrió un error al guardar la cuenta"
+  }
+}

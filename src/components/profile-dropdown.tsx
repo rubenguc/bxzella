@@ -10,9 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useClerk, useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+// import Link from "next/link";
 
 export function ProfileDropdown() {
+  const t = useTranslations("header");
+
   const { user } = useUser();
   const { signOut } = useClerk();
 
@@ -37,16 +40,17 @@ export function ProfileDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
+          {/* <DropdownMenuItem asChild>
             <Link href="/about">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/about">Settings</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut()}>
+          {t("log_out")}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

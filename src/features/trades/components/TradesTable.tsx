@@ -26,6 +26,7 @@ import {
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
+import { useTranslations } from "next-intl";
 
 async function fetchTrades(uid: string, page: number, limit?: number) {
   const res = await fetch(
@@ -34,12 +35,14 @@ async function fetchTrades(uid: string, page: number, limit?: number) {
   return res.json();
 }
 
-export function TradesTable({}) {
+export function TradesTable() {
   const { selectedAccountId } = useUserConfigStore();
+  const t = useTranslations("trades");
+  const tInfo = useTranslations("trade_info");
 
   const columns: ColumnDef<ITradeModel>[] = [
     {
-      header: "Open date",
+      header: tInfo("open_date"),
       accessorKey: "openTime",
       cell: ({ row }) => {
         const openTime = row.getValue("openTime") as string;
@@ -55,7 +58,7 @@ export function TradesTable({}) {
     },
 
     {
-      header: "Symbol",
+      header: tInfo("symbol"),
       accessorKey: "symbol",
       cell: ({ row }) => {
         const symbol = transformSymbol(row.original.symbol);
@@ -66,7 +69,7 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Position",
+      header: tInfo("position"),
       accessorKey: "positionSide",
       cell: ({ row }) => {
         const symbol = row.getValue("positionSide") as string;
@@ -82,7 +85,7 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Leverage",
+      header: tInfo("leverage"),
       accessorKey: "leverage",
       cell: ({ row }) => {
         const leverage = row.getValue("leverage") as number;
@@ -93,7 +96,7 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Closed date",
+      header: tInfo("closed_date"),
       accessorKey: "updateTime",
       cell: ({ row }) => {
         const updateTime = row.getValue("updateTime") as string;
@@ -108,21 +111,21 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Avg Entry price",
+      header: tInfo("avg_entry_price"),
       accessorKey: "avgPrice",
       meta: {
         className: "text-center",
       },
     },
     {
-      header: "Avg Exit price",
+      header: tInfo("avg_exit_price"),
       accessorKey: "avgClosePrice",
       meta: {
         className: "text-center",
       },
     },
     {
-      header: "Position PnL",
+      header: tInfo("position_pnl"),
       accessorKey: "netProfit",
       cell: ({ row }) => {
         const netProfit = row.getValue("netProfit") as string;
@@ -138,7 +141,7 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Realised PnL",
+      header: tInfo("realised_pnl"),
       accessorKey: "realisedProfit",
       cell: ({ row }) => {
         const netProfit = row.getValue("realisedProfit") as string;
@@ -154,7 +157,7 @@ export function TradesTable({}) {
       },
     },
     {
-      header: "Result",
+      header: tInfo("result"),
       cell: ({ row }) => {
         const netProfit = row.getValue("netProfit") as string;
         const isWin = checkWin(netProfit);
@@ -252,7 +255,7 @@ export function TradesTable({}) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("no_trades")}
                 </TableCell>
               </TableRow>
             )}

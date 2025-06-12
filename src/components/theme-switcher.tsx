@@ -10,8 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Check, Moon, Sun } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+const themes = ["light", "dark", "system"];
 
 export function ThemeSwitch() {
+  const t = useTranslations("header");
   const { theme, setTheme } = useTheme();
 
   /* Update theme-color meta tag
@@ -32,27 +36,15 @@ export function ThemeSwitch() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light{" "}
-          <Check
-            size={14}
-            className={cn("ml-auto", theme !== "light" && "hidden")}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-          <Check
-            size={14}
-            className={cn("ml-auto", theme !== "dark" && "hidden")}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-          <Check
-            size={14}
-            className={cn("ml-auto", theme !== "system" && "hidden")}
-          />
-        </DropdownMenuItem>
+        {themes.map((themeItem) => (
+          <DropdownMenuItem key={themeItem} onClick={() => setTheme(themeItem)}>
+            {t(themeItem)}
+            <Check
+              size={14}
+              className={cn("ml-auto", theme !== themeItem && "hidden")}
+            />
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

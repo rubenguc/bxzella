@@ -3,27 +3,22 @@ import { House, Info } from "lucide-react";
 export const sidebarItems = {
   navGroups: [
     {
-      title: "General",
+      title: "",
       items: [
         {
-          title: "Home",
+          title: "home",
           url: "/",
           icon: House,
         },
         {
-          title: "Trades",
+          title: "trades",
           url: "/trades",
           icon: House,
         },
         {
-          title: "Accounts",
+          title: "accounts",
           url: "/accounts",
           icon: House,
-        },
-        {
-          title: "About",
-          url: "/about",
-          icon: Info,
         },
       ],
     },

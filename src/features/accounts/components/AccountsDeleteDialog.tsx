@@ -7,6 +7,7 @@ import { IAccountModel } from "../model/accounts";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteAccount } from "@/features/accounts/server/actions/accounts";
+import { useTranslations } from "next-intl";
 
 interface AccountsDeleteDialogProps {
   open: boolean;
@@ -19,6 +20,9 @@ export function AccountsDeleteDialog({
   onOpenChange,
   currentRow,
 }: AccountsDeleteDialogProps) {
+  const t = useTranslations("accounts");
+  const tCommon = useTranslations("common_messages");
+
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
@@ -45,27 +49,25 @@ export function AccountsDeleteDialog({
             className="stroke-destructive mr-1 inline-block"
             size={18}
           />{" "}
-          Delete Account
+          {t("delete_account")}
         </span>
       }
       desc={
         <div className="space-y-4">
           <p className="mb-2">
-            Are you sure you want to delete{" "}
+            {tCommon("are_your_sure_want_to_delete")}{" "}
             <span className="font-bold">{currentRow.name}</span>?
             <br />
-            This cannot be undone.
+            {tCommon("this_cannot_be_undone")}
           </p>
 
           <Alert variant="destructive">
-            <AlertTitle>Warning!</AlertTitle>
-            <AlertDescription>
-              Please be carefull, this operation can not be rolled back.
-            </AlertDescription>
+            <AlertTitle>{tCommon("warning")}</AlertTitle>
+            <AlertDescription>{tCommon("be_carefull")}</AlertDescription>
           </Alert>
         </div>
       }
-      confirmText="Delete"
+      confirmText={tCommon("delete")}
       destructive
     />
   );

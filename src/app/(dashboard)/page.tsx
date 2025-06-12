@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { AvgWinLoss } from "@/features/trades/components/AvgWinLoss";
+import { NetPNL } from "@/features/trades/components/NetPNL";
 import { OpenPositions } from "@/features/trades/components/OpenPositions";
+import { ProfitFactor } from "@/features/trades/components/ProfitFactor";
 import { RecentTrades } from "@/features/trades/components/RecentTrades";
+import { TradeWinPercentage } from "@/features/trades/components/TradeWinPercentage";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { formatDecimal } from "@/utils/number-utils";
 import { useQuery } from "@tanstack/react-query";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 async function fetchStatistics(
   uid: string,
@@ -38,132 +39,11 @@ export default function Dashboard() {
 
   return (
     <div className="grid gap-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  gap-4">
-        <Card className="max-h-26">
-          <CardContent>
-            <p>Net PnL</p>
-            <p>{data?.netPnL || 0}</p>
-          </CardContent>
-        </Card>
-
-        <Card className="max-h-26">
-          <CardContent>
-            <div className="flex justify-between gap-5 overflow-hidden">
-              <div>
-                <p>ProfiFactor</p>
-                <p>{formatDecimal(data?.profitFactor?.value || 0)}</p>
-              </div>
-              {data?.profitFactor?.value && (
-                <div className="w-40 h-40 scale-30 -translate-y-12">
-                  <ResponsiveContainer>
-                    <PieChart>
-                      <Pie
-                        data={[
-                          {
-                            name: "wins",
-                            value: data?.profitFactor?.sumWin,
-                          },
-                          {
-                            name: "losses",
-                            value: data?.profitFactor?.sumLoss,
-                          },
-                        ]}
-                        innerRadius={60}
-                        outerRadius={80}
-                        dataKey="value"
-                      >
-                        <Cell strokeWidth={0} fill={"var(--color-green-500)"} />
-                        <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="max-h-26">
-          <CardContent>
-            <div className="flex justify-between gap-5 overflow-hidden">
-              <div>
-                <p>Trade win %</p>
-                <p>{formatDecimal(data?.tradeWin?.value || 0)}</p>
-              </div>
-              {data?.profitFactor?.value && (
-                <div className="w-40 h-40 scale-40 -translate-y-10">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          {
-                            name: "wins",
-                            value: data?.tradeWin?.totalWin,
-                          },
-                          {
-                            name: "losses",
-                            value: data?.tradeWin?.totalLoss,
-                          },
-                        ]}
-                        startAngle={180}
-                        endAngle={0}
-                        innerRadius={60}
-                        outerRadius={80}
-                        dataKey="value"
-                        label
-                        labelLine
-                      >
-                        <Cell strokeWidth={0} fill={"var(--color-green-500)"} />
-                        <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="max-h-26">
-          <CardContent>
-            <div className="flex justify-between gap-5 overflow-hidden">
-              <div>
-                <p>Avg win/loss trade %</p>
-                <p>{formatDecimal(data?.avgWinLoss?.value || 0)}</p>
-              </div>
-              {data?.profitFactor?.value && (
-                <div className="w-40 h-40 scale-40 -translate-y-10">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          {
-                            name: "wins",
-                            value: data?.avgWinLoss?.avgWin,
-                          },
-                          {
-                            name: "losses",
-                            value: data?.avgWinLoss?.avgLoss,
-                          },
-                        ]}
-                        startAngle={180}
-                        endAngle={0}
-                        innerRadius={60}
-                        outerRadius={80}
-                        dataKey="value"
-                        label
-                        labelLine
-                      >
-                        <Cell strokeWidth={0} fill={"var(--color-green-500)"} />
-                        <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <NetPNL netPnL={data?.netPnL || 0} />
+        <ProfitFactor profitFactor={data?.profitFactor || {}} />
+        <TradeWinPercentage tradeWin={data?.tradeWin || {}} />
+        <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <OpenPositions />

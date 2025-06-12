@@ -20,22 +20,24 @@ import {
 import { DataTablePagination } from "@/components/data-table-pagination";
 import { DataTableRowActions } from "@/components/data-table-row-actions";
 import { useAccounts } from "../context/accounts-context";
+import { useTranslations } from "next-intl";
 
 async function fetchAccounts(page: number, limit?: number) {
   const res = await fetch(`/api/accounts?page=${page}&limit=${limit}`);
   return res.json();
 }
 
-export function AccountsTable({}) {
+export function AccountsTable() {
+  const t = useTranslations("accounts");
   const { setOpen, setCurrentRow } = useAccounts();
 
   const columns: ColumnDef<IAccountModel>[] = [
     {
-      header: "Name",
+      header: t("name"),
       accessorKey: "name",
     },
     {
-      header: "UID",
+      header: t("uid"),
       accessorKey: "uid",
     },
     {
@@ -130,7 +132,7 @@ export function AccountsTable({}) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("no_accounts")}
                 </TableCell>
               </TableRow>
             )}

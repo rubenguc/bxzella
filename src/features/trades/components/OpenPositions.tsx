@@ -26,20 +26,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
-
-const MOCK_DATA = [
-  {
-    date: "2023-01-01",
-    symbol: "AAPL",
-    volume: 100,
-  },
-  {
-    date: "2023-01-02",
-    symbol: "GOOGL",
-    volume: 200,
-  },
-];
+import { useTranslations } from "next-intl";
 
 async function fetchOpenPositions(uid: string) {
   const res = await fetch(`/api/trades/open-positions?account_id=${uid}`);
@@ -47,11 +34,14 @@ async function fetchOpenPositions(uid: string) {
 }
 
 export function OpenPositions() {
+  const t = useTranslations("dashboard.open_positions");
+  const tInfo = useTranslations("trade_info");
+
   const { selectedAccountId } = useUserConfigStore();
 
   const columns: ColumnDef[] = [
     {
-      header: "Open date",
+      header: tInfo("open_date"),
       accessorKey: "date",
       cell: ({ row }) => {
         const date = row.original.createTime;
@@ -62,7 +52,7 @@ export function OpenPositions() {
       },
     },
     {
-      header: "Position",
+      header: tInfo("position"),
       accessorKey: "positionSide",
       cell: ({ row }) => {
         const symbol = row.original.positionSide;
@@ -78,7 +68,7 @@ export function OpenPositions() {
       },
     },
     {
-      header: "Symbol",
+      header: tInfo("symbol"),
       accessorKey: "symbol",
       cell: ({ row }) => {
         const symbol = transformSymbol(row.original.symbol);
@@ -89,7 +79,7 @@ export function OpenPositions() {
       },
     },
     {
-      header: "Volume",
+      header: tInfo("volume"),
       accessorKey: "positionValue",
       cell: ({ row }) => {
         const volume = row.original.positionValue;
@@ -121,10 +111,8 @@ export function OpenPositions() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Open positions</CardTitle>
-        <CardDescription>
-          {"currently open positions, these don't depend on the time range"}
-        </CardDescription>
+        <CardTitle>{t("open_positions")}</CardTitle>
+        <CardDescription>{t("open_positions_description")}</CardDescription>
       </CardHeader>
       <CardContent className="px-1">
         <Table>
@@ -177,7 +165,7 @@ export function OpenPositions() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("no_open_positions")}
                 </TableCell>
               </TableRow>
             )}

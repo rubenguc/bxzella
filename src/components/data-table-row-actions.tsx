@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Ellipsis, SquarePen, Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DataTableRowActionsProps {
   onDelete?: () => void;
@@ -18,6 +19,8 @@ export function DataTableRowActions({
   onDelete,
   onEdit,
 }: DataTableRowActionsProps) {
+  const t = useTranslations("common_messages");
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -37,7 +40,7 @@ export function DataTableRowActions({
                 onEdit();
               }}
             >
-              Edit
+              {t("edit")}
               <DropdownMenuShortcut>
                 <SquarePen size={16} />
               </DropdownMenuShortcut>
@@ -51,7 +54,7 @@ export function DataTableRowActions({
               }}
               className="text-red-500!"
             >
-              Delete
+              {t("delete")}
               <DropdownMenuShortcut>
                 <Trash size={16} />
               </DropdownMenuShortcut>

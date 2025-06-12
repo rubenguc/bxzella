@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -27,6 +26,7 @@ import {
 } from "@/features/accounts/server/actions/accounts";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface AccountsActionDialogProps {
   currentRow?: IAccountModel;
@@ -41,6 +41,7 @@ export function AccountsActionDialog({
   open,
   onOpenChange,
 }: AccountsActionDialogProps) {
+  const t = useTranslations("accounts");
   const queryClient = useQueryClient();
 
   const isEdit = !!currentRow;
@@ -82,12 +83,8 @@ export function AccountsActionDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
           <DialogTitle>
-            {isEdit ? "Edit Account" : "Add New Account"}
+            {t(isEdit ? "edit_account" : "add_new_account")}
           </DialogTitle>
-          <DialogDescription>
-            {isEdit ? "Update the user here. " : "Create new user here. "}
-            Click save when you&apos;re done.
-          </DialogDescription>
         </DialogHeader>
         <div className="-mr-4 h-[26.25rem] w-full overflow-y-auto py-1 pr-4">
           <Form {...form}>
@@ -101,7 +98,7 @@ export function AccountsActionDialog({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t("name")}</FormLabel>
                     <FormControl>
                       <Input autoComplete="off" {...field} />
                     </FormControl>
@@ -114,7 +111,7 @@ export function AccountsActionDialog({
                 name="apiKey"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>API KEY</FormLabel>
+                    <FormLabel>{t("api_key")}</FormLabel>
                     <FormControl>
                       <Input
                         className="select-none"
@@ -132,7 +129,7 @@ export function AccountsActionDialog({
                 name="secretKey"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SECRET KEY</FormLabel>
+                    <FormLabel>{t("secret_key")}</FormLabel>
                     <FormControl>
                       <Input
                         className="select-none"
@@ -154,7 +151,7 @@ export function AccountsActionDialog({
             type="submit"
             form="user-form"
           >
-            Save changes
+            {t("save_changes")}
           </Button>
         </DialogFooter>
       </DialogContent>
