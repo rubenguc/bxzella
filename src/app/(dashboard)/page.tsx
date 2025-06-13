@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { AvgWinLoss } from "@/features/trades/components/AvgWinLoss";
 import { NetPNL } from "@/features/trades/components/NetPNL";
 import { OpenPositions } from "@/features/trades/components/OpenPositions";
@@ -29,7 +30,21 @@ export default function Dashboard() {
     enabled: !!selectedAccountId && startDate !== 0 && endDate !== 0,
   });
 
-  if (isLoading) return;
+  if (isLoading || !data)
+    return (
+      <div className="grid gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+          <Skeleton className="col-span-1 h-26 max-h-40" />
+        </div>
+      </div>
+    );
 
   return (
     <div className="grid gap-5">
