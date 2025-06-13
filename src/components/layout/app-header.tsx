@@ -6,6 +6,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeSwitch } from "../theme-switcher";
 import { ProfileDropdown } from "../profile-dropdown";
 import { AccountsSelector } from "@/features/accounts/components/AccountsSelector";
+import { DateRangeSelector } from "./DateRangeSelector";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;
@@ -44,6 +45,7 @@ export default function AppHeader({
     >
       <SidebarTrigger variant="outline" className="scale-125 sm:scale-100" />
       <div className="ml-auto flex items-center space-x-4">
+        <DateRangeSelector />
         <AccountsSelector />
         <ThemeSwitch />
         <ProfileDropdown />

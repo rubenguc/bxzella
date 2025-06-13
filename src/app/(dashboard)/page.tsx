@@ -20,19 +20,13 @@ async function fetchStatistics(
   return res.json();
 }
 
-const actualDate = new Date();
-const dateLess30Days = new Date(actualDate);
-dateLess30Days.setDate(dateLess30Days.getDate() - 30);
-const startDate = dateLess30Days.getTime();
-const currentDate = new Date().getTime();
-
 export default function Dashboard() {
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccountId, startDate, endDate } = useUserConfigStore();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["statistics", selectedAccountId, startDate, currentDate],
-    queryFn: () => fetchStatistics(selectedAccountId, startDate, currentDate),
-    enabled: !!selectedAccountId,
+    queryKey: ["statistics", selectedAccountId, startDate, endDate],
+    queryFn: () => fetchStatistics(selectedAccountId, startDate, endDate),
+    enabled: !!selectedAccountId && startDate !== 0 && endDate !== 0,
   });
 
   if (isLoading) return;
