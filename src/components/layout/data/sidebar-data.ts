@@ -1,9 +1,9 @@
-import { House, Info } from "lucide-react";
+import { BookText, House, Users } from "lucide-react";
 
 export const sidebarItems = {
   navGroups: [
     {
-      title: "",
+      title: "bxzella",
       items: [
         {
           title: "home",
@@ -13,12 +13,12 @@ export const sidebarItems = {
         {
           title: "trades",
           url: "/trades",
-          icon: House,
+          icon: BookText,
         },
         {
           title: "accounts",
           url: "/accounts",
-          icon: House,
+          icon: Users,
         },
       ],
     },
