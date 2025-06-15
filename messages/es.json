@@ -39,7 +39,8 @@
       "net_pnl": "Ganancia Neta",
       "profit_factor": "Factor de Ganancia",
       "trade_win_percentage": "Porcentaje de Operaciones Ganadoras",
-      "avg_win_loss": "Promedio Ganancia/Pérdida por Operación"
+      "avg_win_loss": "Promedio Ganancia/Pérdida por Operación",
+      "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos."
     },
     "open_positions": {
       "open_positions": "Posiciones Abiertas",

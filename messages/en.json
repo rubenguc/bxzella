@@ -39,7 +39,8 @@
       "net_pnl": "Net PnL",
       "profit_factor": "Profit Factor",
       "trade_win_percentage": "Trade Win %",
-      "avg_win_loss": "Avg win/loss trade %"
+      "avg_win_loss": "Avg win/loss trade %",
+      "please_select_account_to_fetch_data": "Please select an account to fetch data."
     },
     "open_positions": {
       "open_positions": "Open Positions",

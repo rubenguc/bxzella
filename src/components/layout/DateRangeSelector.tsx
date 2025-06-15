@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Menubar,
   MenubarContent,
@@ -12,21 +12,60 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useUserConfigStore } from "@/store/user-config-store";
 
+const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
+
 export function DateRangeSelector() {
-  const { startDate, endDate, updateDateRange } = useUserConfigStore();
-  const threeMonthsBefore = new Date(startDate - 3 * 30 * 24 * 60 * 60 * 1000);
-  const monthAfter = new Date(startDate + 30 * 24 * 60 * 60 * 1000);
+  const { startDate, endDate, updateDateRange, isInit } = useUserConfigStore();
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
+  const startMonth = useMemo(() => {
+    if (!isInit) return new Date();
+
+    if (startDate === 0) {
+      const actualDate = new Date();
+      return new Date(actualDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    }
+
+    return new Date(startDate - 3 * ONE_MONTH_IN_MS);
+  }, [isInit, startDate]);
+
+  const endMonth = useMemo(() => {
+    if (!isInit) return new Date();
+
+    if (endDate === 0) {
+      const actualDate = new Date();
+      return new Date(actualDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    }
+
+    return new Date(endDate + ONE_MONTH_IN_MS);
+  }, [isInit, endDate]);
+
   useEffect(() => {
+    if (!isInit) return;
+
+    if (startDate === 0 && endDate === 0) {
+      const actualDate = new Date();
+      const sevenDaysAgo = new Date(
+        actualDate.getTime() - 7 * 24 * 60 * 60 * 1000,
+      );
+      setDateRange({
+        from: sevenDaysAgo,
+        to: actualDate,
+      });
+      updateDateRange(
+        sevenDaysAgo.getTime() as number,
+        actualDate.getTime() as number,
+      );
+    }
+
     if (startDate !== 0 && endDate !== 0 && !dateRange?.from) {
       setDateRange({
         from: new Date(startDate),
         to: new Date(endDate),
       });
     }
-  }, [dateRange, startDate, endDate]);
+  }, [dateRange, startDate, endDate, isInit]);
 
   const formattedStartDate = dateRange?.from
     ? format(dateRange!.from as Date, "MMM dd")
@@ -35,13 +74,13 @@ export function DateRangeSelector() {
     ? format(dateRange!.to as Date, "MMM dd")
     : "";
 
-  const value = `${formattedStartDate} - ${formattedEndDate}`;
+  const value = isInit ? `${formattedStartDate} - ${formattedEndDate}` : "";
 
   const onMenuChange = (value?: string) => {
-    if (!value)
+    if (!value && dateRange?.from && dateRange?.to)
       updateDateRange(
-        dateRange!.from?.getTime() as number,
-        dateRange!.to?.getTime() as number,
+        dateRange?.from?.getTime() as number,
+        dateRange?.to?.getTime() as number,
       );
   };
 
@@ -65,10 +104,10 @@ export function DateRangeSelector() {
             selected={dateRange}
             onSelect={setDateRange}
             numberOfMonths={2}
-            startMonth={threeMonthsBefore}
-            endMonth={monthAfter}
+            startMonth={startMonth}
+            endMonth={endMonth}
             disabled={{
-              before: threeMonthsBefore,
+              before: startMonth,
               after: new Date(),
             }}
           />

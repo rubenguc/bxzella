@@ -9,6 +9,7 @@ import { RecentTrades } from "@/features/trades/components/RecentTrades";
 import { TradeWinPercentage } from "@/features/trades/components/TradeWinPercentage";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 async function fetchStatistics(
   uid: string,
@@ -22,13 +23,26 @@ async function fetchStatistics(
 }
 
 export default function Dashboard() {
-  const { selectedAccountId, startDate, endDate } = useUserConfigStore();
+  const { selectedAccountId, startDate, endDate, isInit } =
+    useUserConfigStore();
 
   const { data, isLoading } = useQuery({
     queryKey: ["statistics", selectedAccountId, startDate, endDate],
     queryFn: () => fetchStatistics(selectedAccountId, startDate, endDate),
     enabled: !!selectedAccountId && startDate !== 0 && endDate !== 0,
   });
+
+  const t = useTranslations("dashboard.statistics");
+
+  if (isInit && !selectedAccountId) {
+    return (
+      <div>
+        <p className="text-center text-xl">
+          {t("please_select_account_to_fetch_data")}
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading || !data)
     return (
