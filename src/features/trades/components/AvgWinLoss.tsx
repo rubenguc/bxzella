@@ -19,7 +19,9 @@ export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
     <Card className="max-h-26">
       <CardContent>
         <div className="flex flex-col gap-1.5">
-          <p className="text-gray-300 text-sm">{t("avg_win_loss")}</p>
+          <p className="text-gray-500 dark:text-gray-300 text-sm">
+            {t("avg_win_loss")}
+          </p>
           <div className="flex justify-between items-end">
             <p className="text-xl">{formatDecimal(avgWinLoss?.value || 0)}</p>
             <div className="flex flex-col gap-1 w-[70%]">

@@ -40,7 +40,7 @@ export function AccountsCoinSelector() {
 
   return (
     <Select value={coin} onValueChange={handleSelect}>
-      <SelectTrigger className="relative min-h-9 py-1 px-2 w-fit md:w-32 border rounded-full flex items-center gap-1  overflow-x-hidden text-nowrap">
+      <SelectTrigger className="relative min-h-9 py-1 px-2 w-fit border rounded-full flex items-center gap-1  overflow-x-hidden text-nowrap">
         <SelectPrimitive.Icon asChild className="block md:hidden ">
           <Image src={getCoinImage(coin)} alt="coin" width={20} height={20} />
         </SelectPrimitive.Icon>
@@ -56,7 +56,7 @@ export function AccountsCoinSelector() {
             value={_coin.label}
             disabled={_coin.isDisabled}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Image
                 src={getCoinImage(_coin.label as Coin)}
                 alt="coin"

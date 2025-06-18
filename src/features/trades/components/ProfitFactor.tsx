@@ -19,7 +19,9 @@ export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
       <CardContent>
         <div className="grid grid-cols-2 gap-5">
           <div className="col-span-1 flex flex-col gap-1.5">
-            <p className="text-gray-300 text-sm">{t("profit_factor")}</p>
+            <p className="text-gray-500 dark:text-gray-300 text-sm">
+              {t("profit_factor")}
+            </p>
             <p className="text-xl">{formatDecimal(profitFactor?.value || 0)}</p>
           </div>
           {profitFactor?.value && (

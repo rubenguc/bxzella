@@ -19,7 +19,9 @@ export function TradeWinPercentage({ tradeWin }: TradeWinPercentageProps) {
       <CardContent>
         <div className="grid grid-cols-2 gap-5">
           <div className="col-span-1 flex flex-col gap-1.5">
-            <p className="text-gray-300 text-sm">{t("trade_win_percentage")}</p>
+            <p className="text-gray-500 dark:text-gray-300 text-sm">
+              {t("trade_win_percentage")}
+            </p>
             <p className="text-xl">{formatDecimal(tradeWin?.value || 0)}%</p>
           </div>
           {tradeWin?.value > 0 && (

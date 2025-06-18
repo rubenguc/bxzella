@@ -9,7 +9,7 @@ import { DateRange } from "react-day-picker";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { useUserConfigStore } from "@/store/user-config-store";
 
 const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
@@ -90,9 +90,10 @@ export function DateRangeSelector() {
             <CalendarIcon size={17} className="opacity-50" />
             <Input
               readOnly
-              className="hidden md:block max-w-32 cursor-pointer select-none border-none  shadow-none focus-visible:shadow-none focus-visible:ring-0"
+              className="hidden px-1 md:block max-w-30 cursor-pointer select-none border-none shadow-none focus-visible:shadow-none focus-visible:ring-0"
               value={value}
             />
+            <ChevronDown className="h-4 w-4 opacity-50" />
           </div>
         </MenubarTrigger>
         <MenubarContent>
