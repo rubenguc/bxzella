@@ -10,6 +10,7 @@ import {
 } from "../db/accounts";
 import { getUserBalance } from "@/features/bingx/bingx-api";
 import { encryptData } from "@/features/accounts/utils/encryption";
+import { syncPositions } from "@/features/trades/server/db/trades";
 
 async function processAccountData(unsafeData: z.infer<typeof accountSchema>) {
   const { userId } = await auth();
@@ -38,13 +39,16 @@ export async function createAccount(unsafeData: z.infer<typeof accountSchema>) {
     return { error: true, message: processingResult.message };
 
   const { userId, validatedData, accountBalance } = processingResult;
-  await createAccountDb({
+  const account = await createAccountDb({
     ...validatedData,
     userId,
     uid: accountBalance!.shortUid,
     apiKey: encryptData(validatedData!.apiKey),
     secretKey: encryptData(validatedData!.secretKey),
   });
+
+  // TODO: this sync shouldn't be here
+  await syncPositions(account.uid);
 }
 
 export async function updateAccount(
