@@ -6,6 +6,7 @@
   },
   "header": {
     "select_account": "Select Account",
+    "select_coin": "Select Coin",
     "light": "Light",
     "dark": "Dark",
     "system": "System",
@@ -46,6 +47,10 @@
       "open_positions": "Open Positions",
       "open_positions_description": "currently open positions, these don't depend on the time range",
       "no_open_positions": "No open positions"
+    },
+    "recent_trades": {
+      "recent_trades": "Recent Trades",
+      "no_recent_trades": "No recent trades"
     }
   },
   "trades": {
@@ -69,6 +74,7 @@
     "account_saved_message": "Account saved successfully",
     "account_updated_message": "Account updated successfully",
     "account_deleted_message": "Account deleted successfully",
-    "account_error_message": "An error occurred while saving the account"
+    "account_error_message": "An error occurred while saving the account",
+    "account_sync_trades_descriptions": "If the account ID associated with this account is not already registered, we will sync all your closed postions based on your filled positions based on your the last 30 days. This may take a while"
   }
 }

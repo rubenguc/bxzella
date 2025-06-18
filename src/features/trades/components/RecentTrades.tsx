@@ -24,8 +24,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
 
 export function RecentTrades() {
+  const t = useTranslations("dashboard.recent_trades");
   const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
     useUserConfigStore();
 
@@ -125,7 +127,7 @@ export function RecentTrades() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent trades</CardTitle>
+        <CardTitle>{t("recent_trades")}</CardTitle>
       </CardHeader>
       <CardContent className="px-1">
         <Table>
@@ -178,7 +180,7 @@ export function RecentTrades() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("no_recent_trades")}
                 </TableCell>
               </TableRow>
             )}

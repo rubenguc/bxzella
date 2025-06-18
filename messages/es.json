@@ -6,6 +6,7 @@
   },
   "header": {
     "select_account": "Seleccionar Cuenta",
+    "select_coin": "Select Moneda",
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema",
@@ -46,6 +47,10 @@
       "open_positions": "Posiciones Abiertas",
       "open_positions_description": "posiciones actualmente abiertas, estas no dependen del rango de tiempo",
       "no_open_positions": "No hay posiciones abiertas"
+    },
+    "recent_trades": {
+      "recent_trades": "Recent Trades",
+      "no_recent_trades": "No recent trades"
     }
   },
   "trades": {
@@ -69,6 +74,7 @@
     "account_saved_message": "Cuenta guardada exitosamente",
     "account_updated_message": "Cuenta actualizada exitosamente",
     "account_deleted_message": "Cuenta eliminada exitosamente",
-    "account_error_message": "Ocurrió un error al guardar la cuenta"
+    "account_error_message": "Ocurrió un error al guardar la cuenta",
+    "account_sync_trades_descriptions": "Si el ID de la cuenta asociada con esta cuenta no está ya registrado, sincronizaremos todas tus posiciones cerradas basadas en tus posiciones completadas basadas en tus últimos 30 días. Esto puede llevar algún tiempo"
   }
 }
