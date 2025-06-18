@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   title: "bxzella",
   description:
     "bxzella is a platform designed to help traders analyze their performance by integrating with the BingX API",
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.png",
+    },
+  ],
 };
 
 export default async function RootLayout({
@@ -21,7 +27,13 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        layout: {
+          logoImageUrl: "/logo.png",
+        },
+      }}
+    >
       <ThemeProvider>
         <html lang={locale}>
           <body>

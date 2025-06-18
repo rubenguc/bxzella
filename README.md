@@ -1,4 +1,18 @@
-# bxzella
+
+<center style="display: flex; justify-content: center;align-items: center; gap: 1rem; margin-bottom: 2rem">
+<img src="public/logo.png" width="120" heigth="120" />
+    <p 
+      style="
+    font-size: 4rem;
+    font-weight: bold;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, #60A5FA, white); 
+  "
+    >BXZella<p>
+</center>
 
 bxzella is a platform designed to help traders analyze their performance by integrating with the BingX API. It allows users to view their transaction history, open positions, and track key trading statistics to make informed decisions and improve their strategies.
 
