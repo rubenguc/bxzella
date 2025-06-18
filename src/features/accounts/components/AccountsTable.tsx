@@ -22,6 +22,7 @@ import { DataTableRowActions } from "@/components/data-table-row-actions";
 import { useAccounts } from "../context/accounts-context";
 import { useTranslations } from "next-intl";
 import { getAccounts } from "@/services/api";
+import { LoadingRows } from "@/components/LoadingRows";
 
 export function AccountsTable() {
   const t = useTranslations("accounts");
@@ -79,6 +80,8 @@ export function AccountsTable() {
     onPaginationChange: setPagination,
   });
 
+  const showSkeleton = !data || isLoading;
+
   return (
     <div className="space-y-4">
       <div className="rounded-md border">
@@ -127,14 +130,23 @@ export function AccountsTable() {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {t("no_accounts")}
-                </TableCell>
-              </TableRow>
+              <>
+                {showSkeleton ? (
+                  <LoadingRows
+                    rows={10}
+                    columns={table.getAllColumns().length}
+                  />
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      {t("no_accounts")}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
         </Table>

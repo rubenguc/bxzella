@@ -28,6 +28,7 @@ import {
 } from "@/utils/trade-utils";
 import { useTranslations } from "next-intl";
 import { getTrades } from "@/services/api";
+import { LoadingRows } from "@/components/LoadingRows";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
@@ -201,6 +202,8 @@ export function TradesTable() {
     onPaginationChange: setPagination,
   });
 
+  const showSkeleton = !data || isLoading;
+
   return (
     <div className="space-y-4">
       <div className="rounded-md border">
@@ -249,14 +252,23 @@ export function TradesTable() {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {t("no_trades")}
-                </TableCell>
-              </TableRow>
+              <>
+                {showSkeleton ? (
+                  <LoadingRows
+                    rows={10}
+                    columns={table.getAllColumns().length}
+                  />
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      {t("no_trades")}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
         </Table>

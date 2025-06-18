@@ -33,7 +33,10 @@
     "delete": "Delete",
     "edit": "Edit",
     "cancel": "Cancel",
-    "continue": "Continue"
+    "continue": "Continue",
+    "rows_per_page": "Rows per page",
+    "page": "Page",
+    "of": "of"
   },
   "dashboard": {
     "statistics": {
