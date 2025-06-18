@@ -21,11 +21,7 @@ import { DataTablePagination } from "@/components/data-table-pagination";
 import { DataTableRowActions } from "@/components/data-table-row-actions";
 import { useAccounts } from "../context/accounts-context";
 import { useTranslations } from "next-intl";
-
-async function fetchAccounts(page: number, limit?: number) {
-  const res = await fetch(`/api/accounts?page=${page}&limit=${limit}`);
-  return res.json();
-}
+import { getAccounts } from "@/services/api";
 
 export function AccountsTable() {
   const t = useTranslations("accounts");
@@ -64,7 +60,11 @@ export function AccountsTable() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["accounts", pagination.pageIndex, pagination.pageSize],
-    queryFn: () => fetchAccounts(pagination.pageIndex, pagination.pageSize),
+    queryFn: () =>
+      getAccounts({
+        page: pagination.pageIndex,
+        limit: pagination.pageSize,
+      }),
   });
 
   const table = useReactTable({

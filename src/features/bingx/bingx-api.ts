@@ -1,3 +1,4 @@
+import { Coin } from "@/global-interfaces";
 import { makeRequest } from "./bingx-base";
 import {
   UserBalanceResponse,
@@ -16,9 +17,10 @@ const PATHS = {
 export const getUserBalance = async (
   apiKey: string,
   secretKey: string,
+  coin: Coin = "VST",
 ): Promise<UserBalanceResponse> => {
   return makeRequest({
-    coin: "VST",
+    coin,
     apiKey,
     secretKey,
     path: PATHS.USER_BALANCE,
@@ -28,9 +30,10 @@ export const getUserBalance = async (
 export const getUserActiveOpenPositions = async (
   apiKey: string,
   secretKey: string,
+  coin: Coin = "VST",
 ): Promise<UserPositionResponse> => {
   return makeRequest({
-    coin: "VST",
+    coin,
     apiKey,
     secretKey,
     path: PATHS.USER_ACTIVE_OPEN_POSITIONS,
@@ -44,9 +47,10 @@ export const getFilledOrders = async (
     startTs: number;
     endTs: number;
   },
+  coin: Coin = "VST",
 ): Promise<UserFillOrdersResponse> => {
   return makeRequest({
-    coin: "VST",
+    coin,
     apiKey,
     secretKey,
     path: PATHS.USER_FILLED_ORDERS,
@@ -62,9 +66,10 @@ export const getPositionHistory = async (
     startTs: number;
     endTs: number;
   },
+  coin: Coin = "VST",
 ): Promise<UserPositionHistoryResponse> => {
   return makeRequest({
-    coin: "VST",
+    coin,
     apiKey,
     secretKey,
     path: PATHS.USER_POSITION_HISTORY,

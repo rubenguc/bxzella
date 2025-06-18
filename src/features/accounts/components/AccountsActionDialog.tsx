@@ -144,6 +144,9 @@ export function AccountsActionDialog({
               />
             </form>
           </Form>
+          <p className="mt-5 text-gray-400 text-sm">
+            *{t("account_sync_trades_descriptions")}
+          </p>
         </div>
         <DialogFooter>
           <Button
