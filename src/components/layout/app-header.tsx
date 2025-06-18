@@ -7,6 +7,8 @@ import { ThemeSwitch } from "../theme-switcher";
 import { ProfileDropdown } from "../profile-dropdown";
 import { AccountsSelector } from "@/features/accounts/components/AccountsSelector";
 import { DateRangeSelector } from "./DateRangeSelector";
+import "./header.styles.css";
+import { AccountsCoinSelector } from "@/features/accounts/components/AccountsCoinSelector";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;
@@ -47,6 +49,7 @@ export default function AppHeader({
       <div className="ml-auto flex items-center space-x-4">
         <DateRangeSelector />
         <AccountsSelector />
+        <AccountsCoinSelector />
         <ThemeSwitch />
         <ProfileDropdown />
       </div>
