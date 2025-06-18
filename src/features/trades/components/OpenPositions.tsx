@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getOpenPositions } from "@/services/api";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
@@ -27,11 +28,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-
-async function fetchOpenPositions(uid: string) {
-  const res = await fetch(`/api/trades/open-positions?account_id=${uid}`);
-  return res.json();
-}
 
 export function OpenPositions() {
   const t = useTranslations("dashboard.open_positions");
@@ -46,6 +42,18 @@ export function OpenPositions() {
       cell: ({ row }) => {
         const date = row.original.createTime;
         return <>{transformTimeToLocalDate(date)}</>;
+      },
+      meta: {
+        className: "text-center",
+      },
+    },
+
+    {
+      header: tInfo("symbol"),
+      accessorKey: "symbol",
+      cell: ({ row }) => {
+        const symbol = transformSymbol(row.original.symbol);
+        return <div className="font-medium">{symbol}</div>;
       },
       meta: {
         className: "text-center",
@@ -68,11 +76,11 @@ export function OpenPositions() {
       },
     },
     {
-      header: tInfo("symbol"),
-      accessorKey: "symbol",
+      header: "Leverage",
+      accessorKey: "leverage",
       cell: ({ row }) => {
-        const symbol = transformSymbol(row.original.symbol);
-        return <div className="font-medium">{symbol}</div>;
+        const leverage = row.getValue("leverage") as number;
+        return <div className="font-medium">{leverage}x</div>;
       },
       meta: {
         className: "text-center",
@@ -98,7 +106,10 @@ export function OpenPositions() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["open-positions", selectedAccountId],
-    queryFn: () => fetchOpenPositions(selectedAccountId),
+    queryFn: () =>
+      getOpenPositions({
+        accountId: selectedAccountId,
+      }),
     enabled: !!selectedAccountId,
   });
 

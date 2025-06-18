@@ -27,16 +27,10 @@ import {
   transformSymbol,
 } from "@/utils/trade-utils";
 import { useTranslations } from "next-intl";
-
-async function fetchTrades(uid: string, page: number, limit?: number) {
-  const res = await fetch(
-    `/api/trades?account_id=${uid}&page=${page}&limit=${limit}`,
-  );
-  return res.json();
-}
+import { getTrades } from "@/services/api";
 
 export function TradesTable() {
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccountId, coin } = useUserConfigStore();
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
 
@@ -132,7 +126,7 @@ export function TradesTable() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit}
+            {netProfit} {coin}
           </div>
         );
       },
@@ -144,11 +138,11 @@ export function TradesTable() {
       header: tInfo("realised_pnl"),
       accessorKey: "realisedProfit",
       cell: ({ row }) => {
-        const netProfit = row.getValue("realisedProfit") as string;
-        const isWin = checkWin(netProfit);
+        const realisedProfit = row.getValue("realisedProfit") as string;
+        const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit}
+            {realisedProfit} {coin}
           </div>
         );
       },
@@ -186,7 +180,12 @@ export function TradesTable() {
       pagination.pageSize,
     ],
     queryFn: () =>
-      fetchTrades(selectedAccountId, pagination.pageIndex, pagination.pageSize),
+      getTrades({
+        accountId: selectedAccountId,
+        page: pagination.pageIndex,
+        limit: pagination.pageSize,
+        coin,
+      }),
     enabled: !!selectedAccountId,
   });
 

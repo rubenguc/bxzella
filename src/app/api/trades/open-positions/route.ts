@@ -2,16 +2,25 @@ import connectDB from "@/db/db";
 import { getAccountByIdWithCredentials } from "@/features/accounts/server/db/accounts";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getUserActiveOpenPositions } from "@/features/bingx/bingx-api";
+import { accountIdParamValidation } from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+export const openPositionsSearchParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+});
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const _id = searchParams.get("account_id") || "";
+    const url = new URL(request.url);
+    const searchParams = Object.fromEntries(url.searchParams.entries());
+    const parsedParams = openPositionsSearchParamsSchema.parse(searchParams);
+
+    const { accountId } = parsedParams;
 
     await connectDB();
 
-    const account = await getAccountByIdWithCredentials(_id);
+    const account = await getAccountByIdWithCredentials(accountId);
 
     const { decriptedApiKey, decryptedSecretKey } =
       getDecryptedAccountCredentials(account);

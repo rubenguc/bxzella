@@ -4,7 +4,10 @@ import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
 
 interface NetPNLProps {
-  netPnL: number;
+  netPnL: {
+    value: number;
+    totalTrades: number;
+  };
 }
 
 export function NetPNL({ netPnL }: NetPNLProps) {
@@ -16,7 +19,7 @@ export function NetPNL({ netPnL }: NetPNLProps) {
       <CardContent>
         <p>{t("net_pnl")}</p>
         <p>
-          {formatDecimal(netPnL)} {coin}
+          {formatDecimal(netPnL.value || 0)} {coin}
         </p>
       </CardContent>
     </Card>

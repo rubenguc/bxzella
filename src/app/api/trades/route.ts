@@ -4,31 +4,65 @@ import {
   getTradesByAccountUID,
   syncPositions,
 } from "@/features/trades/server/db/trades";
+import {
+  accountIdParamValidation,
+  dateParamValidation,
+  limitParamValidation,
+  pageParamValidation,
+} from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+export const TradesSearchParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+  page: pageParamValidation(),
+  limit: limitParamValidation(),
+  startDate: dateParamValidation({ field: "startDate" }),
+  endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
+});
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const _id = searchParams.get("account_id") || "";
-    const page = parseInt(searchParams.get("page") || "") || 1;
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const url = new URL(request.url);
+    const searchParams = Object.fromEntries(url.searchParams.entries());
+    const parsedParams = TradesSearchParamsSchema.parse(searchParams);
+
+    const { accountId, page, limit, startDate, endDate } = parsedParams;
 
     await connectDB();
 
-    const account = await getAccountById(_id);
+    const account = await getAccountById(accountId);
 
     const accountUID = account.uid;
 
     await syncPositions(accountUID);
 
-    const data = await getTradesByAccountUID(accountUID, page, limit);
+    const data = await getTradesByAccountUID({
+      uid: accountUID,
+      page,
+      limit,
+      startDate,
+      endDate,
+    });
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          message: "Validation error",
+          errors: err.errors,
+        },
+        { status: 400 },
+      );
+    }
 
-    return NextResponse.json({
-      message: "server_error",
-    });
+    console.error(err);
+    return NextResponse.json(
+      {
+        message: "server_error",
+      },
+      { status: 500 },
+    );
   }
 }

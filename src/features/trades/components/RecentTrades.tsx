@@ -10,8 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getTrades } from "@/services/api";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { transformTimeToLocalDate } from "@/utils/date-utils";
+import {
+  transformDateToParam,
+  transformTimeToLocalDate,
+} from "@/utils/date-utils";
 import { checkLongPosition, checkWin } from "@/utils/trade-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -21,15 +25,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-async function fetchTrades(uid: string, page: number, limit?: number) {
-  const res = await fetch(
-    `/api/trades?account_id=${uid}&page=${page}&limit=${limit}`,
-  );
-  return res.json();
-}
-
 export function RecentTrades() {
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
+    useUserConfigStore();
 
   const columns: ColumnDef[] = [
     {
@@ -94,7 +92,7 @@ export function RecentTrades() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit}
+            {netProfit} {coin}
           </div>
         );
       },
@@ -105,9 +103,17 @@ export function RecentTrades() {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["accounts", selectedAccountId],
-    queryFn: () => fetchTrades(selectedAccountId, 0, 10),
-    enabled: !!selectedAccountId,
+    queryKey: ["accounts", selectedAccountId, startDate, endDate, coin],
+    queryFn: () =>
+      getTrades({
+        accountId: selectedAccountId,
+        startDate: transformDateToParam(startDate!),
+        endDate: transformDateToParam(endDate!),
+        limit: 10,
+        page: 0,
+        coin,
+      }),
+    enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
   });
 
   const table = useReactTable({

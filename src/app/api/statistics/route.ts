@@ -1,26 +1,50 @@
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts";
 import { getTradesStatistic } from "@/features/trades/server/db/trades";
+import {
+  accountIdParamValidation,
+  dateParamValidation,
+} from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+export const statictisSearchParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+  startDate: dateParamValidation({ field: "startDate" }),
+  endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
+});
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const account_id = searchParams.get("account_id") || "";
-    const startDate = parseInt(searchParams.get("startDate") || "0");
-    const endDate = parseInt(searchParams.get("endDate") || "0");
+    const url = new URL(request.url);
+    const searchParams = Object.fromEntries(url.searchParams.entries());
+    const parsedParams = statictisSearchParamsSchema.parse(searchParams);
+
+    const { accountId, startDate, endDate } = parsedParams;
 
     await connectDB();
 
-    const account = await getAccountById(account_id);
+    const account = await getAccountById(accountId);
 
     const accountUID = account.uid;
 
-    const data = await getTradesStatistic(accountUID, startDate, endDate);
+    const data = await getTradesStatistic({
+      accountUID,
+      startDate: startDate!,
+      endDate: endDate!,
+    });
 
     return NextResponse.json(data[0] || {});
   } catch (err) {
-    console.log(err);
+    if (err instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          message: "Validation error",
+          errors: err.errors,
+        },
+        { status: 400 },
+      );
+    }
 
     return NextResponse.json({
       message: "server_error",

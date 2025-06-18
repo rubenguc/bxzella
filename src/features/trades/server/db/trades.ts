@@ -14,6 +14,7 @@ import {
   getSyncTimeRange,
   processFilledOrders,
 } from "../../utils/trades-utils";
+import { Coin } from "@/global-interfaces";
 
 async function fetchPositionHistoryForSymbols(
   apiKey: string,
@@ -21,6 +22,7 @@ async function fetchPositionHistoryForSymbols(
   symbols: string[],
   timeRange: { startTs: number; endTs: number },
   uid: string,
+  coin: Coin = "VST",
 ): Promise<ITradeModel[]> {
   const batchSize = 5;
   const batches = [];
@@ -32,15 +34,23 @@ async function fetchPositionHistoryForSymbols(
   for (const [index, batch] of batches.entries()) {
     const batchResults = await Promise.all(
       batch.map((symbol) =>
-        getPositionHistory(apiKey, secretKey, {
-          symbol,
-          startTs: timeRange.startTs,
-          endTs: timeRange.endTs,
-        })
+        getPositionHistory(
+          apiKey,
+          secretKey,
+          {
+            symbol,
+            startTs: timeRange.startTs,
+            endTs: timeRange.endTs,
+          },
+          coin,
+        )
           .then((r) =>
             r.data.positionHistory.map((ph) => ({
               ...ph,
+              openTime: new Date(ph.openTime),
+              updateTime: new Date(ph.updateTime),
               accountUID: uid,
+              coin,
               type: "P",
             })),
           )
@@ -68,7 +78,8 @@ async function fetchPositionHistoryForSymbols(
   return allPositionHistories;
 }
 
-export async function syncPositions(uid: string) {
+export async function syncPositions(uid: string, coin: Coin = "VST") {
+  console.log(`syncing positions for: ${uid}...`);
   try {
     const uidSyncConfig = await getAccountSync(uid);
 
@@ -96,6 +107,7 @@ export async function syncPositions(uid: string) {
       symbolsToFetch,
       times,
       uid,
+      coin,
     );
 
     const session = await mongoose.startSession();
@@ -108,6 +120,7 @@ export async function syncPositions(uid: string) {
     } finally {
       session.endSession();
     }
+    console.log("positions synced");
   } catch (error) {
     console.error(error);
   }
@@ -120,18 +133,35 @@ export async function saveMultipleTrades(
   await TradeModel.insertMany(trades, { session });
 }
 
-export async function getTradesByAccountUID(
-  uid: string,
-  page: number,
-  limit: number,
-) {
+export async function getTradesByAccountUID({
+  uid,
+  page,
+  limit,
+  coin = "VST",
+  startDate,
+  endDate,
+}: {
+  uid: string;
+  page: number;
+  limit: number;
+  coin?: string;
+  startDate?: Date;
+  endDate?: Date;
+}) {
   const skip = (page - 1) * limit;
   const total = await TradeModel.countDocuments({ accountUID: uid });
   const totalPages = Math.ceil(total / limit);
 
-  const data = await TradeModel.find({
+  const find: Record<string, any> = {
     accountUID: uid,
-  })
+    coin,
+  };
+
+  if (startDate && endDate) {
+    find.updateTime = { $gte: startDate, $lte: endDate };
+  }
+
+  const data = await TradeModel.find(find)
     .sort({ updateTime: -1 })
     .skip(skip)
     .limit(limit);
@@ -142,15 +172,27 @@ export async function getTradesByAccountUID(
   };
 }
 
-export function getTradesStatistic(
-  accountUID: string,
-  startDate: number,
-  endDate: number,
-) {
+export function getTradesStatistic({
+  accountUID,
+  startDate,
+  endDate,
+  coin = "VST",
+}: {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: "VST";
+}) {
+  console.log({
+    startDate,
+    endDate,
+  });
+
   return TradeModel.aggregate([
     {
       $match: {
         accountUID,
+        coin,
         openTime: { $gte: startDate, $lte: endDate },
       },
     },
@@ -259,7 +301,10 @@ export function getTradesStatistic(
             ],
           },
         },
-        netPnL: "$netPnL",
+        netPnL: {
+          value: "$netPnL",
+          totalTrades: "$totalTrades",
+        },
       },
     },
   ]);

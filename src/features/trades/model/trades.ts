@@ -6,8 +6,8 @@ export interface ITradeModel {
   symbol: string;
   positionSide: string;
   isolated: boolean;
-  openTime: number;
-  updateTime: number;
+  openTime: Date;
+  updateTime: Date;
   avgPrice: string;
   avgClosePrice: string;
   realisedProfit: string;
@@ -19,6 +19,7 @@ export interface ITradeModel {
   positionCommission: string;
   totalFunding: string;
   type: "P" | "S";
+  coin: "VST" | "USDT";
 }
 
 /*
@@ -49,11 +50,11 @@ export const TradeSchema = new Schema<ITradeModel>({
     required: true,
   },
   openTime: {
-    type: Number,
+    type: Date,
     required: true,
   },
   updateTime: {
-    type: Number,
+    type: Date,
     required: true,
   },
   avgPrice: {
@@ -101,17 +102,34 @@ export const TradeSchema = new Schema<ITradeModel>({
     required: true,
     enum: ["P", "S"],
   },
+  coin: {
+    type: String,
+    required: true,
+    enum: ["VST", "USDT"],
+  },
 });
 
 TradeSchema.index({ accountUID: 1 });
-TradeSchema.index({ accountUID: 1, openTime: 1 });
-TradeSchema.index({ accountUID: 1, openTime: -1 });
-TradeSchema.index({ accountUID: 1, updateTime: 1 });
-TradeSchema.index({ accountUID: 1, updateTime: -1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: 1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: -1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: 1, updateTime: 1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: 1, updateTime: -1 });
+TradeSchema.index({ accountUID: 1, openTime: 1, coin: 1 });
+TradeSchema.index({ accountUID: 1, openTime: -1, coin: 1 });
+TradeSchema.index({ accountUID: 1, updateTime: 1, coin: 1 });
+TradeSchema.index({ accountUID: 1, updateTime: -1, coin: 1 });
+TradeSchema.index({ accountUID: 1, symbol: 1, openTime: 1, coin: 1 });
+TradeSchema.index({ accountUID: 1, symbol: 1, openTime: -1, coin: 1 });
+TradeSchema.index({
+  accountUID: 1,
+  symbol: 1,
+  openTime: 1,
+  updateTime: 1,
+  coin: 1,
+});
+TradeSchema.index({
+  accountUID: 1,
+  symbol: 1,
+  openTime: 1,
+  updateTime: -1,
+  coin: 1,
+});
 
 export const TradeModel =
   mongoose.models.Trade || mongoose.model("Trade", TradeSchema);

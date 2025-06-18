@@ -7,34 +7,31 @@ import { OpenPositions } from "@/features/trades/components/OpenPositions";
 import { ProfitFactor } from "@/features/trades/components/ProfitFactor";
 import { RecentTrades } from "@/features/trades/components/RecentTrades";
 import { TradeWinPercentage } from "@/features/trades/components/TradeWinPercentage";
+import { getStatistics } from "@/services/api";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { transformDateToParam } from "@/utils/date-utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 
-async function fetchStatistics(
-  uid: string,
-  startDate: number,
-  endDate: number,
-) {
-  const res = await fetch(
-    `/api/statistics?account_id=${uid}&startDate=${startDate}&endDate=${endDate}`,
-  );
-  return res.json();
-}
-
 export default function Dashboard() {
-  const { selectedAccountId, startDate, endDate, isInit } =
+  const { selectedAccountId, startDate, endDate, isStoreLoaded, coin } =
     useUserConfigStore();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["statistics", selectedAccountId, startDate, endDate],
-    queryFn: () => fetchStatistics(selectedAccountId, startDate, endDate),
-    enabled: !!selectedAccountId && startDate !== 0 && endDate !== 0,
+    queryKey: ["statistics", selectedAccountId, startDate, endDate, coin],
+    queryFn: () =>
+      getStatistics({
+        accountId: selectedAccountId,
+        startDate: transformDateToParam(startDate!),
+        endDate: transformDateToParam(endDate!),
+        coin,
+      }),
+    enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
   });
 
   const t = useTranslations("dashboard.statistics");
 
-  if (isInit && !selectedAccountId) {
+  if (isStoreLoaded && !selectedAccountId) {
     return (
       <div>
         <p className="text-center text-xl">
@@ -63,7 +60,7 @@ export default function Dashboard() {
   return (
     <div className="grid gap-5">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <NetPNL netPnL={data?.netPnL || 0} />
+        <NetPNL netPnL={data?.netPnL || {}} />
         <ProfitFactor profitFactor={data?.profitFactor || {}} />
         <TradeWinPercentage tradeWin={data?.tradeWin || {}} />
         <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />

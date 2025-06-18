@@ -8,12 +8,13 @@ type UserConfig = {
   theme: "dark" | "light" | "system";
   setSelectedAccountId: (id: string) => void;
   setTheme: (theme: "dark" | "light" | "system") => void;
-  startDate: number;
-  endDate: number;
-  updateDateRange: (startDate: number, endDate: number) => void;
-  isInit: boolean;
+  startDate: Date | null;
+  endDate: Date | null;
+  updateDateRange: (startDate: Date | null, endDate: Date | null) => void;
+  isStoreLoaded: boolean;
   setHasHydrated: (state: boolean) => void;
   coin: Coin;
+  setCoin: (coin: Coin) => void;
 };
 
 export const useUserConfigStore = create<UserConfig>()(
@@ -21,26 +22,32 @@ export const useUserConfigStore = create<UserConfig>()(
     (set) => ({
       selectedAccountId: "",
       theme: "system",
-      setSelectedAccountId: (id: string) =>
-        set((state) => ({ ...state, selectedAccountId: id })),
-      setTheme: (theme: "dark" | "light" | "system") =>
-        set((state) => ({ ...state, theme })),
-      startDate: 0,
-      endDate: 0,
-      updateDateRange: (startDate: number, endDate: number) =>
-        set((state) => ({ ...state, startDate, endDate })),
-      isInit: false,
+      setSelectedAccountId: (id: string) => set({ selectedAccountId: id }),
+      setTheme: (theme: "dark" | "light" | "system") => set({ theme }),
+      startDate: null,
+      endDate: null,
+      updateDateRange: (startDate: Date | null, endDate: Date | null) =>
+        set({ startDate, endDate }),
+      isStoreLoaded: false,
       coin: "VST",
+      setCoin: (coin: Coin) => set({ coin }),
       setHasHydrated: (state) => {
         set({
-          isInit: state,
+          isStoreLoaded: state,
         });
       },
     }),
     {
       name: "user-config",
-      onRehydrateStorage: (state) => {
-        return () => state.setHasHydrated(true);
+      onRehydrateStorage: () => {
+        return (state) => {
+          const parsedStartDate = state?.startDate
+            ? new Date(state.startDate)
+            : null;
+          const parsedEndDate = state?.endDate ? new Date(state.endDate) : null;
+          state?.updateDateRange(parsedStartDate, parsedEndDate);
+          state?.setHasHydrated(true);
+        };
       },
     },
   ),
