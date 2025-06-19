@@ -2,14 +2,6 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useUserConfigStore } from "@/store/user-config-store";
 import {
   transformDateToParam,
@@ -23,7 +15,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";

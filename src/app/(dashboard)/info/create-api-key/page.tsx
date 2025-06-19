@@ -6,6 +6,8 @@ import Image from "next/image";
 export default function CreateAPIKeyInfo() {
   const t = useTranslations("info.create_key_tutorial");
 
+  if (typeof window === "undefined") return null;
+
   return (
     <div className="max-w-3xl mx-auto px-5">
       <h1 className="text-2xl lg:text-3xl font-bold mb-5">

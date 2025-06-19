@@ -149,7 +149,7 @@ export async function getTradesByAccountUID({
   const total = await TradeModel.countDocuments({ accountUID: uid });
   const totalPages = Math.ceil(total / limit);
 
-  const find: Record<string, any> = {
+  const find: Record<string, string | number> = {
     accountUID: uid,
     coin,
   };

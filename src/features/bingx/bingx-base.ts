@@ -7,7 +7,7 @@ const USDT_HOST = process.env.USDT_HOST;
 type Coin = "VST" | "USDT";
 
 function getParameters(
-  payload: Record<string, string>,
+  payload: Record<string, string | number>,
   timestamp: number,
   urlEncode?: boolean,
 ) {
@@ -39,8 +39,8 @@ export async function makeRequest({
   path: string;
   apiKey: string;
   secretKey: string;
-  payload?: Record<string, any>;
-}): Promise<any> {
+  payload?: Record<string, string | number>;
+}): Promise<unknown> {
   const timestamp = new Date().getTime();
   const sign = CryptoJS.enc.Hex.stringify(
     CryptoJS.HmacSHA256(getParameters(payload, timestamp), secretKey),

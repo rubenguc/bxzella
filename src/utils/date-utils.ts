@@ -1,12 +1,11 @@
 import { format, parse, startOfDay, endOfDay } from "date-fns";
 
-export function transformTimeToLocalDate(time: Date | string) {
+export function transformTimeToLocalDate(time: Date | string | number) {
   if (!time) return "";
 
-  const formattedDate =
-    typeof time === "string"
-      ? new Date(time).toLocaleDateString()
-      : time.toLocaleDateString();
+  const formattedDate = ["string", "number"].includes(typeof time)
+    ? new Date(time).toLocaleDateString()
+    : (time as Date).toLocaleDateString();
   return formattedDate;
 }
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-export function handleApiError(err: any) {
+export function handleApiError(err: unknown) {
   if (err instanceof z.ZodError) {
     return NextResponse.json(
       {
