@@ -1,13 +1,11 @@
-import {
-  AccountModel,
-  IAccountModel,
-} from "@/features/accounts/model/accounts";
+import { AccountModel } from "@/features/accounts/model/accounts";
+import { Account } from "@/features/accounts/interfaces/accounts-interfaces";
 
-export async function createAccountDb(data: IAccountModel) {
+export async function createAccountDb(data: Account) {
   return await AccountModel.create(data);
 }
 
-export async function updateAccountDb(id: string, data: IAccountModel) {
+export async function updateAccountDb(id: string, data: Account) {
   return await AccountModel.findByIdAndUpdate(id, data, { new: true });
 }
 

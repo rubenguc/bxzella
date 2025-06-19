@@ -1,7 +1,6 @@
 import { z } from "zod";
-import { IAccountModel } from "../model/accounts";
 import { useForm } from "react-hook-form";
-import { accountSchema } from "../schemas/accounts";
+import { accountValidationSchema } from "@/features/accounts/schemas/accounts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -28,14 +27,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 interface AccountsActionDialogProps {
-  currentRow?: IAccountModel;
+  currentRow?: AccountDocument;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-type AccountForm = z.infer<typeof accountSchema>;
+type AccountForm = z.infer<typeof accountValidationSchema>;
 
 export function AccountsActionDialog({
   currentRow,
@@ -47,7 +47,7 @@ export function AccountsActionDialog({
 
   const isEdit = !!currentRow;
   const form = useForm<AccountForm>({
-    resolver: zodResolver(accountSchema),
+    resolver: zodResolver(accountValidationSchema),
     defaultValues: isEdit
       ? { ...currentRow, apiKey: "", secretKey: "" }
       : {
@@ -66,7 +66,7 @@ export function AccountsActionDialog({
 
       return;
     }
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ["accounts"],
     });
     form.reset();

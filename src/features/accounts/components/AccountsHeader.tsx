@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useAccounts } from "../context/accounts-context";
+import { useAccounts } from "@/features/accounts/context/accounts-context";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 

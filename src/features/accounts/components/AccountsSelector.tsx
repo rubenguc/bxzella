@@ -9,7 +9,7 @@ import { SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown, Wallet } from "lucide-react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useTranslations } from "next-intl";
-import { useGetAccounts } from "../hooks/useGetAccounts";
+import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
 
 export function AccountsSelector() {
   const t = useTranslations("header");
@@ -35,7 +35,7 @@ export function AccountsSelector() {
         </SelectPrimitive.Icon>
       </SelectTrigger>
       <SelectContent>
-        {accounts?.map((account) => (
+        {accounts.map((account) => (
           <SelectItem key={account._id} value={account._id}>
             {account.name}
           </SelectItem>

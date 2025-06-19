@@ -50,7 +50,7 @@ export function AccountsCoinSelector() {
         </SelectPrimitive.Icon>
       </SelectTrigger>
       <SelectContent>
-        {COINS?.map((_coin) => (
+        {COINS.map((_coin) => (
           <SelectItem
             key={_coin.label}
             value={_coin.label}

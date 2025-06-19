@@ -1,24 +1,23 @@
 "use client";
 
-import { IAccountModel } from "../model/accounts";
 import {
   ColumnDef,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-
 import { DataTableRowActions } from "@/components/data-table-row-actions";
-import { useAccounts } from "../context/accounts-context";
+import { useAccounts } from "@/features/accounts/context/accounts-context";
 import { useTranslations } from "next-intl";
-import { useGetAccounts } from "../hooks/useGetAccounts";
+import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
 import { CustomTable } from "@/components/custom-table";
+import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 export function AccountsTable() {
   const t = useTranslations("accounts");
   const { setOpen, setCurrentRow } = useAccounts();
 
-  const columns: ColumnDef<IAccountModel>[] = [
+  const columns: ColumnDef<AccountDocument>[] = [
     {
       header: t("name"),
       accessorKey: "name",

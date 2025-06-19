@@ -3,16 +3,16 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { TriangleAlert } from "lucide-react";
-import { IAccountModel } from "../model/accounts";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteAccount } from "@/features/accounts/server/actions/accounts";
 import { useTranslations } from "next-intl";
+import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 interface AccountsDeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentRow: IAccountModel;
+  currentRow: AccountDocument;
 }
 
 export function AccountsDeleteDialog({
@@ -22,18 +22,21 @@ export function AccountsDeleteDialog({
 }: AccountsDeleteDialogProps) {
   const t = useTranslations("accounts");
   const tCommon = useTranslations("common_messages");
+  const tError = useTranslations("errors");
 
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     const response = await deleteAccount(currentRow._id);
     if (response?.error) {
-      toast.error(response.message);
+      toast.error(tError(response.message));
       return;
     }
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ["accounts"],
     });
+
+    toast.success(t("account_deleted_message"));
 
     onOpenChange(false);
   };

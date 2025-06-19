@@ -1,5 +1,5 @@
 import { flexRender } from "@tanstack/react-table";
-import { Table as ITable } from "@tanstack/table-core";
+import { Table as ITable, RowData } from "@tanstack/table-core";
 import {
   Table,
   TableBody,
@@ -10,6 +10,13 @@ import {
 } from "./ui/table";
 import { LoadingRows } from "./LoadingRows";
 import { DataTablePagination } from "./data-table-pagination";
+
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    className: string;
+  }
+}
 
 interface CustomTableProps<T> {
   table: ITable<T>;

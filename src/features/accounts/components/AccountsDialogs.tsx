@@ -1,4 +1,4 @@
-import { useAccounts } from "../context/accounts-context";
+import { useAccounts } from "@/features/accounts/context/accounts-context";
 import { AccountsActionDialog } from "./AccountsActionDialog";
 import { AccountsDeleteDialog } from "./AccountsDeleteDialog";
 

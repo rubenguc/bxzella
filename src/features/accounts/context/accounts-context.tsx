@@ -1,20 +1,20 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react";
-import { IAccountModel } from "../model/accounts";
+import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 type AccountsDialogType = "add" | "edit" | "delete";
 
 interface AccountsContextType {
   open: AccountsDialogType | null;
   setOpen: (str: AccountsDialogType | null) => void;
-  currentRow: IAccountModel | null;
-  setCurrentRow: React.Dispatch<React.SetStateAction<IAccountModel | null>>;
+  currentRow: AccountDocument | null;
+  setCurrentRow: React.Dispatch<React.SetStateAction<AccountDocument | null>>;
 }
 
 const AccountsContext = createContext<AccountsContextType | null>(null);
 
 export default function AccountsProvider({ children }: PropsWithChildren) {
   const [open, setOpen] = useState<AccountsDialogType | null>(null);
-  const [currentRow, setCurrentRow] = useState<IAccountModel | null>(null);
+  const [currentRow, setCurrentRow] = useState<AccountDocument | null>(null);
 
   return (
     <AccountsContext.Provider

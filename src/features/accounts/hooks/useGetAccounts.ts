@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAccounts } from "../services/accounts-services";
+import { getAccounts } from "@/features/accounts/services/accounts-services";
 
 export const useGetAccounts = ({
   limit = 10,

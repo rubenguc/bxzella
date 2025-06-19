@@ -22,3 +22,10 @@ export function handleApiError(err: unknown) {
     status: 500,
   });
 }
+
+export function handleServerActionError(message = "server_error") {
+  return {
+    error: true,
+    message,
+  };
+}

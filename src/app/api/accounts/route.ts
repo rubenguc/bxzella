@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export const accountSearchParamsSchema = z.object({
+const accountSearchParamsSchema = z.object({
   page: pageParamValidation(),
   limit: limitParamValidation(),
 });

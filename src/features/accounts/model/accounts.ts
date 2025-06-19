@@ -1,14 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { Account } from "../interfaces/accounts-interfaces";
 
-export interface IAccountModel {
-  userId: string;
-  name: string;
-  apiKey: string;
-  secretKey: string;
-  uid: string;
-}
-
-export const AccountSchema = new Schema<IAccountModel>({
+export const AccountSchema = new Schema<Account>({
   userId: {
     type: String,
     required: true,
