@@ -20,11 +20,11 @@ const badgeVariants = cva(
         "green-outline":
           "border-green-500 bg-transparent text-green-700 [a&]:hover:bg-green-100 [a&]:hover:text-green-800",
         "green-filled":
-          "bg-green-500 text-white [a&]:hover:bg-green-600 [a&]:hover:text-white",
+          "bg-green-500 dark:bg-green-600 text-white [a&]:hover:bg-green-600 [a&]:hover:text-white",
         "red-outline":
-          "border-red-500 bg-transparent text-red-700 [a&]:hover:bg-red-100 [a&]:hover:text-red-800",
+          "border-red-500  bg-transparent text-red-700 [a&]:hover:bg-red-100 [a&]:hover:text-red-800",
         "red-filled":
-          "bg-red-500 text-white [a&]:hover:bg-red-600 [a&]:hover:text-white",
+          "bg-red-500 dark:bg-red-600 text-white [a&]:hover:bg-red-600 [a&]:hover:text-white",
       },
     },
     defaultVariants: {

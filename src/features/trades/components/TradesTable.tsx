@@ -3,20 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { DataTablePagination } from "@/components/data-table-pagination";
+
 import { useUserConfigStore } from "@/store/user-config-store";
 import { ITradeModel } from "../model/trades";
 import { Badge } from "@/components/ui/badge";
@@ -27,11 +18,11 @@ import {
   transformSymbol,
 } from "@/utils/trade-utils";
 import { useTranslations } from "next-intl";
-import { getTrades } from "@/services/api";
-import { LoadingRows } from "@/components/LoadingRows";
 import { useTradeContext } from "../context/trades-context";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { getTrades } from "../services/trades-services";
+import { CustomTable } from "@/components/custom-table";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
@@ -44,14 +35,11 @@ export function TradesTable() {
     {
       header: tInfo("open_date"),
       accessorKey: "openTime",
-      cell: ({ row }) => {
-        const openTime = row.getValue("openTime") as string;
-        return (
-          <div className="font-medium">
-            {transformTimeToLocalDate(openTime)}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.openTime)}
+        </div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -60,10 +48,11 @@ export function TradesTable() {
     {
       header: tInfo("symbol"),
       accessorKey: "symbol",
-      cell: ({ row }) => {
-        const symbol = transformSymbol(row.original.symbol);
-        return <div className="font-medium">{symbol}</div>;
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformSymbol(row.original.symbol)}
+        </div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -72,11 +61,11 @@ export function TradesTable() {
       header: tInfo("position"),
       accessorKey: "positionSide",
       cell: ({ row }) => {
-        const symbol = row.getValue("positionSide") as string;
-        const isLongPosition = checkLongPosition(symbol);
+        const positionSide = row.getValue("positionSide") as string;
+        const isLongPosition = checkLongPosition(positionSide);
         return (
           <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
-            {symbol}
+            {positionSide}
           </Badge>
         );
       },
@@ -87,10 +76,9 @@ export function TradesTable() {
     {
       header: tInfo("leverage"),
       accessorKey: "leverage",
-      cell: ({ row }) => {
-        const leverage = row.getValue("leverage") as number;
-        return <div className="font-medium">{leverage}x</div>;
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">{row.original.leverage}x</div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -98,14 +86,11 @@ export function TradesTable() {
     {
       header: tInfo("closed_date"),
       accessorKey: "updateTime",
-      cell: ({ row }) => {
-        const updateTime = row.getValue("updateTime") as string;
-        return (
-          <div className="font-medium">
-            {transformTimeToLocalDate(updateTime)}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.updateTime)}
+        </div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -128,7 +113,7 @@ export function TradesTable() {
       header: tInfo("position_pnl"),
       accessorKey: "netProfit",
       cell: ({ row }) => {
-        const netProfit = row.getValue("netProfit") as string;
+        const netProfit = row.original.netProfit;
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
@@ -144,27 +129,12 @@ export function TradesTable() {
       header: tInfo("realised_pnl"),
       accessorKey: "realisedProfit",
       cell: ({ row }) => {
-        const realisedProfit = row.getValue("realisedProfit") as string;
+        const realisedProfit = row.original.realisedProfit;
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
             {realisedProfit} {coin}
           </div>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("result"),
-      cell: ({ row }) => {
-        const netProfit = row.getValue("netProfit") as string;
-        const isWin = checkWin(netProfit);
-        return (
-          <Badge variant={isWin ? "green-filled" : "red-filled"}>
-            {isWin ? "Win" : "Loss"}
-          </Badge>
         );
       },
       meta: {
@@ -220,78 +190,16 @@ export function TradesTable() {
     onPaginationChange: setPagination,
   });
 
-  const showSkeleton = !data || isLoading;
-
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className={header.column.columnDef.meta?.className ?? ""}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="group/row"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ""}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <>
-                {showSkeleton ? (
-                  <LoadingRows
-                    rows={10}
-                    columns={table.getAllColumns().length}
-                  />
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      {t("no_trades")}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <DataTablePagination table={table} />
+      <CustomTable
+        containerClassName="rounded-md border"
+        table={table}
+        columnsLength={columns.length}
+        noDataMessage={t("no_trades")}
+        showSkeleton={selectedAccountId && ((!data as boolean) || isLoading)}
+        showPagination
+      />
     </div>
   );
 }

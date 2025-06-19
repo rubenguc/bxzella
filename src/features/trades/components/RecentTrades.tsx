@@ -10,13 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getTrades } from "@/services/api";
 import { useUserConfigStore } from "@/store/user-config-store";
 import {
   transformDateToParam,
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
-import { checkLongPosition, checkWin } from "@/utils/trade-utils";
+import {
+  checkLongPosition,
+  checkWin,
+  transformSymbol,
+} from "@/utils/trade-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
@@ -25,36 +28,36 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
+import { getTrades } from "../services/trades-services";
+import { ITradeModel } from "../model/trades";
+import { CustomTable } from "@/components/custom-table";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
   const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
     useUserConfigStore();
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<ITradeModel>[] = [
     {
       header: "Open date",
       accessorKey: "openTime",
-      cell: ({ row }) => {
-        const openTime = row.getValue("openTime") as string;
-        return (
-          <div className="font-medium">
-            {transformTimeToLocalDate(openTime)}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.openTime)}
+        </div>
+      ),
       meta: {
         className: "text-center",
       },
     },
-
     {
       header: "Symbol",
       accessorKey: "symbol",
-      cell: ({ row }) => {
-        const symbol = (row.getValue("symbol") as string).split("-")?.[0] || "";
-        return <div className="font-medium">{symbol}</div>;
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformSymbol(row.original.symbol)}
+        </div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -63,11 +66,11 @@ export function RecentTrades() {
       header: "Position",
       accessorKey: "positionSide",
       cell: ({ row }) => {
-        const symbol = row.getValue("positionSide") as string;
-        const isLongPosition = checkLongPosition(symbol);
+        const positionSide = row.original.positionSide;
+        const isLongPosition = checkLongPosition(positionSide);
         return (
-          <Badge variant={isLongPosition ? "green-outline" : "red-outline"}>
-            {symbol}
+          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
+            {positionSide}
           </Badge>
         );
       },
@@ -78,10 +81,9 @@ export function RecentTrades() {
     {
       header: "Leverage",
       accessorKey: "leverage",
-      cell: ({ row }) => {
-        const leverage = row.getValue("leverage") as number;
-        return <div className="font-medium">{leverage}x</div>;
-      },
+      cell: ({ row }) => (
+        <div className="font-medium">{row.original.leverage}x</div>
+      ),
       meta: {
         className: "text-center",
       },
@@ -90,7 +92,7 @@ export function RecentTrades() {
       header: "Position PnL",
       accessorKey: "netProfit",
       cell: ({ row }) => {
-        const netProfit = row.getValue("netProfit") as string;
+        const netProfit = row.original.netProfit;
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
@@ -130,62 +132,12 @@ export function RecentTrades() {
         <CardTitle>{t("recent_trades")}</CardTitle>
       </CardHeader>
       <CardContent className="px-1">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      aria-colspan={header.colSpan}
-                      className={header.column.columnDef.meta?.className ?? ""}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="group/row"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ""}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {t("no_recent_trades")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <CustomTable
+          table={table}
+          columnsLength={columns.length}
+          noDataMessage={t("no_recent_trades")}
+          showSkeleton={!data || isLoading}
+        />
       </CardContent>
     </Card>
   );

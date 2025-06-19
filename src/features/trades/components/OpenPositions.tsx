@@ -8,26 +8,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { getOpenPositions } from "@/services/api";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
+import { getOpenPositions } from "../services/trades-services";
+import { ActivePosition } from "@/features/bingx/bingx-interfaces";
+import { CustomTable } from "@/components/custom-table";
 
 export function OpenPositions() {
   const t = useTranslations("dashboard.open_positions");
@@ -35,7 +28,7 @@ export function OpenPositions() {
 
   const { selectedAccountId } = useUserConfigStore();
 
-  const columns: ColumnDef[] = [
+  const columns: ColumnDef<ActivePosition>[] = [
     {
       header: tInfo("open_date"),
       accessorKey: "date",
@@ -66,7 +59,7 @@ export function OpenPositions() {
         const symbol = row.original.positionSide;
         const isLongPosition = checkLongPosition(symbol);
         return (
-          <Badge variant={isLongPosition ? "green-outline" : "red-outline"}>
+          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
             {symbol}
           </Badge>
         );
@@ -79,7 +72,7 @@ export function OpenPositions() {
       header: "Leverage",
       accessorKey: "leverage",
       cell: ({ row }) => {
-        const leverage = row.getValue("leverage") as number;
+        const leverage = row.original.leverage;
         return <div className="font-medium">{leverage}x</div>;
       },
       meta: {
@@ -126,62 +119,12 @@ export function OpenPositions() {
         <CardDescription>{t("open_positions_description")}</CardDescription>
       </CardHeader>
       <CardContent className="px-1">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      aria-colspan={header.colSpan}
-                      className={header.column.columnDef.meta?.className ?? ""}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="group/row"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ""}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {t("no_open_positions")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <CustomTable
+          table={table}
+          columnsLength={columns.length}
+          noDataMessage={t("no_open_positions")}
+          showSkeleton={!data || isLoading}
+        />
       </CardContent>
     </Card>
   );
