@@ -4,6 +4,7 @@ import {
   getTradesByAccountUID,
   syncPositions,
 } from "@/features/trades/server/db/trades";
+import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,
   dateParamValidation,
@@ -47,22 +48,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data);
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          message: "Validation error",
-          errors: err.errors,
-        },
-        { status: 400 },
-      );
-    }
-
-    console.error(err);
-    return NextResponse.json(
-      {
-        message: "server_error",
-      },
-      { status: 500 },
-    );
+    return handleApiError(err);
   }
 }

@@ -2,6 +2,7 @@ import connectDB from "@/db/db";
 import { getAccountByIdWithCredentials } from "@/features/accounts/server/db/accounts";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getUserActiveOpenPositions } from "@/features/bingx/bingx-api";
+import { handleApiError } from "@/utils/server-api-utils";
 import { accountIdParamValidation } from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -32,10 +33,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
-
-    return NextResponse.json({
-      message: "server_error",
-    });
+    return handleApiError(err);
   }
 }

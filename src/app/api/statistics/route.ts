@@ -1,6 +1,7 @@
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts";
 import { getTradesStatistic } from "@/features/trades/server/db/trades";
+import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,
   dateParamValidation,
@@ -36,18 +37,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data[0] || {});
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          message: "Validation error",
-          errors: err.errors,
-        },
-        { status: 400 },
-      );
-    }
-
-    return NextResponse.json({
-      message: "server_error",
-    });
+    return handleApiError(err);
   }
 }

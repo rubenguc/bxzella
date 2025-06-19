@@ -1,5 +1,6 @@
 import connectDB from "@/db/db";
 import { getAccountsByUserId } from "@/features/accounts/server/db/accounts";
+import { handleApiError } from "@/utils/server-api-utils";
 import { limitParamValidation, pageParamValidation } from "@/utils/zod-utils";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -25,20 +26,6 @@ export async function GET(request: NextRequest) {
     const data = await getAccountsByUserId(userId, page, limit);
     return NextResponse.json(data);
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          message: "Validation error",
-          errors: err.errors,
-        },
-        { status: 400 },
-      );
-    }
-
-    console.log(err);
-
-    return NextResponse.json({
-      message: "server_error",
-    });
+    return handleApiError(err);
   }
 }
