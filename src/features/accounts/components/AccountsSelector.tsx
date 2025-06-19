@@ -6,24 +6,16 @@ import {
 } from "@/components/ui/select";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { SelectTrigger } from "@radix-ui/react-select";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, Wallet } from "lucide-react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useTranslations } from "next-intl";
-import { getAccounts } from "@/services/api";
+import { useGetAccounts } from "../hooks/useGetAccounts";
 
 export function AccountsSelector() {
   const t = useTranslations("header");
   const { selectedAccountId, setSelectedAccountId } = useUserConfigStore();
 
-  const { data } = useQuery({
-    queryKey: ["accounts"],
-    queryFn: () =>
-      getAccounts({
-        limit: 10,
-        page: 0,
-      }),
-  });
+  const { data } = useGetAccounts({});
 
   const accounts = data?.data || [];
 
@@ -37,7 +29,7 @@ export function AccountsSelector() {
         <SelectPrimitive.Icon asChild>
           <Wallet className="h-4 w-4 opacity-50" />
         </SelectPrimitive.Icon>
-        <SelectValue className="hola" placeholder={t("select_account")} />
+        <SelectValue placeholder={t("account")} />
         <SelectPrimitive.Icon asChild className="hidden md:block">
           <ChevronDown className="h-4 w-4 opacity-50 ml-auto" />
         </SelectPrimitive.Icon>

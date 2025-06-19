@@ -27,6 +27,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 interface AccountsActionDialogProps {
   currentRow?: IAccountModel;
@@ -146,6 +147,18 @@ export function AccountsActionDialog({
           </Form>
           <p className="mt-5 text-gray-400 text-sm">
             *{t("account_sync_trades_descriptions")}
+          </p>
+          <p className="mt-5 text-gray-400 text-sm">
+            {t.rich("create_api_key_info", {
+              link: (chunks) => (
+                <Link
+                  className="text-blue-400 hover:underline"
+                  href="/info/create-api-key"
+                >
+                  {chunks}
+                </Link>
+              ),
+            })}
           </p>
         </div>
         <DialogFooter>
