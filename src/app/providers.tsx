@@ -4,12 +4,30 @@
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import {
   isServer,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 function makeQueryClient() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const t = useTranslations("errors");
+
   return new QueryClient({
+    queryCache: new QueryCache({
+      onError: (err) => {
+        if (
+          err?.status === 500 &&
+          err?.response?.data === "incorrect_api_key_error"
+        ) {
+          toast(t("incorrect_api_key_error"), {
+            description: t("incorrect_api_key_error_description"),
+          });
+        }
+      },
+    }),
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime

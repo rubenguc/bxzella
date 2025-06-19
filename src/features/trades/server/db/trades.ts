@@ -80,50 +80,47 @@ async function fetchPositionHistoryForSymbols(
 
 export async function syncPositions(uid: string, coin: Coin = "VST") {
   console.log(`syncing positions for: ${uid}...`);
+
+  const uidSyncConfig = await getAccountSync(uid);
+
+  const times = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
+
+  const account = await getAccountByUID(uid);
+  if (!account) return [];
+
+  const { decriptedApiKey, decryptedSecretKey } =
+    getDecryptedAccountCredentials(account);
+
+  const filledOrders = await getFilledOrders(
+    decriptedApiKey,
+    decryptedSecretKey,
+    times,
+  );
+
+  const symbolsToFetch = processFilledOrders(filledOrders);
+
+  if (symbolsToFetch.length === 0) return;
+
+  const allPositionHistories = await fetchPositionHistoryForSymbols(
+    decriptedApiKey,
+    decryptedSecretKey,
+    symbolsToFetch,
+    times,
+    uid,
+    coin,
+  );
+
+  const session = await mongoose.startSession();
+
   try {
-    const uidSyncConfig = await getAccountSync(uid);
-
-    const times = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
-
-    const account = await getAccountByUID(uid);
-    if (!account) return [];
-
-    const { decriptedApiKey, decryptedSecretKey } =
-      getDecryptedAccountCredentials(account);
-
-    const filledOrders = await getFilledOrders(
-      decriptedApiKey,
-      decryptedSecretKey,
-      times,
-    );
-
-    const symbolsToFetch = processFilledOrders(filledOrders);
-
-    if (symbolsToFetch.length === 0) return;
-
-    const allPositionHistories = await fetchPositionHistoryForSymbols(
-      decriptedApiKey,
-      decryptedSecretKey,
-      symbolsToFetch,
-      times,
-      uid,
-      coin,
-    );
-
-    const session = await mongoose.startSession();
-
-    try {
-      await session.withTransaction(async () => {
-        await createOrUpdateAccountSync(uid, times.endTs, session);
-        await saveMultipleTrades(allPositionHistories, session);
-      });
-    } finally {
-      session.endSession();
-    }
-    console.log("positions synced");
-  } catch (error) {
-    console.error(error);
+    await session.withTransaction(async () => {
+      await createOrUpdateAccountSync(uid, times.endTs, session);
+      await saveMultipleTrades(allPositionHistories, session);
+    });
+  } finally {
+    session.endSession();
   }
+  console.log("positions synced");
 }
 
 export async function saveMultipleTrades(

@@ -19,30 +19,31 @@ export type UserBalanceResponse = GenericResponse<
   }[]
 >;
 
-export type UserPositionResponse = GenericResponse<
-  {
-    currency: string;
-    positionAmt: string;
-    availableAmt: string;
-    positionSide: string;
-    isolated: boolean;
-    avgPrice: string;
-    initialMargin: string;
-    margin: string;
-    leverage: number;
-    unrealizedProfit: string;
-    realisedProfit: string;
-    liquidationPrice: number;
-    pnlRatio: string;
-    maxMarginReduction: string;
-    riskRate: string;
-    markPrice: string;
-    positionValue: string;
-    onlyOnePosition: boolean;
-    createTime: number;
-    updateTime: number;
-  }[]
->;
+export type ActivePosition = {
+  currency: string;
+  positionAmt: string;
+  availableAmt: string;
+  positionSide: string;
+  isolated: boolean;
+  avgPrice: string;
+  initialMargin: string;
+  margin: string;
+  leverage: number;
+  unrealizedProfit: string;
+  realisedProfit: string;
+  liquidationPrice: number;
+  pnlRatio: string;
+  maxMarginReduction: string;
+  riskRate: string;
+  markPrice: string;
+  positionValue: string;
+  onlyOnePosition: boolean;
+  createTime: number;
+  updateTime: number;
+  symbol: string;
+};
+
+export type UserPositionResponse = GenericResponse<ActivePosition[]>;
 
 export type UserFillOrdersResponse = GenericResponse<{
   fill_orders: {

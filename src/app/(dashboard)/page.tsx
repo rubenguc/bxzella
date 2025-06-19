@@ -1,13 +1,13 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { AvgWinLoss } from "@/features/trades/components/AvgWinLoss";
 import { NetPNL } from "@/features/trades/components/NetPNL";
 import { OpenPositions } from "@/features/trades/components/OpenPositions";
 import { ProfitFactor } from "@/features/trades/components/ProfitFactor";
 import { RecentTrades } from "@/features/trades/components/RecentTrades";
+import { StatisticsSkeleton } from "@/features/trades/components/StatisticsSkeleton";
 import { TradeWinPercentage } from "@/features/trades/components/TradeWinPercentage";
-import { getStatistics } from "@/services/api";
+import { getStatistics } from "@/features/trades/services/trades-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
 import { useQuery } from "@tanstack/react-query";
@@ -41,21 +41,7 @@ export default function Dashboard() {
     );
   }
 
-  if (isLoading || !data)
-    return (
-      <div className="grid gap-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-        </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-          <Skeleton className="col-span-1 h-26 max-h-40" />
-        </div>
-      </div>
-    );
+  if (isLoading || !data) return <StatisticsSkeleton />;
 
   return (
     <div className="grid gap-5">
