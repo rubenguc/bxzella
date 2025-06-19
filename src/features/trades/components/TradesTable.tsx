@@ -29,11 +29,16 @@ import {
 import { useTranslations } from "next-intl";
 import { getTrades } from "@/services/api";
 import { LoadingRows } from "@/components/LoadingRows";
+import { useTradeContext } from "../context/trades-context";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
+
+  const { setCurrentTrade } = useTradeContext();
 
   const columns: ColumnDef<ITradeModel>[] = [
     {
@@ -70,7 +75,7 @@ export function TradesTable() {
         const symbol = row.getValue("positionSide") as string;
         const isLongPosition = checkLongPosition(symbol);
         return (
-          <Badge variant={isLongPosition ? "green-outline" : "red-outline"}>
+          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
             {symbol}
           </Badge>
         );
@@ -165,6 +170,19 @@ export function TradesTable() {
       meta: {
         className: "text-center",
       },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Button
+          variant="ghost"
+          className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+          onClick={() => setCurrentTrade(row.original)}
+        >
+          <Eye className="h-4 w-4" />
+          <span className="sr-only">Open menu</span>
+        </Button>
+      ),
     },
   ];
 
