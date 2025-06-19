@@ -2,10 +2,12 @@
   "sidebar": {
     "home": "Home",
     "trades": "Trades",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "info": "Info",
+    "create_api_key": "Create API Key"
   },
   "header": {
-    "select_account": "Select Account",
+    "account": "Account",
     "select_coin": "Select Coin",
     "light": "Light",
     "dark": "Dark",
@@ -48,6 +50,11 @@
     "page": "Page",
     "of": "of"
   },
+  "errors": {
+    "server_error": "Server error",
+    "incorrect_api_key_error": "Incorrect API key",
+    "incorrect_api_key_error_description": "Please check your API key and try again."
+  },
   "dashboard": {
     "statistics": {
       "net_pnl": "Net PnL",
@@ -88,6 +95,25 @@
     "account_updated_message": "Account updated successfully",
     "account_deleted_message": "Account deleted successfully",
     "account_error_message": "An error occurred while saving the account",
-    "account_sync_trades_descriptions": "If the account ID associated with this account is not already registered, we will sync all your closed postions based on your filled positions based on your the last 30 days. This may take a while"
+    "account_sync_trades_descriptions": "If the account ID associated with this account is not already registered, we will sync all your closed postions based on your filled positions based on your the last 30 days. This may take a while",
+    "create_api_key_info": "Don't you know how to create an API key? Follow this <link>guide</link> to learn how to create an API key."
+  },
+  "info": {
+    "create_key_tutorial": {
+      "create_bingx_api_key": "Creating a Bingx API Key",
+      "step_by_step_guide": "Step-by-step Guide",
+      "log_into_bingx": "Log into Bingx",
+      "log_into_bingx_description": "Access your <link>Bingx Account</link> and verify that your account meets all requirements for API access.",
+      "go_to_api_managment": "Go to API Management",
+      "go_to_api_managment_description": "Find the 'API Management' tab in your account settings.",
+      "initiate_api_key_creation": "Initiate API Key Creation",
+      "initiate_api_key_creation_description": "Click on 'Create API Key' button.",
+      "config_and_create_your_api_key": "Configure and create your API key",
+      "only_read_permission_needed": "Only the read permission is needed",
+      "add_ip_whitelisting": "Add IP Whitelisting, you can use a page like <link>this</link> to get the ip based on the domain.",
+      "complete_verification_steps_to_continue": "Complete the verification steps to continue",
+      "copy_api_and_secret_key": "Copy API and Secret Key",
+      "copy_api_and_secret_key_description": "Save the API and Secret Key in a secure location. Make sure to save them in this phase, if you don't do it now, <strong>you will not</strong> be able to get your secret key again."
+    }
   }
 }

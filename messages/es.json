@@ -2,7 +2,8 @@
   "sidebar": {
     "home": "Inicio",
     "trades": "Operaciones",
-    "accounts": "Cuentas"
+    "accounts": "Cuentas",
+    "create_api_key": "Crear Clave API"
   },
   "header": {
     "select_account": "Seleccionar Cuenta",
@@ -48,6 +49,11 @@
     "page": "Página",
     "of": "de"
   },
+  "errors": {
+    "server_error": "Error del servidor",
+    "incorrect_api_key_error": "Clave API incorrecta",
+    "incorrect_api_key_error_description": "Por favor, verifica tu clave API e inténtalo nuevamente."
+  },
   "dashboard": {
     "statistics": {
       "net_pnl": "Ganancia Neta",
@@ -88,6 +94,25 @@
     "account_updated_message": "Cuenta actualizada exitosamente",
     "account_deleted_message": "Cuenta eliminada exitosamente",
     "account_error_message": "Ocurrió un error al guardar la cuenta",
-    "account_sync_trades_descriptions": "Si el ID de la cuenta asociada con esta cuenta no está ya registrado, sincronizaremos todas tus posiciones cerradas basadas en tus posiciones completadas basadas en tus últimos 30 días. Esto puede llevar algún tiempo"
+    "account_sync_trades_descriptions": "Si el ID de la cuenta asociada con esta cuenta no está ya registrado, sincronizaremos todas tus posiciones cerradas basadas en tus posiciones completadas basadas en tus últimos 30 días. Esto puede llevar algún tiempo",
+    "create_api_key_info": "¿No sabes cómo crear una clave API? Sigue esta <link>guía</link> para aprender cómo crear una clave API."
+  },
+  "info": {
+    "create_key_tutorial": {
+      "create_bingx_api_key": "Crear una clave API de Bingx",
+      "step_by_step_guide": "Guía paso a paso",
+      "log_into_bingx": "Inicia sesión en Bingx",
+      "log_into_bingx_description": "Accede a tu <link>Cuenta Bingx</link> y verifica que tu cuenta cumpla con todos los requisitos para el acceso API.",
+      "go_to_api_managment": "Ve a Gestión de API",
+      "go_to_api_managment_description": "Encuentra la pestaña 'Gestión de API' en la configuración de tu cuenta.",
+      "initiate_api_key_creation": "Inicia la creación de la clave API",
+      "initiate_api_key_creation_description": "Haz clic en el botón 'Crear clave API'.",
+      "config_and_create_your_api_key": "Configura y crea tu clave API",
+      "only_read_permission_needed": "Solo se necesita permiso de lectura",
+      "add_ip_whitelisting": "Agrega una lista blanca de IPs, puedes usar una página como <link>esta</link> para obtener la IP basada en el dominio.",
+      "complete_verification_steps_to_continue": "Completa los pasos de verificación para continuar",
+      "copy_api_and_secret_key": "Copia la clave API y la clave secreta",
+      "copy_api_and_secret_key_description": "Guarda la clave API y la clave secreta en un lugar seguro. Asegúrate de guardarlas en esta etapa, si no lo haces ahora, <strong>no podrás</strong> recuperar tu clave secreta nuevamente."
+    }
   }
 }
