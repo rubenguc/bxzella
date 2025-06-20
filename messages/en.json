@@ -96,7 +96,9 @@
     "account_deleted_message": "Account deleted successfully",
     "account_error_message": "An error occurred while saving the account",
     "account_sync_trades_descriptions": "If the account ID associated with this account is not already registered, we will sync all your closed postions based on your filled positions based on your the last 30 days. This may take a while",
-    "create_api_key_info": "Don't you know how to create an API key? Follow this <link>guide</link> to learn how to create an API key."
+    "create_api_key_info": "Don't you know how to create an API key? Follow this <link>guide</link> to learn how to create an API key.",
+    "invalid_api_keys": "Invalid API keys",
+    "invalid_account_data": "Invalid account data"
   },
   "info": {
     "create_key_tutorial": {

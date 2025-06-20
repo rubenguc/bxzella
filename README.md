@@ -1,7 +1,7 @@
 
 <center style="display: flex; justify-content: center;align-items: center; gap: 1rem; margin-bottom: 2rem">
 <img src="public/logo.png" width="120" heigth="120" />
-    <p 
+    <p
       style="
     font-size: 4rem;
     font-weight: bold;
@@ -9,7 +9,7 @@
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    background-image: linear-gradient(to right, #60A5FA, white); 
+    background-image: linear-gradient(to right, #60A5FA, white);
   "
     >BXZella<p>
 </center>
@@ -117,3 +117,6 @@ bxzella/
 ├── messages/                 # Translation files
 └── ...                       # Other configuration files (tailwind, tsconfig, etc.)
 ```
+
+### Resouces
+- [Template used](https://github.com/satnaing/shadcn-admin)

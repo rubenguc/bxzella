@@ -95,7 +95,9 @@
     "account_deleted_message": "Cuenta eliminada exitosamente",
     "account_error_message": "Ocurrió un error al guardar la cuenta",
     "account_sync_trades_descriptions": "Si el ID de la cuenta asociada con esta cuenta no está ya registrado, sincronizaremos todas tus posiciones cerradas basadas en tus posiciones completadas basadas en tus últimos 30 días. Esto puede llevar algún tiempo",
-    "create_api_key_info": "¿No sabes cómo crear una clave API? Sigue esta <link>guía</link> para aprender cómo crear una clave API."
+    "create_api_key_info": "¿No sabes cómo crear una clave API? Sigue esta <link>guía</link> para aprender cómo crear una clave API.",
+    "invalid_api_keys": "Claves API inválidas",
+    "invalid_account_data": "Datos de cuenta inválidos"
   },
   "info": {
     "create_key_tutorial": {
