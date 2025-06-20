@@ -2,13 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 
 interface ProfitFactorProps {
-  profitFactor: {
-    value: number;
-    sumWin: number;
-    sumLoss: number;
-  };
+  profitFactor: TradeStatisticsResult["profitFactor"];
 }
 
 export function ProfitFactor({ profitFactor }: ProfitFactorProps) {

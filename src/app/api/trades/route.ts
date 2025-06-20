@@ -14,7 +14,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export const TradesSearchParamsSchema = z.object({
+const TradesSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   page: pageParamValidation(),
   limit: limitParamValidation(),

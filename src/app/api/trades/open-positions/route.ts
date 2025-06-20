@@ -7,7 +7,7 @@ import { accountIdParamValidation } from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export const openPositionsSearchParamsSchema = z.object({
+const openPositionsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
 });
 

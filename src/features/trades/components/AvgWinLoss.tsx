@@ -2,9 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
+import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 
 interface AvgWinLossProps {
-  avgWinLoss: { value: number; avgWin: number; avgLoss: number };
+  avgWinLoss: TradeStatisticsResult["avgWinLoss"];
 }
 
 export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {

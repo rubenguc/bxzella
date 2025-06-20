@@ -1,33 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { Trade } from "@/features/trades/interfaces/trades-interfaces";
 
-export interface ITradeModel {
-  accountUID: string;
-  positionId: string;
-  symbol: string;
-  positionSide: string;
-  isolated: boolean;
-  openTime: Date;
-  updateTime: Date;
-  avgPrice: string;
-  avgClosePrice: string;
-  realisedProfit: string;
-  netProfit: string;
-  positionAmt: string;
-  closePositionAmt: string;
-  leverage: number;
-  closeAllPositions: boolean;
-  positionCommission: string;
-  totalFunding: string;
-  type: "P" | "S";
-  coin: "VST" | "USDT";
-}
-
-/*
- * P - Perpetual contracts
- * S - Standard contracts
- */
-
-export const TradeSchema = new Schema<ITradeModel>({
+export const TradeSchema = new Schema<Trade>({
   accountUID: {
     type: String,
     required: true,

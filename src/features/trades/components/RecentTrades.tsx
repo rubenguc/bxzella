@@ -19,16 +19,16 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { getTrades } from "../services/trades-services";
-import { ITradeModel } from "../model/trades";
+import { getTrades } from "@/features/trades/services/trades-services";
 import { CustomTable } from "@/components/custom-table";
+import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
   const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
     useUserConfigStore();
 
-  const columns: ColumnDef<ITradeModel>[] = [
+  const columns: ColumnDef<TradeDocument>[] = [
     {
       header: "Open date",
       accessorKey: "openTime",

@@ -7,9 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-
 import { useUserConfigStore } from "@/store/user-config-store";
-import { ITradeModel } from "../model/trades";
 import { Badge } from "@/components/ui/badge";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import {
@@ -18,11 +16,12 @@ import {
   transformSymbol,
 } from "@/utils/trade-utils";
 import { useTranslations } from "next-intl";
-import { useTradeContext } from "../context/trades-context";
+import { useTradeContext } from "@/features/trades/context/trades-context";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { getTrades } from "../services/trades-services";
 import { CustomTable } from "@/components/custom-table";
+import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
@@ -31,7 +30,7 @@ export function TradesTable() {
 
   const { setCurrentTrade } = useTradeContext();
 
-  const columns: ColumnDef<ITradeModel>[] = [
+  const columns: ColumnDef<TradeDocument>[] = [
     {
       header: tInfo("open_date"),
       accessorKey: "openTime",
@@ -197,7 +196,7 @@ export function TradesTable() {
         table={table}
         columnsLength={columns.length}
         noDataMessage={t("no_trades")}
-        showSkeleton={selectedAccountId && ((!data as boolean) || isLoading)}
+        showSkeleton={!!selectedAccountId && ((!data as boolean) || isLoading)}
         showPagination
       />
     </div>

@@ -2,12 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
+import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 
 interface NetPNLProps {
-  netPnL: {
-    value: number;
-    totalTrades: number;
-  };
+  netPnL: TradeStatisticsResult["netPnL"];
 }
 
 export function NetPNL({ netPnL }: NetPNLProps) {

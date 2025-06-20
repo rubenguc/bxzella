@@ -18,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { getOpenPositions } from "../services/trades-services";
+import { getOpenPositions } from "@/features/trades/services/trades-services";
 import { ActivePosition } from "@/features/bingx/bingx-interfaces";
 import { CustomTable } from "@/components/custom-table";
 

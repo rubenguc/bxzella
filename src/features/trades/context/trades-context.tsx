@@ -7,12 +7,12 @@ import {
   useContext,
   useState,
 } from "react";
-import { ITradeModel } from "../model/trades";
+import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 interface TradesContextType {
   isOpen: boolean;
-  currentTrade: ITradeModel | null;
-  setCurrentTrade: Dispatch<SetStateAction<ITradeModel | null>>;
+  currentTrade: TradeDocument | null;
+  setCurrentTrade: Dispatch<SetStateAction<TradeDocument | null>>;
 }
 
 const TradesContext = createContext<TradesContextType | null>(null);
@@ -22,7 +22,7 @@ export default function TradesProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [currentTrade, setCurrentTrade] = useState<ITradeModel | null>(null);
+  const [currentTrade, setCurrentTrade] = useState<TradeDocument | null>(null);
 
   const isOpen = !!currentTrade;
 

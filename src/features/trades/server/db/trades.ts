@@ -9,12 +9,13 @@ import {
   getPositionHistory,
 } from "@/features/bingx/bingx-api";
 import mongoose from "mongoose";
-import { ITradeModel, TradeModel } from "../../model/trades";
 import {
   getSyncTimeRange,
   processFilledOrders,
-} from "../../utils/trades-utils";
+} from "@/features/trades/utils/trades-utils";
 import { Coin } from "@/global-interfaces";
+import { Trade } from "@/features/trades/interfaces/trades-interfaces";
+import { TradeModel } from "@/features/trades/model/trades";
 
 async function fetchPositionHistoryForSymbols(
   apiKey: string,
@@ -23,14 +24,14 @@ async function fetchPositionHistoryForSymbols(
   timeRange: { startTs: number; endTs: number },
   uid: string,
   coin: Coin = "VST",
-): Promise<ITradeModel[]> {
+): Promise<Trade[]> {
   const batchSize = 5;
   const batches = [];
   for (let i = 0; i < symbols.length; i += batchSize) {
     batches.push(symbols.slice(i, i + batchSize));
   }
 
-  const allPositionHistories: ITradeModel[] = [];
+  const allPositionHistories: Trade[] = [];
   for (const [index, batch] of batches.entries()) {
     const batchResults = await Promise.all(
       batch.map((symbol) =>
@@ -67,7 +68,7 @@ async function fetchPositionHistoryForSymbols(
     allPositionHistories.push(
       ...(batchResults.flatMap(
         (symbolPositions) => symbolPositions,
-      ) as ITradeModel[]),
+      ) as Trade[]),
     );
 
     if (index < batches.length - 1) {
@@ -124,7 +125,7 @@ export async function syncPositions(uid: string, coin: Coin = "VST") {
 }
 
 export async function saveMultipleTrades(
-  trades: ITradeModel[],
+  trades: Trade[],
   session: mongoose.ClientSession,
 ) {
   await TradeModel.insertMany(trades, { session });
@@ -149,7 +150,8 @@ export async function getTradesByAccountUID({
   const total = await TradeModel.countDocuments({ accountUID: uid });
   const totalPages = Math.ceil(total / limit);
 
-  const find: Record<string, string | number> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const find: Record<string, any> = {
     accountUID: uid,
     coin,
   };
@@ -180,11 +182,6 @@ export function getTradesStatistic({
   endDate: Date;
   coin?: "VST";
 }) {
-  console.log({
-    startDate,
-    endDate,
-  });
-
   return TradeModel.aggregate([
     {
       $match: {

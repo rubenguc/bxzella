@@ -9,7 +9,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export const statictisSearchParamsSchema = z.object({
+const statictisSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   startDate: dateParamValidation({ field: "startDate" }),
   endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),

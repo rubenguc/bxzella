@@ -7,9 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ITradeModel } from "../model/trades";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
-import { useTradeContext } from "../context/trades-context";
+import { useTradeContext } from "@/features/trades/context/trades-context";
 import {
   checkLongPosition,
   checkWin,
@@ -64,13 +63,12 @@ export function TradeInfoDialog() {
     positionSide = "0",
     positionAmt = "0",
     closePositionAmt = "",
-  } = currentTrade || ({} as ITradeModel);
+  } = currentTrade || {};
 
   const isWin = checkWin(netProfit);
   const isLongPosition = checkLongPosition(positionSide);
   const formattedSymbol = transformSymbol(symbol);
 
-  // Pre-calcular valores formateados
   const netProfitFormatted = formatDecimal(Number(netProfit));
   const realisedProfitFormatted = formatDecimal(Number(realisedProfit));
   const avgPriceFormatted = formatDecimal(Number(avgPrice));
