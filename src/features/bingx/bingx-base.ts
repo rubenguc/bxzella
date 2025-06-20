@@ -1,10 +1,9 @@
 import CryptoJS from "crypto-js";
 import axios from "axios";
+import { Coin } from "@/global-interfaces";
 
 const VST_HOST = process.env.VST_HOST;
 const USDT_HOST = process.env.USDT_HOST;
-
-type Coin = "VST" | "USDT";
 
 function getParameters(
   payload: Record<string, string | number>,
@@ -40,7 +39,8 @@ export async function makeRequest({
   apiKey: string;
   secretKey: string;
   payload?: Record<string, string | number>;
-}): Promise<unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}): Promise<any> {
   const timestamp = new Date().getTime();
   const sign = CryptoJS.enc.Hex.stringify(
     CryptoJS.HmacSHA256(getParameters(payload, timestamp), secretKey),
