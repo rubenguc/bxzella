@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
+// @ts-expect-error -- *
 let cached = global.mongoose;
 
 if (!cached) {
+  // @ts-expect-error -- *
   cached = global.mongoose = { conn: null, promise: null };
 }
 
@@ -13,6 +15,7 @@ export default async function connectDB() {
     const opts = {
       bufferCommands: false,
     };
+    // @ts-expect-error -- *
     cached.promise = mongoose.connect(process.env.MONGODB_URI, opts);
   }
 

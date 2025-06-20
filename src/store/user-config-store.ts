@@ -1,13 +1,12 @@
+import { Coin, Theme } from "@/global-interfaces";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type Coin = "VST" | "USDT";
-
 type UserConfig = {
   selectedAccountId: string;
-  theme: "dark" | "light" | "system";
+  theme: Theme;
   setSelectedAccountId: (id: string) => void;
-  setTheme: (theme: "dark" | "light" | "system") => void;
+  setTheme: (theme: Theme) => void;
   startDate: Date | null;
   endDate: Date | null;
   updateDateRange: (startDate: Date | null, endDate: Date | null) => void;
@@ -22,15 +21,14 @@ export const useUserConfigStore = create<UserConfig>()(
     (set) => ({
       selectedAccountId: "",
       theme: "system",
-      setSelectedAccountId: (id: string) => set({ selectedAccountId: id }),
-      setTheme: (theme: "dark" | "light" | "system") => set({ theme }),
+      setSelectedAccountId: (id) => set({ selectedAccountId: id }),
+      setTheme: (theme) => set({ theme }),
       startDate: null,
       endDate: null,
-      updateDateRange: (startDate: Date | null, endDate: Date | null) =>
-        set({ startDate, endDate }),
+      updateDateRange: (startDate, endDate) => set({ startDate, endDate }),
       isStoreLoaded: false,
       coin: "VST",
-      setCoin: (coin: Coin) => set({ coin }),
+      setCoin: (coin) => set({ coin }),
       setHasHydrated: (state) => {
         set({
           isStoreLoaded: state,

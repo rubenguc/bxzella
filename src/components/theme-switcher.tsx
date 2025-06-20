@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-// import { IconCheck, IconMoon, IconSun } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/theme-context";
 import { Button } from "@/components/ui/button";
@@ -11,15 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Theme } from "@/global-interfaces";
 
-const themes = ["light", "dark", "system"];
+const themes: Theme[] = ["light", "dark", "system"];
 
 export function ThemeSwitch() {
   const t = useTranslations("header");
   const { theme, setTheme } = useTheme();
 
-  /* Update theme-color meta tag
-   * when theme is updated */
   useEffect(() => {
     const themeColor = theme === "dark" ? "#020817" : "#fff";
     const metaThemeColor = document.querySelector("meta[name='theme-color']");
