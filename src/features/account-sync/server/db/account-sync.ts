@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { AccountSyncModel } from "../../model/account-sync";
+import { AccountSyncModel } from "@/features/account-sync/model/account-sync";
 
 export const createOrUpdateAccountSync = (
   uid: string,

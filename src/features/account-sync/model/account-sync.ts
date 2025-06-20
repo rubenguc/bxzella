@@ -1,11 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { AccountSync } from "@/features/account-sync/interfaces/account-sync-interfaces";
 
-export interface IAccountSyncModel {
-  uid: string;
-  perpetualLastSyncTime: number;
-}
-
-export const AccounSyncSchema = new Schema<IAccountSyncModel>({
+export const AccounSyncSchema = new Schema<AccountSync>({
   uid: {
     type: String,
     required: true,
