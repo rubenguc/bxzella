@@ -15,6 +15,7 @@ function makeQueryClient() {
 
   return new QueryClient({
     queryCache: new QueryCache({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (err: any) => {
         if (
           err?.status === 500 &&
