@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 // import Link from "next/link";
 
 export function ProfileDropdown() {
@@ -40,12 +41,9 @@ export function ProfileDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* <DropdownMenuItem asChild>
-            <Link href="/about">Profile</Link>
-          </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/about">Settings</Link>
-          </DropdownMenuItem> */}
+            <Link href="/settings">{t("settings")}</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

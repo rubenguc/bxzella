@@ -3,15 +3,17 @@
     "home": "Inicio",
     "trades": "Operaciones",
     "accounts": "Cuentas",
+    "info": "Información",
     "create_api_key": "Crear Clave API"
   },
   "header": {
-    "select_account": "Seleccionar Cuenta",
+    "account": "Seleccionar Cuenta",
     "select_coin": "Select Moneda",
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema",
-    "log_out": "Cerrar Sesión"
+    "log_out": "Cerrar Sesión",
+    "settings": "Configuración"
   },
   "trade_info": {
     "open_date": "Fecha de Apertura",
@@ -32,8 +34,8 @@
     "no": "No",
     "total_funding": "Financiamiento total",
     "total_funding_info": "El Total Funding muestra las tarifas acumuladas pagadas o recibidas por mantener una posición perpetua. Se calcula como (posiciones abiertas × tasa de funding) y puede ser positivo (pagado) o negativo (recibido).",
-    "aprox_entry_amount": "Monto aproximado de entrada",
-    "aprox_entry_amonut_info": "Muestra el capital real utilizado para tu posición tras deducir comisiones.",
+    "approx_entry_amount": "Monto aproximado de entrada",
+    "approx_entry_amount_info": "Muestra el capital real utilizado para tu posición tras deducir comisiones.",
     "position_commission": "Comisión de posición",
     "open_position_value": "Valor de posición al abrir",
     "close_position_value": "Valor de posición al cerrar",
@@ -65,9 +67,9 @@
       "net_pnl_info": "La ganancia neta representa la ganancia o pérdida total después de haber deducido los gastos y comisiones. Representa la ganancia o pérdida real de las operaciones de trading.",
       "profit_factor": "Factor de Ganancia",
       "profit_factor_info": "Métrica que mide la rentabilidad de una estrategia de trading dividiendo las ganancias totales entre las pérdidas totales. Un valor superior a 1 indica estrategia rentable; por debajo, que las pérdidas superan a las ganancias.",
-      "trade_win_percentage": "Porcentaje de Operaciones Ganadoras",
-      "trade_win_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
-      "avg_win_loss": "Promedio Ganancia/Pérdida por Operación",
+      "trade_win_percentage": "% de Op. Ganadoras",
+      "trade_win_percentage_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
+      "avg_win_loss": "% Prom. de operaciones Ganadoras/Perdedoras ",
       "avg_win_loss_info": "Ganancia promedio en operaciones ganadoras y pérdida promedio en operaciones perdedoras. Mide el tamaño típico de las ganancias y pérdidas por operación.",
       "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos."
     },
@@ -146,5 +148,12 @@
       "copy_api_and_secret_key": "Copia la clave API y la clave secreta",
       "copy_api_and_secret_key_description": "Guarda la clave API y la clave secreta en un lugar seguro. Asegúrate de guardarlas en esta etapa, si no lo haces ahora, <strong>no podrás</strong> recuperar tu clave secreta nuevamente."
     }
+  },
+  "settings": {
+    "settings": "Configuración",
+    "theme": "Tema",
+    "language": "Idioma",
+    "en": "Inglés",
+    "es": "Español"
   }
 }

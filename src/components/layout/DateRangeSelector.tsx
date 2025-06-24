@@ -11,10 +11,19 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useLocale } from "next-intl";
+import { es, enUS } from "react-day-picker/locale";
 
 const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 
+const LOCALES = {
+  es,
+  en: enUS,
+};
+
 export function DateRangeSelector() {
+  const locale = useLocale();
+
   const { startDate, endDate, updateDateRange, isStoreLoaded } =
     useUserConfigStore();
 
@@ -97,6 +106,7 @@ export function DateRangeSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <Calendar
+          locale={LOCALES[locale as "es" | "en"] || enUS}
           mode="range"
           defaultMonth={dateRange?.from}
           selected={dateRange}

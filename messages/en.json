@@ -12,7 +12,8 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "log_out": "Log out"
+    "log_out": "Log out",
+    "settings": "Settings"
   },
   "trade_info": {
     "open_date": "Open Date",
@@ -147,5 +148,12 @@
       "copy_api_and_secret_key": "Copy API and Secret Key",
       "copy_api_and_secret_key_description": "Save the API and Secret Key in a secure location. Make sure to save them in this phase, if you don't do it now, <strong>you will not</strong> be able to get your secret key again."
     }
+  },
+  "settings": {
+    "settings": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "en": "English",
+    "es": "Spanish"
   }
 }
