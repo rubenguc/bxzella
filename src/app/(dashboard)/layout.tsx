@@ -3,14 +3,21 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Main } from "@/components/layout/main";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { cookies } from "next/headers";
+import { ReactNode } from "react";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
+  const cookieStore = await cookies();
+
+  const defaultOpen =
+    cookieStore.get("sidebar_state")?.value !== "false" || false;
+
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <div
         id="content"
