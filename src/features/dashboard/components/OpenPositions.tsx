@@ -69,7 +69,7 @@ export function OpenPositions() {
       },
     },
     {
-      header: "Leverage",
+      header: tInfo("leverage"),
       accessorKey: "leverage",
       cell: ({ row }) => {
         const leverage = row.original.leverage;

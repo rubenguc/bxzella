@@ -56,7 +56,7 @@ export function RecentTrades() {
       },
     },
     {
-      header: "Symbol",
+      header: tInfo("symbol"),
       accessorKey: "symbol",
       cell: ({ row }) => (
         <div className="font-medium">
@@ -68,7 +68,7 @@ export function RecentTrades() {
       },
     },
     {
-      header: "Position",
+      header: tInfo("position"),
       accessorKey: "positionSide",
       cell: ({ row }) => {
         const positionSide = row.original.positionSide;
@@ -84,7 +84,7 @@ export function RecentTrades() {
       },
     },
     {
-      header: "Leverage",
+      header: tInfo("leverage"),
       accessorKey: "leverage",
       cell: ({ row }) => (
         <div className="font-medium">{row.original.leverage}x</div>
@@ -94,7 +94,7 @@ export function RecentTrades() {
       },
     },
     {
-      header: "Position PnL",
+      header: tInfo("position_pnl"),
       accessorKey: "netProfit",
       cell: ({ row }) => {
         const netProfit = row.original.netProfit;

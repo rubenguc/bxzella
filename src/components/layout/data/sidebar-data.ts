@@ -3,7 +3,7 @@ import { BookText, House, Info, SquareAsterisk, Users } from "lucide-react";
 export const sidebarItems = {
   navGroups: [
     {
-      title: "bxzella",
+      title: "",
       items: [
         {
           title: "home",

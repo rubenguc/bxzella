@@ -43,7 +43,7 @@ export function StatisticCard({
                   />
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
-                  <p className="text-balance">{popoverInfo}</p>
+                  <p className="text-balance text-sm">{popoverInfo}</p>
                 </PopoverContent>
               </Popover>
               {extraInfo}
