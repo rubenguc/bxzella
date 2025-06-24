@@ -13,6 +13,9 @@ export function StatisticsSkeleton() {
         <Skeleton className="col-span-1 h-26 max-h-40" />
         <Skeleton className="col-span-1 h-26 max-h-40" />
       </div>
+      <div>
+        <Skeleton className="col-span-1 h-96" />
+      </div>
     </div>
   );
 }

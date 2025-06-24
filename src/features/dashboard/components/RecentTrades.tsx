@@ -25,16 +25,30 @@ import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
+  const tInfo = useTranslations("trade_info");
+
   const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
     useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
-      header: "Open date",
+      header: tInfo("open_date"),
       accessorKey: "openTime",
       cell: ({ row }) => (
         <div className="font-medium">
           {transformTimeToLocalDate(row.original.openTime)}
+        </div>
+      ),
+      meta: {
+        className: "text-center",
+      },
+    },
+    {
+      header: tInfo("closed_date"),
+      accessorKey: "updateTime",
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.updateTime)}
         </div>
       ),
       meta: {
