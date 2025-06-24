@@ -1,13 +1,14 @@
 "use client";
 
-import { AvgWinLoss } from "@/features/trades/components/AvgWinLoss";
-import { NetPNL } from "@/features/trades/components/NetPNL";
-import { OpenPositions } from "@/features/trades/components/OpenPositions";
-import { ProfitFactor } from "@/features/trades/components/ProfitFactor";
-import { RecentTrades } from "@/features/trades/components/RecentTrades";
-import { StatisticsSkeleton } from "@/features/trades/components/StatisticsSkeleton";
-import { TradeWinPercentage } from "@/features/trades/components/TradeWinPercentage";
-import { getStatistics } from "@/features/trades/services/trades-services";
+import { AvgWinLoss } from "@/features/dashboard/components/AvgWinLoss";
+import { DayProfits } from "@/features/dashboard/components/DayProfits";
+import { NetPNL } from "@/features/dashboard/components/NetPNL";
+import { OpenPositions } from "@/features/dashboard/components/OpenPositions";
+import { ProfitFactor } from "@/features/dashboard/components/ProfitFactor";
+import { RecentTrades } from "@/features/dashboard/components/RecentTrades";
+import { StatisticsSkeleton } from "@/features/dashboard/components/StatisticsSkeleton";
+import { TradeWinPercentage } from "@/features/dashboard/components/TradeWinPercentage";
+import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
 import { useQuery } from "@tanstack/react-query";
@@ -54,6 +55,9 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <OpenPositions />
         <RecentTrades />
+      </div>
+      <div>
+        <DayProfits />
       </div>
     </div>
   );

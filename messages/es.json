@@ -57,9 +57,13 @@
   "dashboard": {
     "statistics": {
       "net_pnl": "Ganancia Neta",
+      "net_pnl_info": "La ganancia neta representa la ganancia o pérdida total después de haber deducido los gastos y comisiones. Representa la ganancia o pérdida real de las operaciones de trading.",
       "profit_factor": "Factor de Ganancia",
+      "profit_factor_info": "Métrica que mide la rentabilidad de una estrategia de trading dividiendo las ganancias totales entre las pérdidas totales. Un valor superior a 1 indica estrategia rentable; por debajo, que las pérdidas superan a las ganancias.",
       "trade_win_percentage": "Porcentaje de Operaciones Ganadoras",
+      "trade_win_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
       "avg_win_loss": "Promedio Ganancia/Pérdida por Operación",
+      "avg_win_loss_info": "Ganancia promedio en operaciones ganadoras y pérdida promedio en operaciones perdedoras. Mide el tamaño típico de las ganancias y pérdidas por operación.",
       "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos."
     },
     "open_positions": {
@@ -70,6 +74,27 @@
     "recent_trades": {
       "recent_trades": "Recent Trades",
       "no_recent_trades": "No recent trades"
+    },
+    "day_profits": {
+      "day_profits": "Profits por día",
+      "days": {
+        "sunday": "Dom",
+        "monday": "Lun",
+        "tuesday": "Mar",
+        "wednesday": "Mié",
+        "thursday": "Jue",
+        "friday": "Vie",
+        "saturday": "Sáb"
+      },
+      "days_short": {
+        "sunday": "D",
+        "monday": "L",
+        "tuesday": "M",
+        "wednesday": "M",
+        "thursday": "J",
+        "friday": "V",
+        "saturday": "S"
+      }
     }
   },
   "trades": {

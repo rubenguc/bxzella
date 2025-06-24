@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarMenu,
-  MenubarTrigger,
-} from "../ui/menubar";
+
 import { DateRange } from "react-day-picker";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { useUserConfigStore } from "@/store/user-config-store";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -77,41 +77,39 @@ export function DateRangeSelector() {
     ? `${formattedStartDate} - ${formattedEndDate}`
     : "";
 
-  const onMenuChange = (value?: string) => {
-    if (!value && dateRange?.from && dateRange?.to)
+  const updateRange = (isOpen: boolean) => {
+    if (!isOpen && dateRange?.from && dateRange?.to)
       updateDateRange(dateRange?.from, dateRange?.to);
   };
 
   return (
-    <Menubar onValueChange={onMenuChange} className="rounded-full">
-      <MenubarMenu>
-        <MenubarTrigger className="data-[state=open]:bg-transparent p-1">
-          <div className="relative flex items-center">
-            <CalendarIcon size={17} className="opacity-50" />
-            <Input
-              readOnly
-              className="hidden px-1 md:block max-w-30 cursor-pointer select-none border-none shadow-none focus-visible:shadow-none focus-visible:ring-0"
-              value={value}
-            />
-            <ChevronDown className="h-4 w-4 opacity-50" />
-          </div>
-        </MenubarTrigger>
-        <MenubarContent>
-          <Calendar
-            mode="range"
-            defaultMonth={dateRange?.from}
-            selected={dateRange}
-            onSelect={setDateRange}
-            numberOfMonths={2}
-            startMonth={startMonth}
-            endMonth={endMonth}
-            disabled={{
-              before: startMonth,
-              after: new Date(),
-            }}
+    <DropdownMenu onOpenChange={updateRange}>
+      <DropdownMenuTrigger asChild className="px-2 border rounded-full h-9">
+        <div className="relative flex items-center">
+          <CalendarIcon size={17} className="opacity-50" />
+          <Input
+            readOnly
+            className="hidden px-1 py-0 md:block max-w-28 cursor-pointer select-none border-none shadow-none bg-transparent!"
+            value={value}
           />
-        </MenubarContent>
-      </MenubarMenu>
-    </Menubar>
+          <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <Calendar
+          mode="range"
+          defaultMonth={dateRange?.from}
+          selected={dateRange}
+          onSelect={setDateRange}
+          numberOfMonths={2}
+          startMonth={startMonth}
+          endMonth={endMonth}
+          disabled={{
+            before: startMonth,
+            after: new Date(),
+          }}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

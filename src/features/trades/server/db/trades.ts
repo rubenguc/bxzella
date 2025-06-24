@@ -157,6 +157,7 @@ export async function getTradesByAccountUID({
   };
 
   if (startDate && endDate) {
+    find.openTime = { $gte: startDate, $lte: endDate };
     find.updateTime = { $gte: startDate, $lte: endDate };
   }
 
@@ -188,6 +189,7 @@ export function getTradesStatistic({
         accountUID,
         coin,
         openTime: { $gte: startDate, $lte: endDate },
+        updateTime: { $gte: startDate, $lte: endDate },
       },
     },
 
@@ -300,6 +302,48 @@ export function getTradesStatistic({
           totalTrades: "$totalTrades",
         },
       },
+    },
+  ]);
+}
+
+export function getTradeProfitByDays({
+  accountUID,
+  startDate,
+  endDate,
+  coin = "VST",
+}: {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: "VST";
+}) {
+  return TradeModel.aggregate([
+    {
+      $match: {
+        accountUID,
+        coin,
+        updateTime: { $gte: startDate, $lte: endDate },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$updateTime" },
+        },
+        netProfit: {
+          $sum: {
+            $convert: {
+              input: "$netProfit",
+              to: "double",
+              onError: 0,
+            },
+          },
+        },
+        trades: { $push: "$$ROOT" },
+      },
+    },
+    {
+      $sort: { _id: 1 },
     },
   ]);
 }

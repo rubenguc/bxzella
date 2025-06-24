@@ -50,3 +50,9 @@ export interface TradeStatisticsResult {
     totalTrades: number;
   };
 }
+
+export interface TradeProfitPerDay {
+  _id: string;
+  netProfit: number;
+  trades: TradeDocument[];
+}

@@ -10,10 +10,12 @@ export function transformSymbol(symbol: string) {
   return symbol.split("-")?.[0] || "";
 }
 
-export function getResultClass(amount: string) {
-  if (amount === "0") return "";
+export function getResultClass(amount: string | number) {
+  const _amount = String(amount);
 
-  return checkWin(amount) ? "text-green-500" : "text-red-500";
+  if (_amount == "0") return "";
+
+  return checkWin(_amount) ? "text-green-500" : "text-red-500";
 }
 
 export function formatSymbolAmount(positionAmt: string) {

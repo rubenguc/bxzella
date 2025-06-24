@@ -58,9 +58,13 @@
   "dashboard": {
     "statistics": {
       "net_pnl": "Net PnL",
+      "net_pnl_info": "The total profit or loss after fees and comissions have been deducted. It represents the actual gain or loss from trading activities.",
       "profit_factor": "Profit Factor",
+      "profit_factor_info": "A metric that measures the profitability of a trading strategy by dividing total gains by total losses. A value above 1 indicates a profitable strategy, while below 1 suggests losses outweigh gains.",
       "trade_win_percentage": "Trade Win %",
+      "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader’s strategy results in profitable outcomes.",
       "avg_win_loss": "Avg win/loss trade %",
+      "avg_win_loss_info": "The average gain from winning trades and the average loss from losing trades. It helps assess the typical size of profits versus losses per trade.",
       "please_select_account_to_fetch_data": "Please select an account to fetch data."
     },
     "open_positions": {
@@ -71,6 +75,27 @@
     "recent_trades": {
       "recent_trades": "Recent Trades",
       "no_recent_trades": "No recent trades"
+    },
+    "day_profits": {
+      "day_profits": "Day Profits",
+      "days": {
+        "sunday": "Sun",
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat"
+      },
+      "days_short": {
+        "sunday": "S",
+        "monday": "M",
+        "tuesday": "T",
+        "wednesday": "W",
+        "thursday": "T",
+        "friday": "F",
+        "saturday": "S"
+      }
     }
   },
   "trades": {
