@@ -4,7 +4,8 @@
     "trades": "Trades",
     "accounts": "Accounts",
     "info": "Info",
-    "create_api_key": "Create API Key"
+    "create_api_key": "Create API Key",
+    "ai_summary": "AI Summary"
   },
   "header": {
     "account": "Account",
@@ -155,5 +156,19 @@
     "language": "Language",
     "en": "English",
     "es": "Spanish"
+  },
+  "ai_summary": {
+    "header": "AI Summary",
+    "description": "Get your weekly summary powered by AI",
+    "week": "Week",
+    "model": "Model",
+    "no_summaries": "No summaries available",
+    "last_summaries": "Last summaries",
+    "last_summary": "Last summary",
+    "last": "Last",
+    "all": "All",
+    "no_week_data_to_summarize": "No week data to summarize",
+    "no_week_data_to_summarize_description": "This last summarize is based in your last week data. It seems that you haven't used the platform in the last week.",
+    "summary": "Summary"
   }
 }
