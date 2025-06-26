@@ -4,7 +4,8 @@
     "trades": "Operaciones",
     "accounts": "Cuentas",
     "info": "Información",
-    "create_api_key": "Crear Clave API"
+    "create_api_key": "Crear Clave API",
+    "ai_summary": "Resumen AI"
   },
   "header": {
     "account": "Seleccionar Cuenta",
@@ -155,5 +156,19 @@
     "language": "Idioma",
     "en": "Inglés",
     "es": "Español"
+  },
+  "ai_summary": {
+    "header": "Resumen IA",
+    "description": "Obtén tu resumen semanal impulsado por IA",
+    "week": "Semana",
+    "model": "Modelo",
+    "no_summaries": "No hay resúmenes disponibles",
+    "last_summaries": "Resúmenes anteriores",
+    "last_summary": "Último resumen",
+    "last": "Último",
+    "all": "Todos",
+    "no_week_data_to_summarize": "No hay datos de la semana para resumir",
+    "no_week_data_to_summarize_description": "Este último resumen se basa en tus datos de la semana pasada. Parece que no has utilizado la plataforma en la última semana.",
+    "summary": "Resumen"
   }
 }

@@ -1,20 +1,9 @@
 
-<center style="display: flex; justify-content: center;align-items: center; gap: 1rem; margin-bottom: 2rem">
+<p align="center">
 <img src="public/logo.png" width="120" heigth="120" />
-    <p
-      style="
-    font-size: 4rem;
-    font-weight: bold;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    background-image: linear-gradient(to right, #60A5FA, white);
-  "
-    >BXZella<p>
-</center>
+<p align="center" style="color: #60A5FA; font-size: 4rem; font-weight: bold;">BXZella<p>
 
-bxzella is a platform designed to help traders analyze their performance by integrating with the BingX API. It allows users to view their transaction history, open positions, and track key trading statistics to make informed decisions and improve their strategies.
+BXzella is a platform designed to help traders analyze their performance by integrating with the BingX API. It allows users to view their transaction history, open positions, and track key trading statistics to make informed decisions and improve their strategies.
 
 ## Features
 
@@ -22,10 +11,11 @@ bxzella is a platform designed to help traders analyze their performance by inte
 - **Account Management:** Add, edit, and delete your BingX accounts.
 - **BingX Integration:** Connect securely using your API keys to fetch trading data.
 - **Dashboard:**
-    - View key statistics like Net PNL, Profit Factor, Trade Win Percentage, and Average Win/Loss ratio.
+    - View key statistics like Net PNL, Profit Factor, Trade Win Percentage, and Average Win/Lossxw ratio.
     - See your current open positions at a glance.
     - Display a list of your most recent closed trades.
 - **Trades Overview:** A dedicated page to view your complete trade history with details on open/close times, symbols, positions, leverage, and PNL.
+- **AI Summary:** Get AI-powered summaries of your trading performance, including comparisons between periods.
 - **Theming:** Switch between light, dark, and system themes.
 - **Internationalization:** Support for multiple languages (currently English based on `i18n` config).
 

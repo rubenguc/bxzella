@@ -347,3 +347,87 @@ export function getTradeProfitByDays({
     },
   ]);
 }
+
+export function getTradesStatisticByPair({
+  accountUID,
+  startDate,
+  endDate,
+  coin = "VST",
+}: {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: "VST";
+}) {
+  return TradeModel.aggregate([
+    {
+      $match: {
+        accountUID,
+        coin,
+        openTime: { $gte: startDate, $lte: endDate },
+        updateTime: { $gte: startDate, $lte: endDate },
+      },
+    },
+    {
+      $group: {
+        _id: "$symbol",
+        totalNetProfit: {
+          $sum: {
+            $convert: {
+              input: "$netProfit",
+              to: "double",
+              onError: 0,
+            },
+          },
+        },
+        totalNetProfitLong: {
+          $sum: {
+            $cond: [
+              { $eq: ["$positionSide", "LONG"] },
+              {
+                $convert: {
+                  input: "$netProfit",
+                  to: "double",
+                  onError: 0,
+                },
+              },
+              0,
+            ],
+          },
+        },
+        totalNetProfitShort: {
+          $sum: {
+            $cond: [
+              { $eq: ["$positionSide", "SHORT"] },
+              {
+                $convert: {
+                  input: "$netProfit",
+                  to: "double",
+                  onError: 0,
+                },
+              },
+              0,
+            ],
+          },
+        },
+        tradeDurations: {
+          $push: {
+            $subtract: [{ $toLong: "$updateTime" }, { $toLong: "$openTime" }],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        symbol: "$_id",
+        totalNetProfit: 1,
+        totalNetProfitLong: 1,
+        totalNetProfitShort: 1,
+        avgOpenTime: {
+          $divide: [{ $sum: "$tradeDurations" }, { $size: "$tradeDurations" }],
+        },
+      },
+    },
+  ]);
+}

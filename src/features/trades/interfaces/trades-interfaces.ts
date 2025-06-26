@@ -51,6 +51,15 @@ export interface TradeStatisticsResult {
   };
 }
 
+export interface PairStatistic {
+  _id: number;
+  symbol: string;
+  totalNetProfit: number;
+  totalNetProfitLong: number;
+  totalNetProfitShort: number;
+  avgOpenTime: number;
+}
+
 export interface TradeProfitPerDay {
   _id: string;
   netProfit: number;

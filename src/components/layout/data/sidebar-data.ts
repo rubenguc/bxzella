@@ -1,4 +1,11 @@
-import { BookText, House, Info, SquareAsterisk, Users } from "lucide-react";
+import {
+  BookText,
+  Bot,
+  House,
+  Info,
+  SquareAsterisk,
+  Users,
+} from "lucide-react";
 
 export const sidebarItems = {
   navGroups: [
@@ -9,6 +16,11 @@ export const sidebarItems = {
           title: "home",
           url: "/",
           icon: House,
+        },
+        {
+          title: "ai_summary",
+          url: "/ai-summary",
+          icon: Bot,
         },
         {
           title: "trades",
