@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     const nowUTC = toZonedTime(new Date(), "UTC");
 
-    const firstDayLastMonth = startOfMonth(subMonths(nowUTC, 0));
+    const firstDayLastMonth = startOfMonth(subMonths(nowUTC, 1));
     const lastDayCurrentMonth = endOfMonth(nowUTC);
     const startDate = toZonedTime(firstDayLastMonth, "UTC");
     const endDate = toZonedTime(lastDayCurrentMonth, "UTC");

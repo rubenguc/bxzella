@@ -128,7 +128,16 @@ export async function saveMultipleTrades(
   trades: Trade[],
   session: mongoose.ClientSession,
 ) {
-  await TradeModel.insertMany(trades, { session });
+  await TradeModel.bulkWrite(
+    trades.map((trade) => ({
+      updateOne: {
+        filter: { accountUID: trade.accountUID, positionId: trade.positionId },
+        update: { $set: trade },
+        upsert: true,
+      },
+    })),
+    { session },
+  );
 }
 
 export async function getTradesByAccountUID({
