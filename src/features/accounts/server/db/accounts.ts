@@ -40,7 +40,7 @@ export async function getAccountsByUserId(
   page: number,
   limit: number,
 ) {
-  const skip = (page - 1) * limit;
+  const skip = page * limit;
   const total = await AccountModel.countDocuments({ userId });
   const totalPages = Math.ceil(total / limit);
 

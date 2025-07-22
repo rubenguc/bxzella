@@ -10,7 +10,7 @@ export async function getAISummaryByUID(
   page: number,
   limit: number,
 ) {
-  const skip = (page - 1) * limit;
+  const skip = page * limit;
   const total = await AISummaryModel.countDocuments({ uid });
   const totalPages = Math.ceil(total / limit);
 

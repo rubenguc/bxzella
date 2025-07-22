@@ -155,7 +155,7 @@ export async function getTradesByAccountUID({
   startDate?: Date;
   endDate?: Date;
 }) {
-  const skip = (page - 1) * limit;
+  const skip = page * limit;
   const total = await TradeModel.countDocuments({ accountUID: uid });
   const totalPages = Math.ceil(total / limit);
 
@@ -197,6 +197,7 @@ export function getTradesStatistic({
       $match: {
         accountUID,
         coin,
+        closeAllPositions: true,
         openTime: { $gte: startDate, $lte: endDate },
         updateTime: { $gte: startDate, $lte: endDate },
       },
@@ -331,6 +332,7 @@ export function getTradeProfitByDays({
       $match: {
         accountUID,
         coin,
+        closeAllPositions: true,
         updateTime: { $gte: startDate, $lte: endDate },
       },
     },

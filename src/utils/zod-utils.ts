@@ -56,7 +56,7 @@ export const pageParamValidation = () => {
   return z
     .string()
     .optional()
-    .transform((val) => (val && Number(val) ? parseInt(val, 10) : 1))
+    .transform((val) => (val && Number(val) >= 0 ? parseInt(val, 10) : 1))
     .refine((val) => !isNaN(val) && val >= 0, {
       message: "page must be a greater than or equal to zero",
     });
