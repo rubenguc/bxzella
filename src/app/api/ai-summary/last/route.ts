@@ -15,7 +15,10 @@ import {
   getTradesStatisticByPair,
 } from "@/features/trades/server/db/trades";
 import { handleApiError } from "@/utils/server-api-utils";
-import { accountIdParamValidation } from "@/utils/zod-utils";
+import {
+  accountIdParamValidation,
+  coinParamValidation,
+} from "@/utils/zod-utils";
 import { endOfWeek, startOfWeek, subWeeks } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,6 +26,7 @@ import { z } from "zod";
 
 const aiSummaryParamsSchema = z.object({
   accountId: accountIdParamValidation(),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {
@@ -31,7 +35,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = aiSummaryParamsSchema.parse(searchParams);
 
-    const { accountId } = parsedParams;
+    const { accountId, coin } = parsedParams;
 
     await connectDB();
 

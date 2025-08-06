@@ -14,14 +14,14 @@ import { Coin } from "@/global-interfaces";
 
 const COINS = [
   {
+    label: "USDT",
+    isDisabled: false,
+    image: "/assets/coins/USDT.webp",
+  },
+  {
     label: "VST",
     isDisabled: false,
     image: "/assets/coins/VST.webp",
-  },
-  {
-    label: "USDT",
-    isDisabled: true,
-    image: "/assets/coins/USDT.webp",
   },
 ];
 

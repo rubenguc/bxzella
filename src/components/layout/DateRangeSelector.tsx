@@ -48,7 +48,7 @@ export function DateRangeSelector() {
       return new Date(actualDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     }
 
-    return new Date(endDate.getTime() + ONE_MONTH_IN_MS);
+    return new Date(endDate.getTime() + ONE_MONTH_IN_MS * 2);
   }, [isStoreLoaded, endDate]);
 
   useEffect(() => {

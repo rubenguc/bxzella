@@ -4,6 +4,7 @@ import { getTradesStatistic } from "@/features/trades/server/db/trades";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,
+  coinParamValidation,
   dateParamValidation,
 } from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,6 +14,7 @@ const statictisSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   startDate: dateParamValidation({ field: "startDate" }),
   endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {
@@ -21,7 +23,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = statictisSearchParamsSchema.parse(searchParams);
 
-    const { accountId, startDate, endDate } = parsedParams;
+    const { accountId, startDate, endDate, coin } = parsedParams;
 
     await connectDB();
 
@@ -33,6 +35,7 @@ export async function GET(request: NextRequest) {
       accountUID,
       startDate: startDate!,
       endDate: endDate!,
+      coin,
     });
 
     return NextResponse.json(data[0] || {});

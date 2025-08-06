@@ -2,7 +2,10 @@ import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts";
 import { getTradeProfitByDays } from "@/features/trades/server/db/trades";
 import { handleApiError } from "@/utils/server-api-utils";
-import { accountIdParamValidation } from "@/utils/zod-utils";
+import {
+  accountIdParamValidation,
+  coinParamValidation,
+} from "@/utils/zod-utils";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,6 +13,7 @@ import { toZonedTime } from "date-fns-tz";
 
 const dayProfitsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {
@@ -18,7 +22,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = dayProfitsSearchParamsSchema.parse(searchParams);
 
-    const { accountId } = parsedParams;
+    const { accountId, coin } = parsedParams;
 
     await connectDB();
 
@@ -37,6 +41,7 @@ export async function GET(request: NextRequest) {
       accountUID,
       startDate,
       endDate,
+      coin,
     });
 
     return NextResponse.json(data);

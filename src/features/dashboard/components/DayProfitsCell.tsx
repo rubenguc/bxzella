@@ -18,6 +18,8 @@ export function DayProfitsCell({
       return `cursor-pointer hover:bg-green-200 dark:hover:bg-green-800 text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900`;
     } else if (type === "loss") {
       return `cursor-pointer hover:bg-red-200 dark:hover:bg-red-800 text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900`;
+    } else if (date !== null) {
+      return `text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-900`;
     }
 
     return "";

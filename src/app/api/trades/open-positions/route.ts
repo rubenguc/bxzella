@@ -3,12 +3,16 @@ import { getAccountByIdWithCredentials } from "@/features/accounts/server/db/acc
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getUserActiveOpenPositions } from "@/features/bingx/bingx-api";
 import { handleApiError } from "@/utils/server-api-utils";
-import { accountIdParamValidation } from "@/utils/zod-utils";
+import {
+  accountIdParamValidation,
+  coinParamValidation,
+} from "@/utils/zod-utils";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const openPositionsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {
@@ -17,7 +21,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = openPositionsSearchParamsSchema.parse(searchParams);
 
-    const { accountId } = parsedParams;
+    const { accountId, coin } = parsedParams;
 
     await connectDB();
 
@@ -29,6 +33,7 @@ export async function GET(request: NextRequest) {
     const data = await getUserActiveOpenPositions(
       decriptedApiKey,
       decryptedSecretKey,
+      coin,
     );
 
     return NextResponse.json(data);

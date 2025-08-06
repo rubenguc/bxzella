@@ -23,7 +23,7 @@ async function fetchPositionHistoryForSymbols(
   symbols: string[],
   timeRange: { startTs: number; endTs: number },
   uid: string,
-  coin: Coin = "VST",
+  coin: Coin = "USDT",
 ): Promise<Trade[]> {
   const batchSize = 5;
   const batches = [];
@@ -79,10 +79,10 @@ async function fetchPositionHistoryForSymbols(
   return allPositionHistories;
 }
 
-export async function syncPositions(uid: string, coin: Coin = "VST") {
+export async function syncPositions(uid: string, coin: Coin = "USDT") {
   console.log(`syncing positions for: ${uid}...`);
 
-  const uidSyncConfig = await getAccountSync(uid);
+  const uidSyncConfig = await getAccountSync(uid, coin);
 
   const times = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
 
@@ -96,6 +96,7 @@ export async function syncPositions(uid: string, coin: Coin = "VST") {
     decriptedApiKey,
     decryptedSecretKey,
     times,
+    coin,
   );
 
   const symbolsToFetch = processFilledOrders(filledOrders);
@@ -115,7 +116,7 @@ export async function syncPositions(uid: string, coin: Coin = "VST") {
 
   try {
     await session.withTransaction(async () => {
-      await createOrUpdateAccountSync(uid, times.endTs, session);
+      await createOrUpdateAccountSync(uid, times.endTs, coin, session);
       await saveMultipleTrades(allPositionHistories, session);
     });
   } finally {
@@ -144,7 +145,7 @@ export async function getTradesByAccountUID({
   uid,
   page,
   limit,
-  coin = "VST",
+  coin = "USDT",
   startDate,
   endDate,
 }: {
@@ -156,7 +157,7 @@ export async function getTradesByAccountUID({
   endDate?: Date;
 }) {
   const skip = page * limit;
-  const total = await TradeModel.countDocuments({ accountUID: uid });
+  const total = await TradeModel.countDocuments({ accountUID: uid, coin });
   const totalPages = Math.ceil(total / limit);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -185,12 +186,12 @@ export function getTradesStatistic({
   accountUID,
   startDate,
   endDate,
-  coin = "VST",
+  coin = "USDT",
 }: {
   accountUID: string;
   startDate: Date;
   endDate: Date;
-  coin?: "VST";
+  coin?: Coin;
 }) {
   return TradeModel.aggregate([
     {
@@ -320,12 +321,12 @@ export function getTradeProfitByDays({
   accountUID,
   startDate,
   endDate,
-  coin = "VST",
+  coin = "USDT",
 }: {
   accountUID: string;
   startDate: Date;
   endDate: Date;
-  coin?: "VST";
+  coin?: Coin;
 }) {
   return TradeModel.aggregate([
     {
@@ -363,12 +364,12 @@ export function getTradesStatisticByPair({
   accountUID,
   startDate,
   endDate,
-  coin = "VST",
+  coin = "USDT",
 }: {
   accountUID: string;
   startDate: Date;
   endDate: Date;
-  coin?: "VST";
+  coin?: Coin;
 }) {
   return TradeModel.aggregate([
     {

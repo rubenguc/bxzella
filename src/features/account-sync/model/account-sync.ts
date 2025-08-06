@@ -10,6 +10,10 @@ export const AccounSyncSchema = new Schema<AccountSync>({
     type: Number,
     required: true,
   },
+  coin: {
+    type: String,
+    required: true,
+  },
 });
 
 export const AccountSyncModel =

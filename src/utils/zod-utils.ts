@@ -71,3 +71,13 @@ export const limitParamValidation = () => {
       message: "limit must be a positive integer",
     });
 };
+
+export const coinParamValidation = () => {
+  return z
+    .string()
+    .optional()
+    .transform((val) => (val ? val : "USDT"))
+    .refine((val) => val === "VST" || val === "USDT", {
+      message: "coin must be VST or USDT",
+    });
+};
