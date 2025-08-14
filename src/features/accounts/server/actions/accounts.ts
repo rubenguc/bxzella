@@ -10,7 +10,7 @@ import {
 } from "@/features/accounts/server/db/accounts";
 import { getUserBalance } from "@/features/bingx/bingx-api";
 import { encryptData } from "@/features/accounts/utils/encryption";
-import { syncPositions } from "@/features/trades/server/db/trades";
+import { syncPositions } from "@/features/trades/server/db/trades-db";
 import { handleServerActionError } from "@/utils/server-api-utils";
 
 async function processAccountData(

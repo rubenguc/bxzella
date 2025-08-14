@@ -3,7 +3,7 @@ import { getAccountById } from "@/features/accounts/server/db/accounts";
 import {
   getTradesByAccountUID,
   syncPositions,
-} from "@/features/trades/server/db/trades";
+} from "@/features/trades/server/db/trades-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,

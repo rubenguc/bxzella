@@ -3,7 +3,7 @@
 import { handleServerActionError } from "@/utils/server-api-utils";
 import { TradePlaybook } from "../../interfaces/trades-interfaces";
 import { auth } from "@clerk/nextjs/server";
-import { updateTradePlaybook } from "../db/trades";
+import { updateTradePlaybook } from "../db/trades-db";
 
 export async function updateTradePlaybookAction(
   tradeId: string,

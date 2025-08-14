@@ -18,7 +18,7 @@ import {
   Trade,
   TradePlaybook,
 } from "@/features/trades/interfaces/trades-interfaces";
-import { TradeModel } from "@/features/trades/model/trades";
+import { TradeModel } from "@/features/trades/model/trades-model";
 
 async function fetchPositionHistoryForSymbols(
   apiKey: string,

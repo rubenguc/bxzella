@@ -1,6 +1,6 @@
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts";
-import { getTradesStatistic } from "@/features/trades/server/db/trades";
+import { getTradesStatistic } from "@/features/trades/server/db/trades-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,

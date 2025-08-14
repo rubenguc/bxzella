@@ -13,7 +13,7 @@ import { parseModelName } from "@/features/ai-summary/utils/model";
 import {
   getTradesStatistic,
   getTradesStatisticByPair,
-} from "@/features/trades/server/db/trades";
+} from "@/features/trades/server/db/trades-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,

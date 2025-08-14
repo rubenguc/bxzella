@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { Info } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TradePlaybook } from "./TradePlaybook";
+import { TradePlaybook } from "./trades-playbook";
 
 interface InfoRowProps {
   label: string;
