@@ -1,13 +1,13 @@
 "use client";
 
-import { AvgWinLoss } from "@/features/dashboard/components/AvgWinLoss";
-import { DayProfits } from "@/features/dashboard/components/DayProfits";
-import { NetPNL } from "@/features/dashboard/components/NetPNL";
-import { OpenPositions } from "@/features/dashboard/components/OpenPositions";
-import { ProfitFactor } from "@/features/dashboard/components/ProfitFactor";
-import { RecentTrades } from "@/features/dashboard/components/RecentTrades";
-import { StatisticsSkeleton } from "@/features/dashboard/components/StatisticsSkeleton";
-import { TradeWinPercentage } from "@/features/dashboard/components/TradeWinPercentage";
+import { AvgWinLoss } from "@/features/dashboard/components/avg-win-loss";
+import { DayProfits } from "@/features/dashboard/components/day-profits";
+import { NetPNL } from "@/features/dashboard/components/net-pnl";
+import { OpenPositions } from "@/features/dashboard/components/open-positions";
+import { ProfitFactor } from "@/features/dashboard/components/profit-factor";
+import { RecentTrades } from "@/features/dashboard/components/recent-trades";
+import { StatisticsSkeleton } from "@/features/dashboard/components/statistics-skeleton";
+import { TradeWinPercentage } from "@/features/dashboard/components/trade-win-percentage";
 import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";

@@ -2,7 +2,7 @@ import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./StatisticCard";
+import { StatisticCard } from "./statistic-card";
 import { Badge } from "@/components/ui/badge";
 
 interface TradeWinPercentageProps {

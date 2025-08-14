@@ -2,7 +2,7 @@ import { useUserConfigStore } from "@/store/user-config-store";
 import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
 import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./StatisticCard";
+import { StatisticCard } from "./statistic-card";
 
 interface AvgWinLossProps {
   avgWinLoss: TradeStatisticsResult["avgWinLoss"];
