@@ -27,6 +27,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Info } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TradePlaybook } from "./TradePlaybook";
 
 interface InfoRowProps {
   label: string;
@@ -71,6 +73,7 @@ export function TradeInfoDialog() {
   const coin = useUserConfigStore((state) => state.coin);
 
   const {
+    _id = "",
     symbol = "",
     openTime = "",
     updateTime = "",
@@ -85,6 +88,7 @@ export function TradeInfoDialog() {
     positionSide = "0",
     positionAmt = "0",
     closePositionAmt = "",
+    playbook = {},
   } = currentTrade || {};
 
   const isWin = checkWin(netProfit);
@@ -137,92 +141,94 @@ export function TradeInfoDialog() {
             </DialogDescription>
           </DialogHeader>
           <div className="-mr-4 min-h-[26.25rem] w-full overflow-y-auto py-1 pr-4">
-            <div className="flex flex-col gap-2">
-              <InfoRow
-                label={t("position_pnl")}
-                tooltipInfo={t("position_pnl_info")}
-                value={`${netProfitFormatted} ${coin}`}
-                valueClassName={`font-bold ${isWin ? "text-green-500" : "text-red-500"}`}
-                className="text-xl"
-              />
+            <Tabs className="h-full">
+              <TabsList>
+                <TabsTrigger value="info">{t("info")}</TabsTrigger>
+                <TabsTrigger value="playbooks">{t("playbooks")}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="info">
+                <div className="flex flex-col gap-2">
+                  <InfoRow
+                    label={t("position_pnl")}
+                    tooltipInfo={t("position_pnl_info")}
+                    value={`${netProfitFormatted} ${coin}`}
+                    valueClassName={`font-bold ${isWin ? "text-green-500" : "text-red-500"}`}
+                    className="text-xl"
+                  />
 
-              <InfoRow
-                label={t("realised_pnl")}
-                tooltipInfo={t("realised_pnl_info")}
-                value={`${realisedProfitFormatted} ${coin}`}
-                valueClassName={isWin ? "text-green-500" : "text-red-500"}
-              />
+                  <InfoRow
+                    label={t("realised_pnl")}
+                    tooltipInfo={t("realised_pnl_info")}
+                    value={`${realisedProfitFormatted} ${coin}`}
+                    valueClassName={isWin ? "text-green-500" : "text-red-500"}
+                  />
 
-              <InfoRow label={t("leverage")} value={`${leverage}x`} />
+                  <InfoRow label={t("leverage")} value={`${leverage}x`} />
 
-              <InfoRow
-                label={t("avg_entry_price")}
-                value={`${avgPriceFormatted} ${coin}`}
-              />
+                  <InfoRow
+                    label={t("avg_entry_price")}
+                    value={`${avgPriceFormatted} ${coin}`}
+                  />
 
-              <InfoRow
-                label={t("avg_exit_price")}
-                value={`${avgClosePriceFormatted} ${coin}`}
-              />
+                  <InfoRow
+                    label={t("avg_exit_price")}
+                    value={`${avgClosePriceFormatted} ${coin}`}
+                  />
 
-              <InfoRow
-                label={t("isolated")}
-                value={isolated ? t("yes") : t("no")}
-              />
+                  <InfoRow
+                    label={t("isolated")}
+                    value={isolated ? t("yes") : t("no")}
+                  />
 
-              <InfoRow
-                label={t("total_funding")}
-                tooltipInfo={t("total_funding_info")}
-                value={`${totalFundingFormatted} ${coin}`}
-                valueClassName={getResultClass(totalFunding)}
-              />
+                  <InfoRow
+                    label={t("total_funding")}
+                    tooltipInfo={t("total_funding_info")}
+                    value={`${totalFundingFormatted} ${coin}`}
+                    valueClassName={getResultClass(totalFunding)}
+                  />
 
-              <InfoRow
-                label={t("position_commission")}
-                value={`${positionCommissionFormatted} ${coin}`}
-                valueClassName={getResultClass(positionCommission)}
-              />
+                  <InfoRow
+                    label={t("position_commission")}
+                    value={`${positionCommissionFormatted} ${coin}`}
+                    valueClassName={getResultClass(positionCommission)}
+                  />
 
-              <InfoRow
-                label={t("approx_entry_amount")}
-                tooltipInfo={t("approx_entry_amount_info")}
-                value={`≈ ${aproxEntryAmountWithLeverage} ${coin}`}
-              />
+                  <InfoRow
+                    label={t("approx_entry_amount")}
+                    tooltipInfo={t("approx_entry_amount_info")}
+                    value={`≈ ${aproxEntryAmountWithLeverage} ${coin}`}
+                  />
 
-              <InfoRow
-                label={`${t("open_position_value")} (${leverage}x)`}
-                value={`≈ ${openPositionValue} ${coin}`}
-              />
+                  <InfoRow
+                    label={`${t("open_position_value")} (${leverage}x)`}
+                    value={`≈ ${openPositionValue} ${coin}`}
+                  />
 
-              <InfoRow
-                label={`${t("close_position_value")} (${leverage}x)`}
-                value={`≈ ${closePositionValue} ${coin}`}
-              />
+                  <InfoRow
+                    label={`${t("close_position_value")} (${leverage}x)`}
+                    value={`≈ ${closePositionValue} ${coin}`}
+                  />
 
-              <InfoRow
-                label={`${t("open_position_amount")} (${leverage}x)`}
-                value={`≈ ${openPositionAmountFormatted} ${formattedSymbol}`}
-              />
+                  <InfoRow
+                    label={`${t("open_position_amount")} (${leverage}x)`}
+                    value={`≈ ${openPositionAmountFormatted} ${formattedSymbol}`}
+                  />
 
-              <InfoRow
-                label={`${t("close_position_amount")} (${leverage}x)`}
-                value={`≈ ${closePositionAmountFormatted} ${formattedSymbol}`}
-              />
+                  <InfoRow
+                    label={`${t("close_position_amount")} (${leverage}x)`}
+                    value={`≈ ${closePositionAmountFormatted} ${formattedSymbol}`}
+                  />
 
-              <p className="text-sm text-gray-400 mt-4">
-                * {t("not_exact_values_description")}
-              </p>
-            </div>
+                  <p className="text-sm text-gray-400 mt-4">
+                    * {t("not_exact_values_description")}
+                  </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="playbooks" className="flex flex-col flex-1">
+                <TradePlaybook tradePlaybook={playbook} tradeId={_id} />
+              </TabsContent>
+            </Tabs>
           </div>
-          {/* <DialogFooter>
-            <Button
-              disabled={form.formState.isSubmitting}
-              type="submit"
-              form="user-form"
-            >
-              {t("save_changes")}
-            </Button>
-          </DialogFooter> */}
         </DialogContent>
       </Dialog>
     </>

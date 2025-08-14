@@ -5,7 +5,8 @@
     "accounts": "Accounts",
     "info": "Info",
     "create_api_key": "Create API Key",
-    "ai_summary": "AI Summary"
+    "ai_summary": "AI Summary",
+    "playbooks": "Playbooks"
   },
   "header": {
     "account": "Account",
@@ -42,7 +43,11 @@
     "close_position_value": "Close position Value",
     "open_position_amount": "Open position Amount",
     "close_position_amount": "Close position Amount",
-    "not_exact_values_description": "We use the values that Bingx provides for his API, these values are approximations and may not match the exact values shown in your account"
+    "not_exact_values_description": "We use the values that Bingx provides for his API, these values are approximations and may not match the exact values shown in your account",
+    "info": "Info",
+    "playbooks": "Playbooks",
+    "playbook_data_updated": "Playbook data updated successfully",
+    "save_changes": "Save Changes"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",
@@ -62,20 +67,23 @@
     "incorrect_api_key_error": "Incorrect API key",
     "incorrect_api_key_error_description": "Please check your API key and try again."
   },
+  "statistics": {
+    "net_pnl": "Net PnL",
+    "net_pnl_info": "The total profit or loss after fees and comissions have been deducted. It represents the actual gain or loss from trading activities.",
+    "profit_factor": "Profit Factor",
+    "profit_factor_info": "A metric that measures the profitability of a trading strategy by dividing total gains by total losses. A value above 1 indicates a profitable strategy, while below 1 suggests losses outweigh gains.",
+    "trade_win_percentage": "Trade Win %",
+    "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader’s strategy results in profitable outcomes.",
+    "avg_win_loss": "Avg win/loss trade %",
+    "avg_win_loss_info": "The average gain from winning trades and the average loss from losing trades. It helps assess the typical size of profits versus losses per trade.",
+    "please_select_account_to_fetch_data": "Please select an account to fetch data.",
+    "win": "Win",
+    "lost": "Lost",
+    "win_rate": "Win Rate",
+    "average_win": "Average win",
+    "average_loss": "Average loss"
+  },
   "dashboard": {
-    "statistics": {
-      "net_pnl": "Net PnL",
-      "net_pnl_info": "The total profit or loss after fees and comissions have been deducted. It represents the actual gain or loss from trading activities.",
-      "profit_factor": "Profit Factor",
-      "profit_factor_info": "A metric that measures the profitability of a trading strategy by dividing total gains by total losses. A value above 1 indicates a profitable strategy, while below 1 suggests losses outweigh gains.",
-      "trade_win_percentage": "Trade Win %",
-      "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader’s strategy results in profitable outcomes.",
-      "avg_win_loss": "Avg win/loss trade %",
-      "avg_win_loss_info": "The average gain from winning trades and the average loss from losing trades. It helps assess the typical size of profits versus losses per trade.",
-      "please_select_account_to_fetch_data": "Please select an account to fetch data.",
-      "win": "Win",
-      "lost": "Lost"
-    },
     "open_positions": {
       "open_positions": "Open Positions",
       "open_positions_description": "currently open positions, these don't depend on the time range",
@@ -172,5 +180,31 @@
     "no_week_data_to_summarize": "No week data to summarize",
     "no_week_data_to_summarize_description": "This last summarize is based in your last week data. It seems that you haven't used the platform in the last week.",
     "summary": "Summary"
+  },
+  "playbooks": {
+    "header": "Playbooks",
+    "header_description": "Manage your playbooks",
+    "failed_to_create_playbook": "Failed to create playbook",
+    "failed_to_update_playbook": "Failed to update playbook",
+    "failed_to_delete_playbook": "Failed to delete playbook",
+    "playbook_not_found": "Playbook not found",
+    "playbook_deleted_message": "Playbook deleted successfully",
+    "add_playbook": "Add Playbook",
+    "edit_playbook": "Edit Playbook",
+    "delete_playbook": "Delete Playbook",
+    "add_icon": "Add Icon",
+    "name": "Name",
+    "description": "Description",
+    "rules": "Rules",
+    "add_group_rule": "Add Group Rule",
+    "entry_criteria": "Entry Criteria",
+    "exit_criteria": "Exit Criteria",
+    "add_rule": "Add Rule",
+    "save_changes": "Save Changes",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "trades": "Trades",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

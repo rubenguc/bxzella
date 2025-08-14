@@ -1,4 +1,5 @@
 import {
+  BookCheck,
   BookText,
   Bot,
   House,
@@ -31,6 +32,11 @@ export const sidebarItems = {
           title: "accounts",
           url: "/accounts",
           icon: Users,
+        },
+        {
+          title: "playbooks",
+          url: "/playbooks",
+          icon: BookCheck,
         },
         {
           title: "info",

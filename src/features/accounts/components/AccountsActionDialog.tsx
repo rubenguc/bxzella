@@ -30,7 +30,7 @@ import Link from "next/link";
 import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 interface AccountsActionDialogProps {
-  currentRow?: AccountDocument;
+  currentRow?: AccountDocument | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }

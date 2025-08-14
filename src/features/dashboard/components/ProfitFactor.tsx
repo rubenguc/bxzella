@@ -10,7 +10,7 @@ interface ProfitFactorProps {
 }
 
 export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
-  const t = useTranslations("dashboard.statistics");
+  const t = useTranslations("statistics");
   const { coin } = useUserConfigStore();
 
   return (

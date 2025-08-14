@@ -14,7 +14,10 @@ import {
   processFilledOrders,
 } from "@/features/trades/utils/trades-utils";
 import { Coin } from "@/global-interfaces";
-import { Trade } from "@/features/trades/interfaces/trades-interfaces";
+import {
+  Trade,
+  TradePlaybook,
+} from "@/features/trades/interfaces/trades-interfaces";
 import { TradeModel } from "@/features/trades/model/trades";
 
 async function fetchPositionHistoryForSymbols(
@@ -442,4 +445,11 @@ export function getTradesStatisticByPair({
       },
     },
   ]);
+}
+
+export function updateTradePlaybook(
+  tradeId: string,
+  tradePlaybook: TradePlaybook,
+) {
+  return TradeModel.updateOne({ _id: tradeId }, { playbook: tradePlaybook });
 }

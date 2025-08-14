@@ -10,7 +10,7 @@ interface TradeWinPercentageProps {
 }
 
 export function TradeWinPercentage({ tradeWin }: TradeWinPercentageProps) {
-  const t = useTranslations("dashboard.statistics");
+  const t = useTranslations("statistics");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCustomLabel = (props: any) => {

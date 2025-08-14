@@ -9,7 +9,7 @@ interface AvgWinLossProps {
 }
 
 export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
-  const t = useTranslations("dashboard.statistics");
+  const t = useTranslations("statistics");
   const coin = useUserConfigStore((state) => state.coin);
 
   const total = avgWinLoss.avgWin + avgWinLoss.avgLoss;

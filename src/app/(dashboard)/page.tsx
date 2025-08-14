@@ -30,7 +30,7 @@ export default function Dashboard() {
     enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
   });
 
-  const t = useTranslations("dashboard.statistics");
+  const t = useTranslations("statistics");
 
   if (isStoreLoaded && !selectedAccountId) {
     return (

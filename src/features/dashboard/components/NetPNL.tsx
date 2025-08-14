@@ -11,7 +11,7 @@ interface NetPNLProps {
 
 export function NetPNL({ netPnL }: NetPNLProps) {
   const coin = useUserConfigStore((state) => state.coin);
-  const t = useTranslations("dashboard.statistics");
+  const t = useTranslations("statistics");
 
   return (
     <StatisticCard

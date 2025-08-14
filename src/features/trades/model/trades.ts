@@ -81,7 +81,38 @@ export const TradeSchema = new Schema<Trade>({
     required: true,
     enum: ["VST", "USDT"],
   },
+
+  playbook: {
+    id: {
+      type: Schema.Types.ObjectId,
+      ref: "Playbook",
+      default: null,
+    },
+    rulesProgress: [
+      {
+        groupName: {
+          type: String,
+          required: true,
+        },
+        completedRules: [String],
+        totalRules: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    totalCompletedRules: {
+      type: Number,
+      default: 0,
+    },
+    totalRules: {
+      type: Number,
+      default: 0,
+    },
+  },
 });
+
+// Create an interface for playbook
 
 TradeSchema.index({ accountUID: 1 });
 TradeSchema.index({ accountUID: 1, openTime: 1, coin: 1 });
@@ -104,6 +135,11 @@ TradeSchema.index({
   updateTime: -1,
   coin: 1,
 });
+
+TradeSchema.index({ "playbook.id": 1 });
+TradeSchema.index({ accountUID: 1, "playbook.id": 1 });
+TradeSchema.index({ "playbook.totalCompletedRules": -1 });
+TradeSchema.index({ accountUID: 1, "playbook.totalCompletedRules": -1 });
 
 export const TradeModel =
   mongoose.models.Trade || mongoose.model("Trade", TradeSchema);
