@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { PlaybookForm } from "./playbooks-action-dialog";
-import { RuleGroup } from "./RuleGroup";
+import { RuleGroup } from "./rule-group";
 import { PlaybooksRuleGroupDialog } from "./playbooks-rule-group-dialog";
 import { useToggle } from "react-use";
 import { useCallback } from "react";

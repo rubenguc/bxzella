@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { changeLanguage } from "@/features/settings/server/actions/settings";
+import { changeLanguage } from "@/features/settings/server/actions/settings-actions";
 
 const LANGUAGES = ["en", "es"];
 

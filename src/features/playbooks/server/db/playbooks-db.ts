@@ -1,9 +1,9 @@
-import { PlaybookModel } from "@/features/playbooks/model/playbook-model";
+import { PlaybookModel } from "@/features/playbooks/model/playbooks-model";
 import {
   Playbook,
   PlaybookDocument,
   PlaybookTradeStatistics,
-} from "@/features/playbooks/interfaces/playbook-interfaces";
+} from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
 
 export async function createPlaybook(playbookData: Partial<Playbook>) {

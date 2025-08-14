@@ -3,7 +3,7 @@ import { getAccountById } from "@/features/accounts/server/db/accounts";
 import {
   createPlaybook,
   getTradesStatisticByPlaybook,
-} from "@/features/playbooks/server/db/playbooks";
+} from "@/features/playbooks/server/db/playbooks-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,

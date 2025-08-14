@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetAllPlaybooks } from "@/features/playbooks/hooks/useGetAllPlaybooks";
-import { PlaybookDocument } from "@/features/playbooks/interfaces/playbook-interfaces";
+import { PlaybookDocument } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { useState } from "react";
 import { TradePlaybook as ITradePlaybook } from "../interfaces/trades-interfaces";
 import { Button } from "@/components/ui/button";

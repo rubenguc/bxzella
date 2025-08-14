@@ -6,7 +6,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { PlaybookDocument } from "../interfaces/playbook-interfaces";
+import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 
 type PlaybooksDialogType = "add" | "edit" | "delete";
 

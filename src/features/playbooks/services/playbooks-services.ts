@@ -3,7 +3,7 @@ import { baseConfig } from "@/services/api";
 import {
   PlaybookDocument,
   PlaybookTradeStatistics,
-} from "../interfaces/playbook-interfaces";
+} from "../interfaces/playbooks-interfaces";
 
 export const getPlaybooks = async (params: {
   accountId: string;

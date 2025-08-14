@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { PlaybookDocument } from "../interfaces/playbook-interfaces";
+import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 import { useForm } from "react-hook-form";
 import { playbookValidationSchema } from "../schemas/playbooks-schema";
 import { z } from "zod";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Rules } from "./Rules";
+import { Rules } from "./rules";
 import EmojiPicker from "emoji-picker-react";
 import {
   Popover,
@@ -32,7 +32,7 @@ import { useToggle } from "react-use";
 import {
   createPlaybookAction,
   updatePlaybookAction,
-} from "../server/actions/playbook-actions";
+} from "../server/actions/playbooks-actions";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 

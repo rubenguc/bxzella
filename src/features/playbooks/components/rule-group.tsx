@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { PlaybookRulesGroup } from "../interfaces/playbook-interfaces";
+import { PlaybookRulesGroup } from "../interfaces/playbooks-interfaces";
 import { Button } from "@/components/ui/button";
 import { GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";

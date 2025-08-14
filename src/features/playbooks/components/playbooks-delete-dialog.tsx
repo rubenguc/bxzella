@@ -6,8 +6,8 @@ import { TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { PlaybookDocument } from "../interfaces/playbook-interfaces";
-import { deletePlaybookAction } from "../server/actions/playbook-actions";
+import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
+import { deletePlaybookAction } from "../server/actions/playbooks-actions";
 
 interface PlaybooksDeleteDialogProps {
   open: boolean;

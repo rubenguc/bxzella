@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAllPlaybooks } from "@/features/playbooks/server/db/playbooks";
+import { getAllPlaybooks } from "@/features/playbooks/server/db/playbooks-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import { limitParamValidation, pageParamValidation } from "@/utils/zod-utils";
 import { auth } from "@clerk/nextjs/server";

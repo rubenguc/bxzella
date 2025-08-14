@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PlaybookListSkeleton } from "./playbooks-list-skeleton";
-import { PlaybookDocument } from "../interfaces/playbook-interfaces";
+import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 
 export function PlaybooksList() {
   const t = useTranslations("playbooks");

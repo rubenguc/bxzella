@@ -4,8 +4,8 @@ import {
   createPlaybook,
   updatePlaybook,
   deletePlaybook,
-} from "../db/playbooks";
-import { Playbook } from "@/features/playbooks/interfaces/playbook-interfaces";
+} from "../db/playbooks-db";
+import { Playbook } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { handleServerActionError } from "@/utils/server-api-utils";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
