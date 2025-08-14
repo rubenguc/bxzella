@@ -22,6 +22,7 @@ import { Eye } from "lucide-react";
 import { getTrades } from "../services/trades-services";
 import { CustomTable } from "@/components/custom-table";
 import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { formatDecimal } from "@/utils/number-utils";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
@@ -116,7 +117,7 @@ export function TradesTable() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit} {coin}
+            {formatDecimal(Number(netProfit), 4)} {coin}
           </div>
         );
       },
@@ -132,7 +133,7 @@ export function TradesTable() {
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {realisedProfit} {coin}
+            {formatDecimal(Number(realisedProfit), 4)} {coin}
           </div>
         );
       },

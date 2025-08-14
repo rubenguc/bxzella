@@ -17,7 +17,7 @@ export type PlaybookDocument = Playbook & {
 };
 
 export interface PlaybookTradeStatistics {
-  playbook: PlaybookDocument;
+  playbook: Partial<PlaybookDocument>;
   profitFactor: {
     value: number;
     sumWin: number;

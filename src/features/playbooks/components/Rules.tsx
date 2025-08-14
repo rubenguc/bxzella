@@ -18,7 +18,7 @@ export const Rules = ({ error }: RulesProps) => {
 
   const [isDialogOpen, setIsDialogOpen] = useToggle(false);
 
-  const { append, fields, update } = useFieldArray({
+  const { append, fields, update, remove } = useFieldArray({
     control,
     name: "rulesGroup",
   });
@@ -61,7 +61,7 @@ export const Rules = ({ error }: RulesProps) => {
         </Button>
       </div>
       <div
-        className={`border ${error ? "border-destructive" : ""} dark:bg-gray-900 rounded-md min-h-32 overflow-y-scroll p-3 gap-5 flex flex-col`}
+        className={`border ${error ? "border-destructive" : ""} bg-slate-50  dark:bg-gray-900 rounded-md min-h-32 overflow-y-scroll p-3 gap-5 flex flex-col`}
       >
         {fields.map((ruleGroup, index) => (
           <RuleGroup
@@ -70,6 +70,8 @@ export const Rules = ({ error }: RulesProps) => {
             groupIndex={index}
             onAddRule={() => handleAddRule(index)}
             onRemoveRule={(ruleIndex) => handleRemoveRule(index, ruleIndex)}
+            onRemoveGroup={() => remove(index)}
+            onEditName={() => console.log("should edit")}
           />
         ))}
       </div>

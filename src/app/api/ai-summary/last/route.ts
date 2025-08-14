@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = aiSummaryParamsSchema.parse(searchParams);
 
-    const { accountId, coin } = parsedParams;
+    const { accountId } = parsedParams;
 
     await connectDB();
 

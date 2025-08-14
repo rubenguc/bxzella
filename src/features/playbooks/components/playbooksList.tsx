@@ -24,6 +24,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PlaybookListSkeleton } from "./playbooks-list-skeleton";
+import { PlaybookDocument } from "../interfaces/playbook-interfaces";
 
 export function PlaybooksList() {
   const t = useTranslations("playbooks");
@@ -32,7 +34,8 @@ export function PlaybooksList() {
   const { setOpen, setCurrentRow } = usePlaybooks();
   const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
 
-  const [pagination, setPagination] = useState({
+  // TODO: add pagination for playbooks
+  const [pagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
@@ -58,94 +61,100 @@ export function PlaybooksList() {
 
   const playbooks = data?.data || [];
 
+  const showSkeleton = isLoading && !!data;
+
+  if (showSkeleton) {
+    return <PlaybookListSkeleton />;
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {playbooks.map((playbook) => (
-        <Card key={playbook._id}>
-          <CardHeader>
-            <CardTitle>
-              {playbook.icon} {playbook.name}
-            </CardTitle>
-            <CardDescription>
-              {`${playbook.totalTrades} ${t("trades")}`}
-            </CardDescription>
-            <CardAction>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost">
-                    <Menu />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setCurrentRow(playbook);
-                      setOpen("edit");
-                    }}
-                  >
-                    {t("edit")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setCurrentRow(playbook);
-                      setOpen("delete");
-                    }}
-                  >
-                    {t("delete")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 space-y-3.5">
-              <div className="flex flex-col">
-                <span className="dark:text-gray-300 text-sm leading-3">
-                  {tStatistics("win_rate")}
-                </span>
-                <span>{formatDecimal(playbook.tradeWinPercent)}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="dark:text-gray-300 text-sm leading-3">
-                  {tStatistics("net_pnl")}
-                </span>
-                <span className={getResultClass(playbook.netPnL)}>
-                  {formatDecimal(playbook.netPnL)} {coin}
-                </span>
-              </div>
+      {playbooks.map(
+        ({ playbook, avgWinLoss, netPnL, profitFactor, tradeWin }) => (
+          <Card key={playbook._id}>
+            <CardHeader>
+              <CardTitle>
+                {playbook.icon} {playbook.name}
+              </CardTitle>
+              <CardDescription>
+                {`${netPnL.totalTrades} ${t("trades")}`}
+              </CardDescription>
+              <CardAction>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost">
+                      <Menu />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setCurrentRow(playbook as PlaybookDocument);
+                        setOpen("edit");
+                      }}
+                    >
+                      {t("edit")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setCurrentRow(playbook as PlaybookDocument);
+                        setOpen("delete");
+                      }}
+                    >
+                      {t("delete")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 space-y-3.5">
+                <div className="flex flex-col">
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-3">
+                    {tStatistics("win_rate")}
+                  </span>
+                  <span>{formatDecimal(tradeWin.value)}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-3">
+                    {tStatistics("net_pnl")}
+                  </span>
+                  <span className={getResultClass(netPnL.value)}>
+                    {formatDecimal(netPnL.value)} {coin}
+                  </span>
+                </div>
 
-              <div className="flex flex-col">
-                <span className="dark:text-gray-300 text-sm leading-3">
-                  {tStatistics("average_win")}
-                </span>
-                <span>
-                  {formatDecimal(playbook.avgWin)} {coin}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="dark:text-gray-300 text-sm leading-3">
-                  {tStatistics("average_loss")}
-                </span>
-                <span>
-                  {formatDecimal(playbook.avgLoss)} {coin}
-                </span>
-              </div>
+                <div className="flex flex-col">
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-3">
+                    {tStatistics("average_win")}
+                  </span>
+                  <span>
+                    {formatDecimal(avgWinLoss.avgWin)} {coin}
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-3">
+                    {tStatistics("average_loss")}
+                  </span>
+                  <span>
+                    {formatDecimal(avgWinLoss.avgLoss)} {coin}
+                  </span>
+                </div>
 
-              <div className="flex flex-col">
-                <span className="dark:text-gray-300 text-sm leading-3">
-                  {tStatistics("profit_factor")}
-                </span>
-                <span>
-                  {formatDecimal(playbook.profitFactor)} {coin}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-3">
+                    {tStatistics("profit_factor")}
+                  </span>
+                  <span>{formatDecimal(profitFactor.value)}</span>
+                </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="dark:text-gray-400">
-            {playbook.description}
-          </CardFooter>
-        </Card>
-      ))}
+            </CardContent>
+            <CardFooter className="text-muted-foreground">
+              {playbook.description}
+            </CardFooter>
+          </Card>
+        ),
+      )}
     </div>
   );
 }

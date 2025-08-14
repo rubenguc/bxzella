@@ -93,13 +93,13 @@ export const PlaybooksActionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-4/5">
+      <DialogContent className="sm:max-w-2xl max-h-4/5 flex flex-col">
         <DialogHeader className="text-left">
           <DialogTitle>
             {t(isEdit ? "edit_playbook" : "add_playbook")}
           </DialogTitle>
         </DialogHeader>
-        <div className="w-full overflow-y-auto py-1 ">
+        <div className="w-full overflow-y-auto py-1 flex-1 ">
           <Form {...form}>
             <form
               id="playbook-form"

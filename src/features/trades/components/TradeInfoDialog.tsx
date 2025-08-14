@@ -88,7 +88,12 @@ export function TradeInfoDialog() {
     positionSide = "0",
     positionAmt = "0",
     closePositionAmt = "",
-    playbook = {},
+    playbook = {
+      id: "",
+      totalRules: 0,
+      totalCompletedRules: 0,
+      rulesProgress: [],
+    },
   } = currentTrade || {};
 
   const isWin = checkWin(netProfit);

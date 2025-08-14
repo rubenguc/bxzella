@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { PlaybookRulesGroup } from "../interfaces/playbook-interfaces";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import { PlaybookForm } from "./playbooks-action-dialog";
@@ -10,6 +10,8 @@ interface RuleGroupProps extends PlaybookRulesGroup {
   onAddRule: () => void;
   onRemoveRule: (index: number) => void;
   groupIndex: number;
+  onRemoveGroup: () => void;
+  onEditName: () => void;
 }
 
 export const RuleGroup = ({
@@ -18,14 +20,37 @@ export const RuleGroup = ({
   onAddRule,
   onRemoveRule,
   groupIndex,
+  onRemoveGroup,
+  onEditName,
 }: RuleGroupProps) => {
   const t = useTranslations("playbooks");
 
   const { register } = useFormContext<PlaybookForm>();
 
   return (
-    <div className="flex flex-col gap-3 dark:bg-gray-500 rounded-lg py-2 px-4">
-      <span>{name}</span>
+    <div className="flex flex-col gap-3  bg-white dark:bg-gray-800 border rounded-lg py-2 px-4">
+      <div className="flex items-center gap-4">
+        <span>{name}</span>
+
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onEditName}
+            className="dark:hover:bg-gray-700"
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRemoveGroup}
+            className="text-red-500 hover:text-red-700 dark:hover:bg-gray-700"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-2">
         {rules.map((rule, index) => (
@@ -53,7 +78,7 @@ export const RuleGroup = ({
 
         <Button
           variant="ghost"
-          className="flex items-center gap-2 w-fit"
+          className="flex items-center gap-2 w-fit dark:hover:bg-gray-700"
           size="sm"
           type="button"
           onClick={onAddRule}

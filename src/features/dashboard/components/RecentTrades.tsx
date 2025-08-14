@@ -22,6 +22,7 @@ import { useTranslations } from "next-intl";
 import { getTrades } from "@/features/trades/services/trades-services";
 import { CustomTable } from "@/components/custom-table";
 import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { formatDecimal } from "@/utils/number-utils";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
@@ -101,7 +102,7 @@ export function RecentTrades() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {netProfit} {coin}
+            {formatDecimal(Number(netProfit), 4)} {coin}
           </div>
         );
       },

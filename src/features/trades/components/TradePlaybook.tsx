@@ -101,7 +101,7 @@ export const TradePlaybook = ({
       </div>
       <div className="flex-1"></div>
       <div className="flex justify-end">
-        <Button disabled={isSaving} onClick={onSavePlaybook}>
+        <Button disabled={isSaving || isLoading} onClick={onSavePlaybook}>
           {t("save_changes")}
         </Button>
       </div>

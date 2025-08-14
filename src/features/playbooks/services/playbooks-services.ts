@@ -1,6 +1,9 @@
 import { Coin, PaginationResponse } from "@/global-interfaces";
 import { baseConfig } from "@/services/api";
-import { PlaybookDocument } from "../interfaces/playbook-interfaces";
+import {
+  PlaybookDocument,
+  PlaybookTradeStatistics,
+} from "../interfaces/playbook-interfaces";
 
 export const getPlaybooks = async (params: {
   accountId: string;
@@ -9,7 +12,7 @@ export const getPlaybooks = async (params: {
   page: number;
   limit: number;
   coin: Coin;
-}): Promise<PaginationResponse<PlaybookDocument>> => {
+}): Promise<PaginationResponse<PlaybookTradeStatistics>> => {
   const response = await baseConfig.get("/playbooks", { params });
   return response.data;
 };

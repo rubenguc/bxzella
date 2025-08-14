@@ -1,5 +1,9 @@
 import { PlaybookModel } from "@/features/playbooks/model/playbook-model";
-import { Playbook } from "@/features/playbooks/interfaces/playbook-interfaces";
+import {
+  Playbook,
+  PlaybookDocument,
+  PlaybookTradeStatistics,
+} from "@/features/playbooks/interfaces/playbook-interfaces";
 import { TradeModel } from "@/features/trades/model/trades";
 
 export async function createPlaybook(playbookData: Partial<Playbook>) {
@@ -73,20 +77,17 @@ export async function getTradesStatisticByPlaybook({
 }) {
   const skip = page * limit;
 
-  // 1️⃣ Obtener playbooks paginados
   const [playbooks, totalPlaybooks] = await Promise.all([
     PlaybookModel.find({})
-      .sort({ name: 1 }) // puedes cambiar a otro campo
+      .sort({ name: 1 })
       .skip(skip)
       .limit(limit)
-      .lean(),
+      .lean() as Promise<Partial<PlaybookDocument>[]>,
     PlaybookModel.countDocuments({}),
   ]);
 
-  // 2️⃣ Lista de IDs en esta página
   const playbookIds = playbooks.map((pb) => pb._id);
 
-  // 3️⃣ Agregación de trades solo para los playbooks visibles
   const tradesAgg = await TradeModel.aggregate([
     {
       $match: {
@@ -130,15 +131,14 @@ export async function getTradesStatisticByPlaybook({
     },
   ]);
 
-  // 4️⃣ Mapear resultados de trades por playbook
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tradeMap = new Map<string, any>();
   for (const t of tradesAgg) {
     tradeMap.set(t._id?.toString() ?? "null", t);
   }
 
-  // 5️⃣ Armar respuesta final
-  const data = playbooks.map((pb) => {
-    const s = tradeMap.get(pb._id.toString()) ?? {
+  const data: PlaybookTradeStatistics[] = playbooks.map((pb) => {
+    const s = tradeMap.get(pb._id!.toString()) ?? {
       totalTrades: 0,
       totalWin: 0,
       totalLoss: 0,
@@ -156,23 +156,33 @@ export async function getTradesStatisticByPlaybook({
     const avgWinLoss = s.totalWin && s.totalLoss ? avgWin / avgLoss : 0;
 
     return {
-      _id: pb._id,
-      rulesGroup: pb.rulesGroup,
-      name: pb.name,
-      description: pb.description,
-      icon: pb.icon,
-      notes: pb.notes,
-      totalTrades: s.totalTrades,
-      totalWin: s.totalWin,
-      totalLoss: s.totalLoss,
-      sumWin: s.sumWin,
-      sumLoss: s.sumLoss,
-      netPnL: s.netPnL,
-      profitFactor,
-      tradeWinPercent,
-      avgWinLoss,
-      avgWin,
-      avgLoss,
+      playbook: {
+        _id: pb._id,
+        rulesGroup: pb.rulesGroup,
+        name: pb.name,
+        description: pb.description,
+        icon: pb.icon,
+        notes: pb.notes,
+      },
+      tradeWin: {
+        value: tradeWinPercent,
+        totalWin: s.totalWin,
+        totalLoss: s.totalLoss,
+      },
+      avgWinLoss: {
+        value: avgWinLoss,
+        avgWin,
+        avgLoss,
+      },
+      netPnL: {
+        value: s.netPnL,
+        totalTrades: s.totalTrades,
+      },
+      profitFactor: {
+        value: profitFactor,
+        sumWin: s.sumWin,
+        sumLoss: s.sumLoss,
+      },
     };
   });
 
