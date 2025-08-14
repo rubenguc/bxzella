@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { AccountSyncModel } from "@/features/account-sync/model/account-sync";
+import { AccountSyncModel } from "@/features/account-sync/model/account-sync-model";
 import { Coin } from "@/global-interfaces";
 
 export const createOrUpdateAccountSync = (
