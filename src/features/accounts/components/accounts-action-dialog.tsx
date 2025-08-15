@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { accountValidationSchema } from "@/features/accounts/schemas/accounts";
+import { accountValidationSchema } from "@/features/accounts/schemas/accounts-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import {
   createAccount,
   updateAccount,
-} from "@/features/accounts/server/actions/accounts";
+} from "@/features/accounts/server/actions/accounts-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";

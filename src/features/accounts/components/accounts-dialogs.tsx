@@ -1,6 +1,6 @@
 import { useAccounts } from "@/features/accounts/context/accounts-context";
-import { AccountsActionDialog } from "./AccountsActionDialog";
-import { AccountsDeleteDialog } from "./AccountsDeleteDialog";
+import { AccountsActionDialog } from "./accounts-action-dialog";
+import { AccountsDeleteDialog } from "./accounts-delete-dialog";
 
 export function AccountsDialogs() {
   const { open, setOpen, currentRow, setCurrentRow } = useAccounts();

@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAccountByIdWithCredentials } from "@/features/accounts/server/db/accounts";
+import { getAccountByIdWithCredentials } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getUserActiveOpenPositions } from "@/features/bingx/bingx-api";
 import { handleApiError } from "@/utils/server-api-utils";

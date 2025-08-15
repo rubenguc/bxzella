@@ -1,13 +1,13 @@
 "use server";
 
 import { z } from "zod";
-import { accountValidationSchema } from "@/features/accounts/schemas/accounts";
+import { accountValidationSchema } from "@/features/accounts/schemas/accounts-schemas";
 import { auth } from "@clerk/nextjs/server";
 import {
   createAccountDb,
   deleteAccountDb,
   updateAccountDb,
-} from "@/features/accounts/server/db/accounts";
+} from "@/features/accounts/server/db/accounts-db";
 import { getUserBalance } from "@/features/bingx/bingx-api";
 import { encryptData } from "@/features/accounts/utils/encryption";
 import { syncPositions } from "@/features/trades/server/db/trades-db";

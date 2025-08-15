@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts";
+import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import {
   createPlaybook,
   getTradesStatisticByPlaybook,

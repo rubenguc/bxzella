@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts";
+import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { getAISummaryByUID } from "@/features/ai-summary/server/db/ai-summary";
 import { handleApiError } from "@/utils/server-api-utils";
 import {

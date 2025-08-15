@@ -1,4 +1,4 @@
-import { AccountModel } from "@/features/accounts/model/accounts";
+import { AccountModel } from "@/features/accounts/model/accounts-model";
 import { Account } from "@/features/accounts/interfaces/accounts-interfaces";
 
 export async function createAccountDb(data: Account) {

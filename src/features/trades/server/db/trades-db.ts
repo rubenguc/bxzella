@@ -2,7 +2,7 @@ import {
   createOrUpdateAccountSync,
   getAccountSync,
 } from "@/features/account-sync/server/db/account-sync-db";
-import { getAccountByUID } from "@/features/accounts/server/db/accounts";
+import { getAccountByUID } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import {
   getFilledOrders,

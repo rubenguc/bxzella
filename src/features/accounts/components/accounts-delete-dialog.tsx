@@ -5,7 +5,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { deleteAccount } from "@/features/accounts/server/actions/accounts";
+import { deleteAccount } from "@/features/accounts/server/actions/accounts-actions";
 import { useTranslations } from "next-intl";
 import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 

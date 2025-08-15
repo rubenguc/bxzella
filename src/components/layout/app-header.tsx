@@ -4,10 +4,10 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ProfileDropdown } from "../profile-dropdown";
-import { AccountsSelector } from "@/features/accounts/components/AccountsSelector";
+import { AccountsSelector } from "@/features/accounts/components/accounts-selector";
 import { DateRangeSelector } from "./DateRangeSelector";
 import "./header.styles.css";
-import { AccountsCoinSelector } from "@/features/accounts/components/AccountsCoinSelector";
+import { AccountsCoinSelector } from "@/features/accounts/components/accounts-coin-selector";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;
