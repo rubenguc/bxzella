@@ -4,10 +4,13 @@
     "trades": "Trades",
     "accounts": "Accounts",
     "info": "Info",
-    "create_api_key": "Create API Key",
-    "ai_summary": "AI Summary",
-    "playbooks": "Playbooks"
+    "create-api-key": "Create API Key",
+    "ai-summary": "AI Summary",
+    "playbooks": "Playbooks",
+    "": "Dashboard",
+    "settings": "Settings"
   },
+
   "header": {
     "account": "Account",
     "select_coin": "Select Coin",
@@ -116,13 +119,9 @@
     }
   },
   "trades": {
-    "header": "Trades",
-    "description": "You can see all your trades closed",
     "no_trades": "No trades"
   },
   "accounts": {
-    "header": "Accounts",
-    "description": "Manage your accounts here",
     "add_account": "Add Account",
     "name": "Name",
     "uid": "UID",
@@ -168,8 +167,6 @@
     "es": "Spanish"
   },
   "ai_summary": {
-    "header": "AI Summary",
-    "description": "Get your weekly summary powered by AI",
     "week": "Week",
     "model": "Model",
     "no_summaries": "No summaries available",
@@ -182,8 +179,6 @@
     "summary": "Summary"
   },
   "playbooks": {
-    "header": "Playbooks",
-    "header_description": "Manage your playbooks",
     "failed_to_create_playbook": "Failed to create playbook",
     "failed_to_update_playbook": "Failed to update playbook",
     "failed_to_delete_playbook": "Failed to delete playbook",

@@ -93,7 +93,10 @@ export function DateRangeSelector() {
 
   return (
     <DropdownMenu onOpenChange={updateRange}>
-      <DropdownMenuTrigger asChild className="px-2 border rounded-full h-9">
+      <DropdownMenuTrigger
+        asChild
+        className="px-2 border rounded-full h-9 min-w-9"
+      >
         <div className="relative flex items-center">
           <CalendarIcon size={17} className="opacity-50" />
           <Input

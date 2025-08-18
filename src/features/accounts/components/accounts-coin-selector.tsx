@@ -40,8 +40,8 @@ export function AccountsCoinSelector() {
 
   return (
     <Select value={coin} onValueChange={handleSelect}>
-      <SelectTrigger className="relative min-h-9 py-1 px-2 w-fit border rounded-full flex items-center gap-1  overflow-x-hidden text-nowrap">
-        <SelectPrimitive.Icon asChild className="block md:hidden ">
+      <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit border rounded-full flex items-center gap-1  overflow-x-hidden text-nowrap">
+        <SelectPrimitive.Icon asChild className="block md:hidden mx-auto">
           <Image src={getCoinImage(coin)} alt="coin" width={20} height={20} />
         </SelectPrimitive.Icon>
         <SelectValue className="hola" placeholder={t("select_coin")} />

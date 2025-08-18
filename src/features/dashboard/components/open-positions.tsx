@@ -79,22 +79,6 @@ export function OpenPositions() {
         className: "text-center",
       },
     },
-    {
-      header: tInfo("volume"),
-      accessorKey: "positionValue",
-      cell: ({ row }) => {
-        const volume = row.original.positionValue;
-        const currency = row.original.currency;
-        return (
-          <>
-            {volume} {currency}
-          </>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
   ];
 
   const { data, isLoading } = useQuery({

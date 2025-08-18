@@ -8,11 +8,7 @@ export function PlaybooksHeader() {
   const { setOpen } = usePlaybooks();
 
   return (
-    <div className="mb-2 flex flex-wrap items-center justify-between space-y-2">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">{t("header")}</h2>
-        <p className="text-muted-foreground">{t("header_description")}</p>
-      </div>
+    <div className="mb-2 flex flex-wrap items-center justify-end space-y-2">
       <Button className="space-x-1" onClick={() => setOpen("add")}>
         <Plus size={18} /> <span>{t("add_playbook")}</span>
       </Button>

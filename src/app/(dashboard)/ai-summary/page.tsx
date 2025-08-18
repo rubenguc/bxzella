@@ -2,7 +2,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AISummaryDialog } from "@/features/ai-summary/components/AISummaryDialog";
-import { AISummaryHeader } from "@/features/ai-summary/components/AISummaryHeader";
 import { AISummaryLast } from "@/features/ai-summary/components/AISummaryLast";
 import { AISummaryTable } from "@/features/ai-summary/components/AISummaryTable";
 import AISummaryProvider from "@/features/ai-summary/context/ai-summary-context";
@@ -13,7 +12,6 @@ export default function AISummary() {
 
   return (
     <AISummaryProvider>
-      <AISummaryHeader />
       <Tabs defaultValue="last" className="mt-4">
         <TabsList className="bg-transparent border-b w-full">
           <TabsTrigger value="last">{t("last")}</TabsTrigger>

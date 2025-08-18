@@ -6,7 +6,9 @@
     "info": "Información",
     "create_api_key": "Crear Clave API",
     "ai_summary": "Resumen AI",
-    "playbooks": "Playbooks"
+    "playbooks": "Manual de operaciones",
+    "": "Dashboard",
+    "settings": "Panel de control"
   },
   "header": {
     "account": "Seleccionar Cuenta",
@@ -45,8 +47,8 @@
     "close_position_amount": "Monto de posición al cerrar",
     "not_exact_values_description": "Utilizamos los valores que BingX proporciona a través de su API; estos valores son aproximaciones y pueden no coincidir con los valores exactos mostrados en tu cuenta.",
     "info": "Información",
-    "playbooks": "Playbooks",
-    "playbook_data_updated": "Datos del playbook actualizados correctamente",
+    "playbooks": "Manual de operaciones",
+    "playbook_data_updated": "Datos del Manual de operación actualizados correctamente",
     "save_changes": "Guardar Cambios"
   },
   "common_messages": {
@@ -116,13 +118,9 @@
     }
   },
   "trades": {
-    "header": "Operaciones",
-    "description": "Puedes ver todas tus operaciones cerradas",
     "no_trades": "No hay operaciones"
   },
   "accounts": {
-    "header": "Cuentas",
-    "description": "Administra tus cuentas aquí",
     "add_account": "Agregar Cuenta",
     "name": "Nombre",
     "uid": "UID",
@@ -168,8 +166,6 @@
     "es": "Español"
   },
   "ai_summary": {
-    "header": "Resumen IA",
-    "description": "Obtén tu resumen semanal impulsado por IA",
     "week": "Semana",
     "model": "Modelo",
     "no_summaries": "No hay resúmenes disponibles",
@@ -182,16 +178,14 @@
     "summary": "Resumen"
   },
   "playbooks": {
-    "header": "Playbooks",
-    "header_description": "Gestiona tus playbooks",
-    "failed_to_create_playbook": "Error al crear el playbook",
-    "failed_to_update_playbook": "Error al actualizar el playbook",
-    "failed_to_delete_playbook": "Error al eliminar el playbook",
-    "playbook_not_found": "Playbook no encontrado",
-    "playbook_deleted_message": "Playbook eliminado correctamente",
-    "add_playbook": "Agregar Playbook",
-    "edit_playbook": "Editar Playbook",
-    "delete_playbook": "Eliminar Playbook",
+    "failed_to_create_playbook": "Error al crear el manual de operaciones",
+    "failed_to_update_playbook": "Error al actualizar el manual de operaciones",
+    "failed_to_delete_playbook": "Error al eliminar el manual de operaciones",
+    "playbook_not_found": "Manual de operaciones no encontrado",
+    "playbook_deleted_message": "Manual de operaciones eliminado correctamente",
+    "add_playbook": "Agregar Manual de Operaciones",
+    "edit_playbook": "Editar Manual de Operaciones",
+    "delete_playbook": "Eliminar Manual de Operaciones",
     "add_icon": "Agregar Ícono",
     "name": "Nombre",
     "description": "Descripción",
