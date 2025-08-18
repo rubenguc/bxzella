@@ -3,7 +3,6 @@
 import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { ProfileDropdown } from "../profile-dropdown";
 import { AccountsSelector } from "@/features/accounts/components/accounts-selector";
 import { DateRangeSelector } from "./DateRangeSelector";
 import "./header.styles.css";
@@ -49,7 +48,6 @@ export default function AppHeader({
         <DateRangeSelector />
         <AccountsSelector />
         <AccountsCoinSelector />
-        <ProfileDropdown />
       </div>
     </header>
   );

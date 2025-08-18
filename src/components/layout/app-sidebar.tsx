@@ -1,10 +1,16 @@
 "use client";
 
 import { ComponentProps } from "react";
-import { Sidebar, SidebarContent, useSidebar } from "../ui/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  useSidebar,
+} from "../ui/sidebar";
 import { sidebarItems } from "./data/sidebar-data";
 import { NavGroup } from "./nav-group";
 import Image from "next/image";
+import { ProfileDropdown } from "../profile-dropdown";
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
   const { open, isMobile, openMobile } = useSidebar();
@@ -22,10 +28,14 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
             BXZella
           </span>
         </div>
+
         {sidebarItems.navGroups.map((props) => (
           <NavGroup key={props.title} {...props} />
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <ProfileDropdown />
+      </SidebarFooter>
     </Sidebar>
   );
 }

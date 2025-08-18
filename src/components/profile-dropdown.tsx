@@ -23,7 +23,10 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full mx-auto"
+        >
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.imageUrl} alt="@shadcn" />
             <AvatarFallback>{user?.firstName?.[0]}</AvatarFallback>
