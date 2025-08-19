@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Rules } from "./rules";
 import EmojiPicker from "emoji-picker-react";
 import {
   Popover,
@@ -35,6 +34,7 @@ import {
 } from "../server/actions/playbooks-actions";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { PlaybooksRules } from "./playbooks-rules";
 
 interface PlaybooksActionDialogProps {
   currentRow?: PlaybookDocument;
@@ -172,7 +172,7 @@ export const PlaybooksActionDialog = ({
                 name="rulesGroup"
                 render={({ fieldState: { error } }) => (
                   <FormItem>
-                    <Rules error={!!error?.message} />
+                    <PlaybooksRules error={!!error?.message} />
                     <FormMessage />
                   </FormItem>
                 )}

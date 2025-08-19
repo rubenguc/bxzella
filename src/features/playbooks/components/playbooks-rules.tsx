@@ -3,16 +3,16 @@ import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { PlaybookForm } from "./playbooks-action-dialog";
-import { RuleGroup } from "./rule-group";
 import { PlaybooksRuleGroupDialog } from "./playbooks-rule-group-dialog";
 import { useToggle } from "react-use";
 import { useCallback } from "react";
+import { PlaybooksRuleGroup } from "./playbooks-rule-group";
 
-interface RulesProps {
+interface PlaybooksRulesProps {
   error: boolean;
 }
 
-export const Rules = ({ error }: RulesProps) => {
+export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
   const t = useTranslations("playbooks");
   const { control } = useFormContext<PlaybookForm>();
 
@@ -64,7 +64,7 @@ export const Rules = ({ error }: RulesProps) => {
         className={`border ${error ? "border-destructive" : ""} bg-slate-50  dark:bg-gray-900 rounded-md min-h-32 overflow-y-scroll p-3 gap-5 flex flex-col`}
       >
         {fields.map((ruleGroup, index) => (
-          <RuleGroup
+          <PlaybooksRuleGroup
             key={ruleGroup.id}
             {...ruleGroup}
             groupIndex={index}
