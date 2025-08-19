@@ -2,6 +2,17 @@ import { Coin } from "@/global-interfaces";
 
 export type ContractType = "P" | "S"; // P = Perpetual | S = "Standard"
 
+export type TradePlaybook = {
+  id: string | null;
+  rulesProgress: {
+    groupName: string;
+    completedRules: string[];
+    totalRules: number;
+  }[];
+  totalCompletedRules: number;
+  totalRules: number;
+} | null;
+
 export interface Trade {
   accountUID: string;
   positionId: string;
@@ -22,6 +33,7 @@ export interface Trade {
   totalFunding: string;
   type: "P" | "S";
   coin: Coin;
+  playbook: TradePlaybook;
 }
 
 export type TradeDocument = Trade & {

@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAccountsByUserId } from "@/features/accounts/server/db/accounts";
+import { getAccountsByUserId } from "@/features/accounts/server/db/accounts-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import { limitParamValidation, pageParamValidation } from "@/utils/zod-utils";
 import { auth } from "@clerk/nextjs/server";

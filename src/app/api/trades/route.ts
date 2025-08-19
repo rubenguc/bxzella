@@ -1,12 +1,13 @@
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts";
+import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import {
   getTradesByAccountUID,
   syncPositions,
-} from "@/features/trades/server/db/trades";
+} from "@/features/trades/server/db/trades-db";
 import { handleApiError } from "@/utils/server-api-utils";
 import {
   accountIdParamValidation,
+  coinParamValidation,
   dateParamValidation,
   limitParamValidation,
   pageParamValidation,
@@ -20,6 +21,7 @@ const TradesSearchParamsSchema = z.object({
   limit: limitParamValidation(),
   startDate: dateParamValidation({ field: "startDate" }),
   endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {
@@ -28,7 +30,7 @@ export async function GET(request: NextRequest) {
     const searchParams = Object.fromEntries(url.searchParams.entries());
     const parsedParams = TradesSearchParamsSchema.parse(searchParams);
 
-    const { accountId, page, limit, startDate, endDate } = parsedParams;
+    const { accountId, page, limit, startDate, endDate, coin } = parsedParams;
 
     await connectDB();
 
@@ -36,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     const accountUID = account.uid;
 
-    await syncPositions(accountUID);
+    await syncPositions(accountUID, coin);
 
     const data = await getTradesByAccountUID({
       uid: accountUID,
@@ -44,10 +46,12 @@ export async function GET(request: NextRequest) {
       limit,
       startDate,
       endDate,
+      coin,
     });
 
     return NextResponse.json(data);
   } catch (err) {
+    console.error(err);
     return handleApiError(err);
   }
 }

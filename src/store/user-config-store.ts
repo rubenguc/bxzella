@@ -27,7 +27,7 @@ export const useUserConfigStore = create<UserConfig>()(
       endDate: null,
       updateDateRange: (startDate, endDate) => set({ startDate, endDate }),
       isStoreLoaded: false,
-      coin: "VST",
+      coin: "USDT",
       setCoin: (coin) => set({ coin }),
       setHasHydrated: (state) => {
         set({

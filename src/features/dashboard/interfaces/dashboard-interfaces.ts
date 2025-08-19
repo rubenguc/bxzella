@@ -4,3 +4,10 @@ export interface CalendarCell {
   trades: number | null;
   type?: "profit" | "loss";
 }
+
+export interface WeekSummary {
+  weekNumber: number;
+  totalNetProfit: number;
+  totalTrades: number;
+  daysTraded: number;
+}

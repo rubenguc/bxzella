@@ -3,15 +3,24 @@ import { useEffect, useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
-import { format } from "date-fns";
+import {
+  format,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+  subDays,
+  subMonths,
+} from "date-fns";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 import { useUserConfigStore } from "@/store/user-config-store";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { es, enUS } from "react-day-picker/locale";
 
 const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
@@ -23,6 +32,7 @@ const LOCALES = {
 
 export function DateRangeSelector() {
   const locale = useLocale();
+  const t = useTranslations("date_range_selector");
 
   const { startDate, endDate, updateDateRange, isStoreLoaded } =
     useUserConfigStore();
@@ -48,7 +58,7 @@ export function DateRangeSelector() {
       return new Date(actualDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     }
 
-    return new Date(endDate.getTime() + ONE_MONTH_IN_MS);
+    return new Date(endDate.getTime() + ONE_MONTH_IN_MS * 2);
   }, [isStoreLoaded, endDate]);
 
   useEffect(() => {
@@ -91,9 +101,79 @@ export function DateRangeSelector() {
       updateDateRange(dateRange?.from, dateRange?.to);
   };
 
+  // Predefined date ranges
+  const predefinedRanges = [
+    {
+      label: t("today"),
+      range: () => {
+        const today = new Date();
+        return { from: today, to: today };
+      },
+    },
+    {
+      label: t("this_week"),
+      range: () => {
+        const today = new Date();
+        const weekEnd = endOfWeek(today, { weekStartsOn: 0 });
+        return {
+          from: startOfWeek(today, { weekStartsOn: 0 }),
+          to: weekEnd > today ? today : weekEnd,
+        };
+      },
+    },
+    {
+      label: t("this_month"),
+      range: () => {
+        const today = new Date();
+        const monthEnd = endOfMonth(today);
+        return {
+          from: startOfMonth(today),
+          to: monthEnd > today ? today : monthEnd,
+        };
+      },
+    },
+    {
+      label: t("last_30_days"),
+      range: () => {
+        const today = new Date();
+        return {
+          from: subDays(today, 30),
+          to: today,
+        };
+      },
+    },
+    {
+      label: t("last_month"),
+      range: () => {
+        const today = new Date();
+        const firstDayLastMonth = startOfMonth(subMonths(today, 1));
+        const lastDayLastMonth = endOfMonth(subMonths(today, 1));
+        return {
+          from: firstDayLastMonth,
+          to: lastDayLastMonth > today ? today : lastDayLastMonth,
+        };
+      },
+    },
+  ];
+
+  const selectPredefinedRange = (
+    rangeFn: () => { from: Date; to: Date },
+    e: React.MouseEvent,
+  ) => {
+    // Prevent the dropdown from closing when clicking a predefined range
+    e.preventDefault();
+    e.stopPropagation();
+
+    const range = rangeFn();
+    setDateRange(range);
+  };
+
   return (
     <DropdownMenu onOpenChange={updateRange}>
-      <DropdownMenuTrigger asChild className="px-2 border rounded-full h-9">
+      <DropdownMenuTrigger
+        asChild
+        className="px-2 border rounded-full h-9 min-w-9"
+      >
         <div className="relative flex items-center">
           <CalendarIcon size={17} className="opacity-50" />
           <Input
@@ -104,21 +184,34 @@ export function DateRangeSelector() {
           <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <Calendar
-          locale={LOCALES[locale as "es" | "en"] || enUS}
-          mode="range"
-          defaultMonth={dateRange?.from}
-          selected={dateRange}
-          onSelect={setDateRange}
-          numberOfMonths={2}
-          startMonth={startMonth}
-          endMonth={endMonth}
-          disabled={{
-            before: startMonth,
-            after: new Date(),
-          }}
-        />
+      <DropdownMenuContent className="flex">
+        <div className="flex-1">
+          <Calendar
+            locale={LOCALES[locale as "es" | "en"] || enUS}
+            mode="range"
+            defaultMonth={dateRange?.from}
+            selected={dateRange}
+            onSelect={setDateRange}
+            numberOfMonths={2}
+            startMonth={startMonth}
+            endMonth={endMonth}
+            disabled={{
+              before: startMonth,
+              after: new Date(),
+            }}
+          />
+        </div>
+        <div className="w-fit border-l p-1 bg-background">
+          {predefinedRanges.map((item, index) => (
+            <DropdownMenuItem
+              key={index}
+              className="cursor-pointer"
+              onClick={(e) => selectPredefinedRange(item.range, e)}
+            >
+              {item.label}
+            </DropdownMenuItem>
+          ))}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

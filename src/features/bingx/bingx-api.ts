@@ -17,7 +17,7 @@ const PATHS = {
 export const getUserBalance = async (
   apiKey: string,
   secretKey: string,
-  coin: Coin = "VST",
+  coin: Coin = "USDT",
 ): Promise<UserBalanceResponse> => {
   return makeRequest({
     coin,
@@ -30,7 +30,7 @@ export const getUserBalance = async (
 export const getUserActiveOpenPositions = async (
   apiKey: string,
   secretKey: string,
-  coin: Coin = "VST",
+  coin: Coin = "USDT",
 ): Promise<UserPositionResponse> => {
   return makeRequest({
     coin,
@@ -47,7 +47,7 @@ export const getFilledOrders = async (
     startTs: number;
     endTs: number;
   },
-  coin: Coin = "VST",
+  coin: Coin = "USDT",
 ): Promise<UserFillOrdersResponse> => {
   return makeRequest({
     coin,
@@ -66,7 +66,7 @@ export const getPositionHistory = async (
     startTs: number;
     endTs: number;
   },
-  coin: Coin = "VST",
+  coin: Coin = "USDT",
 ): Promise<UserPositionHistoryResponse> => {
   return makeRequest({
     coin,

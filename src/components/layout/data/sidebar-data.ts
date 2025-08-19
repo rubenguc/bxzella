@@ -1,4 +1,5 @@
 import {
+  BookCheck,
   BookText,
   Bot,
   House,
@@ -18,7 +19,7 @@ export const sidebarItems = {
           icon: House,
         },
         {
-          title: "ai_summary",
+          title: "ai-summary",
           url: "/ai-summary",
           icon: Bot,
         },
@@ -33,11 +34,16 @@ export const sidebarItems = {
           icon: Users,
         },
         {
+          title: "playbooks",
+          url: "/playbooks",
+          icon: BookCheck,
+        },
+        {
           title: "info",
           icon: Info,
           items: [
             {
-              title: "create_api_key",
+              title: "create-api-key",
               url: "/info/create-api-key",
               icon: SquareAsterisk,
             },

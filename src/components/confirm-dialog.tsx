@@ -16,7 +16,7 @@ interface ConfirmDialogProps {
   onOpenChange: (open: boolean) => void;
   title: React.ReactNode;
   disabled?: boolean;
-  desc: React.JSX.Element | string;
+  desc?: React.JSX.Element | string;
   cancelBtnText?: string;
   confirmText?: React.ReactNode;
   destructive?: boolean;
@@ -48,9 +48,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
       <AlertDialogContent className={cn(className && className)}>
         <AlertDialogHeader className="text-left">
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription asChild>
-            <div>{desc}</div>
-          </AlertDialogDescription>
+          {desc && (
+            <AlertDialogDescription asChild>
+              <div>{desc}</div>
+            </AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         {children}
         <AlertDialogFooter>

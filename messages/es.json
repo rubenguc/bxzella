@@ -5,7 +5,10 @@
     "accounts": "Cuentas",
     "info": "Información",
     "create_api_key": "Crear Clave API",
-    "ai_summary": "Resumen AI"
+    "ai_summary": "Resumen AI",
+    "playbooks": "Manual de operaciones",
+    "": "Dashboard",
+    "settings": "Panel de control"
   },
   "header": {
     "account": "Seleccionar Cuenta",
@@ -42,7 +45,11 @@
     "close_position_value": "Valor de posición al cerrar",
     "open_position_amount": "Monto de posición al abrir",
     "close_position_amount": "Monto de posición al cerrar",
-    "not_exact_values_description": "Utilizamos los valores que BingX proporciona a través de su API; estos valores son aproximaciones y pueden no coincidir con los valores exactos mostrados en tu cuenta."
+    "not_exact_values_description": "Utilizamos los valores que BingX proporciona a través de su API; estos valores son aproximaciones y pueden no coincidir con los valores exactos mostrados en tu cuenta.",
+    "info": "Información",
+    "playbooks": "Manual de operaciones",
+    "playbook_data_updated": "Datos del Manual de operación actualizados correctamente",
+    "save_changes": "Guardar Cambios"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
@@ -62,31 +69,37 @@
     "incorrect_api_key_error": "Clave API incorrecta",
     "incorrect_api_key_error_description": "Por favor, verifica tu clave API e inténtalo nuevamente."
   },
+  "statistics": {
+    "net_pnl": "Ganancia Neta",
+    "net_pnl_info": "La ganancia neta representa la ganancia o pérdida total después de haber deducido los gastos y comisiones. Representa la ganancia o pérdida real de las operaciones de trading.",
+    "profit_factor": "Factor de Ganancia",
+    "profit_factor_info": "Métrica que mide la rentabilidad de una estrategia de trading dividiendo las ganancias totales entre las pérdidas totales. Un valor superior a 1 indica estrategia rentable; por debajo, que las pérdidas superan a las ganancias.",
+    "trade_win_percentage": "% de Op. Ganadoras",
+    "trade_win_percentage_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
+    "avg_win_loss": "% Prom. de operaciones Ganadoras/Perdedoras ",
+    "avg_win_loss_info": "Ganancia promedio en operaciones ganadoras y pérdida promedio en operaciones perdedoras. Mide el tamaño típico de las ganancias y pérdidas por operación.",
+    "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos.",
+    "win": "Ganado",
+    "lost": "Perdido",
+    "win_rate": "Tasa de Ganancia",
+    "average_win": "Ganancia promedio",
+    "average_loss": "Pérdida promedio"
+  },
   "dashboard": {
-    "statistics": {
-      "net_pnl": "Ganancia Neta",
-      "net_pnl_info": "La ganancia neta representa la ganancia o pérdida total después de haber deducido los gastos y comisiones. Representa la ganancia o pérdida real de las operaciones de trading.",
-      "profit_factor": "Factor de Ganancia",
-      "profit_factor_info": "Métrica que mide la rentabilidad de una estrategia de trading dividiendo las ganancias totales entre las pérdidas totales. Un valor superior a 1 indica estrategia rentable; por debajo, que las pérdidas superan a las ganancias.",
-      "trade_win_percentage": "% de Op. Ganadoras",
-      "trade_win_percentage_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
-      "avg_win_loss": "% Prom. de operaciones Ganadoras/Perdedoras ",
-      "avg_win_loss_info": "Ganancia promedio en operaciones ganadoras y pérdida promedio en operaciones perdedoras. Mide el tamaño típico de las ganancias y pérdidas por operación.",
-      "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos.",
-      "win": "Ganado",
-      "lost": "Perdido"
-    },
     "open_positions": {
       "open_positions": "Posiciones Abiertas",
       "open_positions_description": "posiciones actualmente abiertas, estas no dependen del rango de tiempo",
       "no_open_positions": "No hay posiciones abiertas"
     },
     "recent_trades": {
-      "recent_trades": "Recent Trades",
-      "no_recent_trades": "No recent trades"
+      "recent_trades": "Operaciones Recientes",
+      "no_recent_trades": "No hay operaciones recientes"
     },
     "day_profits": {
       "day_profits": "Profits por día",
+      "week_summary": "Semana",
+      "total_days": "días",
+      "monthly_stats": "Estadísticas Mensuales",
       "days": {
         "sunday": "Dom",
         "monday": "Lun",
@@ -108,13 +121,9 @@
     }
   },
   "trades": {
-    "header": "Operaciones",
-    "description": "Puedes ver todas tus operaciones cerradas",
     "no_trades": "No hay operaciones"
   },
   "accounts": {
-    "header": "Cuentas",
-    "description": "Administra tus cuentas aquí",
     "add_account": "Agregar Cuenta",
     "name": "Nombre",
     "uid": "UID",
@@ -160,8 +169,6 @@
     "es": "Español"
   },
   "ai_summary": {
-    "header": "Resumen IA",
-    "description": "Obtén tu resumen semanal impulsado por IA",
     "week": "Semana",
     "model": "Modelo",
     "no_summaries": "No hay resúmenes disponibles",
@@ -172,5 +179,36 @@
     "no_week_data_to_summarize": "No hay datos de la semana para resumir",
     "no_week_data_to_summarize_description": "Este último resumen se basa en tus datos de la semana pasada. Parece que no has utilizado la plataforma en la última semana.",
     "summary": "Resumen"
+  },
+  "playbooks": {
+    "failed_to_create_playbook": "Error al crear el manual de operaciones",
+    "failed_to_update_playbook": "Error al actualizar el manual de operaciones",
+    "failed_to_delete_playbook": "Error al eliminar el manual de operaciones",
+    "playbook_not_found": "Manual de operaciones no encontrado",
+    "playbook_deleted_message": "Manual de operaciones eliminado correctamente",
+    "add_playbook": "Agregar Manual de Operaciones",
+    "edit_playbook": "Editar Manual de Operaciones",
+    "delete_playbook": "Eliminar Manual de Operaciones",
+    "add_icon": "Agregar Ícono",
+    "name": "Nombre",
+    "description": "Descripción",
+    "rules": "Reglas",
+    "add_group_rule": "Agregar Grupo de Reglas",
+    "entry_criteria": "Criterios de Entrada",
+    "exit_criteria": "Criterios de Salida",
+    "add_rule": "Agregar Regla",
+    "save_changes": "Guardar Cambios",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "trades": "Operaciones",
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "date_range_selector": {
+    "today": "Hoy",
+    "this_week": "Esta Semana",
+    "this_month": "Este Mes",
+    "last_30_days": "Últimos 30 Días",
+    "last_month": "Mes Pasado"
   }
 }

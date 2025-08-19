@@ -1,5 +1,5 @@
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts";
+import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import {
   AISummary,
   AISummaryDocument,
@@ -13,9 +13,12 @@ import { parseModelName } from "@/features/ai-summary/utils/model";
 import {
   getTradesStatistic,
   getTradesStatisticByPair,
-} from "@/features/trades/server/db/trades";
+} from "@/features/trades/server/db/trades-db";
 import { handleApiError } from "@/utils/server-api-utils";
-import { accountIdParamValidation } from "@/utils/zod-utils";
+import {
+  accountIdParamValidation,
+  coinParamValidation,
+} from "@/utils/zod-utils";
 import { endOfWeek, startOfWeek, subWeeks } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,6 +26,7 @@ import { z } from "zod";
 
 const aiSummaryParamsSchema = z.object({
   accountId: accountIdParamValidation(),
+  coin: coinParamValidation(),
 });
 
 export async function GET(request: NextRequest) {

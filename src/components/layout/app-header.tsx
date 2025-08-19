@@ -3,23 +3,21 @@
 import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { ProfileDropdown } from "../profile-dropdown";
-import { AccountsSelector } from "@/features/accounts/components/AccountsSelector";
+import { AccountsSelector } from "@/features/accounts/components/accounts-selector";
 import { DateRangeSelector } from "./DateRangeSelector";
 import "./header.styles.css";
-import { AccountsCoinSelector } from "@/features/accounts/components/AccountsCoinSelector";
+import { AccountsCoinSelector } from "@/features/accounts/components/accounts-coin-selector";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;
   ref?: React.Ref<HTMLElement>;
 }
 
-export default function AppHeader({
-  className,
-  fixed,
-
-  ...props
-}: HeaderProps) {
+export default function AppHeader({ className, fixed, ...props }: HeaderProps) {
+  const tSidebar = useTranslations("sidebar");
+  const pathname = usePathname();
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -34,6 +32,8 @@ export default function AppHeader({
     return () => document.removeEventListener("scroll", onScroll);
   }, []);
 
+  const parsedPathname = pathname.split("/").pop();
+
   return (
     <header
       className={cn(
@@ -45,11 +45,13 @@ export default function AppHeader({
       {...props}
     >
       <SidebarTrigger variant="outline" className="scale-125 sm:scale-100" />
+      <span className="font-semibold md:text-xl text-ellipsis overflow-hidden whitespace-nowrap">
+        {tSidebar(parsedPathname as string)}
+      </span>
       <div className="ml-auto flex items-center space-x-4">
         <DateRangeSelector />
         <AccountsSelector />
         <AccountsCoinSelector />
-        <ProfileDropdown />
       </div>
     </header>
   );
