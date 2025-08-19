@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, useEffect, useMemo, useState } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AccountsSelector } from "@/features/accounts/components/accounts-selector";

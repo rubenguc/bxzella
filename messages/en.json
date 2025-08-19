@@ -98,6 +98,9 @@
     },
     "day_profits": {
       "day_profits": "Day Profits",
+      "week": "Week",
+      "total_days": "days",
+      "monthly_stats": "Monthly Stats",
       "days": {
         "sunday": "Sun",
         "monday": "Mon",

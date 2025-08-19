@@ -3,6 +3,18 @@ import { startOfMonth } from "date-fns";
 import { useMemo, useState } from "react";
 import { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
 
+export interface WeekSummary {
+  weekNumber: number;
+  totalNetProfit: number;
+  totalTrades: number;
+  daysTraded: number;
+}
+
+export interface MonthlySummary {
+  totalNetProfit: number;
+  daysTraded: number;
+}
+
 export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(1);
 
@@ -115,6 +127,60 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
     return calendarData;
   }, [currentMonthIndex, data, months]);
 
+  const weeklySummaries = useMemo(() => {
+    const summaries: WeekSummary[] = [];
+    
+    // Process each week (6 weeks)
+    for (let week = 0; week < 6; week++) {
+      let totalNetProfit = 0;
+      let totalTrades = 0;
+      let daysTraded = 0;
+      
+      // Process each day in the week (7 days)
+      for (let day = 0; day < 7; day++) {
+        const index = week * 7 + day;
+        const cell = processCalendarData[index];
+        
+        if (cell && cell.date !== null && cell.amount !== null) {
+          totalNetProfit += cell.amount;
+          totalTrades += cell.trades || 0;
+          if (cell.amount !== 0 || (cell.amount === 0 && cell.trades && cell.trades > 0)) {
+            daysTraded++;
+          }
+        }
+      }
+      
+      summaries.push({
+        weekNumber: week + 1,
+        totalNetProfit,
+        totalTrades,
+        daysTraded,
+      });
+    }
+    
+    return summaries;
+  }, [processCalendarData]);
+
+  const monthlySummary = useMemo(() => {
+    // Calculate total net profit and days traded for the month
+    let totalNetProfit = 0;
+    let daysTraded = 0;
+    
+    processCalendarData.forEach(cell => {
+      if (cell && cell.date !== null && cell.amount !== null) {
+        totalNetProfit += cell.amount;
+        if (cell.amount !== 0 || (cell.amount === 0 && cell.trades && cell.trades > 0)) {
+          daysTraded++;
+        }
+      }
+    });
+    
+    return {
+      totalNetProfit,
+      daysTraded,
+    };
+  }, [processCalendarData]);
+
   const handlePrevMonth = () => {
     setCurrentMonthIndex((prev) => (prev === 0 ? 1 : 0));
   };
@@ -130,6 +196,8 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
 
   return {
     calendarData: processCalendarData,
+    weeklySummaries,
+    monthlySummary,
     handlePrevMonth,
     handleNextMonth,
     isPreviousMonth,

@@ -27,26 +27,26 @@ export function DayProfitsCell({
 
   return (
     <div
-      className={`h-18  border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  items-end justify-between text-center relative p-1 md:px-4 ${getCellClassName()}`}
+      className={`min-h-24 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
     >
       {date !== null && (
         <>
-          <div className="text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 flex">
+          <div className="text-xs sm:text-sm  font-medium mb-0.5 sm:mb-1">
             {date}
           </div>
 
           {amount !== null && (
-            <div className="text-end">
+            <>
               <div
-                className={`text-[8px] sm:text-[10px] lg:text-[0.9rem] font-bold leading-tight`}
+                className={`text-[8px] sm:text-[10px] lg:text-[1rem] font-bold leading-tight`}
               >
                 {formatDecimal(amount)} {coin}
               </div>
               <div className="text-[10px] sm:text-xs  leading-tight">
                 <span className="hidden sm:inline">{trades} trades</span>
-                <span className="sm:hidden">{trades}t</span>
+                <span className="sm:hidden">{trades}T</span>
               </div>
-            </div>
+            </>
           )}
         </>
       )}
