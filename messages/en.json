@@ -204,5 +204,12 @@
     "trades": "Trades",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "date_range_selector": {
+    "today": "Today",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "last_30_days": "Last 30 Days",
+    "last_month": "Last Month"
   }
 }

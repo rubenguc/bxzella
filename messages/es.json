@@ -203,5 +203,12 @@
     "trades": "Operaciones",
     "edit": "Editar",
     "delete": "Eliminar"
+  },
+  "date_range_selector": {
+    "today": "Hoy",
+    "this_week": "Esta Semana",
+    "this_month": "Este Mes",
+    "last_30_days": "Últimos 30 Días",
+    "last_month": "Mes Pasado"
   }
 }
