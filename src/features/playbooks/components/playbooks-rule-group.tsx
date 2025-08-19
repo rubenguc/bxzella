@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import { PlaybookForm } from "./playbooks-action-dialog";
 
-interface RuleGroupProps extends PlaybookRulesGroup {
+interface PlaybooksRuleGroupProps extends PlaybookRulesGroup {
   onAddRule: () => void;
   onRemoveRule: (index: number) => void;
   groupIndex: number;
@@ -14,7 +14,7 @@ interface RuleGroupProps extends PlaybookRulesGroup {
   onEditName: () => void;
 }
 
-export const RuleGroup = ({
+export const PlaybooksRuleGroup = ({
   name,
   rules,
   onAddRule,
@@ -22,7 +22,7 @@ export const RuleGroup = ({
   groupIndex,
   onRemoveGroup,
   onEditName,
-}: RuleGroupProps) => {
+}: PlaybooksRuleGroupProps) => {
   const t = useTranslations("playbooks");
 
   const { register } = useFormContext<PlaybookForm>();
