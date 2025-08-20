@@ -101,6 +101,7 @@
       "week": "Week",
       "total_days": "days",
       "monthly_stats": "Monthly Stats",
+      "net_pnl": "Net PnL",
       "days": {
         "sunday": "Sun",
         "monday": "Mon",
