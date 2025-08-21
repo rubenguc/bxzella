@@ -113,7 +113,7 @@ export function RecentTrades() {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["accounts", selectedAccountId, startDate, endDate, coin],
+    queryKey: ["all-trades", selectedAccountId, startDate, endDate, coin],
     queryFn: () =>
       getTrades({
         accountId: selectedAccountId,

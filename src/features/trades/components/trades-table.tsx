@@ -163,10 +163,11 @@ export function TradesTable() {
 
   const { data, isLoading } = useQuery({
     queryKey: [
-      "accounts",
+      "all-trades",
       selectedAccountId,
       pagination.pageIndex,
       pagination.pageSize,
+      coin,
     ],
     queryFn: () =>
       getTrades({

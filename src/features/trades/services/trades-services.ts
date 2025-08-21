@@ -17,6 +17,7 @@ export const getTrades = async (params: {
 
 export const getOpenPositions = async (params: {
   accountId: string;
+  coin: Coin;
 }): Promise<PaginationResponse<ActivePosition>> => {
   const response = await baseConfig.get("/trades/open-positions", { params });
   return response.data;
