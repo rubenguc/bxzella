@@ -8,6 +8,7 @@ import { ProfitFactor } from "@/features/dashboard/components/profit-factor";
 import { RecentTrades } from "@/features/dashboard/components/recent-trades";
 import { StatisticsSkeleton } from "@/features/dashboard/components/statistics-skeleton";
 import { TradeWinPercentage } from "@/features/dashboard/components/trade-win-percentage";
+import DayProfitsProvider from "@/features/dashboard/context/day-profits-context";
 import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
@@ -56,8 +57,11 @@ export default function Dashboard() {
         <OpenPositions />
         <RecentTrades />
       </div>
+
       <div>
-        <DayProfits />
+        <DayProfitsProvider>
+          <DayProfits />
+        </DayProfitsProvider>
       </div>
     </div>
   );

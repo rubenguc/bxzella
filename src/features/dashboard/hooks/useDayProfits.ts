@@ -78,6 +78,7 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
           amount: day.netProfit,
           trades: day.trades.length,
           type: day.netProfit >= 0 ? "profit" : "loss",
+          allTrades: day.trades,
         });
       }
     });
@@ -105,6 +106,8 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
             amount: tradingInfo.amount,
             trades: tradingInfo.trades,
             type: tradingInfo.type,
+            allTrades: tradingInfo.allTrades,
+            month: currentMonthNum,
           });
         } else {
           calendarData.push({
@@ -129,27 +132,30 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
 
   const weeklySummaries = useMemo(() => {
     const summaries: WeekSummary[] = [];
-    
+
     // Process each week (6 weeks)
     for (let week = 0; week < 6; week++) {
       let totalNetProfit = 0;
       let totalTrades = 0;
       let daysTraded = 0;
-      
+
       // Process each day in the week (7 days)
       for (let day = 0; day < 7; day++) {
         const index = week * 7 + day;
         const cell = processCalendarData[index];
-        
+
         if (cell && cell.date !== null && cell.amount !== null) {
           totalNetProfit += cell.amount;
           totalTrades += cell.trades || 0;
-          if (cell.amount !== 0 || (cell.amount === 0 && cell.trades && cell.trades > 0)) {
+          if (
+            cell.amount !== 0 ||
+            (cell.amount === 0 && cell.trades && cell.trades > 0)
+          ) {
             daysTraded++;
           }
         }
       }
-      
+
       summaries.push({
         weekNumber: week + 1,
         totalNetProfit,
@@ -157,7 +163,7 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
         daysTraded,
       });
     }
-    
+
     return summaries;
   }, [processCalendarData]);
 
@@ -165,16 +171,19 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
     // Calculate total net profit and days traded for the month
     let totalNetProfit = 0;
     let daysTraded = 0;
-    
-    processCalendarData.forEach(cell => {
+
+    processCalendarData.forEach((cell) => {
       if (cell && cell.date !== null && cell.amount !== null) {
         totalNetProfit += cell.amount;
-        if (cell.amount !== 0 || (cell.amount === 0 && cell.trades && cell.trades > 0)) {
+        if (
+          cell.amount !== 0 ||
+          (cell.amount === 0 && cell.trades && cell.trades > 0)
+        ) {
           daysTraded++;
         }
       }
     });
-    
+
     return {
       totalNetProfit,
       daysTraded,

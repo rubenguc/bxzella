@@ -4,6 +4,7 @@ import { Coin } from "@/global-interfaces";
 
 interface CalendarCellProps extends CalendarCell {
   coin: Coin;
+  onClick: () => void;
 }
 
 export function DayProfitsCell({
@@ -12,6 +13,7 @@ export function DayProfitsCell({
   trades,
   coin,
   type,
+  onClick,
 }: CalendarCellProps) {
   const getCellClassName = () => {
     if (type === "profit") {
@@ -27,6 +29,7 @@ export function DayProfitsCell({
 
   return (
     <div
+      onClick={amount !== null ? onClick : undefined}
       className={`min-h-24 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
     >
       {date !== null && (

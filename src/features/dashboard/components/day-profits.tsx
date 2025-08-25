@@ -17,6 +17,7 @@ import { WeekSummaryCell } from "./week-summary-cell";
 import { Badge } from "@/components/ui/badge";
 import { formatDecimal } from "@/utils/number-utils";
 import { getResultClass } from "@/utils/trade-utils";
+import { useDayProfitsContext } from "../context/day-profits-context";
 
 const daysOfWeekKeys = [
   "sunday",
@@ -30,6 +31,7 @@ const daysOfWeekKeys = [
 
 export function DayProfits() {
   const t = useTranslations("dashboard.day_profits");
+  const { selectDayProfit } = useDayProfitsContext();
 
   const { selectedAccountId, isStoreLoaded, coin } = useUserConfigStore();
 
@@ -115,7 +117,12 @@ export function DayProfits() {
                 </div>
               ))}
               {calendarData.map((item, index) => (
-                <DayProfitsCell key={index} {...item} coin={coin} />
+                <DayProfitsCell
+                  key={index}
+                  {...item}
+                  coin={coin}
+                  onClick={() => selectDayProfit(item)}
+                />
               ))}
             </div>
             <div className="gap-1 hidden invisible md:grid md:visible">

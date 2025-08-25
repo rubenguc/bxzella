@@ -26,7 +26,7 @@ export function OpenPositions() {
   const t = useTranslations("dashboard.open_positions");
   const tInfo = useTranslations("trade_info");
 
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccountId, coin } = useUserConfigStore();
 
   const columns: ColumnDef<ActivePosition>[] = [
     {
@@ -82,10 +82,11 @@ export function OpenPositions() {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["open-positions", selectedAccountId],
+    queryKey: ["open-positions", selectedAccountId, coin],
     queryFn: () =>
       getOpenPositions({
         accountId: selectedAccountId,
+        coin,
       }),
     enabled: !!selectedAccountId,
   });

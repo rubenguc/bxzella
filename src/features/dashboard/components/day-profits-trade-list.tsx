@@ -1,35 +1,29 @@
-"use client";
-
+import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
-import {
-  transformDateToParam,
-  transformTimeToLocalDate,
-} from "@/utils/date-utils";
+import { transformTimeToLocalDate } from "@/utils/date-utils";
+import { formatDecimal } from "@/utils/number-utils";
 import {
   checkLongPosition,
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { getTrades } from "@/features/trades/services/trades-services";
-import { CustomTable } from "@/components/custom-table";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { formatDecimal } from "@/utils/number-utils";
 
-export function RecentTrades() {
-  const t = useTranslations("dashboard.recent_trades");
+interface DayProfitsTradeListProps {
+  trades: TradeDocument[];
+}
+
+export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
+  const { coin } = useUserConfigStore();
+  const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
-
-  const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
-    useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
@@ -44,18 +38,7 @@ export function RecentTrades() {
         className: "text-center",
       },
     },
-    {
-      header: tInfo("closed_date"),
-      accessorKey: "updateTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.updateTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
+
     {
       header: tInfo("symbol"),
       accessorKey: "symbol",
@@ -72,7 +55,7 @@ export function RecentTrades() {
       header: tInfo("position"),
       accessorKey: "positionSide",
       cell: ({ row }) => {
-        const positionSide = row.original.positionSide;
+        const positionSide = row.getValue("positionSide") as string;
         const isLongPosition = checkLongPosition(positionSide);
         return (
           <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
@@ -95,6 +78,18 @@ export function RecentTrades() {
       },
     },
     {
+      header: tInfo("closed_date"),
+      accessorKey: "updateTime",
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.updateTime)}
+        </div>
+      ),
+      meta: {
+        className: "text-center",
+      },
+    },
+    {
       header: tInfo("position_pnl"),
       accessorKey: "netProfit",
       cell: ({ row }) => {
@@ -110,41 +105,39 @@ export function RecentTrades() {
         className: "text-center",
       },
     },
+    {
+      header: tInfo("realised_pnl"),
+      accessorKey: "realisedProfit",
+      cell: ({ row }) => {
+        const realisedProfit = row.original.realisedProfit;
+        const isWin = checkWin(realisedProfit);
+        return (
+          <div className={isWin ? "text-green-600" : "text-red-600"}>
+            {formatDecimal(Number(realisedProfit), 4)} {coin}
+          </div>
+        );
+      },
+      meta: {
+        className: "text-center",
+      },
+    },
   ];
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["all-trades", selectedAccountId, startDate, endDate, coin],
-    queryFn: () =>
-      getTrades({
-        accountId: selectedAccountId,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
-        limit: 10,
-        page: 0,
-        coin,
-      }),
-    enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
-  });
-
   const table = useReactTable({
-    data: data?.data ?? [],
+    data: trades ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
   });
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("recent_trades")}</CardTitle>
-      </CardHeader>
-      <CardContent className="px-1">
-        <CustomTable
-          table={table}
-          columnsLength={columns.length}
-          noDataMessage={t("no_recent_trades")}
-          showSkeleton={!data || isLoading}
-        />
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+      <CustomTable
+        containerClassName="rounded-md border"
+        table={table}
+        columnsLength={columns.length}
+        noDataMessage={t("no_trades")}
+      />
+    </div>
   );
-}
+};
