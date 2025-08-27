@@ -6,11 +6,11 @@ export type TradePlaybook = {
   id: string | null;
   rulesProgress: {
     groupName: string;
-    completedRules: string[];
-    totalRules: number;
+    rules: {
+      name: string;
+      isCompleted: boolean;
+    }[];
   }[];
-  totalCompletedRules: number;
-  totalRules: number;
 } | null;
 
 export interface Trade {

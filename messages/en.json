@@ -50,7 +50,9 @@
     "info": "Info",
     "playbooks": "Playbooks",
     "playbook_data_updated": "Playbook data updated successfully",
-    "save_changes": "Save Changes"
+    "save_changes": "Save Changes",
+    "rules_followed": "Rules Followed",
+    "check_all": "Check All"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",

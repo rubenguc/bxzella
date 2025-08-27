@@ -30,7 +30,7 @@ export function AISummaryDialog() {
             {t("model")}: {model}
           </DialogDescription>
         </DialogHeader>
-        <div className="max-h-[26.25rem] w-full overflow-y-auto py-1 pr-4">
+        <div className="max-h-[26.25rem] w-full overflow-y-auto py-1">
           <div className="[&>h2]:mb-3 [&>h2]:font-bold [&>ul]:list-disc [&>ol]:list-disc [&>ol]:pl-7 [&>ul]:pl-7 [&>ul]:mb-5  [&>p:first-of-type]:mb-4 [&>p:first-of-type]:text-gray-300">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{result}</ReactMarkdown>
           </div>

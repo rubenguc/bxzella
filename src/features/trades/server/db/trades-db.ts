@@ -447,9 +447,54 @@ export function getTradesStatisticByPair({
   ]);
 }
 
-export function updateTradePlaybook(
+export async function updateTradePlaybook(
   tradeId: string,
   tradePlaybook: TradePlaybook,
 ) {
-  return TradeModel.updateOne({ _id: tradeId }, { playbook: tradePlaybook });
+  return await TradeModel.updateOne({ _id: tradeId }, { playbook: tradePlaybook });
+}
+
+export async function getPaginatedTradesByPlaybook({
+  accountUID,
+  startDate,
+  endDate,
+  coin = "USDT",
+  playbookId,
+  page = 1,
+  limit = 10,
+}: {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
+  playbookId: string;
+  page?: number;
+  limit?: number;
+}): Promise<{ data: Trade[]; totalPages: number }> {
+  const skip = page * limit;
+
+  const findCriteria: Record<string, unknown> = {
+    accountUID,
+    coin,
+    "playbook.id": playbookId,
+  };
+
+  if (startDate && endDate) {
+    findCriteria.openTime = { $gte: startDate, $lte: endDate };
+    findCriteria.updateTime = { $gte: startDate, $lte: endDate };
+  }
+
+  const totalTrades = await TradeModel.countDocuments(findCriteria);
+  const totalPages = Math.ceil(totalTrades / limit);
+
+  const trades = await TradeModel.find(findCriteria)
+    .sort({ updateTime: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  return {
+    data: trades as unknown as Trade[],
+    totalPages,
+  };
 }

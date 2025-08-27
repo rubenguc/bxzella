@@ -14,8 +14,8 @@ export async function updateTradePlaybookAction(
 
     if (userId === null) return handleServerActionError("not_authenticated");
 
-    await updateTradePlaybook(tradeId, tradePlaybook);
-    return { error: false, message: "" };
+    const result = await updateTradePlaybook(tradeId, tradePlaybook);
+    return { error: false, message: "", result };
   } catch (error) {
     console.error("Error updating playbook:", error);
     return handleServerActionError("failed_to_create_playbook");
