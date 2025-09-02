@@ -4,8 +4,8 @@
     "trades": "Operaciones",
     "accounts": "Cuentas",
     "info": "Información",
-    "create_api_key": "Crear Clave API",
-    "ai_summary": "Resumen AI",
+    "create-api-key": "Crear Clave API",
+    "ai-summary": "Resumen AI",
     "playbooks": "Manual de operaciones",
     "": "Dashboard",
     "settings": "Panel de control"
@@ -49,7 +49,9 @@
     "info": "Información",
     "playbooks": "Manual de operaciones",
     "playbook_data_updated": "Datos del Manual de operación actualizados correctamente",
-    "save_changes": "Guardar Cambios"
+    "save_changes": "Guardar Cambios",
+    "rules_followed": "Reglas Seguidas",
+    "check_all": "Marcar Todo"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
@@ -97,7 +99,7 @@
     },
     "day_profits": {
       "day_profits": "Profits por día",
-      "week_summary": "Semana",
+      "week": "Semana",
       "total_days": "días",
       "monthly_stats": "Estadísticas Mensuales",
       "net_pnl": "Ganancia Neta",
@@ -203,7 +205,8 @@
     "continue": "Continuar",
     "trades": "Operaciones",
     "edit": "Editar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "see_details": "Ver detalles"
   },
   "date_range_selector": {
     "today": "Hoy",
@@ -211,5 +214,25 @@
     "this_month": "Este Mes",
     "last_30_days": "Últimos 30 Días",
     "last_month": "Mes Pasado"
+  },
+  "playbook_details": {
+    "back": "Volver",
+    "playbook_not_found": "Manual de operaciones no encontrado",
+    "tabs": {
+      "overview": "Resumen",
+      "playbook_rules": "Reglas del Manual de operaciones",
+      "trades": "Operaciones"
+    },
+    "playbook_rules": {
+      "follow_rate": "Tasa de Seguimiento"
+    },
+    "overview": {
+      "net_pnl": "Ganancia Neta",
+      "trades": "Operaciones",
+      "win_rate": "% Tasa de Ganancia",
+      "profit_factor": "Factor de Ganancia",
+      "avg_winner": "Ganancia Promedio",
+      "avg_loser": "Pérdida Promedio"
+    }
   }
 }

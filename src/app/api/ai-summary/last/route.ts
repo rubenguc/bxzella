@@ -96,8 +96,6 @@ export async function GET(request: NextRequest) {
       aiSummaryLast2Weeks as unknown as AISummaryDocument,
     );
 
-    console.log("summary created");
-
     const createdSummary = await createAISummaryDb({
       uid: accountUID,
       coin: "VST",

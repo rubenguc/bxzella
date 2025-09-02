@@ -5,6 +5,8 @@ import {
   PlaybookTradeStatistics,
 } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
+import { Coin } from "@/global-interfaces";
+import mongoose from "mongoose";
 
 export async function createPlaybook(playbookData: Partial<Playbook>) {
   const playbook = new PlaybookModel(playbookData);
@@ -12,7 +14,7 @@ export async function createPlaybook(playbookData: Partial<Playbook>) {
 }
 
 export async function getPlaybookById(id: string) {
-  return await PlaybookModel.findById(id);
+  return await PlaybookModel.findById(id).lean();
 }
 
 export async function getAllPlaybooks({
@@ -190,6 +192,124 @@ export async function getTradesStatisticByPlaybook({
     totalPlaybooks,
     totalPages: Math.ceil(totalPlaybooks / limit),
     currentPage: page,
+    data,
+  };
+}
+
+export async function getTradesStatisticByPlaybookId({
+  playbookId,
+  accountUID,
+  startDate,
+  endDate,
+  coin = "USDT",
+}: {
+  playbookId: string;
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
+}) {
+  const playbook = await PlaybookModel.findById(playbookId).lean();
+
+  if (!playbook) {
+    throw new Error(`Playbook with id ${playbookId} not found.`);
+  }
+
+  const tradesAgg = await TradeModel.aggregate([
+    {
+      $match: {
+        accountUID,
+        coin,
+        closeAllPositions: true,
+        openTime: { $gte: startDate, $lte: endDate },
+        updateTime: { $gte: startDate, $lte: endDate },
+        "playbook.id": new mongoose.Types.ObjectId(playbookId),
+      },
+    },
+    {
+      $addFields: {
+        numericNetProfit: {
+          $convert: { input: "$netProfit", to: "double", onError: 0 },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$playbook.id",
+        totalTrades: { $sum: 1 },
+        totalWin: {
+          $sum: { $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0] },
+        },
+        totalLoss: {
+          $sum: { $cond: [{ $lt: ["$numericNetProfit", 0] }, 1, 0] },
+        },
+        sumWin: {
+          $sum: {
+            $cond: [{ $gt: ["$numericNetProfit", 0] }, "$numericNetProfit", 0],
+          },
+        },
+        sumLoss: {
+          $sum: {
+            $cond: [{ $lt: ["$numericNetProfit", 0] }, "$numericNetProfit", 0],
+          },
+        },
+        netPnL: { $sum: "$numericNetProfit" },
+      },
+    },
+  ]);
+
+  const statistics = tradesAgg[0] ?? {
+    totalTrades: 0,
+    totalWin: 0,
+    totalLoss: 0,
+    sumWin: 0,
+    sumLoss: 0,
+    netPnL: 0,
+  };
+
+  const sumLossAbs = Math.abs(statistics.sumLoss);
+  const profitFactor =
+    sumLossAbs === 0 ? statistics.sumWin : statistics.sumWin / sumLossAbs;
+  const tradeWinPercent =
+    statistics.totalTrades === 0
+      ? 0
+      : (statistics.totalWin / statistics.totalTrades) * 100;
+  const avgWin =
+    statistics.totalWin === 0 ? 0 : statistics.sumWin / statistics.totalWin;
+  const avgLoss =
+    statistics.totalLoss === 0
+      ? 0
+      : Math.abs(statistics.sumLoss) / statistics.totalLoss;
+  const avgWinLoss =
+    statistics.totalWin && statistics.totalLoss ? avgWin / avgLoss : 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { userId: _, ...playbookData } = playbook as Partial<PlaybookDocument>;
+
+  const data: PlaybookTradeStatistics = {
+    playbook: playbookData,
+    tradeWin: {
+      value: tradeWinPercent,
+      totalWin: statistics.totalWin,
+      totalLoss: statistics.totalLoss,
+    },
+    avgWinLoss: {
+      value: avgWinLoss,
+      avgWin,
+      avgLoss,
+    },
+    netPnL: {
+      value: statistics.netPnL,
+      totalTrades: statistics.totalTrades,
+    },
+    profitFactor: {
+      value: profitFactor,
+      sumWin: statistics.sumWin,
+      sumLoss: statistics.sumLoss,
+    },
+  };
+
+  return {
     data,
   };
 }

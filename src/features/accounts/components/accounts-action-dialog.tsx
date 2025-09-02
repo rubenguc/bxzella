@@ -87,7 +87,7 @@ export function AccountsActionDialog({
             {t(isEdit ? "edit_account" : "add_new_account")}
           </DialogTitle>
         </DialogHeader>
-        <div className="-mr-4 h-[26.25rem] w-full overflow-y-auto py-1 pr-4">
+        <div className="h-[26.25rem] w-full overflow-y-auto py-1">
           <Form {...form}>
             <form
               id="user-form"

@@ -32,7 +32,7 @@ export default function AppHeader({ className, fixed, ...props }: HeaderProps) {
     return () => document.removeEventListener("scroll", onScroll);
   }, []);
 
-  const parsedPathname = pathname.split("/").pop();
+  const parsedPathname = pathname.split("/")[1];
 
   return (
     <header

@@ -178,7 +178,7 @@ export function DateRangeSelector() {
           <CalendarIcon size={17} className="opacity-50" />
           <Input
             readOnly
-            className="hidden px-1 py-0 md:block max-w-28 cursor-pointer select-none border-none shadow-none bg-transparent!"
+            className="hidden px-1 py-0 md:block max-w-30 cursor-pointer select-none border-none shadow-none bg-transparent!"
             value={value}
           />
           <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />

@@ -50,7 +50,7 @@ export function InfoRow({
       className={`flex items-center justify-between text-sm lg:text-base ${className || ""}`}
     >
       <div className="flex items-center gap-1.5">
-        <p className="font-medium">{label}</p>
+        <p className="font-medium md:text-gray-300">{label}</p>
         {tooltipInfo && (
           <Popover>
             <PopoverTrigger asChild>
@@ -144,23 +144,31 @@ export function TradeInfoDialog() {
               {transformTimeToLocalDate(openTime)} -{" "}
               {transformTimeToLocalDate(updateTime)}
             </DialogDescription>
+            <div className="flex gap-2 border border-muted rounded-xl py-2 px-2">
+              <div
+                className={`w-1 h-full  rounded-xl ${isWin ? "bg-green-500" : "bg-red-500"}`}
+              />
+              <div className="flex flex-col">
+                <span className="text-sm md:text-gray-300">
+                  {t("position_pnl")}
+                </span>
+                <strong
+                  className={`${isWin ? "text-green-500" : "text-red-500"} text-xl`}
+                >{`${netProfitFormatted} ${coin}`}</strong>
+              </div>
+            </div>
           </DialogHeader>
-          <div className="-mr-4 min-h-[26.25rem] w-full overflow-y-auto py-1 pr-4">
+          <div className="min-h-[26.25rem]  overflow-y-auto py-1 w-full">
             <Tabs className="h-full">
               <TabsList>
                 <TabsTrigger value="info">{t("info")}</TabsTrigger>
                 <TabsTrigger value="playbooks">{t("playbooks")}</TabsTrigger>
               </TabsList>
-              <TabsContent value="info">
+              <TabsContent
+                value="info"
+                className="border border-muted rounded-xl py-2 px-4"
+              >
                 <div className="flex flex-col gap-2">
-                  <InfoRow
-                    label={t("position_pnl")}
-                    tooltipInfo={t("position_pnl_info")}
-                    value={`${netProfitFormatted} ${coin}`}
-                    valueClassName={`font-bold ${isWin ? "text-green-500" : "text-red-500"}`}
-                    className="text-xl"
-                  />
-
                   <InfoRow
                     label={t("realised_pnl")}
                     tooltipInfo={t("realised_pnl_info")}
@@ -229,7 +237,10 @@ export function TradeInfoDialog() {
                   </p>
                 </div>
               </TabsContent>
-              <TabsContent value="playbooks" className="flex flex-col flex-1">
+              <TabsContent
+                value="playbooks"
+                className="flex flex-col flex-1 border border-muted rounded-xl py-2 px-4"
+              >
                 <TradePlaybook tradePlaybook={playbook} tradeId={_id} />
               </TabsContent>
             </Tabs>

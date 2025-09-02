@@ -94,21 +94,20 @@ export const TradeSchema = new Schema<Trade>({
           type: String,
           required: true,
         },
-        completedRules: [String],
-        totalRules: {
-          type: Number,
-          required: true,
-        },
+        rules: [
+          {
+            name: {
+              type: String,
+              required: true,
+            },
+            isCompleted: {
+              type: Boolean,
+              required: true,
+            },
+          },
+        ],
       },
     ],
-    totalCompletedRules: {
-      type: Number,
-      default: 0,
-    },
-    totalRules: {
-      type: Number,
-      default: 0,
-    },
   },
 });
 

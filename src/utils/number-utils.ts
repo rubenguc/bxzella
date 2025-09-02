@@ -3,7 +3,9 @@ export function formatDecimal(value: number, precision = 2): string {
 
   const _value = value / (SUFFIXES[suffix] || 1);
 
-  return _value.toFixed(precision) + suffix;
+  const _precision = suffix ? 2 : precision;
+
+  return _value.toFixed(_precision) + suffix;
 }
 
 // create a function to determine if the abs number is bigger than 1k, 1m, etc, and return the appropriate suffix and the number
