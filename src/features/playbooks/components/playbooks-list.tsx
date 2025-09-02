@@ -26,10 +26,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PlaybookListSkeleton } from "./playbooks-list-skeleton";
 import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
+import { useRouter } from "next/navigation";
 
 export function PlaybooksList() {
   const t = useTranslations("playbooks");
   const tStatistics = useTranslations("statistics");
+  const router = useRouter();
 
   const { setOpen, setCurrentRow } = usePlaybooks();
   const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
@@ -102,6 +104,13 @@ export function PlaybooksList() {
                       }}
                     >
                       {t("delete")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        router.push(`/playbooks/${playbook._id}`);
+                      }}
+                    >
+                      {t("see_details")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

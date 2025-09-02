@@ -144,7 +144,7 @@ export function TradeInfoDialog() {
               {transformTimeToLocalDate(openTime)} -{" "}
               {transformTimeToLocalDate(updateTime)}
             </DialogDescription>
-            <div className="flex gap-2 border border-muted rounded-xl py-2 px-4">
+            <div className="flex gap-2 border border-muted rounded-xl py-2 px-2">
               <div
                 className={`w-1 h-full  rounded-xl ${isWin ? "bg-green-500" : "bg-red-500"}`}
               />

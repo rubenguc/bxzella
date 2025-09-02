@@ -10,7 +10,6 @@
     "": "Dashboard",
     "settings": "Settings"
   },
-
   "header": {
     "account": "Account",
     "select_coin": "Select Coin",
@@ -52,7 +51,8 @@
     "playbook_data_updated": "Playbook data updated successfully",
     "save_changes": "Save Changes",
     "rules_followed": "Rules Followed",
-    "check_all": "Check All"
+    "check_all": "Check All",
+    "no_trades": "No trades"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",
@@ -206,7 +206,29 @@
     "continue": "Continue",
     "trades": "Trades",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "see_details": "See details",
+    "back": "Back"
+  },
+  "playbook_details": {
+    "back": "Back",
+    "playbook_not_found": "Playbook not found",
+    "tabs": {
+      "overview": "Overview",
+      "playbook_rules": "Playbooks Rules",
+      "trades": "Trades"
+    },
+    "playbook_rules": {
+      "follow_rate": "Follow Rate"
+    },
+    "overview": {
+      "net_pnl": "Net PnL",
+      "trades": "Trades",
+      "win_rate": "Win Rate %",
+      "profit_factor": "Profit Factor",
+      "avg_winner": "Avg Winner",
+      "avg_loser": "Avg Loser"
+    }
   },
   "date_range_selector": {
     "today": "Today",

@@ -19,6 +19,7 @@ import {
   TradePlaybook,
 } from "@/features/trades/interfaces/trades-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
+import { PlaybookRulesCompletionResponse } from "../../interfaces/playbook-rules-completion-interface";
 
 async function fetchPositionHistoryForSymbols(
   apiKey: string,
@@ -451,7 +452,10 @@ export async function updateTradePlaybook(
   tradeId: string,
   tradePlaybook: TradePlaybook,
 ) {
-  return await TradeModel.updateOne({ _id: tradeId }, { playbook: tradePlaybook });
+  return await TradeModel.updateOne(
+    { _id: tradeId },
+    { playbook: tradePlaybook },
+  );
 }
 
 export async function getPaginatedTradesByPlaybook({
@@ -496,5 +500,105 @@ export async function getPaginatedTradesByPlaybook({
   return {
     data: trades as unknown as Trade[],
     totalPages,
+  };
+}
+
+export async function getPlaybookRulesCompletionByPlaybookId({
+  playbookId,
+  accountUID,
+  startDate,
+  endDate,
+  coin = "USDT",
+}: {
+  playbookId: string;
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
+}): Promise<PlaybookRulesCompletionResponse> {
+  const rulesCompletion = await TradeModel.aggregate([
+    {
+      $match: {
+        accountUID,
+        coin,
+        closeAllPositions: true,
+        openTime: { $gte: startDate, $lte: endDate },
+        updateTime: { $gte: startDate, $lte: endDate },
+        "playbook.id": new mongoose.Types.ObjectId(playbookId),
+      },
+    },
+    {
+      $unwind: "$playbook.rulesProgress",
+    },
+    {
+      $unwind: "$playbook.rulesProgress.rules",
+    },
+    {
+      $group: {
+        _id: {
+          groupName: "$playbook.rulesProgress.groupName",
+          ruleName: "$playbook.rulesProgress.rules.name",
+        },
+        total: { $sum: 1 },
+        completed: {
+          $sum: {
+            $cond: ["$playbook.rulesProgress.rules.isCompleted", 1, 0],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        groupName: "$_id.groupName",
+        ruleName: "$_id.ruleName",
+        completionPercentage: {
+          $cond: [
+            { $eq: ["$total", 0] },
+            0,
+            { $multiply: [{ $divide: ["$completed", "$total"] }, 100] },
+          ],
+        },
+        _id: 0,
+      },
+    },
+  ]);
+
+  // Reestructurar para mantener la misma estructura que el playbook
+  const rulesGroupCompletion = rulesCompletion.reduce(
+    (acc, rule) => {
+      const groupIndex = acc.findIndex(
+        (group: { name: string }) => group.name === rule.groupName,
+      );
+
+      if (groupIndex === -1) {
+        acc.push({
+          name: rule.groupName,
+          rules: [
+            {
+              name: rule.ruleName,
+              completionPercentage: rule.completionPercentage,
+            },
+          ],
+        });
+      } else {
+        acc[groupIndex].rules.push({
+          name: rule.ruleName,
+          completionPercentage: rule.completionPercentage,
+        });
+      }
+
+      return acc;
+    },
+    [] as Array<{
+      name: string;
+      rules: Array<{
+        name: string;
+        completionPercentage: number;
+      }>;
+    }>,
+  );
+
+  return {
+    rulesGroupCompletion,
   };
 }

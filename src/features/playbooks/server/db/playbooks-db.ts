@@ -5,6 +5,8 @@ import {
   PlaybookTradeStatistics,
 } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
+import { Coin } from "@/global-interfaces";
+import mongoose from "mongoose";
 
 export async function createPlaybook(playbookData: Partial<Playbook>) {
   const playbook = new PlaybookModel(playbookData);
@@ -12,7 +14,7 @@ export async function createPlaybook(playbookData: Partial<Playbook>) {
 }
 
 export async function getPlaybookById(id: string) {
-  return await PlaybookModel.findById(id);
+  return await PlaybookModel.findById(id).lean();
 }
 
 export async function getAllPlaybooks({
@@ -205,7 +207,7 @@ export async function getTradesStatisticByPlaybookId({
   accountUID: string;
   startDate: Date;
   endDate: Date;
-  coin?: "USDT" | "VST";
+  coin?: Coin;
 }) {
   const playbook = await PlaybookModel.findById(playbookId).lean();
 
@@ -221,7 +223,7 @@ export async function getTradesStatisticByPlaybookId({
         closeAllPositions: true,
         openTime: { $gte: startDate, $lte: endDate },
         updateTime: { $gte: startDate, $lte: endDate },
-        "playbook.id": playbookId,
+        "playbook.id": new mongoose.Types.ObjectId(playbookId),
       },
     },
     {

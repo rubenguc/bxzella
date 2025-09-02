@@ -18,6 +18,8 @@ import { useToggle } from "react-use";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 interface TradePlaybookProps {
   tradePlaybook: ITradePlaybook;
@@ -29,6 +31,9 @@ export const TradePlaybook = ({
   tradeId,
 }: TradePlaybookProps) => {
   const t = useTranslations("trade_info");
+  const { selectedAccountId } = useUserConfigStore();
+
+  const queryClient = useQueryClient();
 
   const [isSaving, toggleSaving] = useToggle(false);
 
@@ -57,18 +62,18 @@ export const TradePlaybook = ({
   const handleRuleCompletion = (ruleName: string, completed: boolean) => {
     setSelectedPlaybook((prevState) => {
       if (!prevState) return prevState;
-      
+
       // Check if the rule state is actually changing
-      const ruleGroup = prevState.rulesProgress.find(group => 
-        group.rules.some(rule => rule.name === ruleName)
+      const ruleGroup = prevState.rulesProgress.find((group) =>
+        group.rules.some((rule) => rule.name === ruleName),
       );
-      
-      const rule = ruleGroup?.rules.find(rule => rule.name === ruleName);
+
+      const rule = ruleGroup?.rules.find((rule) => rule.name === ruleName);
       if (rule && rule.isCompleted === completed) {
         // No change needed
         return prevState;
       }
-      
+
       return {
         ...prevState,
         rulesProgress: prevState.rulesProgress.map((group) => ({
@@ -84,12 +89,26 @@ export const TradePlaybook = ({
   const onSavePlaybook = async () => {
     toggleSaving(true);
     try {
-      await updateTradePlaybookAction(tradeId, selectedPlaybook);
-      // return { error: false, message: "" };
+      const response = await updateTradePlaybookAction(
+        tradeId,
+        selectedPlaybook,
+      );
+
+      if (response?.error) {
+        toast.error(response.message);
+        return;
+      }
+
+      // @ts-expect-error ** response
+      if (response.isUpdated) {
+        queryClient.invalidateQueries({
+          queryKey: ["all-trades", selectedAccountId],
+        });
+      }
+
       toast(t("playbook_data_updated"));
     } catch (error) {
       console.error("Error updating playbook:", error);
-      // return handleServerActionError("failed_to_create_playbook");
     }
     toggleSaving(false);
   };
