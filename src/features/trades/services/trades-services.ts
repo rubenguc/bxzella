@@ -1,4 +1,4 @@
-import { Coin, PaginationResponse } from "@/global-interfaces";
+import { Coin, PaginationResponseWithSync } from "@/global-interfaces";
 import { baseConfig } from "@/services/api";
 import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { ActivePosition } from "@/features/bingx/bingx-interfaces";
@@ -10,7 +10,7 @@ export const getTrades = async (params: {
   page: number;
   limit: number;
   coin: Coin;
-}): Promise<PaginationResponse<TradeDocument>> => {
+}): Promise<PaginationResponseWithSync<TradeDocument>> => {
   const response = await baseConfig.get("/trades", { params });
   return response.data;
 };
