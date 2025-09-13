@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     const accountUID = account.uid;
 
-    await syncPositions(accountUID, coin);
+    const synced = await syncPositions(accountUID, coin);
 
     const data = await getTradesByAccountUID({
       uid: accountUID,
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       coin,
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json({ ...data, synced });
   } catch (err) {
     console.error(err);
     return handleApiError(err);

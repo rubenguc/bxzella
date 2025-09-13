@@ -5,4 +5,8 @@ export interface PaginationResponse<T> {
   totalPages: number;
 }
 
+export interface PaginationResponseWithSync<T> extends PaginationResponse<T> {
+  synced?: boolean;
+}
+
 export type Theme = "dark" | "light" | "system";

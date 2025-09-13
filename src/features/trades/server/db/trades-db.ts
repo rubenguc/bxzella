@@ -83,7 +83,7 @@ async function fetchPositionHistoryForSymbols(
   return allPositionHistories;
 }
 
-export async function syncPositions(uid: string, coin: Coin = "USDT") {
+export async function syncPositions(uid: string, coin: Coin = "USDT"): Promise<boolean> {
   console.log(`syncing positions for: ${uid}...`);
 
   const uidSyncConfig = await getAccountSync(uid, coin);
@@ -105,7 +105,7 @@ export async function syncPositions(uid: string, coin: Coin = "USDT") {
 
   const symbolsToFetch = processFilledOrders(filledOrders);
 
-  if (symbolsToFetch.length === 0) return;
+  if (symbolsToFetch.length === 0) return false;
 
   const allPositionHistories = await fetchPositionHistoryForSymbols(
     decriptedApiKey,
@@ -127,6 +127,7 @@ export async function syncPositions(uid: string, coin: Coin = "USDT") {
     session.endSession();
   }
   console.log("positions synced");
+  return true;
 }
 
 export async function saveMultipleTrades(
