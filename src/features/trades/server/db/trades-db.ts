@@ -91,7 +91,7 @@ export async function syncPositions(uid: string, coin: Coin = "USDT"): Promise<b
   const times = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
 
   const account = await getAccountByUID(uid);
-  if (!account) return [];
+  if (!account) return false;
 
   const { decriptedApiKey, decryptedSecretKey } =
     getDecryptedAccountCredentials(account);

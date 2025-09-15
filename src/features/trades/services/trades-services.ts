@@ -1,4 +1,4 @@
-import { Coin, PaginationResponseWithSync } from "@/global-interfaces";
+import { Coin, PaginationResponseWithSync, PaginationResponse } from "@/global-interfaces";
 import { baseConfig } from "@/services/api";
 import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { ActivePosition } from "@/features/bingx/bingx-interfaces";
