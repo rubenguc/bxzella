@@ -1,27 +1,22 @@
 "use server";
 
+import connectDB from "@/db/db";
 import {
   createPlaybook,
   updatePlaybook,
   deletePlaybook,
 } from "../db/playbooks-db";
 import { Playbook } from "@/features/playbooks/interfaces/playbooks-interfaces";
-import { handleServerActionError } from "@/utils/server-api-utils";
-import { auth } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+import { getUserAuth, handleServerActionError } from "@/utils/server-api-utils";
 
 export async function createPlaybookAction(playbookData: Partial<Playbook>) {
   try {
-    const { userId } = await auth();
-
-    if (userId === null) return handleServerActionError("not_authenticated");
-
+    const userId = await getUserAuth();
+    await connectDB();
     await createPlaybook({ ...playbookData, userId });
-    revalidatePath("/playbooks");
     return { error: false, message: "" };
   } catch (error) {
-    console.error("Error creating playbook:", error);
-    return handleServerActionError("failed_to_create_playbook");
+    return handleServerActionError("failed_to_create_playbook", error);
   }
 }
 
@@ -30,30 +25,24 @@ export async function updatePlaybookAction(
   playbookData: Partial<Playbook>,
 ) {
   try {
-    const { userId } = await auth();
-
-    if (userId === null) return handleServerActionError("not_authenticated");
-
+    await getUserAuth();
+    await connectDB();
     const playbook = await updatePlaybook(id, playbookData);
-    if (!playbook) {
-      return handleServerActionError("playbook_not_found");
-    }
+    if (!playbook) return handleServerActionError("playbook_not_found");
     return { error: false, message: "" };
   } catch (error) {
-    console.error("Error updating playbook:", error);
-    return handleServerActionError("failed_to_update_playbook");
+    return handleServerActionError("failed_to_update_playbook", error);
   }
 }
 
 export async function deletePlaybookAction(id: string) {
   try {
+    await getUserAuth();
+    await connectDB();
     const playbook = await deletePlaybook(id);
-    if (!playbook) {
-      return handleServerActionError("playbook_not_found");
-    }
+    if (!playbook) return handleServerActionError("playbook_not_found");
     return { error: false, message: "playbook_deleted_successfully" };
   } catch (error) {
-    console.error("Error deleting playbook:", error);
-    return handleServerActionError("failed_to_delete_playbook");
+    return handleServerActionError("failed_to_delete_playbook", error);
   }
 }

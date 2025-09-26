@@ -20,8 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  createAccount,
-  updateAccount,
+  createAccountAction,
+  updateAccountAction,
 } from "@/features/accounts/server/actions/accounts-actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -59,8 +59,8 @@ export function AccountsActionDialog({
 
   const onSubmit = async (values: AccountForm) => {
     const response = isEdit
-      ? await updateAccount(currentRow._id, values)
-      : await createAccount(values);
+      ? await updateAccountAction(currentRow._id, values)
+      : await createAccountAction(values);
     if (response?.error) {
       toast.error(response.message);
 

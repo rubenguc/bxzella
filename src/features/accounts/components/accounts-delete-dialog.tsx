@@ -5,7 +5,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { deleteAccount } from "@/features/accounts/server/actions/accounts-actions";
+import { deleteAccountAction } from "@/features/accounts/server/actions/accounts-actions";
 import { useTranslations } from "next-intl";
 import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
@@ -27,7 +27,7 @@ export function AccountsDeleteDialog({
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
-    const response = await deleteAccount(currentRow._id);
+    const response = await deleteAccountAction(currentRow._id);
     if (response?.error) {
       toast.error(tError(response.message));
       return;
