@@ -34,7 +34,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <ProfileDropdown />
+        <ProfileDropdown showText={showText} />
       </SidebarFooter>
     </Sidebar>
   );

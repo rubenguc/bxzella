@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { getResultClass } from "@/utils/trade-utils";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { DayProfitsTradeList } from "./day-profits-trade-list";
+import { formatDecimal } from "@/utils/number-utils";
 
 export function DayProfitsDialog() {
   const t = useTranslations("dashboard.day_profits");
@@ -33,7 +34,7 @@ export function DayProfitsDialog() {
           >
             <span> {`${t("net_pnl")} `}</span>
             <span>
-              {dayProfit?.amount} {coin}
+              {formatDecimal(dayProfit?.amount || 0, 4)} {coin}
             </span>
           </div>
         </DialogTitle>

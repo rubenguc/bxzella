@@ -17,7 +17,7 @@ export function WeekSummaryCell({
   const t = useTranslations("dashboard.day_profits");
 
   return (
-    <div className="min-h-24 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  justify-center py-1 px-2 ">
+    <div className="min-h-24 border  rounded-lg flex flex-col  justify-center py-1 px-2 bg-sidebar border-primary/50">
       <div className="text-[10px] sm:text-xs font-medium">
         {t("week")} {weekNumber}
       </div>

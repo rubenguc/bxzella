@@ -21,7 +21,7 @@ export function DayProfitsCell({
     } else if (type === "loss") {
       return `cursor-pointer hover:bg-red-200 dark:hover:bg-red-800 text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900`;
     } else if (date !== null) {
-      return `text-gray-800 dark:text-gray-300 bg-gray-100 dark:bg-gray-900`;
+      return `text-gray-800 dark:text-gray-300 bg-sidebar`;
     }
 
     return "";

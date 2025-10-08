@@ -58,7 +58,7 @@ export function NavGroup({ title, items }: NavGroup) {
 }
 
 const NavBadge = ({ children }: { children: ReactNode }) => (
-  <Badge className="rounded-full px-1 py-0 text-xs">{children}</Badge>
+  <Badge className="rounded-full px-1 py-0 text-xs ">{children}</Badge>
 );
 
 const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
@@ -71,6 +71,7 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
         asChild
         isActive={checkIsActive(href, item)}
         tooltip={t(item.title)}
+        className="data-[active=true]:bg-primary/95 hover:bg-primary hover:text-white data-[active=true]:text-white"
       >
         <Link href={item.url} onClick={() => setOpenMobile(false)}>
           {item.icon && <item.icon />}
@@ -99,7 +100,10 @@ const SidebarMenuCollapsible = ({
     >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={item.title}>
+          <SidebarMenuButton
+            tooltip={item.title}
+            className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white"
+          >
             {item.icon && <item.icon />}
             <span>{t(item.title)}</span>
             {item.badge && <NavBadge>{item.badge}</NavBadge>}
@@ -113,6 +117,7 @@ const SidebarMenuCollapsible = ({
                 <SidebarMenuSubButton
                   asChild
                   isActive={checkIsActive(href, subItem)}
+                  className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white hover:text-white"
                 >
                   <Link href={subItem.url} onClick={() => setOpenMobile(false)}>
                     {subItem.icon && <subItem.icon />}
@@ -143,8 +148,9 @@ const SidebarMenuCollapsedDropdown = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton
-            tooltip={item.title}
+            tooltip={t(item.title)}
             isActive={checkIsActive(href, item)}
+            className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white"
           >
             {item.icon && <item.icon />}
             <span>{t(item.title)}</span>
@@ -161,10 +167,12 @@ const SidebarMenuCollapsedDropdown = ({
             <DropdownMenuItem key={`${sub.title}-${sub.url}`} asChild>
               <Link
                 href={sub.url}
-                className={`${checkIsActive(href, sub) ? "bg-secondary" : ""}`}
+                className={`group focus:bg-primary hover:text-white data-[active=true]:text-white ${checkIsActive(href, sub) ? "bg-primary data-[active=true]:bg-primary " : ""}`}
               >
-                {sub.icon && <sub.icon />}
-                <span className="max-w-52 text-wrap">{t(sub.title)}</span>
+                {sub.icon && <sub.icon color="white" />}
+                <span className="max-w-52 text-wrap group-hover:text-white text-white">
+                  {t(sub.title)}
+                </span>
                 {sub.badge && (
                   <span className="ml-auto text-xs">{sub.badge}</span>
                 )}

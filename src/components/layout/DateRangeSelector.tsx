@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-
 import { DateRange } from "react-day-picker";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
@@ -170,19 +169,14 @@ export function DateRangeSelector() {
 
   return (
     <DropdownMenu onOpenChange={updateRange}>
-      <DropdownMenuTrigger
-        asChild
-        className="px-2 border rounded-full h-9 min-w-9"
-      >
-        <div className="relative flex items-center">
-          <CalendarIcon size={17} className="opacity-50" />
-          <Input
-            readOnly
-            className="hidden px-1 py-0 md:block max-w-30 cursor-pointer select-none border-none shadow-none bg-transparent!"
-            value={value}
-          />
-          <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />
-        </div>
+      <DropdownMenuTrigger className="px-2 rounded-xl h-9 min-w-9  bg-card relative flex items-center outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
+        <CalendarIcon size={17} className="opacity-50" />
+        <Input
+          readOnly
+          className="hidden px-1 py-0 md:block max-w-30 cursor-pointer select-none border-none shadow-none bg-transparent!"
+          value={value}
+        />
+        <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex">
         <div className="flex-1">

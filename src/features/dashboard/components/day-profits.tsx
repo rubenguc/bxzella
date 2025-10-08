@@ -93,7 +93,9 @@ export function DayProfits() {
         </CardTitle>
         <CardAction className="flex flex-col sm:flex-row justify-between items-center sm:gap-1 text-xs">
           <span className="font-medium">{t("monthly_stats")}:</span>{" "}
-          <span className={getResultClass(monthlySummary.totalNetProfit)}>
+          <span
+            className={`${getResultClass(monthlySummary.totalNetProfit)} font-bold`}
+          >
             {formatDecimal(monthlySummary.totalNetProfit)} {coin}
           </span>
           <Badge variant="secondary">
