@@ -69,7 +69,11 @@ export function AccountsActionDialog({
     await queryClient.invalidateQueries({
       queryKey: ["accounts"],
     });
-    form.reset();
+    form.reset({
+      name: "",
+      apiKey: "",
+      secretKey: "",
+    });
     onOpenChange(false);
   };
 

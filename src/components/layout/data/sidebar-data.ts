@@ -4,6 +4,7 @@ import {
   Bot,
   House,
   Info,
+  NotebookText,
   SquareAsterisk,
   Users,
 } from "lucide-react";
@@ -37,6 +38,11 @@ export const sidebarItems = {
           title: "playbooks",
           url: "/playbooks",
           icon: BookCheck,
+        },
+        {
+          title: "notebooks",
+          url: "/notebooks",
+          icon: NotebookText,
         },
         {
           title: "info",

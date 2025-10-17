@@ -8,7 +8,8 @@
     "ai-summary": "AI Summary",
     "playbooks": "Playbooks",
     "": "Dashboard",
-    "settings": "Settings"
+    "settings": "Settings",
+    "notebooks": "Notebooks"
   },
   "header": {
     "account": "Account",
@@ -52,7 +53,9 @@
     "save_changes": "Save Changes",
     "rules_followed": "Rules Followed",
     "check_all": "Check All",
-    "no_trades": "No trades"
+    "no_trades": "No trades",
+    "save": "Save",
+    "trade_note": "Trade Note"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",
@@ -236,5 +239,36 @@
     "this_month": "This Month",
     "last_30_days": "Last 30 Days",
     "last_month": "Last Month"
+  },
+  "notebooks": {
+    "notebooks_folder": {
+      "sessions_recap": "Sessions Recap",
+      "daily_journal": "Daily Journal",
+      "trade_notes": "Trade Notes",
+      "add_folder": "Add Folder",
+      "add_new_folder": "Add new folder",
+      "edit_folder": "Edit Folder",
+      "name": "Name",
+      "select_color_label": "Select color label",
+      "cancel": "Cancel",
+      "save": "Save",
+      "folder_created": "Folder created successfully",
+      "error_creating_notebook_folder": "Error creating notebook folder",
+      "error_updating_notebook_folder": "Error updating notebook folder",
+      "error_deleting_notebook_folder": "Error deleting notebook folder",
+      "folder_deleted": "Folder deleted successfully",
+      "delete_folder": "Delete Folder",
+      "notebook_folder_not_found": "Notebook folder not found",
+      "all_notes": "All Notes"
+    },
+    "notebooks": {
+      "no_notebooks_to_show": "No notebooks to show"
+    },
+    "notebook_detail": {
+      "net_pnl": "Net PnL",
+      "created": "Created",
+      "last_updated": "Last Updated",
+      "save": "Save"
+    }
   }
 }

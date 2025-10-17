@@ -8,7 +8,8 @@
     "ai-summary": "Resumen AI",
     "playbooks": "Manual de operaciones",
     "": "Dashboard",
-    "settings": "Panel de control"
+    "settings": "Panel de control",
+    "notebooks": "Cuadernos"
   },
   "header": {
     "account": "Seleccionar Cuenta",
@@ -51,7 +52,10 @@
     "playbook_data_updated": "Datos del Manual de operación actualizados correctamente",
     "save_changes": "Guardar Cambios",
     "rules_followed": "Reglas Seguidas",
-    "check_all": "Marcar Todo"
+    "check_all": "Marcar Todo",
+    "no_trades": "Sin operaciones",
+    "save": "Guardar",
+    "trade_note": "Nota de operación"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
@@ -206,7 +210,8 @@
     "trades": "Operaciones",
     "edit": "Editar",
     "delete": "Eliminar",
-    "see_details": "Ver detalles"
+    "see_details": "Ver detalles",
+    "back": "Volver"
   },
   "date_range_selector": {
     "today": "Hoy",
@@ -214,6 +219,37 @@
     "this_month": "Este Mes",
     "last_30_days": "Últimos 30 Días",
     "last_month": "Mes Pasado"
+  },
+  "notebooks": {
+    "notebooks_folder": {
+      "sessions_recap": "Resumen de Sesiones",
+      "daily_journal": "Diario Personal",
+      "trade_notes": "Notas de Operaciones",
+      "add_folder": "Agregar Carpeta",
+      "add_new_folder": "Agregar nueva carpeta",
+      "edit_folder": "Editar Carpeta",
+      "name": "Nombre",
+      "select_color_label": "Seleccionar etiqueta de color",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "folder_created": "Carpeta creada exitosamente",
+      "error_creating_notebook_folder": "Error al crear carpeta de cuaderno",
+      "error_updating_notebook_folder": "Error al actualizar carpeta de cuaderno",
+      "error_deleting_notebook_folder": "Error al eliminar carpeta de cuaderno",
+      "folder_deleted": "Carpeta eliminada exitosamente",
+      "delete_folder": "Eliminar Carpeta",
+      "notebook_folder_not_found": "Carpeta de cuaderno no encontrada",
+      "all_notes": "Todas las Notas"
+    },
+    "notebooks": {
+      "no_notebooks_to_show": "No hay cuadernos para mostrar"
+    },
+    "notebook_detail": {
+      "net_pnl": "Ganancia Neta",
+      "created": "Creado",
+      "last_updated": "Última Actualización",
+      "save": "Guardar"
+    }
   },
   "playbook_details": {
     "back": "Volver",

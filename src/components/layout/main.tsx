@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 
 interface MainProps extends React.HTMLAttributes<HTMLElement> {
@@ -10,7 +9,7 @@ export const Main = ({ className, ...props }: MainProps) => {
   return (
     <main
       className={cn(
-        "peer-[.header-fixed]/header:mt-16 max-w-7xl mx-auto w-full",
+        "peer-[.header-fixed]/header:mt-16 max-w-7xl mx-auto w-full flex-1 flex flex-col",
         "px-4 py-6",
         className,
       )}

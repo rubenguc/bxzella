@@ -71,7 +71,7 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
         asChild
         isActive={checkIsActive(href, item)}
         tooltip={t(item.title)}
-        className="data-[active=true]:bg-primary/95 hover:bg-primary hover:text-white data-[active=true]:text-white"
+        className="data-[active=true]:bg-accent dark:data-[active=true]:bg-accent/90 hover:bg-accent dark:hover:bg-accent/50 hover:text-white data-[active=true]:text-white"
       >
         <Link href={item.url} onClick={() => setOpenMobile(false)}>
           {item.icon && <item.icon />}
@@ -102,7 +102,7 @@ const SidebarMenuCollapsible = ({
         <CollapsibleTrigger asChild>
           <SidebarMenuButton
             tooltip={item.title}
-            className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white"
+            className="data-[active=true]:bg-accent dark:data-[active=true]:bg-accent/90 hover:bg-accent dark:hover:bg-accent/50 hover:text-white data-[active=true]:text-white"
           >
             {item.icon && <item.icon />}
             <span>{t(item.title)}</span>
@@ -117,7 +117,7 @@ const SidebarMenuCollapsible = ({
                 <SidebarMenuSubButton
                   asChild
                   isActive={checkIsActive(href, subItem)}
-                  className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white hover:text-white"
+                  className="data-[active=true]:bg-accent dark:data-[active=true]:bg-accent/90 hover:bg-accent dark:hover:bg-accent/50 hover:text-white data-[active=true]:text-white "
                 >
                   <Link href={subItem.url} onClick={() => setOpenMobile(false)}>
                     {subItem.icon && <subItem.icon />}
@@ -150,7 +150,7 @@ const SidebarMenuCollapsedDropdown = ({
           <SidebarMenuButton
             tooltip={t(item.title)}
             isActive={checkIsActive(href, item)}
-            className="data-[active=true]:bg-primary hover:bg-primary hover:text-white data-[active=true]:text-white"
+            className="data-[active=true]:bg-accent dark:data-[active=true]:bg-accent/90 hover:bg-accent dark:hover:bg-accent/50 hover:text-white data-[active=true]:text-white"
           >
             {item.icon && <item.icon />}
             <span>{t(item.title)}</span>
@@ -167,7 +167,7 @@ const SidebarMenuCollapsedDropdown = ({
             <DropdownMenuItem key={`${sub.title}-${sub.url}`} asChild>
               <Link
                 href={sub.url}
-                className={`group focus:bg-primary hover:text-white data-[active=true]:text-white ${checkIsActive(href, sub) ? "bg-primary data-[active=true]:bg-primary " : ""}`}
+                className={`group focus:bg-primary hover:text-white data-[active=true]:text-white ${checkIsActive(href, sub) ? "bg-primary data-[active=true]:bg-accent dark:data-[active=true]:bg-accent/90 " : ""}`}
               >
                 {sub.icon && <sub.icon color="white" />}
                 <span className="max-w-52 text-wrap group-hover:text-white text-white">

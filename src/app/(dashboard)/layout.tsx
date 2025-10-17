@@ -22,7 +22,7 @@ export default async function RootLayout({
       <div
         id="content"
         className={cn(
-          "w-full max-w-full",
+          "w-full max-w-full flex",
           "peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon))]",
           "peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]",
           "sm:transition-[width] sm:duration-200 sm:ease-linear",
