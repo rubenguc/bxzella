@@ -8,7 +8,7 @@ import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryp
 import {
   getFilledOrders,
   getPositionHistory,
-} from "@/features/bingx/bingx-api";
+} from "@/features/providers/bingx/bingx-api";
 import type { PlaybookRulesCompletionResponse } from "@/features/trades/interfaces/playbook-rules-completion-interface";
 import type {
   FetchPositionHistoryForSymbolsProps,
@@ -348,90 +348,6 @@ export function getTradeProfitByDays({
     },
     {
       $sort: { _id: 1 },
-    },
-  ]);
-}
-
-export function getTradesStatisticByPair({
-  accountUID,
-  startDate,
-  endDate,
-  coin = "USDT",
-}: {
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-}) {
-  return TradeModel.aggregate([
-    {
-      $match: {
-        accountUID,
-        coin,
-        openTime: { $gte: startDate, $lte: endDate },
-        updateTime: { $gte: startDate, $lte: endDate },
-      },
-    },
-    {
-      $group: {
-        _id: "$symbol",
-        totalNetProfit: {
-          $sum: {
-            $convert: {
-              input: "$netProfit",
-              to: "double",
-              onError: 0,
-            },
-          },
-        },
-        totalNetProfitLong: {
-          $sum: {
-            $cond: [
-              { $eq: ["$positionSide", "LONG"] },
-              {
-                $convert: {
-                  input: "$netProfit",
-                  to: "double",
-                  onError: 0,
-                },
-              },
-              0,
-            ],
-          },
-        },
-        totalNetProfitShort: {
-          $sum: {
-            $cond: [
-              { $eq: ["$positionSide", "SHORT"] },
-              {
-                $convert: {
-                  input: "$netProfit",
-                  to: "double",
-                  onError: 0,
-                },
-              },
-              0,
-            ],
-          },
-        },
-        tradeDurations: {
-          $push: {
-            $subtract: [{ $toLong: "$updateTime" }, { $toLong: "$openTime" }],
-          },
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        symbol: "$_id",
-        totalNetProfit: 1,
-        totalNetProfitLong: 1,
-        totalNetProfitShort: 1,
-        avgOpenTime: {
-          $divide: [{ $sum: "$tradeDurations" }, { $size: "$tradeDurations" }],
-        },
-      },
     },
   ]);
 }
