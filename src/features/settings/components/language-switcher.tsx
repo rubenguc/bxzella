@@ -21,9 +21,9 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <label>{t("language")}:</label>
+      <label htmlFor="language">{t("language")}:</label>
       <Select value={locale} onValueChange={onChangeLanguage}>
-        <SelectTrigger className="w-fit">
+        <SelectTrigger className="w-fit" id="language">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>

@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import { useTheme } from "@/context/theme-context";
 import { useTranslations } from "next-intl";
-import { Theme } from "@/global-interfaces";
+import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -10,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTheme } from "@/context/theme-context";
+import type { Theme } from "@/interfaces/global-interfaces";
 
 const themes: Theme[] = ["light", "dark", "system"];
 
@@ -25,9 +25,9 @@ export function ThemeSwitcher() {
 
   return (
     <div className="flex items-center gap-2">
-      <label>{t("theme")}:</label>
+      <label htmlFor="theme">{t("theme")}:</label>
       <Select value={theme} onValueChange={setTheme}>
-        <SelectTrigger className="w-fit">
+        <SelectTrigger className="w-fit" id="for">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>

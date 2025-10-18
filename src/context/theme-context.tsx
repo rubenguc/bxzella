@@ -1,8 +1,8 @@
 "use client";
 
-import { Theme } from "@/global-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
 import { createContext, useContext, useEffect } from "react";
+import type { Theme } from "@/interfaces/global-interfaces";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
