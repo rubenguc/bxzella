@@ -1,4 +1,4 @@
-import type { PaginationResponse } from "@/global-interfaces";
+import type { PaginationResponse } from "@/interfaces/global-interfaces";
 import { baseConfig } from "@/services/api";
 import type {
   NotebookDocument,

@@ -3,7 +3,7 @@ import type {
   NotebookDocument,
 } from "@/features/notebooks/interfaces/notebooks-interfaces";
 import { NotebooksModel } from "@/features/notebooks/model/notebooks-model";
-import type { PaginationResponse } from "@/global-interfaces";
+import type { PaginationResponse } from "@/interfaces/global-interfaces";
 
 export async function createNotebook(
   data: Notebook,

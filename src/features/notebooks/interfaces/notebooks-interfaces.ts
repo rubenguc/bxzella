@@ -1,5 +1,5 @@
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import type { Types } from "mongoose";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export interface Notebook {
   startDate?: Date;

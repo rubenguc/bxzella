@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { TextEditor } from "@/components/text-editor/text-editor";
 import { Button } from "@/components/ui/button";

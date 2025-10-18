@@ -1,5 +1,5 @@
 import type { NotebookFolderDocument } from "@/features/notebooks/interfaces/notebooks-folder-interfaces";
-import type { Coin } from "@/global-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
 import { baseConfig } from "@/services/api";
 
 export async function getAllNotebooksFolders(params: {

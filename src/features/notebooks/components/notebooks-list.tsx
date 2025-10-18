@@ -28,8 +28,6 @@ export function NotebooksList() {
       }),
   });
 
-  console.log(data, selectedNotebookFolder);
-
   const notebooks = data?.data || [];
 
   return (

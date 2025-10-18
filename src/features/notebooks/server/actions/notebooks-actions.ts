@@ -1,10 +1,10 @@
 "use server";
 
 import connectDB from "@/db/db";
+import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { handleServerActionError } from "@/utils/server-api-utils";
 import { updateNotebookByTradeId } from "../db/notebooks-db";
 import { getNotebookTradesFolderByAccountUID } from "../db/notebooks-folder-db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 
 export async function updateNotebookByTradeIdAction(
   tradeId: string,
