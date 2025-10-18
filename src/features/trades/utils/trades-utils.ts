@@ -1,4 +1,4 @@
-import type { UserFillOrdersResponse } from "@/features/bingx/bingx-interfaces";
+import type { UserFillOrdersResponse } from "@/features/providers/bingx/bingx-interfaces";
 
 export function getSyncTimeRange(startTime?: number): {
   startTs: number;

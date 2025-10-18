@@ -7,7 +7,7 @@ import {
   deleteAccountDb,
   updateAccountDb,
 } from "@/features/accounts/server/db/accounts-db";
-import { getUserBalance } from "@/features/bingx/bingx-api";
+import { getUserBalance } from "@/features/providers/bingx/bingx-api";
 import { encryptData } from "@/features/accounts/utils/encryption";
 import { syncPositions } from "@/features/trades/server/db/trades-db";
 import { getUserAuth, handleServerActionError } from "@/utils/server-api-utils";

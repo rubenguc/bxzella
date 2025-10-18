@@ -1,4 +1,4 @@
-import type { ActivePosition } from "@/features/bingx/bingx-interfaces";
+import type { ActivePosition } from "@/features/providers/bingx/bingx-interfaces";
 import type {
   GetOpenPositionsProps,
   GetTradesByAccountUID,
