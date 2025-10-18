@@ -9,12 +9,13 @@ import {
   getFilledOrders,
   getPositionHistory,
 } from "@/features/providers/bingx/bingx-api";
-import type { PlaybookRulesCompletionResponse } from "@/features/trades/interfaces/playbook-rules-completion-interface";
 import type {
   FetchPositionHistoryForSymbolsProps,
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
   GetPlaybookRulesCompletionByPlaybookId,
+  GetPlaybookRulesCompletionByPlaybookIdResponse,
+  GetTradeProfitByDays,
   GetTradesByAccountUID,
   GetTradesByAccountUIDResponse,
   GetTradesStatisticProps,
@@ -28,6 +29,7 @@ import {
   processFilledOrders,
 } from "@/features/trades/utils/trades-utils";
 import type { Coin } from "@/interfaces/global-interfaces";
+import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 
 async function fetchPositionHistoryForSymbols({
@@ -78,11 +80,7 @@ async function fetchPositionHistoryForSymbols({
       ),
     );
 
-    allPositionHistories.push(
-      ...(batchResults.flatMap(
-        (symbolPositions) => symbolPositions,
-      ) as Trade[]),
-    );
+    allPositionHistories.push(...(batchResults.flat() as Trade[]));
 
     if (index < batches.length - 1) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -172,8 +170,11 @@ export async function getTradesByAccountUID({
   };
 
   if (startDate && endDate) {
-    find.openTime = { $gte: startDate, $lte: endDate };
-    find.updateTime = { $gte: startDate, $lte: endDate };
+    const parsedStartDate = getUTCDay(startDate);
+    const parsedEndDate = getUTCDay(endDate, true);
+
+    find.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
+    find.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
   }
 
   return await getPaginatedData(TradeModel, find, { page, limit });
@@ -185,14 +186,17 @@ export function getTradesStatistic({
   endDate,
   coin = "USDT",
 }: GetTradesStatisticProps): Promise<TradeStatisticsResult> {
+  const parsedStartDate = getUTCDay(startDate);
+  const parsedEndDate = getUTCDay(endDate, true);
+
   return TradeModel.aggregate([
     {
       $match: {
         accountUID,
         coin,
         closeAllPositions: true,
-        openTime: { $gte: startDate, $lte: endDate },
-        updateTime: { $gte: startDate, $lte: endDate },
+        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
 
@@ -314,19 +318,17 @@ export function getTradeProfitByDays({
   startDate,
   endDate,
   coin = "USDT",
-}: {
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-}) {
+}: GetTradeProfitByDays) {
+  const parsedStartDate = getUTCDay(startDate);
+  const parsedEndDate = getUTCDay(endDate, true);
+
   return TradeModel.aggregate([
     {
       $match: {
         accountUID,
         coin,
         closeAllPositions: true,
-        updateTime: { $gte: startDate, $lte: endDate },
+        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
     {
@@ -378,8 +380,11 @@ export async function getPaginatedTradesByPlaybook({
   };
 
   if (startDate && endDate) {
-    findCriteria.openTime = { $gte: startDate, $lte: endDate };
-    findCriteria.updateTime = { $gte: startDate, $lte: endDate };
+    const parsedStartDate = getUTCDay(startDate);
+    const parsedEndDate = getUTCDay(endDate, true);
+
+    findCriteria.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
+    findCriteria.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
   }
 
   return await getPaginatedData(TradeModel, findCriteria, {
@@ -397,15 +402,18 @@ export async function getPlaybookRulesCompletionByPlaybookId({
   startDate,
   endDate,
   coin = "USDT",
-}: GetPlaybookRulesCompletionByPlaybookId): Promise<PlaybookRulesCompletionResponse> {
+}: GetPlaybookRulesCompletionByPlaybookId): GetPlaybookRulesCompletionByPlaybookIdResponse {
+  const parsedStartDate = getUTCDay(startDate);
+  const parsedEndDate = getUTCDay(endDate, true);
+
   const rulesCompletion = await TradeModel.aggregate([
     {
       $match: {
         accountUID,
         coin,
         closeAllPositions: true,
-        openTime: { $gte: startDate, $lte: endDate },
-        updateTime: { $gte: startDate, $lte: endDate },
+        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
         "playbook.id": new mongoose.Types.ObjectId(playbookId),
       },
     },

@@ -1,4 +1,4 @@
-import { Coin } from "@/global-interfaces";
+import { Coin } from "@/interfaces/global-interfaces";
 import { baseConfig } from "@/services/api";
 import {
   TradeProfitPerDay,

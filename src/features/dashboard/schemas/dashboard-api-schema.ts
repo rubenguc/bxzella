@@ -3,20 +3,16 @@ import {
   accountIdParamValidation,
   coinParamValidation,
   dateParamValidation,
-  limitParamValidation,
-  pageParamValidation,
 } from "@/utils/zod-utils";
 
-export const tradesSearchParamsSchema = z.object({
+export const statictisSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
-  page: pageParamValidation(),
-  limit: limitParamValidation(),
   startDate: dateParamValidation({ field: "startDate" }),
   endDate: dateParamValidation({ field: "endDate" }),
   coin: coinParamValidation(),
 });
 
-export const openPositionsSearchParamsSchema = z.object({
+export const dayProfitsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   coin: coinParamValidation(),
 });

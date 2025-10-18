@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { getOpenPositions } from "@/features/trades/services/trades-services";
-import { ActivePosition } from "@/features/bingx/bingx-interfaces";
+import { ActivePosition } from "@/features/providers/bingx/bingx-interfaces";
 import { CustomTable } from "@/components/custom-table";
 
 export function OpenPositions() {

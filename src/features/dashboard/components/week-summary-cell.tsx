@@ -1,6 +1,6 @@
 import { WeekSummary } from "@/features/dashboard/interfaces/dashboard-interfaces";
 import { formatDecimal } from "@/utils/number-utils";
-import { Coin } from "@/global-interfaces";
+import { Coin } from "@/interfaces/global-interfaces";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 

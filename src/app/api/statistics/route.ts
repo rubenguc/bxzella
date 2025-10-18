@@ -1,44 +1,30 @@
+import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts-db";
+import { statictisSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
 import { getTradesStatistic } from "@/features/trades/server/db/trades-db";
-import { handleApiError } from "@/utils/server-api-utils";
-import {
-  accountIdParamValidation,
-  coinParamValidation,
-  dateParamValidation,
-} from "@/utils/zod-utils";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const statictisSearchParamsSchema = z.object({
-  accountId: accountIdParamValidation(),
-  startDate: dateParamValidation({ field: "startDate" }),
-  endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
-  coin: coinParamValidation(),
-});
+import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(request.url);
-    const searchParams = Object.fromEntries(url.searchParams.entries());
-    const parsedParams = statictisSearchParamsSchema.parse(searchParams);
-
-    const { accountId, startDate, endDate, coin } = parsedParams;
+    const { accountId, startDate, endDate, coin } = parseSearchParams(
+      request,
+      statictisSearchParamsSchema,
+    );
 
     await connectDB();
 
     const account = await getAccountById(accountId);
-
     const accountUID = account.uid;
 
     const data = await getTradesStatistic({
       accountUID,
-      startDate: startDate!,
-      endDate: endDate!,
+      startDate,
+      endDate,
       coin,
     });
 
-    return NextResponse.json(data[0] || {});
+    return NextResponse.json(data);
   } catch (err) {
     return handleApiError(err);
   }

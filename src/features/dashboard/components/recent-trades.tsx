@@ -1,29 +1,29 @@
 "use client";
 
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  type ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
+import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { getTrades } from "@/features/trades/services/trades-services";
+import type { PaginationResponseWithSync } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import {
   transformDateToParam,
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
+import { formatDecimal } from "@/utils/number-utils";
 import {
   checkLongPosition,
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
-import { getTrades } from "@/features/trades/services/trades-services";
-import { PaginationResponseWithSync } from "@/global-interfaces";
-import { CustomTable } from "@/components/custom-table";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { formatDecimal } from "@/utils/number-utils";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
@@ -122,9 +122,9 @@ export function RecentTrades() {
     enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
     queryFn: async () => {
       const response = await getTrades({
-        accountId: selectedAccountId,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+        accountUID: selectedAccountId,
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
         limit: 10,
         page: 0,
         coin,

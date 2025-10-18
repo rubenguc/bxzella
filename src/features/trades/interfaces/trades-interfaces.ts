@@ -1,4 +1,5 @@
 import type { Coin, PaginationResponse } from "@/interfaces/global-interfaces";
+import { PlaybookRulesCompletionResponse } from "./playbook-rules-completion-interface";
 
 export type ContractType = "P" | "S"; // P = Perpetual | S = "Standard"
 
@@ -102,8 +103,8 @@ export interface FetchPositionHistoryForSymbolsProps {
 export interface GetTradesByAccountUID extends BaseQuery {
   page: number;
   limit: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
 }
 
 export type GetTradesByAccountUIDResponse = Promise<
@@ -112,15 +113,15 @@ export type GetTradesByAccountUIDResponse = Promise<
 
 export interface GetTradesStatisticProps {
   accountUID: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   coin?: Coin;
 }
 
 export interface GetPaginatedTradesByPlaybook {
   accountUID: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   coin?: Coin;
   playbookId: string;
   page?: number;
@@ -134,7 +135,17 @@ export type GetPaginatedTradesByPlaybookReponse = Promise<
 export interface GetPlaybookRulesCompletionByPlaybookId {
   playbookId: string;
   accountUID: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
+  coin?: Coin;
+}
+
+export type GetPlaybookRulesCompletionByPlaybookIdResponse =
+  Promise<PlaybookRulesCompletionResponse>;
+
+export interface GetTradeProfitByDays {
+  accountUID: string;
+  startDate: string;
+  endDate: string;
   coin?: Coin;
 }

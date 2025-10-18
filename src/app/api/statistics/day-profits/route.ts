@@ -1,28 +1,18 @@
+import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts-db";
+import { dayProfitsSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
 import { getTradeProfitByDays } from "@/features/trades/server/db/trades-db";
-import { handleApiError } from "@/utils/server-api-utils";
-import {
-  accountIdParamValidation,
-  coinParamValidation,
-} from "@/utils/zod-utils";
-import { endOfMonth, startOfMonth, subMonths } from "date-fns";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { toZonedTime } from "date-fns-tz";
-
-const dayProfitsSearchParamsSchema = z.object({
-  accountId: accountIdParamValidation(),
-  coin: coinParamValidation(),
-});
+import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(request.url);
-    const searchParams = Object.fromEntries(url.searchParams.entries());
-    const parsedParams = dayProfitsSearchParamsSchema.parse(searchParams);
-
-    const { accountId, coin } = parsedParams;
+    const { accountId, coin } = parseSearchParams(
+      request,
+      dayProfitsSearchParamsSchema,
+    );
 
     await connectDB();
 
@@ -34,8 +24,14 @@ export async function GET(request: NextRequest) {
 
     const firstDayLastMonth = startOfMonth(subMonths(nowUTC, 1));
     const lastDayCurrentMonth = endOfMonth(nowUTC);
-    const startDate = toZonedTime(firstDayLastMonth, "UTC");
-    const endDate = toZonedTime(lastDayCurrentMonth, "UTC");
+    const startDate = format(
+      toZonedTime(firstDayLastMonth, "UTC"),
+      "yyyy-MM-dd",
+    );
+    const endDate = format(
+      toZonedTime(lastDayCurrentMonth, "UTC"),
+      "yyyy-MM-dd",
+    );
 
     const data = await getTradeProfitByDays({
       accountUID,
