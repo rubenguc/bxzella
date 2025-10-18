@@ -10,3 +10,11 @@ export interface PaginationResponseWithSync<T> extends PaginationResponse<T> {
 }
 
 export type Theme = "dark" | "light" | "system";
+
+export type LeanDocument<T> = T extends {
+  $locals?: never;
+  __v?: any;
+  _id?: any;
+}
+  ? T
+  : "Please convert the document to a POJO via `.toObject()` or .lean()`";

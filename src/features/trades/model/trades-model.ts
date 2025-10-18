@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Trade } from "@/features/trades/interfaces/trades-interfaces";
+import type { Trade } from "@/features/trades/interfaces/trades-interfaces";
 
 export const TradeSchema = new Schema<Trade>({
   accountUID: {

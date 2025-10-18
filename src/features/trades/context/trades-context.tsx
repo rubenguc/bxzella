@@ -2,12 +2,13 @@
 
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type PropsWithChildren,
+  type SetStateAction,
   useContext,
   useState,
 } from "react";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 interface TradesContextType {
   isOpen: boolean;
@@ -17,11 +18,7 @@ interface TradesContextType {
 
 const TradesContext = createContext<TradesContextType | null>(null);
 
-export default function TradesProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function TradesProvider({ children }: PropsWithChildren) {
   const [currentTrade, setCurrentTrade] = useState<TradeDocument | null>(null);
 
   const isOpen = !!currentTrade;

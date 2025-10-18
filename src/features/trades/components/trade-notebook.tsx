@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { TextEditor } from "@/components/text-editor/text-editor";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
 
   const [content, setContent] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["trade-notebook", tradeId],
     queryFn: () => getNotebookByTradeId(tradeId),
     enabled: !!tradeId,

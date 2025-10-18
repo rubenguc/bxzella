@@ -2,27 +2,27 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  ColumnDef,
+  type ColumnDef,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Eye } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useUserConfigStore } from "@/store/user-config-store";
+import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTradeContext } from "@/features/trades/context/trades-context";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
+import { formatDecimal } from "@/utils/number-utils";
 import {
   checkLongPosition,
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import { useTranslations } from "next-intl";
-import { useTradeContext } from "@/features/trades/context/trades-context";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import { getTrades } from "../services/trades-services";
-import { CustomTable } from "@/components/custom-table";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { formatDecimal } from "@/utils/number-utils";
 
 export function TradesTable() {
   const { selectedAccountId, coin } = useUserConfigStore();
@@ -171,7 +171,7 @@ export function TradesTable() {
     ],
     queryFn: () =>
       getTrades({
-        accountId: selectedAccountId,
+        accountUID: selectedAccountId,
         page: pagination.pageIndex,
         limit: pagination.pageSize,
         coin,

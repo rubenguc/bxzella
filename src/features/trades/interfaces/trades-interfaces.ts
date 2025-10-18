@@ -1,4 +1,4 @@
-import { Coin } from "@/global-interfaces";
+import type { Coin, PaginationResponse } from "@/interfaces/global-interfaces";
 
 export type ContractType = "P" | "S"; // P = Perpetual | S = "Standard"
 
@@ -76,4 +76,65 @@ export interface TradeProfitPerDay {
   _id: string;
   netProfit: number;
   trades: TradeDocument[];
+}
+
+// Queries
+
+export interface BaseQuery {
+  coin?: Coin;
+  accountUID: string;
+}
+
+export interface GetOpenPositionsProps {
+  accountId: string;
+  coin: Coin;
+}
+
+export interface FetchPositionHistoryForSymbolsProps {
+  apiKey: string;
+  secretKey: string;
+  symbols: string[];
+  timeRange: { startTs: number; endTs: number };
+  uid: string;
+  coin: Coin;
+}
+
+export interface GetTradesByAccountUID extends BaseQuery {
+  page: number;
+  limit: number;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export type GetTradesByAccountUIDResponse = Promise<
+  PaginationResponse<TradeDocument>
+>;
+
+export interface GetTradesStatisticProps {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
+}
+
+export interface GetPaginatedTradesByPlaybook {
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
+  playbookId: string;
+  page?: number;
+  limit?: number;
+}
+
+export type GetPaginatedTradesByPlaybookReponse = Promise<
+  PaginationResponse<TradeDocument>
+>;
+
+export interface GetPlaybookRulesCompletionByPlaybookId {
+  playbookId: string;
+  accountUID: string;
+  startDate: Date;
+  endDate: Date;
+  coin?: Coin;
 }

@@ -1,3 +1,12 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { Trash } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useMemo, useState } from "react";
+import { useToggle } from "react-use";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -5,21 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetAllPlaybooks } from "@/features/playbooks/hooks/useGetAllPlaybooks";
-import { PlaybookDocument } from "@/features/playbooks/interfaces/playbooks-interfaces";
-import { useState, useMemo } from "react";
-import { TradePlaybook as ITradePlaybook } from "../interfaces/trades-interfaces";
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
-import { updateTradePlaybookAction } from "../server/actions/trades-actions";
-import { Trash } from "lucide-react";
-import { toast } from "sonner";
-import { useToggle } from "react-use";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
-import { useQueryClient } from "@tanstack/react-query";
+import { useGetAllPlaybooks } from "@/features/playbooks/hooks/useGetAllPlaybooks";
+import type { PlaybookDocument } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
+import type { TradePlaybook as ITradePlaybook } from "../interfaces/trades-interfaces";
+import { updateTradePlaybookAction } from "../server/actions/trades-actions";
 
 interface TradePlaybookProps {
   tradePlaybook: ITradePlaybook;

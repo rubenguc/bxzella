@@ -1,10 +1,10 @@
-import { UserFillOrdersResponse } from "@/features/bingx/bingx-interfaces";
+import type { UserFillOrdersResponse } from "@/features/bingx/bingx-interfaces";
 
 export function getSyncTimeRange(startTime?: number): {
   startTs: number;
   endTs: number;
 } {
-  let startTs;
+  let startTs = 0;
   if (startTime) {
     startTs = startTime;
   } else {

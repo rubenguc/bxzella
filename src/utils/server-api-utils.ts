@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export function handleApiError(err: unknown) {
-  console.log(err);
+  console.error(err);
 
   if (err instanceof z.ZodError) {
     return NextResponse.json(

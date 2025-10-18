@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   createOrUpdateAccountSync,
   getAccountSync,
@@ -8,27 +9,35 @@ import {
   getFilledOrders,
   getPositionHistory,
 } from "@/features/bingx/bingx-api";
-import mongoose from "mongoose";
+import type { PlaybookRulesCompletionResponse } from "@/features/trades/interfaces/playbook-rules-completion-interface";
+import type {
+  FetchPositionHistoryForSymbolsProps,
+  GetPaginatedTradesByPlaybook,
+  GetPaginatedTradesByPlaybookReponse,
+  GetPlaybookRulesCompletionByPlaybookId,
+  GetTradesByAccountUID,
+  GetTradesByAccountUIDResponse,
+  GetTradesStatisticProps,
+  Trade,
+  TradePlaybook,
+  TradeStatisticsResult,
+} from "@/features/trades/interfaces/trades-interfaces";
+import { TradeModel } from "@/features/trades/model/trades-model";
 import {
   getSyncTimeRange,
   processFilledOrders,
 } from "@/features/trades/utils/trades-utils";
-import { Coin } from "@/global-interfaces";
-import {
-  Trade,
-  TradePlaybook,
-} from "@/features/trades/interfaces/trades-interfaces";
-import { TradeModel } from "@/features/trades/model/trades-model";
-import { PlaybookRulesCompletionResponse } from "../../interfaces/playbook-rules-completion-interface";
+import type { Coin } from "@/interfaces/global-interfaces";
+import { getPaginatedData } from "@/utils/db-utils";
 
-async function fetchPositionHistoryForSymbols(
-  apiKey: string,
-  secretKey: string,
-  symbols: string[],
-  timeRange: { startTs: number; endTs: number },
-  uid: string,
-  coin: Coin = "USDT",
-): Promise<Trade[]> {
+async function fetchPositionHistoryForSymbols({
+  apiKey,
+  secretKey,
+  symbols,
+  timeRange,
+  uid,
+  coin = "USDT",
+}: FetchPositionHistoryForSymbolsProps): Promise<Trade[]> {
   const batchSize = 5;
   const batches = [];
   for (let i = 0; i < symbols.length; i += batchSize) {
@@ -83,12 +92,15 @@ async function fetchPositionHistoryForSymbols(
   return allPositionHistories;
 }
 
-export async function syncPositions(uid: string, coin: Coin = "USDT"): Promise<boolean> {
+export async function syncPositions(
+  uid: string,
+  coin: Coin = "USDT",
+): Promise<boolean> {
   console.log(`syncing positions for: ${uid}...`);
 
   const uidSyncConfig = await getAccountSync(uid, coin);
 
-  const times = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
+  const timeRange = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
 
   const account = await getAccountByUID(uid);
   if (!account) return false;
@@ -99,7 +111,7 @@ export async function syncPositions(uid: string, coin: Coin = "USDT"): Promise<b
   const filledOrders = await getFilledOrders(
     decriptedApiKey,
     decryptedSecretKey,
-    times,
+    timeRange,
     coin,
   );
 
@@ -107,20 +119,20 @@ export async function syncPositions(uid: string, coin: Coin = "USDT"): Promise<b
 
   if (symbolsToFetch.length === 0) return false;
 
-  const allPositionHistories = await fetchPositionHistoryForSymbols(
-    decriptedApiKey,
-    decryptedSecretKey,
-    symbolsToFetch,
-    times,
+  const allPositionHistories = await fetchPositionHistoryForSymbols({
+    apiKey: decriptedApiKey,
+    secretKey: decryptedSecretKey,
+    symbols: symbolsToFetch,
+    timeRange,
     uid,
     coin,
-  );
+  });
 
   const session = await mongoose.startSession();
 
   try {
     await session.withTransaction(async () => {
-      await createOrUpdateAccountSync(uid, times.endTs, coin, session);
+      await createOrUpdateAccountSync(uid, timeRange.endTs, coin, session);
       await saveMultipleTrades(allPositionHistories, session);
     });
   } finally {
@@ -147,27 +159,15 @@ export async function saveMultipleTrades(
 }
 
 export async function getTradesByAccountUID({
-  uid,
+  accountUID,
   page,
   limit,
   coin = "USDT",
   startDate,
   endDate,
-}: {
-  uid: string;
-  page: number;
-  limit: number;
-  coin?: string;
-  startDate?: Date;
-  endDate?: Date;
-}) {
-  const skip = page * limit;
-  const total = await TradeModel.countDocuments({ accountUID: uid, coin });
-  const totalPages = Math.ceil(total / limit);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: GetTradesByAccountUID): GetTradesByAccountUIDResponse {
   const find: Record<string, any> = {
-    accountUID: uid,
+    accountUID,
     coin,
   };
 
@@ -176,15 +176,7 @@ export async function getTradesByAccountUID({
     find.updateTime = { $gte: startDate, $lte: endDate };
   }
 
-  const data = await TradeModel.find(find)
-    .sort({ updateTime: -1 })
-    .skip(skip)
-    .limit(limit);
-
-  return {
-    data,
-    totalPages,
-  };
+  return await getPaginatedData(TradeModel, find, { page, limit });
 }
 
 export function getTradesStatistic({
@@ -192,12 +184,7 @@ export function getTradesStatistic({
   startDate,
   endDate,
   coin = "USDT",
-}: {
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-}) {
+}: GetTradesStatisticProps): Promise<TradeStatisticsResult> {
   return TradeModel.aggregate([
     {
       $match: {
@@ -319,7 +306,7 @@ export function getTradesStatistic({
         },
       },
     },
-  ]);
+  ]) as unknown as Promise<TradeStatisticsResult>;
 }
 
 export function getTradeProfitByDays({
@@ -467,17 +454,7 @@ export async function getPaginatedTradesByPlaybook({
   playbookId,
   page = 1,
   limit = 10,
-}: {
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-  playbookId: string;
-  page?: number;
-  limit?: number;
-}): Promise<{ data: Trade[]; totalPages: number }> {
-  const skip = page * limit;
-
+}: GetPaginatedTradesByPlaybook): GetPaginatedTradesByPlaybookReponse {
   const findCriteria: Record<string, unknown> = {
     accountUID,
     coin,
@@ -489,19 +466,13 @@ export async function getPaginatedTradesByPlaybook({
     findCriteria.updateTime = { $gte: startDate, $lte: endDate };
   }
 
-  const totalTrades = await TradeModel.countDocuments(findCriteria);
-  const totalPages = Math.ceil(totalTrades / limit);
-
-  const trades = await TradeModel.find(findCriteria)
-    .sort({ updateTime: -1 })
-    .skip(skip)
-    .limit(limit)
-    .lean();
-
-  return {
-    data: trades as unknown as Trade[],
-    totalPages,
-  };
+  return await getPaginatedData(TradeModel, findCriteria, {
+    page,
+    limit,
+    sortBy: {
+      updateTime: -1,
+    },
+  });
 }
 
 export async function getPlaybookRulesCompletionByPlaybookId({
@@ -510,13 +481,7 @@ export async function getPlaybookRulesCompletionByPlaybookId({
   startDate,
   endDate,
   coin = "USDT",
-}: {
-  playbookId: string;
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-}): Promise<PlaybookRulesCompletionResponse> {
+}: GetPlaybookRulesCompletionByPlaybookId): Promise<PlaybookRulesCompletionResponse> {
   const rulesCompletion = await TradeModel.aggregate([
     {
       $match: {

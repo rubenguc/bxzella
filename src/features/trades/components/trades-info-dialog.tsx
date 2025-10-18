@@ -2,7 +2,6 @@
 
 import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -73,8 +72,6 @@ export function TradeInfoDialog() {
   const t = useTranslations("trade_info");
   const { isOpen, currentTrade, setCurrentTrade } = useTradeContext();
   const coin = useUserConfigStore((state) => state.coin);
-
-  const [md, setMd] = useState("");
 
   const {
     _id = "",
