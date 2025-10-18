@@ -1,5 +1,7 @@
 import type { FilterQuery, Model } from "mongoose";
 
+type AnyObject = Record<string, any>;
+
 export interface PaginationParams {
   page?: number;
   limit?: number;

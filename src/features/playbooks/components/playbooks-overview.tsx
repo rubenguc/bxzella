@@ -1,10 +1,10 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { PlaybookTradeStatistics } from "../interfaces/playbooks-interfaces";
-import { PlaybooksStatisticValue } from "./playbooks-statistic-card";
 import { useTranslations } from "next-intl";
-import { getResultClass } from "@/utils/trade-utils";
-import { formatDecimal } from "@/utils/number-utils";
+import { Card, CardContent } from "@/components/ui/card";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { formatDecimal } from "@/utils/number-utils";
+import { getResultClass } from "@/utils/trade-utils";
+import type { PlaybookTradeStatistics } from "../interfaces/playbooks-interfaces";
+import { PlaybooksStatisticValue } from "./playbooks-statistic-card";
 
 type PlaybooksOverviewProps = Omit<PlaybookTradeStatistics, "playbook">;
 

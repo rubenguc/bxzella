@@ -1,82 +1,62 @@
-import { Coin, PaginationResponse } from "@/global-interfaces";
+import type { PlaybookRulesCompletionResponse } from "@/features/trades/interfaces/playbook-rules-completion-interface";
+import type {
+  GetPaginatedTradesByPlaybook,
+  GetPaginatedTradesByPlaybookReponse,
+  GetPlaybookRulesCompletionByPlaybookId,
+} from "@/features/trades/interfaces/trades-interfaces";
 import { baseConfig } from "@/services/api";
-import {
-  PlaybookDocument,
-  PlaybookTradeStatistics,
+import type {
+  GetAllPlaybooksProps,
+  GetAllPlaybooksPropsResponse,
+  GetTradesStatisticByPlaybookIdProps,
+  GetTradesStatisticByPlaybookIdResponse,
+  GetTradesStatisticByPlaybookProps,
+  GetTradesStatisticByPlaybookResponse,
 } from "../interfaces/playbooks-interfaces";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { PlaybookRulesCompletionResponse } from "@/features/trades/interfaces/playbook-rules-completion-interface";
 
-export const getPlaybooks = async (params: {
-  accountId: string;
-  startDate?: string;
-  endDate?: string;
-  page: number;
-  limit: number;
-  coin: Coin;
-}): Promise<PaginationResponse<PlaybookTradeStatistics>> => {
+export const getPlaybooks = async (
+  params: GetTradesStatisticByPlaybookProps,
+): GetTradesStatisticByPlaybookResponse => {
   const response = await baseConfig.get("/playbooks", { params });
   return response.data;
 };
 
-export const getAllPlaybooks = async (params: {
-  page: number;
-  limit: number;
-}): Promise<{
-  data: PlaybookDocument[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    total: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}> => {
+export const getAllPlaybooks = async (
+  params: Omit<GetAllPlaybooksProps, "userId">,
+): GetAllPlaybooksPropsResponse => {
   const response = await baseConfig.get("/playbooks/all", { params });
   return response.data;
 };
 
 export const getPlaybook = async (
-  id: string,
-  params: {
-    accountId: string;
-    startDate?: string;
-    endDate?: string;
-    coin: Coin;
-  },
-): Promise<PlaybookTradeStatistics> => {
-  const response = await baseConfig.get(`/playbooks/${id}`, { params });
-  return response.data.data;
-};
-
-export const getTradesByPlaybookId = async (
-  id: string,
-  params: {
-    accountId: string;
-    startDate?: string;
-    endDate?: string;
-    page: number;
-    limit: number;
-    coin: Coin;
-  },
-): Promise<PaginationResponse<TradeDocument>> => {
-  const response = await baseConfig.get(`/playbooks/${id}/trades`, {
+  params: GetTradesStatisticByPlaybookIdProps,
+): GetTradesStatisticByPlaybookIdResponse => {
+  const response = await baseConfig.get(`/playbooks/${params.playbookId}`, {
     params,
   });
   return response.data;
 };
 
+export const getTradesByPlaybookId = async (
+  params: GetPaginatedTradesByPlaybook,
+): GetPaginatedTradesByPlaybookReponse => {
+  const response = await baseConfig.get(
+    `/playbooks/${params.playbookId}/trades`,
+    {
+      params,
+    },
+  );
+  return response.data;
+};
+
 export const getRulesCompletionByPlaybookId = async (
-  id: string,
-  params: {
-    accountId: string;
-    startDate?: string;
-    endDate?: string;
-    coin: Coin;
-  },
+  params: GetPlaybookRulesCompletionByPlaybookId,
 ): Promise<PlaybookRulesCompletionResponse> => {
-  const response = await baseConfig.get(`/playbooks/${id}/rules-completion`, {
-    params,
-  });
+  const response = await baseConfig.get(
+    `/playbooks/${params.playbookId}/rules-completion`,
+    {
+      params,
+    },
+  );
   return response.data;
 };

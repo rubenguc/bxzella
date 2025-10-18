@@ -1,26 +1,26 @@
-import { useUserConfigStore } from "@/store/user-config-store";
 import { useQuery } from "@tanstack/react-query";
-import { getTradesByPlaybookId } from "../services/playbooks-services";
+import {
+  type ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
+import { CustomTable } from "@/components/custom-table";
+import { Badge } from "@/components/ui/badge";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { usePagination } from "@/hooks/use-pagination";
+import { useUserConfigStore } from "@/store/user-config-store";
 import {
   transformDateToParam,
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
-import { usePagination } from "@/hooks/use-pagination";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { useTranslations } from "next-intl";
+import { formatDecimal } from "@/utils/number-utils";
 import {
   checkLongPosition,
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import { Badge } from "@/components/ui/badge";
-import { formatDecimal } from "@/utils/number-utils";
-import { CustomTable } from "@/components/custom-table";
+import { getTradesByPlaybookId } from "../services/playbooks-services";
 
 interface PlaybooksTradesProps {
   id: string;
@@ -131,13 +131,14 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["playbooks-trades", limit, page],
+    queryKey: ["playbooks-trades", limit, page, id],
     queryFn: () =>
-      getTradesByPlaybookId(id, {
-        accountId: selectedAccountId!,
+      getTradesByPlaybookId({
+        playbookId: id,
+        accountUID: selectedAccountId,
         coin,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
         limit,
         page,
       }),

@@ -1,63 +1,61 @@
-import { PlaybookModel } from "@/features/playbooks/model/playbooks-model";
-import {
+import mongoose from "mongoose";
+import type {
+  GetAllPlaybooksProps,
+  GetAllPlaybooksPropsResponse,
+  GetTradesStatisticByPlaybookIdProps,
+  GetTradesStatisticByPlaybookIdResponse,
+  GetTradesStatisticByPlaybookProps,
+  GetTradesStatisticByPlaybookResponse,
   Playbook,
   PlaybookDocument,
   PlaybookTradeStatistics,
 } from "@/features/playbooks/interfaces/playbooks-interfaces";
+import { PlaybookModel } from "@/features/playbooks/model/playbooks-model";
 import { TradeModel } from "@/features/trades/model/trades-model";
-import { Coin } from "@/global-interfaces";
-import mongoose from "mongoose";
+import { getUTCDay } from "@/utils/date-utils";
+import { getPaginatedData } from "@/utils/db-utils";
 
-export async function createPlaybook(playbookData: Partial<Playbook>) {
+export async function createPlaybook(
+  playbookData: Partial<Playbook>,
+): Promise<PlaybookDocument> {
   const playbook = new PlaybookModel(playbookData);
   return await playbook.save();
 }
 
-export async function getPlaybookById(id: string) {
-  return await PlaybookModel.findById(id).lean();
+export async function getPlaybookById(
+  id: string,
+): Promise<PlaybookDocument | null> {
+  return await PlaybookModel.findById(id).lean<PlaybookDocument>();
 }
 
 export async function getAllPlaybooks({
   userId,
   page = 1,
   limit = 10,
-}: {
-  userId: string;
-  page?: number;
-  limit?: number;
-}) {
-  const skip = (page - 1) * limit;
-  const playbooks = await PlaybookModel.find({ userId })
-    .skip(skip)
-    .limit(limit)
-    .sort({ _id: -1 });
-
-  const total = await PlaybookModel.countDocuments();
-  const totalPages = Math.ceil(total / limit);
-
-  return {
-    data: playbooks,
-    pagination: {
-      currentPage: page,
-      totalPages,
-      total,
-      hasNext: page < totalPages,
-      hasPrev: page > 1,
+}: GetAllPlaybooksProps): GetAllPlaybooksPropsResponse {
+  return await getPaginatedData(
+    PlaybookModel,
+    { userId },
+    {
+      page,
+      limit,
     },
-  };
+  );
 }
 
 export async function updatePlaybook(
   id: string,
   updateData: Partial<Playbook>,
-) {
+): Promise<PlaybookDocument | null> {
   return await PlaybookModel.findByIdAndUpdate(id, updateData, {
     new: true,
     runValidators: true,
   });
 }
 
-export async function deletePlaybook(id: string) {
+export async function deletePlaybook(
+  id: string,
+): Promise<PlaybookDocument | null> {
   return await PlaybookModel.findByIdAndDelete(id);
 }
 
@@ -68,25 +66,15 @@ export async function getTradesStatisticByPlaybook({
   coin = "USDT",
   page = 1,
   limit = 10,
-}: {
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: "USDT" | "VST";
-  page?: number;
-  limit?: number;
-  includeUnassigned?: boolean;
-}) {
-  const skip = page * limit;
-
-  const [playbooks, totalPlaybooks] = await Promise.all([
-    PlaybookModel.find({})
-      .sort({ name: 1 })
-      .skip(skip)
-      .limit(limit)
-      .lean() as Promise<Partial<PlaybookDocument>[]>,
-    PlaybookModel.countDocuments({}),
-  ]);
+}: GetTradesStatisticByPlaybookProps): GetTradesStatisticByPlaybookResponse {
+  const { data: playbooks, totalPages } = await getPaginatedData(
+    PlaybookModel,
+    {},
+    {
+      page,
+      limit,
+    },
+  );
 
   const playbookIds = playbooks.map((pb) => pb._id);
 
@@ -189,9 +177,7 @@ export async function getTradesStatisticByPlaybook({
   });
 
   return {
-    totalPlaybooks,
-    totalPages: Math.ceil(totalPlaybooks / limit),
-    currentPage: page,
+    totalPages,
     data,
   };
 }
@@ -202,18 +188,15 @@ export async function getTradesStatisticByPlaybookId({
   startDate,
   endDate,
   coin = "USDT",
-}: {
-  playbookId: string;
-  accountUID: string;
-  startDate: Date;
-  endDate: Date;
-  coin?: Coin;
-}) {
+}: GetTradesStatisticByPlaybookIdProps): GetTradesStatisticByPlaybookIdResponse {
   const playbook = await PlaybookModel.findById(playbookId).lean();
 
   if (!playbook) {
     throw new Error(`Playbook with id ${playbookId} not found.`);
   }
+
+  const parsedStartDate = getUTCDay(startDate);
+  const parsedEndDate = getUTCDay(endDate, true);
 
   const tradesAgg = await TradeModel.aggregate([
     {
@@ -221,8 +204,8 @@ export async function getTradesStatisticByPlaybookId({
         accountUID,
         coin,
         closeAllPositions: true,
-        openTime: { $gte: startDate, $lte: endDate },
-        updateTime: { $gte: startDate, $lte: endDate },
+        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
         "playbook.id": new mongoose.Types.ObjectId(playbookId),
       },
     },

@@ -1,23 +1,24 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlaybooksOverview } from "@/features/playbooks/components/playbooks-overview";
+import { PlaybooksRulesCompletion } from "@/features/playbooks/components/playbooks-rules-completion";
+import { PlaybooksTrades } from "@/features/playbooks/components/playbooks-trades";
+import type { PlaybookTradeStatistics } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { getPlaybook } from "@/features/playbooks/services/playbooks-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlaybooksOverview } from "@/features/playbooks/components/playbooks-overview";
-import { PlaybooksTrades } from "@/features/playbooks/components/playbooks-trades";
-import { PlaybooksRulesCompletion } from "@/features/playbooks/components/playbooks-rules-completion";
 
 export default function PlaybookDetailPage() {
   const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
@@ -29,14 +30,17 @@ export default function PlaybookDetailPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["playbook", id, selectedAccountId, coin, startDate, endDate],
     queryFn: () =>
-      getPlaybook(id as string, {
-        accountId: selectedAccountId,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+      getPlaybook({
+        playbookId: id,
+        accountUID: selectedAccountId,
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
         coin,
       }),
     enabled: !!id && !!selectedAccountId && !!startDate && !!endDate,
   });
+
+  const playbookInfo = data?.data || ({} as PlaybookTradeStatistics);
 
   if (isLoading) {
     return (
@@ -46,7 +50,7 @@ export default function PlaybookDetailPage() {
     );
   }
 
-  if (!data) {
+  if (!data?.data) {
     return (
       <div className="flex justify-center items-center h-64">
         <p>{t("playbook_not_found")}</p>
@@ -63,8 +67,10 @@ export default function PlaybookDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{data.playbook?.name}</CardTitle>
-          <CardDescription>{data.playbook?.description}</CardDescription>
+          <CardTitle>{playbookInfo.playbook?.name}</CardTitle>
+          <CardDescription>
+            {playbookInfo.playbook?.description}
+          </CardDescription>
         </CardHeader>
       </Card>
 
@@ -78,10 +84,10 @@ export default function PlaybookDetailPage() {
         </TabsList>
         <TabsContent value="overview">
           <PlaybooksOverview
-            tradeWin={data.tradeWin || {}}
-            avgWinLoss={data.avgWinLoss || {}}
-            netPnL={data.netPnL || {}}
-            profitFactor={data.profitFactor || {}}
+            tradeWin={playbookInfo.tradeWin || {}}
+            avgWinLoss={playbookInfo.avgWinLoss || {}}
+            netPnL={playbookInfo.netPnL || {}}
+            profitFactor={playbookInfo.profitFactor || {}}
           />
         </TabsContent>
         <TabsContent value="playbook_rules">

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Playbook } from "../interfaces/playbooks-interfaces";
+import type { Playbook } from "../interfaces/playbooks-interfaces";
 
 export const PlaybookSchema = new Schema<Playbook>({
   userId: {

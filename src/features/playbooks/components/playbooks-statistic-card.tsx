@@ -1,10 +1,10 @@
+import { Info } from "lucide-react";
+import type { JSX } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Info } from "lucide-react";
-import { JSX } from "react";
 
 interface PlaybooksStatisticValueProps {
   title: string;

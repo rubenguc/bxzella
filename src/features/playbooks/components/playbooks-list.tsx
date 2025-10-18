@@ -1,10 +1,8 @@
-import { useTranslations } from "next-intl";
-import { usePlaybooks } from "../context/playbooks-context";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useUserConfigStore } from "@/store/user-config-store";
-import { getPlaybooks } from "../services/playbooks-services";
-import { transformDateToParam } from "@/utils/date-utils";
+import { Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -14,19 +12,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { formatDecimal } from "@/utils/number-utils";
-import { getResultClass } from "@/utils/trade-utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { usePagination } from "@/hooks/use-pagination";
+import { useUserConfigStore } from "@/store/user-config-store";
+import { transformDateToParam } from "@/utils/date-utils";
+import { formatDecimal } from "@/utils/number-utils";
+import { getResultClass } from "@/utils/trade-utils";
+import { usePlaybooks } from "../context/playbooks-context";
+import type { PlaybookDocument } from "../interfaces/playbooks-interfaces";
+import { getPlaybooks } from "../services/playbooks-services";
 import { PlaybookListSkeleton } from "./playbooks-list-skeleton";
-import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
-import { useRouter } from "next/navigation";
 
 export function PlaybooksList() {
   const t = useTranslations("playbooks");
@@ -36,26 +36,17 @@ export function PlaybooksList() {
   const { setOpen, setCurrentRow } = usePlaybooks();
   const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
 
-  // TODO: add pagination for playbooks
-  const [pagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const { limit, page } = usePagination();
 
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "playbooks",
-      selectedAccountId,
-      pagination.pageIndex,
-      pagination.pageSize,
-    ],
+    queryKey: ["playbooks", selectedAccountId, limit, page, startDate, endDate],
     queryFn: () =>
       getPlaybooks({
-        accountId: selectedAccountId,
-        page: pagination.pageIndex,
-        limit: pagination.pageSize,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+        accountUID: selectedAccountId,
+        page,
+        limit,
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
         coin,
       }),
     enabled: !!selectedAccountId && !!startDate && !!endDate,

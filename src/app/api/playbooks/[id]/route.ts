@@ -1,34 +1,21 @@
+import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { handleApiError } from "@/utils/server-api-utils";
-import { NextRequest, NextResponse } from "next/server";
-import { getTradesStatisticByPlaybookId } from "@/features/playbooks/server/db/playbooks-db";
-import {
-  accountIdParamValidation,
-  coinParamValidation,
-  dateParamValidation,
-} from "@/utils/zod-utils";
 import { getAccountById } from "@/features/accounts/server/db/accounts-db";
-import { z } from "zod";
-
-const playbookParamsSchema = z.object({
-  accountId: accountIdParamValidation(),
-  startDate: dateParamValidation({ field: "startDate" }),
-  endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
-  coin: coinParamValidation(),
-});
+import { playbookParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
+import { getTradesStatisticByPlaybookId } from "@/features/playbooks/server/db/playbooks-db";
+import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const url = new URL(request.url);
-    const searchParams = Object.fromEntries(url.searchParams.entries());
-    const parsedParams = playbookParamsSchema.parse(searchParams);
-
     const { id } = await params;
 
-    const { accountId, startDate, endDate, coin } = parsedParams;
+    const { accountId, coin, endDate, startDate } = parseSearchParams(
+      request,
+      playbookParamsSchema,
+    );
 
     await connectDB();
     const account = await getAccountById(accountId);
@@ -39,8 +26,8 @@ export async function GET(
     const data = await getTradesStatisticByPlaybookId({
       playbookId: id,
       accountUID,
-      startDate: startDate!,
-      endDate: endDate!,
+      startDate,
+      endDate,
       coin,
     });
 

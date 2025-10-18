@@ -1,27 +1,21 @@
+import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
+import { playbooksAllSearchParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getAllPlaybooks } from "@/features/playbooks/server/db/playbooks-db";
-import { handleApiError } from "@/utils/server-api-utils";
-import { limitParamValidation, pageParamValidation } from "@/utils/zod-utils";
-import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const PlaybooksSearchParamsSchema = z.object({
-  page: pageParamValidation(),
-  limit: limitParamValidation(),
-});
+import {
+  getUserAuth,
+  handleApiError,
+  parseSearchParams,
+} from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
+    const userId = await getUserAuth();
 
-    if (!userId) return new Response("Missing userId", { status: 400 });
-
-    const url = new URL(request.url);
-    const searchParams = Object.fromEntries(url.searchParams.entries());
-    const parsedParams = PlaybooksSearchParamsSchema.parse(searchParams);
-
-    const { page, limit } = parsedParams;
+    const { page, limit } = parseSearchParams(
+      request,
+      playbooksAllSearchParamsSchema,
+    );
 
     await connectDB();
 
@@ -33,7 +27,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data);
   } catch (err) {
-    console.error(err);
     return handleApiError(err);
   }
 }

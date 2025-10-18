@@ -1,12 +1,12 @@
 import {
   createContext,
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
+  type Dispatch,
+  type PropsWithChildren,
+  type SetStateAction,
   useContext,
   useState,
 } from "react";
-import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
+import type { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 
 type PlaybooksDialogType = "add" | "edit" | "delete";
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { TriangleAlert } from "lucide-react";
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { PlaybookDocument } from "../interfaces/playbooks-interfaces";
+import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 import { deletePlaybookAction } from "../server/actions/playbooks-actions";
 
 interface PlaybooksDeleteDialogProps {

@@ -1,7 +1,7 @@
-import { useUserConfigStore } from "@/store/user-config-store";
 import { useQuery } from "@tanstack/react-query";
-import { transformDateToParam } from "@/utils/date-utils";
-import { getRulesCompletionByPlaybookId } from "../services/playbooks-services";
+import { useTranslations } from "next-intl";
+import { Fragment } from "react";
+import { Card } from "@/components/ui/card";
 
 import {
   Table,
@@ -11,9 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Fragment } from "react";
-import { useTranslations } from "next-intl";
-import { Card } from "@/components/ui/card";
+import { useUserConfigStore } from "@/store/user-config-store";
+import { transformDateToParam } from "@/utils/date-utils";
+import { getRulesCompletionByPlaybookId } from "../services/playbooks-services";
 
 interface PlaybooksRulesCompletionProps {
   id: string;
@@ -29,11 +29,12 @@ export function PlaybooksRulesCompletion({
   const { data } = useQuery({
     queryKey: ["playbooks-rules-completion"],
     queryFn: () =>
-      getRulesCompletionByPlaybookId(id, {
-        accountId: selectedAccountId!,
+      getRulesCompletionByPlaybookId({
+        playbookId: id,
+        accountUID: selectedAccountId,
         coin,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
       }),
   });
 

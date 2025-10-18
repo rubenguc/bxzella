@@ -1,10 +1,10 @@
-import { useTranslations } from "next-intl";
-import { PlaybookRulesGroup } from "../interfaces/playbooks-interfaces";
-import { Button } from "@/components/ui/button";
 import { GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
 import { useFormContext } from "react-hook-form";
-import { PlaybookForm } from "./playbooks-action-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import type { PlaybookRulesGroup } from "../interfaces/playbooks-interfaces";
+import type { PlaybookForm } from "./playbooks-action-dialog";
 
 interface PlaybooksRuleGroupProps extends PlaybookRulesGroup {
   onAddRule: () => void;

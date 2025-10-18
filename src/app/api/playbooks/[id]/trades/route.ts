@@ -1,50 +1,29 @@
+import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { getAccountById } from "@/features/accounts/server/db/accounts-db";
+import { playbookTradesParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getPaginatedTradesByPlaybook } from "@/features/trades/server/db/trades-db";
-import { handleApiError } from "@/utils/server-api-utils";
-import {
-  accountIdParamValidation,
-  coinParamValidation,
-  dateParamValidation,
-  limitParamValidation,
-  pageParamValidation,
-} from "@/utils/zod-utils";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const playbookParamsSchema = z.object({
-  accountId: accountIdParamValidation(),
-  startDate: dateParamValidation({ field: "startDate" }),
-  endDate: dateParamValidation({ field: "endDate", tillEndOfTheDay: true }),
-  coin: coinParamValidation(),
-  page: pageParamValidation(),
-  limit: limitParamValidation(),
-});
+import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const url = new URL(request.url);
-    const searchParams = Object.fromEntries(url.searchParams.entries());
-    const parsedParams = playbookParamsSchema.parse(searchParams);
-
     const { id } = await params;
 
-    const { accountId, startDate, endDate, coin, page, limit } = parsedParams;
+    const { accountId, startDate, endDate, coin, page, limit } =
+      parseSearchParams(request, playbookTradesParamsSchema);
 
     await connectDB();
     const account = await getAccountById(accountId);
     const accountUID = account.uid;
 
-    await connectDB();
-
     const data = await getPaginatedTradesByPlaybook({
       playbookId: id,
       accountUID,
-      startDate: startDate!,
-      endDate: endDate!,
+      startDate,
+      endDate,
       coin,
       page,
       limit,
@@ -52,7 +31,6 @@ export async function GET(
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
     return handleApiError(err);
   }
 }

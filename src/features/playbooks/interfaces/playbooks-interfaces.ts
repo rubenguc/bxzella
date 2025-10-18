@@ -1,3 +1,6 @@
+import type { Coin } from "@/interfaces/global-interfaces";
+import type { PaginationResponse } from "@/utils/db-utils";
+
 export interface Playbook {
   userId: string;
   name: string;
@@ -38,3 +41,38 @@ export interface PlaybookTradeStatistics {
     totalTrades: number;
   };
 }
+
+export interface GetAllPlaybooksProps {
+  userId: string;
+  page?: number;
+  limit?: number;
+}
+
+export type GetAllPlaybooksPropsResponse = Promise<
+  PaginationResponse<PlaybookDocument>
+>;
+
+export interface GetTradesStatisticByPlaybookProps {
+  accountUID: string;
+  startDate: string;
+  endDate: string;
+  coin?: Coin;
+  page?: number;
+  limit?: number;
+}
+
+export type GetTradesStatisticByPlaybookResponse = Promise<
+  PaginationResponse<PlaybookTradeStatistics>
+>;
+
+export interface GetTradesStatisticByPlaybookIdProps {
+  playbookId: string;
+  accountUID: string;
+  startDate: string;
+  endDate: string;
+  coin?: Coin;
+}
+
+export type GetTradesStatisticByPlaybookIdResponse = Promise<{
+  data: PlaybookTradeStatistics;
+}>;

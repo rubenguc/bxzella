@@ -1,51 +1,20 @@
 import { z } from "zod";
-import { getUTCDay } from "./date-utils";
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-// TODO: change return type based on isOptional
-export const dateParamValidation = ({
-  field,
-  isOptional = true,
-  tillEndOfTheDay = false,
-}: {
-  field: string;
-  isOptional?: boolean;
-  tillEndOfTheDay?: boolean;
-}) => {
-  if (isOptional) {
-    return z
-      .string()
-      .optional()
-      .refine((val) => !val || dateRegex.test(val), {
-        message: `${field} must be in format YYYY-MM-DD`,
-      })
-      .transform((val) => {
-        if (!val) return undefined;
-        const date = getUTCDay(val, tillEndOfTheDay);
-        if (!isNaN(date.getTime())) {
-          return date;
-        }
-        return undefined;
-      })
-      .refine((date) => !date || !isNaN(date.getTime()), {
-        message: `${field} must be a valid date`,
-      });
-  } else {
-    return z
-      .string()
-      .refine((val) => dateRegex.test(val), {
-        message: `${field} must be in format YYYY-MM-DD`,
-      })
-      .transform((val) => {
-        const date = getUTCDay(val, tillEndOfTheDay);
+export const dateParamValidation = ({ field }: { field: string }) => {
+  return z.string().refine((val) => dateRegex.test(val), {
+    message: `${field} must be in format YYYY-MM-DD`,
+  });
+};
 
-        return date;
-      })
-      .refine((date) => !isNaN(date.getTime()), {
-        message: `${field} must be a valid date`,
-      });
-  }
+export const dateParamValidationOptional = ({ field }: { field: string }) => {
+  return z
+    .string()
+    .optional()
+    .refine((val) => !val || dateRegex.test(val), {
+      message: `${field} must be in format YYYY-MM-DD`,
+    });
 };
 
 export const accountIdParamValidation = () => {
