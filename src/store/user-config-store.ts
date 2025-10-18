@@ -1,6 +1,6 @@
-import { Coin, Theme } from "@/global-interfaces";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { Coin, Theme } from "@/interfaces/global-interfaces";
 
 type UserConfig = {
   selectedAccountId: string;

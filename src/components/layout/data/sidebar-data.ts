@@ -20,11 +20,6 @@ export const sidebarItems = {
           icon: House,
         },
         {
-          title: "ai-summary",
-          url: "/ai-summary",
-          icon: Bot,
-        },
-        {
           title: "trades",
           url: "/trades",
           icon: BookText,
