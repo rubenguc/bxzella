@@ -16,11 +16,11 @@ export async function createNotebookFolder(
 }
 
 export async function getAllNotebooksFolders({
-  accountUID,
+  accountId,
 }: {
-  accountUID: string;
+  accountId: string;
 }): Promise<NotebookFolderDocument[]> {
-  return await NotebookFolderModel.find({ accountUID }).sort({
+  return await NotebookFolderModel.find({ accountId }).sort({
     isDefault: -1,
     _id: 1,
   });
@@ -38,23 +38,23 @@ export async function deleteNotebookFolder(id: string): Promise<boolean> {
   return result.deletedCount === 1;
 }
 
-export async function getNotebookTradesFolderByAccountUID(accountUID: string) {
-  return await NotebookFolderModel.findOne({ accountUID, name: "trade_notes" });
+export async function getNotebookTradesFolderByAccountId(accountId: string) {
+  return await NotebookFolderModel.findOne({ accountId, name: "trade_notes" });
 }
 
 export async function initializeNotebooksFolder(
-  accountUID: string,
+  accountId: string,
 ): Promise<void> {
   try {
     const existingCount = await NotebookFolderModel.countDocuments({
       name: { $in: getDefaultFolderNames() },
-      accountUID,
+      accountId,
     });
 
     if (existingCount === 0) {
       console.log("Insertando notebooks folders iniciales...");
       await NotebookFolderModel.insertMany(
-        getDefaultNotebookFolders(accountUID),
+        getDefaultNotebookFolders(accountId),
       );
       console.log("Notebooks iniciales insertados correctamente.");
     } else {

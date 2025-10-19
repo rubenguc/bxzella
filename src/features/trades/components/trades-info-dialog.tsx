@@ -71,7 +71,6 @@ export function InfoRow({
 export function TradeInfoDialog() {
   const t = useTranslations("trade_info");
   const { isOpen, currentTrade, setCurrentTrade } = useTradeContext();
-  const coin = useUserConfigStore((state) => state.coin);
 
   const {
     _id = "",
@@ -89,6 +88,7 @@ export function TradeInfoDialog() {
     positionSide = "0",
     positionAmt = "0",
     closePositionAmt = "",
+    coin = "USDT",
     playbook = {
       id: "",
       totalRules: 0,

@@ -6,6 +6,7 @@ export interface PaginationParams {
   page?: number;
   limit?: number;
   sortBy?: AnyObject;
+  projection?: AnyObject;
 }
 
 export interface PaginationResponse<T> {
@@ -21,6 +22,7 @@ export async function getPaginatedData<T>(
   model: Model<T>,
   findCriteria: FilterQuery<T>,
   {
+    projection = {},
     page = 1,
     limit = 10,
     sortBy = {
@@ -28,10 +30,10 @@ export async function getPaginatedData<T>(
     },
   }: PaginationParams = {},
 ): Promise<PaginationResponse<T>> {
-  const skip = (page - 1) * limit;
+  const skip = page * limit;
 
   const [totalItems, data] = await Promise.all([
-    model.countDocuments(findCriteria),
+    model.countDocuments(findCriteria, projection),
     model.find(findCriteria).sort(sortBy).skip(skip).limit(limit).lean<T[]>(),
   ]);
 

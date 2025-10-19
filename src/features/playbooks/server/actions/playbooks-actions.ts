@@ -11,9 +11,8 @@ import {
 
 export async function createPlaybookAction(playbookData: Partial<Playbook>) {
   try {
-    const userId = await getUserAuth();
     await connectDB();
-    await createPlaybook({ ...playbookData, userId });
+    await createPlaybook(playbookData);
     return { error: false, message: "" };
   } catch (error) {
     return handleServerActionError("failed_to_create_playbook", error);

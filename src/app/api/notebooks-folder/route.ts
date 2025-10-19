@@ -26,12 +26,15 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
     const account = await getAccountById(accountId);
-    const accountUID = account.uid;
 
-    await initializeNotebooksFolder(accountUID);
+    if (!account) {
+      return NextResponse.json({ error: "Account not found" }, { status: 404 });
+    }
+
+    await initializeNotebooksFolder(account?._id);
 
     const data = await getAllNotebooksFolders({
-      accountUID,
+      accountId,
     });
 
     return NextResponse.json(data);

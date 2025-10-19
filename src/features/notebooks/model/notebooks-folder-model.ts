@@ -22,8 +22,9 @@ export const NotebookFolderSchema = new Schema<NotebookFolder>(
       required: true,
       default: false,
     },
-    accountUID: {
-      type: String,
+    accountId: {
+      type: mongoose.Types.ObjectId,
+      ref: "Account",
       required: true,
     },
   },
@@ -32,7 +33,7 @@ export const NotebookFolderSchema = new Schema<NotebookFolder>(
   },
 );
 
-NotebookFolderSchema.index({ accountUID: 1, isDefault: 1 });
+NotebookFolderSchema.index({ accountId: 1, isDefault: 1 });
 
 export const NotebookFolderModel =
   mongoose.models.NotebookFolder ||

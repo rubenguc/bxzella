@@ -117,7 +117,7 @@ export function TradesTable() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {coin}
+            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
           </div>
         );
       },
@@ -133,7 +133,7 @@ export function TradesTable() {
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(realisedProfit), 4)} {coin}
+            {formatDecimal(Number(realisedProfit), 4)} {row.original.coin}
           </div>
         );
       },
@@ -171,7 +171,7 @@ export function TradesTable() {
     ],
     queryFn: () =>
       getTrades({
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         page: pagination.pageIndex,
         limit: pagination.pageSize,
         coin,

@@ -1,31 +1,46 @@
+import type { ClientSession } from "mongoose";
+import type {
+  Account,
+  AccountDocument,
+  GetAccountsByUserId,
+  GetAccountsByUserIdResponse,
+} from "@/features/accounts/interfaces/accounts-interfaces";
 import { AccountModel } from "@/features/accounts/model/accounts-model";
-import { Account } from "@/features/accounts/interfaces/accounts-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
+import { getPaginatedData } from "@/utils/db-utils";
 
-export async function createAccountDb(data: Account) {
+export async function createAccountDb(data: Account): Promise<AccountDocument> {
   return await AccountModel.create(data);
 }
 
-export async function updateAccountDb(id: string, data: Account) {
+export async function updateAccountDb(
+  id: string,
+  data: Partial<Account>,
+): Promise<AccountDocument | null> {
   return await AccountModel.findByIdAndUpdate(id, data, { new: true });
 }
 
-export async function deleteAccountDb(id: string) {
+export async function deleteAccountDb(
+  id: string,
+): Promise<AccountDocument | null> {
   return await AccountModel.findByIdAndDelete(id);
 }
 
-export async function getAccountByUID(uid: string) {
+export async function getAccountByUID(
+  uid: string,
+): Promise<AccountDocument | null> {
   return await AccountModel.findOne({ uid });
 }
 
-export async function getAccountById(id: string) {
-  return await AccountModel.findById(id, {
-    _id: 1,
-    name: 1,
-    uid: 1,
-  });
+export async function getAccountById(
+  id: string,
+): Promise<AccountDocument | null> {
+  return await AccountModel.findById(id);
 }
 
-export async function getAccountByIdWithCredentials(id: string) {
+export async function getAccountByIdWithCredentials(
+  id: string,
+): Promise<AccountDocument | null> {
   return await AccountModel.findById(id, {
     _id: 1,
     name: 1,
@@ -35,23 +50,46 @@ export async function getAccountByIdWithCredentials(id: string) {
   });
 }
 
-export async function getAccountsByUserId(
-  userId: string,
-  page: number,
-  limit: number,
+export async function getAccountsByUserId({
+  limit,
+  page,
+  userId,
+}: GetAccountsByUserId): GetAccountsByUserIdResponse {
+  return await getPaginatedData(
+    AccountModel,
+    { userId },
+    {
+      projection: {
+        _id: 1,
+        name: 1,
+        uid: 1,
+        provider: 1,
+      },
+      sortBy: { createdAt: -1 },
+      limit,
+      page,
+    },
+  );
+}
+
+export async function getAccountLastSyncPerCoin(
+  uid: string,
+  coin: Coin,
+): Promise<number> {
+  const account = await AccountModel.findOne({ uid }).lean<AccountDocument>();
+
+  return account?.lastSyncPerCoin?.[coin] || 0;
+}
+
+export async function updateLastSyncPerCoin(
+  id: string,
+  coin: Coin,
+  time: number,
+  session?: ClientSession,
 ) {
-  const skip = page * limit;
-  const total = await AccountModel.countDocuments({ userId });
-  const totalPages = Math.ceil(total / limit);
-
-  const data = await AccountModel.find({ userId }, { _id: 1, name: 1, uid: 1 })
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .lean();
-
-  return {
-    data,
-    totalPages,
-  };
+  await AccountModel.updateOne(
+    { _id: id },
+    { $set: { [`lastSyncPerCoin.${coin}`]: time } },
+    { session },
+  );
 }

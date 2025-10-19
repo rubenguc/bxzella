@@ -132,7 +132,7 @@
   "accounts": {
     "add_account": "Add Account",
     "name": "Name",
-    "uid": "UID",
+    "provider": "Provider",
     "no_accounts": "No accounts",
     "add_new_account": "Add New Account",
     "edit_account": "Edit Account",
@@ -192,6 +192,7 @@
     "failed_to_delete_playbook": "Failed to delete playbook",
     "playbook_not_found": "Playbook not found",
     "playbook_deleted_message": "Playbook deleted successfully",
+    "playbooks_saved_message": "Playbooks saved successfully",
     "add_playbook": "Add Playbook",
     "edit_playbook": "Edit Playbook",
     "delete_playbook": "Delete Playbook",

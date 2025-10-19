@@ -10,27 +10,27 @@ export const getDefaultFolderNames = (): string[] =>
   Object.values(DEFAULT_FOLDER_NAMES);
 
 export const getDefaultNotebookFolders = (
-  accountUID: string,
+  accountId: string,
 ): Partial<NotebookFolder>[] => [
   {
     name: DEFAULT_FOLDER_NAMES.TRADE_NOTES,
     tagColor: "system",
     type: "trade",
     isDefault: true,
-    accountUID,
+    accountId,
   },
   {
     name: DEFAULT_FOLDER_NAMES.DAILY_JOURNAL,
     tagColor: "system",
     type: "day",
     isDefault: true,
-    accountUID,
+    accountId,
   },
   {
     name: DEFAULT_FOLDER_NAMES.SESSIONS_RECAP,
     tagColor: "system",
     type: "day",
     isDefault: true,
-    accountUID,
+    accountId,
   },
 ];

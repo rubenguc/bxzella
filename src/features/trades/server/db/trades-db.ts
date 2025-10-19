@@ -1,14 +1,10 @@
 import mongoose from "mongoose";
 import {
-  createOrUpdateAccountSync,
-  getAccountSync,
-} from "@/features/account-sync/server/db/account-sync-db";
-import { getAccountByUID } from "@/features/accounts/server/db/accounts-db";
+  getAccountById,
+  updateLastSyncPerCoin,
+} from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
-import {
-  getFilledOrders,
-  getPositionHistory,
-} from "@/features/providers/bingx/bingx-api";
+import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
   FetchPositionHistoryForSymbolsProps,
   GetPaginatedTradesByPlaybook,
@@ -16,122 +12,53 @@ import type {
   GetPlaybookRulesCompletionByPlaybookId,
   GetPlaybookRulesCompletionByPlaybookIdResponse,
   GetTradeProfitByDays,
-  GetTradesByAccountUID,
-  GetTradesByAccountUIDResponse,
+  GetTradesByAccountId,
+  GetTradesByAccountIdResponse,
   GetTradesStatisticProps,
   Trade,
   TradePlaybook,
   TradeStatisticsResult,
 } from "@/features/trades/interfaces/trades-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
-import {
-  getSyncTimeRange,
-  processFilledOrders,
-} from "@/features/trades/utils/trades-utils";
+import { getSyncTimeRange } from "@/features/trades/utils/trades-utils";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 
-async function fetchPositionHistoryForSymbols({
-  apiKey,
-  secretKey,
-  symbols,
-  timeRange,
-  uid,
-  coin = "USDT",
-}: FetchPositionHistoryForSymbolsProps): Promise<Trade[]> {
-  const batchSize = 5;
-  const batches = [];
-  for (let i = 0; i < symbols.length; i += batchSize) {
-    batches.push(symbols.slice(i, i + batchSize));
-  }
-
-  const allPositionHistories: Trade[] = [];
-  for (const [index, batch] of batches.entries()) {
-    const batchResults = await Promise.all(
-      batch.map((symbol) =>
-        getPositionHistory(
-          apiKey,
-          secretKey,
-          {
-            symbol,
-            startTs: timeRange.startTs,
-            endTs: timeRange.endTs,
-          },
-          coin,
-        )
-          .then((r) =>
-            r.data.positionHistory.map((ph) => ({
-              ...ph,
-              openTime: new Date(ph.openTime),
-              updateTime: new Date(ph.updateTime),
-              accountUID: uid,
-              coin,
-              type: "P",
-            })),
-          )
-          .catch((error) => {
-            console.error(
-              `Error fetching position history for symbol ${symbol}:`,
-              error,
-            );
-            return [];
-          }),
-      ),
-    );
-
-    allPositionHistories.push(...(batchResults.flat() as Trade[]));
-
-    if (index < batches.length - 1) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-  }
-
-  return allPositionHistories;
-}
-
 export async function syncPositions(
-  uid: string,
+  accountId: string,
   coin: Coin = "USDT",
 ): Promise<boolean> {
-  console.log(`syncing positions for: ${uid}...`);
+  console.log(`syncing positions for: ${accountId}...`);
 
-  const uidSyncConfig = await getAccountSync(uid, coin);
-
-  const timeRange = getSyncTimeRange(uidSyncConfig?.perpetualLastSyncTime);
-
-  const account = await getAccountByUID(uid);
+  const account = await getAccountById(accountId);
   if (!account) return false;
 
+  const lastSyncTime = account.lastSyncPerCoin[coin];
+  const timeRange = getSyncTimeRange(lastSyncTime);
   const { decriptedApiKey, decryptedSecretKey } =
     getDecryptedAccountCredentials(account);
 
-  const filledOrders = await getFilledOrders(
+  const providerService = getProvider(
+    account.provider,
     decriptedApiKey,
     decryptedSecretKey,
-    timeRange,
-    coin,
   );
 
-  const symbolsToFetch = processFilledOrders(filledOrders);
-
-  if (symbolsToFetch.length === 0) return false;
-
-  const allPositionHistories = await fetchPositionHistoryForSymbols({
-    apiKey: decriptedApiKey,
-    secretKey: decryptedSecretKey,
-    symbols: symbolsToFetch,
-    timeRange,
-    uid,
+  const positions = await providerService.getPositionHistory({
     coin,
+    startTs: timeRange.startTs,
+    endTs: timeRange.endTs,
   });
+
+  if (!positions.length) return false;
 
   const session = await mongoose.startSession();
 
   try {
     await session.withTransaction(async () => {
-      await createOrUpdateAccountSync(uid, timeRange.endTs, coin, session);
-      await saveMultipleTrades(allPositionHistories, session);
+      await updateLastSyncPerCoin(account._id, coin, timeRange.endTs, session);
+      await saveMultipleTrades(positions, account._id, session);
     });
   } finally {
     session.endSession();
@@ -142,12 +69,13 @@ export async function syncPositions(
 
 export async function saveMultipleTrades(
   trades: Trade[],
+  accountId: string,
   session: mongoose.ClientSession,
 ) {
   await TradeModel.bulkWrite(
     trades.map((trade) => ({
       updateOne: {
-        filter: { accountUID: trade.accountUID, positionId: trade.positionId },
+        filter: { accountId: accountId, positionId: trade.positionId },
         update: { $set: trade },
         upsert: true,
       },
@@ -156,16 +84,16 @@ export async function saveMultipleTrades(
   );
 }
 
-export async function getTradesByAccountUID({
-  accountUID,
+export async function getTradesByAccountId({
+  accountId,
   page,
   limit,
   coin = "USDT",
   startDate,
   endDate,
-}: GetTradesByAccountUID): GetTradesByAccountUIDResponse {
+}: GetTradesByAccountId): GetTradesByAccountIdResponse {
   const find: Record<string, any> = {
-    accountUID,
+    accountId,
     coin,
   };
 
@@ -181,7 +109,7 @@ export async function getTradesByAccountUID({
 }
 
 export function getTradesStatistic({
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -192,7 +120,7 @@ export function getTradesStatistic({
   return TradeModel.aggregate([
     {
       $match: {
-        accountUID,
+        accountId,
         coin,
         closeAllPositions: true,
         openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
@@ -314,7 +242,7 @@ export function getTradesStatistic({
 }
 
 export function getTradeProfitByDays({
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -325,7 +253,7 @@ export function getTradeProfitByDays({
   return TradeModel.aggregate([
     {
       $match: {
-        accountUID,
+        accountId,
         coin,
         closeAllPositions: true,
         updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
@@ -365,7 +293,7 @@ export async function updateTradePlaybook(
 }
 
 export async function getPaginatedTradesByPlaybook({
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -374,7 +302,7 @@ export async function getPaginatedTradesByPlaybook({
   limit = 10,
 }: GetPaginatedTradesByPlaybook): GetPaginatedTradesByPlaybookReponse {
   const findCriteria: Record<string, unknown> = {
-    accountUID,
+    accountId,
     coin,
     "playbook.id": playbookId,
   };
@@ -398,7 +326,7 @@ export async function getPaginatedTradesByPlaybook({
 
 export async function getPlaybookRulesCompletionByPlaybookId({
   playbookId,
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -409,7 +337,7 @@ export async function getPlaybookRulesCompletionByPlaybookId({
   const rulesCompletion = await TradeModel.aggregate([
     {
       $match: {
-        accountUID,
+        accountId,
         coin,
         closeAllPositions: true,
         openTime: { $gte: parsedStartDate, $lte: parsedEndDate },

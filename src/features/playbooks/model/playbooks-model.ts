@@ -2,10 +2,10 @@ import mongoose, { Schema } from "mongoose";
 import type { Playbook } from "../interfaces/playbooks-interfaces";
 
 export const PlaybookSchema = new Schema<Playbook>({
-  userId: {
-    type: String,
+  accountId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Account",
     required: true,
-    trim: true,
   },
   name: {
     type: String,

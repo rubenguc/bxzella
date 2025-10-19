@@ -135,7 +135,7 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
     queryFn: () =>
       getTradesByPlaybookId({
         playbookId: id,
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         coin,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),

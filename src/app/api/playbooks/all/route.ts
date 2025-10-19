@@ -2,17 +2,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { playbooksAllSearchParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getAllPlaybooks } from "@/features/playbooks/server/db/playbooks-db";
-import {
-  getUserAuth,
-  handleApiError,
-  parseSearchParams,
-} from "@/utils/server-api-utils";
+import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await getUserAuth();
-
-    const { page, limit } = parseSearchParams(
+    const { page, limit, accountId } = parseSearchParams(
       request,
       playbooksAllSearchParamsSchema,
     );
@@ -20,7 +14,7 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const data = await getAllPlaybooks({
-      userId,
+      accountId,
       page,
       limit,
     });

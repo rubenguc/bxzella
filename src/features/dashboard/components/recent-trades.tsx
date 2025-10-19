@@ -122,7 +122,7 @@ export function RecentTrades() {
     enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
     queryFn: async () => {
       const response = await getTrades({
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
         limit: 10,

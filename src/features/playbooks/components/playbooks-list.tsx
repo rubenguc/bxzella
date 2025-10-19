@@ -42,7 +42,7 @@ export function PlaybooksList() {
     queryKey: ["playbooks", selectedAccountId, limit, page, startDate, endDate],
     queryFn: () =>
       getPlaybooks({
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         page,
         limit,
         startDate: transformDateToParam(startDate as Date),

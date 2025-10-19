@@ -19,6 +19,7 @@ export const playbooksSearchParamsSchema = z.object({
 export const playbooksAllSearchParamsSchema = z.object({
   page: pageParamValidation(),
   limit: limitParamValidation(),
+  accountId: accountIdParamValidation(),
 });
 
 export const playbookParamsSchema = z.object({

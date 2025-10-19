@@ -1,3 +1,5 @@
+import type { Types } from "mongoose";
+
 export interface NotebookFolderForm {
   name: string;
   tagColor: string;
@@ -6,7 +8,7 @@ export interface NotebookFolderForm {
 export interface NotebookFolder extends NotebookFolderForm {
   type: "trade" | "day" | "session" | "note";
   isDefault: boolean;
-  accountUID: string;
+  accountId: Types.ObjectId | string | null;
 }
 
 export interface NotebookFolderDocument extends NotebookFolder {

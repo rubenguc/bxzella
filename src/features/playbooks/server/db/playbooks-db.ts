@@ -29,13 +29,13 @@ export async function getPlaybookById(
 }
 
 export async function getAllPlaybooks({
-  userId,
+  accountId,
   page = 1,
   limit = 10,
 }: GetAllPlaybooksProps): GetAllPlaybooksPropsResponse {
   return await getPaginatedData(
     PlaybookModel,
-    { userId },
+    { accountId },
     {
       page,
       limit,
@@ -60,7 +60,7 @@ export async function deletePlaybook(
 }
 
 export async function getTradesStatisticByPlaybook({
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -69,7 +69,9 @@ export async function getTradesStatisticByPlaybook({
 }: GetTradesStatisticByPlaybookProps): GetTradesStatisticByPlaybookResponse {
   const { data: playbooks, totalPages } = await getPaginatedData(
     PlaybookModel,
-    {},
+    {
+      accountId,
+    },
     {
       page,
       limit,
@@ -81,7 +83,7 @@ export async function getTradesStatisticByPlaybook({
   const tradesAgg = await TradeModel.aggregate([
     {
       $match: {
-        accountUID,
+        accountId,
         coin,
         closeAllPositions: true,
         openTime: { $gte: startDate, $lte: endDate },
@@ -184,7 +186,7 @@ export async function getTradesStatisticByPlaybook({
 
 export async function getTradesStatisticByPlaybookId({
   playbookId,
-  accountUID,
+  accountId,
   startDate,
   endDate,
   coin = "USDT",
@@ -201,7 +203,7 @@ export async function getTradesStatisticByPlaybookId({
   const tradesAgg = await TradeModel.aggregate([
     {
       $match: {
-        accountUID,
+        accountId,
         coin,
         closeAllPositions: true,
         openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
@@ -266,11 +268,8 @@ export async function getTradesStatisticByPlaybookId({
   const avgWinLoss =
     statistics.totalWin && statistics.totalLoss ? avgWin / avgLoss : 0;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { userId: _, ...playbookData } = playbook as Partial<PlaybookDocument>;
-
   const data: PlaybookTradeStatistics = {
-    playbook: playbookData,
+    playbook: playbook as Partial<PlaybookDocument>,
     tradeWin: {
       value: tradeWinPercent,
       totalWin: statistics.totalWin,

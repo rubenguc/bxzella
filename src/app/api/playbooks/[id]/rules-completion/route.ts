@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { playbookRulesCompletionParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getPlaybookRulesCompletionByPlaybookId } from "@/features/trades/server/db/trades-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
@@ -18,14 +17,12 @@ export async function GET(
     );
 
     await connectDB();
-    const account = await getAccountById(accountId);
-    const accountUID = account.uid;
 
     await connectDB();
 
     const data = await getPlaybookRulesCompletionByPlaybookId({
       playbookId: id,
-      accountUID,
+      accountId,
       startDate,
       endDate,
       coin,

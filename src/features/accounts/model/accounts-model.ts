@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { Account } from "../interfaces/accounts-interfaces";
+import type { Account } from "../interfaces/accounts-interfaces";
 
 export const AccountSchema = new Schema<Account>({
   userId: {
@@ -10,10 +10,10 @@ export const AccountSchema = new Schema<Account>({
     type: String,
     required: true,
   },
-  uid: {
-    type: String,
-    required: true,
-  },
+  // uid: {
+  //   type: String,
+  //   required: true,
+  // },
   apiKey: {
     type: String,
     required: true,
@@ -21,6 +21,14 @@ export const AccountSchema = new Schema<Account>({
   secretKey: {
     type: String,
     required: true,
+  },
+  provider: {
+    type: String,
+    required: true,
+  },
+  lastSyncPerCoin: {
+    type: Schema.Types.Mixed, // Record<Coin, number>
+    default: {},
   },
 });
 

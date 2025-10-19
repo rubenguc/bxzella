@@ -35,6 +35,7 @@ import {
   updatePlaybookAction,
 } from "../server/actions/playbooks-actions";
 import { PlaybooksRules } from "./playbooks-rules";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 interface PlaybooksActionDialogProps {
   currentRow?: PlaybookDocument;
@@ -51,6 +52,8 @@ export const PlaybooksActionDialog = ({
 }: PlaybooksActionDialogProps) => {
   const t = useTranslations("playbooks");
   const queryClient = useQueryClient();
+
+  const { selectedAccountId } = useUserConfigStore();
 
   const isEdit = !!currentRow;
   const form = useForm<PlaybookForm>({
@@ -77,7 +80,7 @@ export const PlaybooksActionDialog = ({
   const onSubmit = async (values: PlaybookForm) => {
     const response = isEdit
       ? await updatePlaybookAction(currentRow._id, values)
-      : await createPlaybookAction(values);
+      : await createPlaybookAction({ ...values, accountId: selectedAccountId });
     if (response?.error) {
       toast.error(response.message);
       return;
@@ -85,6 +88,8 @@ export const PlaybooksActionDialog = ({
     await queryClient.invalidateQueries({
       queryKey: ["playbooks"],
     });
+
+    toast.success("playbooks_saved_message");
     form.reset();
     onOpenChange(false);
   };

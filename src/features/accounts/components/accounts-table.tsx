@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  ColumnDef,
+  type ColumnDef,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { CustomTable } from "@/components/custom-table";
 import { DataTableRowActions } from "@/components/data-table-row-actions";
 import { useAccounts } from "@/features/accounts/context/accounts-context";
-import { useTranslations } from "next-intl";
 import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
-import { CustomTable } from "@/components/custom-table";
-import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
+import type { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
 
 export function AccountsTable() {
   const t = useTranslations("accounts");
@@ -23,8 +23,8 @@ export function AccountsTable() {
       accessorKey: "name",
     },
     {
-      header: t("uid"),
-      accessorKey: "uid",
+      header: t("provider"),
+      accessorKey: "provider",
     },
     {
       id: "actions",

@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { statictisSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
 import { getTradesStatistic } from "@/features/trades/server/db/trades-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
@@ -14,11 +13,8 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    const account = await getAccountById(accountId);
-    const accountUID = account.uid;
-
     const data = await getTradesStatistic({
-      accountUID,
+      accountId,
       startDate,
       endDate,
       coin,

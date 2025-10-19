@@ -1,7 +1,6 @@
 "use server";
 
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import type { NotebookFolderForm } from "@/features/notebooks/interfaces/notebooks-folder-interfaces";
 import {
   createNotebookFolder,
@@ -17,13 +16,9 @@ export async function createNotebookFolderAction(
   try {
     await connectDB();
 
-    const account = await getAccountById(accountId);
-
-    const accountUID = account.uid as string;
-
     await createNotebookFolder({
       ...data,
-      accountUID,
+      accountId,
       type: "session",
       isDefault: false,
     });

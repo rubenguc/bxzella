@@ -31,7 +31,7 @@ export function PlaybooksRulesCompletion({
     queryFn: () =>
       getRulesCompletionByPlaybookId({
         playbookId: id,
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         coin,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),

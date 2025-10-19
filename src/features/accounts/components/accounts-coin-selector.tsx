@@ -10,7 +10,7 @@ import { ChevronDown } from "lucide-react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Coin } from "@/global-interfaces";
+import { Coin } from "@/interfaces/global-interfaces";
 
 const COINS = [
   {

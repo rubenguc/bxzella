@@ -2,8 +2,9 @@ import mongoose, { Schema } from "mongoose";
 import type { Trade } from "@/features/trades/interfaces/trades-interfaces";
 
 export const TradeSchema = new Schema<Trade>({
-  accountUID: {
-    type: String,
+  accountId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Account",
     required: true,
   },
   positionId: {
@@ -113,22 +114,22 @@ export const TradeSchema = new Schema<Trade>({
 
 // Create an interface for playbook
 
-TradeSchema.index({ accountUID: 1 });
-TradeSchema.index({ accountUID: 1, openTime: 1, coin: 1 });
-TradeSchema.index({ accountUID: 1, openTime: -1, coin: 1 });
-TradeSchema.index({ accountUID: 1, updateTime: 1, coin: 1 });
-TradeSchema.index({ accountUID: 1, updateTime: -1, coin: 1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: 1, coin: 1 });
-TradeSchema.index({ accountUID: 1, symbol: 1, openTime: -1, coin: 1 });
+TradeSchema.index({ accountId: 1 });
+TradeSchema.index({ accountId: 1, openTime: 1, coin: 1 });
+TradeSchema.index({ accountId: 1, openTime: -1, coin: 1 });
+TradeSchema.index({ accountId: 1, updateTime: 1, coin: 1 });
+TradeSchema.index({ accountId: 1, updateTime: -1, coin: 1 });
+TradeSchema.index({ accountId: 1, symbol: 1, openTime: 1, coin: 1 });
+TradeSchema.index({ accountId: 1, symbol: 1, openTime: -1, coin: 1 });
 TradeSchema.index({
-  accountUID: 1,
+  accountId: 1,
   symbol: 1,
   openTime: 1,
   updateTime: 1,
   coin: 1,
 });
 TradeSchema.index({
-  accountUID: 1,
+  accountId: 1,
   symbol: 1,
   openTime: 1,
   updateTime: -1,
@@ -136,9 +137,9 @@ TradeSchema.index({
 });
 
 TradeSchema.index({ "playbook.id": 1 });
-TradeSchema.index({ accountUID: 1, "playbook.id": 1 });
+TradeSchema.index({ accountId: 1, "playbook.id": 1 });
 TradeSchema.index({ "playbook.totalCompletedRules": -1 });
-TradeSchema.index({ accountUID: 1, "playbook.totalCompletedRules": -1 });
+TradeSchema.index({ accountId: 1, "playbook.totalCompletedRules": -1 });
 
 export const TradeModel =
   mongoose.models.Trade || mongoose.model("Trade", TradeSchema);

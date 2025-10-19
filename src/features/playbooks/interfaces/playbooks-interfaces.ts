@@ -1,8 +1,9 @@
+import type { Types } from "mongoose";
 import type { Coin } from "@/interfaces/global-interfaces";
 import type { PaginationResponse } from "@/utils/db-utils";
 
 export interface Playbook {
-  userId: string;
+  accountId: Types.ObjectId | string | null;
   name: string;
   description: string;
   icon: string;
@@ -43,7 +44,7 @@ export interface PlaybookTradeStatistics {
 }
 
 export interface GetAllPlaybooksProps {
-  userId: string;
+  accountId: string;
   page?: number;
   limit?: number;
 }
@@ -53,7 +54,7 @@ export type GetAllPlaybooksPropsResponse = Promise<
 >;
 
 export interface GetTradesStatisticByPlaybookProps {
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;
@@ -67,7 +68,7 @@ export type GetTradesStatisticByPlaybookResponse = Promise<
 
 export interface GetTradesStatisticByPlaybookIdProps {
   playbookId: string;
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;

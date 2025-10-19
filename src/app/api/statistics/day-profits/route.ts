@@ -2,7 +2,6 @@ import { endOfMonth, format, startOfMonth, subMonths } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { dayProfitsSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
 import { getTradeProfitByDays } from "@/features/trades/server/db/trades-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
@@ -15,10 +14,6 @@ export async function GET(request: NextRequest) {
     );
 
     await connectDB();
-
-    const account = await getAccountById(accountId);
-
-    const accountUID = account.uid;
 
     const nowUTC = toZonedTime(new Date(), "UTC");
 
@@ -34,7 +29,7 @@ export async function GET(request: NextRequest) {
     );
 
     const data = await getTradeProfitByDays({
-      accountUID,
+      accountId,
       startDate,
       endDate,
       coin,

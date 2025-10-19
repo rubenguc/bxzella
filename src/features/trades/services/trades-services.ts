@@ -1,7 +1,7 @@
 import type { ActivePosition } from "@/features/providers/bingx/bingx-interfaces";
 import type {
   GetOpenPositionsProps,
-  GetTradesByAccountUID,
+  GetTradesByAccountId,
   TradeDocument,
 } from "@/features/trades/interfaces/trades-interfaces";
 import type {
@@ -11,7 +11,7 @@ import type {
 import { baseConfig } from "@/services/api";
 
 export const getTrades = async (
-  params: GetTradesByAccountUID,
+  params: GetTradesByAccountId,
 ): Promise<PaginationResponseWithSync<TradeDocument>> => {
   const response = await baseConfig.get("/trades", { params });
   return response.data;

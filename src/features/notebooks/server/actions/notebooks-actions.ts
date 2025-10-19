@@ -1,10 +1,9 @@
 "use server";
 
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { handleServerActionError } from "@/utils/server-api-utils";
 import { updateNotebookByTradeId } from "../db/notebooks-db";
-import { getNotebookTradesFolderByAccountUID } from "../db/notebooks-folder-db";
+import { getNotebookTradesFolderByAccountId } from "../db/notebooks-folder-db";
 
 export async function updateNotebookByTradeIdAction(
   tradeId: string,
@@ -14,12 +13,7 @@ export async function updateNotebookByTradeIdAction(
   try {
     await connectDB();
 
-    const account = await getAccountById(accountId);
-
-    const accountUID = account.uid;
-
-    const notebookFolder =
-      await getNotebookTradesFolderByAccountUID(accountUID);
+    const notebookFolder = await getNotebookTradesFolderByAccountId(accountId);
 
     if (!notebookFolder) {
       return handleServerActionError("note_folder_id");

@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { getAccountById } from "@/features/accounts/server/db/accounts-db";
 import { playbooksSearchParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import {
   createPlaybook,
@@ -14,13 +13,11 @@ export async function GET(request: NextRequest) {
       parseSearchParams(request, playbooksSearchParamsSchema);
 
     await connectDB();
-    const account = await getAccountById(accountId);
-    const accountUID = account.uid;
 
     const data = await getTradesStatisticByPlaybook({
       page,
       limit,
-      accountUID,
+      accountId,
       startDate,
       endDate,
       coin,

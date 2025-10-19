@@ -1,7 +1,11 @@
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { accountValidationSchema } from "@/features/accounts/schemas/accounts-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,24 +22,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import type {
+  AccountDocument,
+  AccountForm,
+} from "@/features/accounts/interfaces/accounts-interfaces";
+import {
+  accountUpdateValidationSchema,
+  accountValidationSchema,
+} from "@/features/accounts/schemas/accounts-schemas";
 import {
   createAccountAction,
   updateAccountAction,
 } from "@/features/accounts/server/actions/accounts-actions";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
+import type { Provider } from "@/interfaces/global-interfaces";
 
 interface AccountsActionDialogProps {
   currentRow?: AccountDocument | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-type AccountForm = z.infer<typeof accountValidationSchema>;
 
 export function AccountsActionDialog({
   currentRow,
@@ -47,13 +52,18 @@ export function AccountsActionDialog({
 
   const isEdit = !!currentRow;
   const form = useForm<AccountForm>({
-    resolver: zodResolver(accountValidationSchema),
+    resolver: zodResolver(
+      isEdit ? accountUpdateValidationSchema : accountValidationSchema,
+    ),
     defaultValues: isEdit
-      ? { ...currentRow, apiKey: "", secretKey: "" }
+      ? {
+          name: currentRow.name,
+        }
       : {
           name: "",
           apiKey: "",
           secretKey: "",
+          provider: "bingx" as Provider,
         },
   });
 
@@ -66,6 +76,9 @@ export function AccountsActionDialog({
 
       return;
     }
+
+    toast.success(t("account_saved_message"));
+
     await queryClient.invalidateQueries({
       queryKey: ["accounts"],
     });
@@ -73,6 +86,7 @@ export function AccountsActionDialog({
       name: "",
       apiKey: "",
       secretKey: "",
+      provider: "bingx",
     });
     onOpenChange(false);
   };
@@ -111,42 +125,46 @@ export function AccountsActionDialog({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="apiKey"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("api_key")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="select-none"
-                        type="password"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="secretKey"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("secret_key")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="select-none"
-                        type="password"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="" />
-                  </FormItem>
-                )}
-              />
+              {!isEdit && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="apiKey"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("api_key")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="select-none"
+                            type="password"
+                            autoComplete="off"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="secretKey"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("secret_key")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="select-none"
+                            type="password"
+                            autoComplete="off"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
             </form>
           </Form>
           <p className="mt-5 text-gray-400 text-sm">

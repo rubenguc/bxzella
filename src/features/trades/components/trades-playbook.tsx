@@ -39,7 +39,7 @@ export const TradePlaybook = ({
 
   const [selectedPlaybook, setSelectedPlaybook] =
     useState<ITradePlaybook>(tradePlaybook);
-  const { data, isLoading } = useGetAllPlaybooks({ page: 1, limit: 100 });
+  const { data, isLoading } = useGetAllPlaybooks({ page: 1, limit: 100, accountId: selectedAccountId });
 
   const playbooks = data?.data || [];
 

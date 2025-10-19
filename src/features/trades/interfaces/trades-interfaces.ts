@@ -1,5 +1,6 @@
+import type { Types } from "mongoose";
 import type { Coin, PaginationResponse } from "@/interfaces/global-interfaces";
-import { PlaybookRulesCompletionResponse } from "./playbook-rules-completion-interface";
+import type { PlaybookRulesCompletionResponse } from "./playbook-rules-completion-interface";
 
 export type ContractType = "P" | "S"; // P = Perpetual | S = "Standard"
 
@@ -15,7 +16,7 @@ export type TradePlaybook = {
 } | null;
 
 export interface Trade {
-  accountUID: string;
+  accountId: Types.ObjectId | string | null;
   positionId: string;
   symbol: string;
   positionSide: string;
@@ -83,7 +84,7 @@ export interface TradeProfitPerDay {
 
 export interface BaseQuery {
   coin?: Coin;
-  accountUID: string;
+  accountId: string;
 }
 
 export interface GetOpenPositionsProps {
@@ -100,26 +101,26 @@ export interface FetchPositionHistoryForSymbolsProps {
   coin: Coin;
 }
 
-export interface GetTradesByAccountUID extends BaseQuery {
+export interface GetTradesByAccountId extends BaseQuery {
   page: number;
   limit: number;
   startDate?: string;
   endDate?: string;
 }
 
-export type GetTradesByAccountUIDResponse = Promise<
+export type GetTradesByAccountIdResponse = Promise<
   PaginationResponse<TradeDocument>
 >;
 
 export interface GetTradesStatisticProps {
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;
 }
 
 export interface GetPaginatedTradesByPlaybook {
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;
@@ -134,7 +135,7 @@ export type GetPaginatedTradesByPlaybookReponse = Promise<
 
 export interface GetPlaybookRulesCompletionByPlaybookId {
   playbookId: string;
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;
@@ -144,7 +145,7 @@ export type GetPlaybookRulesCompletionByPlaybookIdResponse =
   Promise<PlaybookRulesCompletionResponse>;
 
 export interface GetTradeProfitByDays {
-  accountUID: string;
+  accountId: string;
   startDate: string;
   endDate: string;
   coin?: Coin;

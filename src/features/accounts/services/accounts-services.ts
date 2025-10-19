@@ -1,6 +1,6 @@
 import { baseConfig } from "@/services/api";
 import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
-import { PaginationResponse } from "@/global-interfaces";
+import { PaginationResponse } from "@/interfaces/global-interfaces";
 
 export const getAccounts = async (params: {
   page: number;

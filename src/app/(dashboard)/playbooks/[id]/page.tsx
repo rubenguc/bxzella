@@ -32,7 +32,7 @@ export default function PlaybookDetailPage() {
     queryFn: () =>
       getPlaybook({
         playbookId: id,
-        accountUID: selectedAccountId,
+        accountId: selectedAccountId,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
         coin,
