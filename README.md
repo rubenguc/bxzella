@@ -15,10 +15,10 @@ BXzella is a platform designed to help traders analyze their performance by inte
     - See your current open positions at a glance.
     - Display a list of your most recent closed trades.
 - **Trades Overview:** A dedicated page to view your complete trade history with details on open/close times, symbols, positions, leverage, and PNL.
-- **AI Summary:** Get AI-powered summaries of your trading performance, including comparisons between periods.
+- **Notebooks:** Create, edit, and share trading strategies and notes.
+- **Playbooks:** Organize and share trading playbooks with detailed strategies and notes.
 - **Theming:** Switch between light, dark, and system themes.
 - **Internationalization:** Support for multiple languages (currently English based on `i18n` config).
-
 
 ## Getting Started
 
@@ -95,10 +95,18 @@ bxzella/
 │   ├── context/              # React contexts
 │   ├── db/                   # Database connection setup (MongoDB)
 │   ├── features/             # Feature-based organization
-│   │   ├── account-sync/     # Logic for syncing account data
-│   │   ├── accounts/         # Account management feature
-│   │   ├── bingx/            # BingX API interaction logic
-│   │   └── trades/           # Trades data and statistics feature
+│   │   ├── <feature>/        # Logic for each feature
+│   │   │   ├── components/   # UI components
+│   │   │   ├── context/      # React contexts
+│   │   │   ├── hooks/        # Custom React hooks
+│   │   │   ├── interfaces/   # TS Interfaces
+│   │   │   ├── model/        # Mongoose model
+│   │   │   ├── schemas/      # Validation schemas
+│   │   │   ├── server/       # Server-side logic
+│   │   │   │   ├── actions/  # Server actions
+│   │   │   │   └── db/       # Db queries
+│   │   │   ├── services/     # Apis calls for tanstack Query
+│   │   │   └── utils/     # Apis calls for tanstack Query
 │   ├── hooks/                # Custom React hooks
 │   ├── i18n/                 # Internationalization setup
 │   ├── lib/                  # Utility functions
