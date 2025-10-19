@@ -1,4 +1,4 @@
-export type Coin = "VST" | "USDT";
+export type Coin = "VST" | "USDT" | "USDC";
 
 export interface PaginationResponse<T> {
   data: T[];
@@ -18,3 +18,5 @@ export type LeanDocument<T> = T extends {
 }
   ? T
   : "Please convert the document to a POJO via `.toObject()` or .lean()`";
+
+export type Provider = "bingx" | "bitunix";
