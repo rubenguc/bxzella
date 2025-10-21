@@ -19,69 +19,6 @@ const PATHS = {
   USER_POSITION_HISTORY: "/openApi/swap/v1/trade/positionHistory",
 };
 
-// export const getUserBalance = async (
-//   apiKey: string,
-//   secretKey: string,
-//   coin: Coin = "USDT",
-// ): Promise<UserBalanceResponse> => {
-//   return makeRequest({
-//     coin,
-//     apiKey,
-//     secretKey,
-//     path: PATHS.USER_BALANCE,
-//   });
-// };
-
-// export const getUserActiveOpenPositions = async (
-//   apiKey: string,
-//   secretKey: string,
-//   coin: Coin = "USDT",
-// ): Promise<UserPositionResponse> => {
-//   return makeRequest({
-//     coin,
-//     apiKey,
-//     secretKey,
-//     path: PATHS.USER_ACTIVE_OPEN_POSITIONS,
-//   });
-// };
-
-// export const fetchFilledOrders = async (
-//   apiKey: string,
-//   secretKey: string,
-//   payload: {
-//     startTs: number;
-//     endTs: number;
-//   },
-//   coin: Coin = "USDT",
-// ): Promise<UserFillOrdersResponse> => {
-//   return makeRequest({
-//     coin,
-//     apiKey,
-//     secretKey,
-//     path: PATHS.USER_FILLED_ORDERS,
-//     payload,
-//   });
-// };
-
-// export const getPositionHistory = async (
-//   apiKey: string,
-//   secretKey: string,
-//   payload: {
-//     symbol: string;
-//     startTs: number;
-//     endTs: number;
-//   },
-//   coin: Coin = "USDT",
-// ): Promise<UserPositionHistoryResponse> => {
-//   return makeRequest({
-//     coin,
-//     apiKey,
-//     secretKey,
-//     path: PATHS.USER_POSITION_HISTORY,
-//     payload,
-//   });
-// };
-
 export class BingxProvider implements ProviderInterface {
   private apiKey: string;
   private secretKey: string;
@@ -111,15 +48,16 @@ export class BingxProvider implements ProviderInterface {
 
   private async fetchPositionHistory({
     coin,
-    startTs,
     endTs,
     symbol,
   }: {
     coin: Coin;
-    startTs: number;
     endTs: number;
     symbol: string;
   }): Promise<UserPositionHistoryResponse> {
+    // 90 days ago
+    const startTs = endTs - 90 * 24 * 60 * 60 * 1000;
+
     return makeRequest({
       coin,
       apiKey: this.apiKey,
@@ -161,12 +99,6 @@ export class BingxProvider implements ProviderInterface {
       path: PATHS.USER_BALANCE,
     })) as UserBalanceResponse;
 
-    console.log({
-      accountBalanceResponse,
-      apiKey: this.apiKey,
-      secretKey: this.secretKey,
-    });
-
     if (accountBalanceResponse.code === 100419) {
       /// TODO: ip code error
     }
@@ -195,7 +127,7 @@ export class BingxProvider implements ProviderInterface {
         batch.map((symbol) =>
           this.fetchPositionHistory({
             symbol,
-            startTs,
+
             endTs,
             coin,
           })
@@ -228,12 +160,14 @@ export class BingxProvider implements ProviderInterface {
     return allPositionHistories;
   }
 
-  async getActivePositions(coin: Coin): Promise<void> {
+  async getActivePositions(coin: Coin): Promise<Trade[]> {
     const activePositons = (await makeRequest({
       coin,
       apiKey: this.apiKey,
       secretKey: this.secretKey,
       path: PATHS.USER_ACTIVE_OPEN_POSITIONS,
     })) as UserPositionResponse;
+
+    return activePositons.data;
   }
 }
