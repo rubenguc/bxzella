@@ -3,6 +3,9 @@ import axios from "axios";
 
 export const baseConfig = axios.create({
   baseURL: "/api",
+  headers: {
+    TIMEZONE: new Date().getTimezoneOffset() / -60,
+  },
 });
 
 baseConfig.interceptors.response.use(

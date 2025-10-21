@@ -1,7 +1,7 @@
-import { TradeProfitPerDay } from "@/features/trades/interfaces/trades-interfaces";
-import { startOfMonth } from "date-fns";
+import { format } from "date-fns";
 import { useMemo, useState } from "react";
-import { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
+import type { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
+import type { TradeProfitPerDay } from "@/features/trades/interfaces/trades-interfaces";
 
 export interface WeekSummary {
   weekNumber: number;
@@ -15,51 +15,118 @@ export interface MonthlySummary {
   daysTraded: number;
 }
 
-export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(1);
-
-  const months = useMemo(() => {
+// Hook to manage month selection state
+export const useMonthSelection = () => {
+  // Set default to current month
+  const [selectedMonth, setSelectedMonth] = useState(() => {
     const today = new Date();
+    return format(today, "yyyy-MM"); // Default to current month in "YYYY-MM" format
+  });
 
-    const currentMonthStart = startOfMonth(today);
-    const previousMonthStart = startOfMonth(
-      new Date(
-        currentMonthStart.getFullYear(),
-        currentMonthStart.getMonth() - 1,
-        1,
-      ),
-    );
+  // Generate the last 5 months for minimum query range
+  const monthsList = useMemo(() => {
+    const today = new Date();
+    const months = [];
 
-    return [
-      {
-        name: previousMonthStart.toLocaleDateString("en-US", {
+    // Generate 5 months back from current month (5 months including current)
+    for (let i = 4; i >= 0; i--) {
+      const monthDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      months.push({
+        name: monthDate.toLocaleDateString("en-US", {
           month: "long",
           year: "numeric",
         }),
-        shortName: previousMonthStart.toLocaleDateString("en-US", {
+        shortName: monthDate.toLocaleDateString("en-US", {
           month: "short",
           year: "numeric",
         }),
-        date: previousMonthStart,
-      },
-      {
-        name: currentMonthStart.toLocaleDateString("en-US", {
-          month: "long",
-          year: "numeric",
-        }),
-        shortName: currentMonthStart.toLocaleDateString("en-US", {
-          month: "short",
-          year: "numeric",
-        }),
-        date: currentMonthStart,
-      },
-    ];
+        value: format(monthDate, "yyyy-MM"), // Format as "YYYY-MM"
+        date: monthDate,
+      });
+    }
+
+    return months;
   }, []);
 
+  // Find the selected month object based on the selectedMonth value
+  const selectedMonthObject = useMemo(() => {
+    return (
+      monthsList.find((month) => month.value === selectedMonth) ||
+      monthsList[monthsList.length - 1]
+    );
+  }, [monthsList, selectedMonth]);
+
+  // Parse selected month to get year and month number
+  const [selectedYear, selectedMonthNum] = useMemo(() => {
+    const [year, month] = selectedMonth.split("-").map(Number);
+    return [year, month - 1]; // Convert to 0-indexed month
+  }, [selectedMonth]);
+
+  const handlePrevMonth = () => {
+    const selectedDate = new Date(selectedYear, selectedMonthNum, 1);
+    const prevMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() - 1,
+      1,
+    );
+    setSelectedMonth(format(prevMonth, "yyyy-MM"));
+  };
+
+  const handleNextMonth = () => {
+    const selectedDate = new Date(selectedYear, selectedMonthNum, 1);
+    const nextMonth = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1,
+      1,
+    );
+    setSelectedMonth(format(nextMonth, "yyyy-MM"));
+  };
+
+  // Check if selected month is the earliest available month (5 months ago)
+  const earliestDate = new Date();
+  earliestDate.setMonth(earliestDate.getMonth() - 3); // 5 months including current (so we can go back 4 months from current)
+  const isEarliestMonth =
+    selectedYear < earliestDate.getFullYear() ||
+    (selectedYear === earliestDate.getFullYear() &&
+      selectedMonthNum < earliestDate.getMonth());
+
+  // Check if selected month is the current month
+  const currentDate = new Date();
+  const isCurrentMonth =
+    selectedYear === currentDate.getFullYear() &&
+    selectedMonthNum === currentDate.getMonth();
+
+  return {
+    selectedMonth: selectedMonthObject,
+    handlePrevMonth,
+    handleNextMonth,
+    isPreviousMonth: isEarliestMonth,
+    isCurrentMonth,
+    monthValue: selectedMonth,
+  };
+};
+
+// Hook to process data for a specific month
+export const useDayProfitsData = ({
+  data,
+  month,
+}: {
+  data: TradeProfitPerDay[];
+  month: string;
+}) => {
+  // Parse the month string to get year and month number
+  const [selectedYear, selectedMonthNum] = useMemo(() => {
+    if (!month) {
+      const today = new Date();
+      return [today.getFullYear(), today.getMonth()];
+    }
+    const [year, monthStr] = month.split("-").map(Number);
+    return [year, monthStr - 1]; // Convert to 0-indexed month
+  }, [month]);
+
   const processCalendarData = useMemo(() => {
-    const selectedMonthDate = months[currentMonthIndex].date;
-    const currentYear = selectedMonthDate.getFullYear();
-    const currentMonthNum = selectedMonthDate.getMonth(); // getMonth() is 0-indexed
+    const currentYear = selectedYear;
+    const currentMonthNum = selectedMonthNum;
 
     // Create a map of trading data by date (day of the month)
     const tradingMap = new Map();
@@ -67,13 +134,11 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
       // Directly parse the date string "yyyy-mm-dd"
       const dateParts = day._id.split("-");
       const dayOfMonth = parseInt(dateParts[2], 10);
-      const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+      const monthNum = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+      const year = parseInt(dateParts[0], 10);
 
       // Ensure the parsed date belongs to the currently displayed month and year
-      if (
-        parseInt(dateParts[0], 10) === currentYear &&
-        month === currentMonthNum
-      ) {
+      if (year === currentYear && monthNum === currentMonthNum) {
         tradingMap.set(dayOfMonth, {
           amount: day.netProfit,
           trades: day.trades.length,
@@ -95,7 +160,10 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
 
     // Generate 42 cells (6 weeks x 7 days)
     for (let i = 0; i < 42; i++) {
-      const isCurrentMonth = current.getMonth() === currentMonthNum;
+      const currentDayMonth = current.getMonth();
+      const currentDayYear = current.getFullYear();
+      const isCurrentMonth =
+        currentDayMonth === currentMonthNum && currentDayYear === currentYear;
       const dayNum = current.getDate();
 
       if (isCurrentMonth) {
@@ -128,7 +196,7 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
     }
 
     return calendarData;
-  }, [currentMonthIndex, data, months]);
+  }, [selectedYear, selectedMonthNum, data]);
 
   const weeklySummaries = useMemo(() => {
     const summaries: WeekSummary[] = [];
@@ -190,27 +258,9 @@ export const useDayProfits = ({ data }: { data: TradeProfitPerDay[] }) => {
     };
   }, [processCalendarData]);
 
-  const handlePrevMonth = () => {
-    setCurrentMonthIndex((prev) => (prev === 0 ? 1 : 0));
-  };
-
-  const handleNextMonth = () => {
-    setCurrentMonthIndex((prev) => (prev === 1 ? 0 : 1));
-  };
-
-  const isPreviousMonth = currentMonthIndex === 0;
-  const isCurrentMonth = currentMonthIndex === 1;
-
-  const selectedMonth = months[currentMonthIndex];
-
   return {
     calendarData: processCalendarData,
     weeklySummaries,
     monthlySummary,
-    handlePrevMonth,
-    handleNextMonth,
-    isPreviousMonth,
-    isCurrentMonth,
-    selectedMonth,
   };
 };

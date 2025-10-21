@@ -1,6 +1,12 @@
+import {
+  type ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { formatDecimal } from "@/utils/number-utils";
@@ -9,12 +15,6 @@ import {
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
 
 interface DayProfitsTradeListProps {
   trades: TradeDocument[];

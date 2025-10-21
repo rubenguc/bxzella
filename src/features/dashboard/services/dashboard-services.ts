@@ -18,6 +18,7 @@ export const getStatistics = async (params: {
 export const getDayProfits = async (params: {
   accountId: string;
   coin: Coin;
+  month?: string;
 }): Promise<TradeProfitPerDay[]> => {
   const response = await baseConfig.get("/statistics/day-profits", { params });
   return response.data;

@@ -15,4 +15,8 @@ export const statictisSearchParamsSchema = z.object({
 export const dayProfitsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   coin: coinParamValidation(),
+  month: z
+    .string()
+    .regex(/^\d{4}-\d{2}$/, { message: "Month must be in format yyyy-MM" })
+    .optional(),
 });

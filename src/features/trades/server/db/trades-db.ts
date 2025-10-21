@@ -105,10 +105,16 @@ export async function getTradesByAccountId({
     find.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
   }
 
-  return await getPaginatedData(TradeModel, find, { page, limit });
+  return await getPaginatedData(TradeModel, find, {
+    page,
+    limit,
+    sortBy: {
+      updateTime: -1,
+    },
+  });
 }
 
-export function getTradesStatistic({
+export async function getTradesStatistic({
   accountId,
   startDate,
   endDate,
@@ -117,10 +123,10 @@ export function getTradesStatistic({
   const parsedStartDate = getUTCDay(startDate);
   const parsedEndDate = getUTCDay(endDate, true);
 
-  return TradeModel.aggregate([
+  const result = await TradeModel.aggregate([
     {
       $match: {
-        accountId,
+        accountId: new mongoose.Types.ObjectId(accountId),
         coin,
         closeAllPositions: true,
         openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
@@ -238,32 +244,42 @@ export function getTradesStatistic({
         },
       },
     },
-  ]) as unknown as Promise<TradeStatisticsResult>;
+  ]);
+
+  return result[0] || {};
 }
 
-export function getTradeProfitByDays({
-  accountId,
-  startDate,
-  endDate,
-  coin = "USDT",
-}: GetTradeProfitByDays) {
+export function getTradeProfitByDays(
+  { accountId, startDate, endDate, coin = "USDT" }: GetTradeProfitByDays,
+  timezone: number,
+) {
   const parsedStartDate = getUTCDay(startDate);
   const parsedEndDate = getUTCDay(endDate, true);
+
+  const offsetMs = timezone * 60 * 60 * 1000;
 
   return TradeModel.aggregate([
     {
       $match: {
-        accountId,
+        accountId: new mongoose.Types.ObjectId(accountId),
         coin,
         closeAllPositions: true,
         updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
     {
-      $group: {
-        _id: {
-          $dateToString: { format: "%Y-%m-%d", date: "$updateTime" },
+      $addFields: {
+        localDay: {
+          $dateToString: {
+            format: "%Y-%m-%d",
+            date: { $add: ["$updateTime", offsetMs] },
+          },
         },
+      },
+    },
+    {
+      $group: {
+        _id: "$localDay",
         netProfit: {
           $sum: {
             $convert: {
@@ -274,6 +290,18 @@ export function getTradeProfitByDays({
           },
         },
         trades: { $push: "$$ROOT" },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        netProfit: 1,
+        trades: {
+          $sortArray: {
+            input: "$trades",
+            sortBy: { updateTime: -1 },
+          },
+        },
       },
     },
     {

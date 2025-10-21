@@ -1,7 +1,8 @@
-import { useUserConfigStore } from "@/store/user-config-store";
 import { useQuery } from "@tanstack/react-query";
-import { getDayProfits } from "@/features/dashboard/services/dashboard-services";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -9,15 +10,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useDayProfits } from "@/features/dashboard/hooks/useDayProfits";
-import { DayProfitsCell } from "./day-profits-cell";
-import { WeekSummaryCell } from "./week-summary-cell";
-import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  useDayProfitsData,
+  useMonthSelection,
+} from "@/features/dashboard/hooks/useDayProfits";
+import { getDayProfits } from "@/features/dashboard/services/dashboard-services";
+import { useUserConfigStore } from "@/store/user-config-store";
 import { formatDecimal } from "@/utils/number-utils";
 import { getResultClass } from "@/utils/trade-utils";
 import { useDayProfitsContext } from "../context/day-profits-context";
+import { DayProfitsCell } from "./day-profits-cell";
+import { WeekSummaryCell } from "./week-summary-cell";
 
 const daysOfWeekKeys = [
   "sunday",
@@ -34,28 +38,29 @@ export function DayProfits() {
   const { selectDayProfit } = useDayProfitsContext();
 
   const { selectedAccountId, isStoreLoaded, coin } = useUserConfigStore();
-
-  const { data } = useQuery({
-    queryKey: ["day-profits", selectedAccountId, coin],
-    queryFn: () =>
-      getDayProfits({
-        accountId: selectedAccountId,
-        coin,
-      }),
-    enabled: isStoreLoaded && !!selectedAccountId,
-  });
-
   const {
-    calendarData,
-    weeklySummaries,
-    monthlySummary,
+    selectedMonth,
     handleNextMonth,
     handlePrevMonth,
     isPreviousMonth,
     isCurrentMonth,
-    selectedMonth,
-  } = useDayProfits({
+    monthValue,
+  } = useMonthSelection();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["day-profits", selectedAccountId, coin, monthValue],
+    queryFn: () =>
+      getDayProfits({
+        accountId: selectedAccountId,
+        coin,
+        month: monthValue,
+      }),
+    enabled: isStoreLoaded && !!selectedAccountId,
+  });
+
+  const { calendarData, weeklySummaries, monthlySummary } = useDayProfitsData({
     data: data || [],
+    month: monthValue,
   });
 
   return (
@@ -74,9 +79,8 @@ export function DayProfits() {
                 <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
 
-              <h1 className="text-lg sm:text-xl font-semibold ">
-                <span className="hidden sm:inline">{selectedMonth.name}</span>
-                <span className="sm:hidden">{selectedMonth.shortName}</span>
+              <h1 className="text-lg sm:text-xl font-semibold">
+                {selectedMonth.name}
               </h1>
 
               <Button
@@ -105,6 +109,12 @@ export function DayProfits() {
       </CardHeader>
       <CardContent className="overflow-hidden">
         <div className="relative w-full overflow-auto">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <Spinner className="size-10" />
+            </div>
+          )}
+
           <div className="grid grid-cols-7 md:grid-cols-8 gap-3">
             <div className="grid grid-cols-7 col-span-7 gap-1">
               {daysOfWeekKeys.map((day) => (
