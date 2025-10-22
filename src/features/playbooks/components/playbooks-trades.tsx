@@ -29,7 +29,7 @@ interface PlaybooksTradesProps {
 export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
   const tInfo = useTranslations("trade_info");
 
-  const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
+  const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
   const { limit, page, setPagination } = usePagination();
 
   const columns: ColumnDef<TradeDocument>[] = [
@@ -104,7 +104,7 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {coin}
+            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
           </div>
         );
       },
@@ -120,7 +120,7 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(realisedProfit), 4)} {coin}
+            {formatDecimal(Number(realisedProfit), 4)} {row.original.coin}
           </div>
         );
       },
@@ -131,11 +131,11 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["playbooks-trades", limit, page, id],
+    queryKey: ["playbooks-trades", limit, page, id, selectedAccount?._id],
     queryFn: () =>
       getTradesByPlaybookId({
         playbookId: id,
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         coin,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
@@ -165,7 +165,7 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
       table={table}
       columnsLength={columns.length}
       noDataMessage={tInfo("no_trades")}
-      showSkeleton={!!selectedAccountId && ((!data as boolean) || isLoading)}
+      showSkeleton={!!selectedAccount?._id && ((!data as boolean) || isLoading)}
       showPagination
     />
   );

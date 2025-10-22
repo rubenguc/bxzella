@@ -37,7 +37,7 @@ export function DayProfits() {
   const t = useTranslations("dashboard.day_profits");
   const { selectDayProfit } = useDayProfitsContext();
 
-  const { selectedAccountId, isStoreLoaded, coin } = useUserConfigStore();
+  const { selectedAccount, isStoreLoaded, coin } = useUserConfigStore();
   const {
     selectedMonth,
     handleNextMonth,
@@ -48,14 +48,14 @@ export function DayProfits() {
   } = useMonthSelection();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["day-profits", selectedAccountId, coin, monthValue],
+    queryKey: ["day-profits", selectedAccount?._id, coin, monthValue],
     queryFn: () =>
       getDayProfits({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         coin,
         month: monthValue,
       }),
-    enabled: isStoreLoaded && !!selectedAccountId,
+    enabled: isStoreLoaded && !!selectedAccount?._id,
   });
 
   const { calendarData, weeklySummaries, monthlySummary } = useDayProfitsData({

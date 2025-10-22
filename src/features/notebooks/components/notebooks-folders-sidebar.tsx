@@ -24,7 +24,7 @@ export function NotebooksFoldersSidebar() {
 
   const [isOpen, toggleOpen] = useToggle(true);
 
-  const { selectedAccountId, coin } = useUserConfigStore();
+  const { selectedAccount, coin } = useUserConfigStore();
 
   const {
     setSelectedNotebookFolder,
@@ -34,13 +34,13 @@ export function NotebooksFoldersSidebar() {
   } = useNotebookFoldersContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["notebooks-folders"],
+    queryKey: ["notebooks-folders", selectedAccount?._id],
     queryFn: () =>
       getAllNotebooksFolders({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         coin,
       }),
-    enabled: !!selectedAccountId && !!coin,
+    enabled: !!selectedAccount?._id && !!coin,
   });
 
   const notebooksFolders = data ?? [];

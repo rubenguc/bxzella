@@ -80,6 +80,9 @@ export interface TradeProfitPerDay {
   trades: TradeDocument[];
 }
 
+export interface OpenPosition
+  extends Pick<Trade, "openTime" | "symbol" | "positionSide" | "leverage"> {}
+
 // Queries
 
 export interface BaseQuery {

@@ -1,16 +1,16 @@
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { SelectTrigger } from "@radix-ui/react-select";
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { SelectTrigger } from "@radix-ui/react-select";
-import { ChevronDown } from "lucide-react";
-import * as SelectPrimitive from "@radix-ui/react-select";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-import { Coin } from "@/interfaces/global-interfaces";
 
 const COINS = [
   {

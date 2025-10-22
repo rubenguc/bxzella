@@ -24,14 +24,14 @@ export function PlaybooksRulesCompletion({
 }: PlaybooksRulesCompletionProps) {
   const t = useTranslations("playbook_details.playbook_rules");
 
-  const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
+  const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
 
   const { data } = useQuery({
     queryKey: ["playbooks-rules-completion"],
     queryFn: () =>
       getRulesCompletionByPlaybookId({
         playbookId: id,
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         coin,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),

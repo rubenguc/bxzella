@@ -53,7 +53,7 @@ export const PlaybooksActionDialog = ({
   const t = useTranslations("playbooks");
   const queryClient = useQueryClient();
 
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccount } = useUserConfigStore();
 
   const isEdit = !!currentRow;
   const form = useForm<PlaybookForm>({
@@ -80,7 +80,10 @@ export const PlaybooksActionDialog = ({
   const onSubmit = async (values: PlaybookForm) => {
     const response = isEdit
       ? await updatePlaybookAction(currentRow._id, values)
-      : await createPlaybookAction({ ...values, accountId: selectedAccountId });
+      : await createPlaybookAction({
+          ...values,
+          accountId: selectedAccount!._id,
+        });
     if (response?.error) {
       toast.error(response.message);
       return;

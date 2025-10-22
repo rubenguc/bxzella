@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { SelectedAccount } from "@/features/accounts/interfaces/accounts-interfaces";
 import type { Coin, Theme } from "@/interfaces/global-interfaces";
 
 type UserConfig = {
-  selectedAccountId: string;
+  selectedAccount: SelectedAccount | null;
   theme: Theme;
-  setSelectedAccountId: (id: string) => void;
+  setSelectedAccount: (account: SelectedAccount | null) => void;
   setTheme: (theme: Theme) => void;
   startDate: Date | null;
   endDate: Date | null;
@@ -19,9 +20,9 @@ type UserConfig = {
 export const useUserConfigStore = create<UserConfig>()(
   persist(
     (set) => ({
-      selectedAccountId: "",
+      selectedAccount: null,
       theme: "system",
-      setSelectedAccountId: (id) => set({ selectedAccountId: id }),
+      setSelectedAccount: (account) => set({ selectedAccount: account }),
       setTheme: (theme) => set({ theme }),
       startDate: null,
       endDate: null,

@@ -6,7 +6,6 @@ import {
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
-  FetchPositionHistoryForSymbolsProps,
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
   GetPlaybookRulesCompletionByPlaybookId,
@@ -20,7 +19,6 @@ import type {
   TradeStatisticsResult,
 } from "@/features/trades/interfaces/trades-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
-import { getSyncTimeRange } from "@/features/trades/utils/trades-utils";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
@@ -34,8 +32,11 @@ export async function syncPositions(
   const account = await getAccountById(accountId);
   if (!account) return false;
 
-  const lastSyncTime = account.lastSyncPerCoin[coin];
-  const timeRange = getSyncTimeRange(lastSyncTime);
+  const coinToSearch = account.provider === "bitunix" ? "USDT" : coin;
+
+  const lastSyncTime = account.lastSyncPerCoin[coinToSearch] || 0;
+  const syncTime = Date.now();
+
   const { decriptedApiKey, decryptedSecretKey } =
     getDecryptedAccountCredentials(account);
 
@@ -46,9 +47,8 @@ export async function syncPositions(
   );
 
   const positions = await providerService.getPositionHistory({
-    coin,
-    startTs: timeRange.startTs,
-    endTs: timeRange.endTs,
+    coin: coinToSearch,
+    lastSyncTime,
   });
 
   if (!positions.length) return false;
@@ -57,7 +57,7 @@ export async function syncPositions(
 
   try {
     await session.withTransaction(async () => {
-      await updateLastSyncPerCoin(account._id, coin, timeRange.endTs, session);
+      await updateLastSyncPerCoin(account._id, coinToSearch, syncTime, session);
       await saveMultipleTrades(positions, account._id, session);
     });
   } finally {
@@ -68,7 +68,7 @@ export async function syncPositions(
 }
 
 export async function saveMultipleTrades(
-  trades: Trade[],
+  trades: Partial<Trade>[],
   accountId: string,
   session: mongoose.ClientSession,
 ) {

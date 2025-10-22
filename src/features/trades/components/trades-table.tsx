@@ -25,7 +25,7 @@ import {
 import { getTrades } from "../services/trades-services";
 
 export function TradesTable() {
-  const { selectedAccountId, coin } = useUserConfigStore();
+  const { selectedAccount, coin } = useUserConfigStore();
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
 
@@ -164,19 +164,19 @@ export function TradesTable() {
   const { data, isLoading } = useQuery({
     queryKey: [
       "all-trades",
-      selectedAccountId,
+      selectedAccount?._id,
       pagination.pageIndex,
       pagination.pageSize,
       coin,
     ],
     queryFn: () =>
       getTrades({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         page: pagination.pageIndex,
         limit: pagination.pageSize,
         coin,
       }),
-    enabled: !!selectedAccountId,
+    enabled: !!selectedAccount?._id,
   });
 
   const table = useReactTable({
@@ -198,7 +198,7 @@ export function TradesTable() {
         table={table}
         columnsLength={columns.length}
         noDataMessage={t("no_trades")}
-        showSkeleton={!!selectedAccountId && ((!data as boolean) || isLoading)}
+        showSkeleton={!!selectedAccount && ((!data as boolean) || isLoading)}
         showPagination
       />
     </div>

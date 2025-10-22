@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { AvgWinLoss } from "@/features/dashboard/components/avg-win-loss";
 import { DayProfits } from "@/features/dashboard/components/day-profits";
 import { NetPNL } from "@/features/dashboard/components/net-pnl";
@@ -12,28 +14,28 @@ import DayProfitsProvider from "@/features/dashboard/context/day-profits-context
 import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 export default function Dashboard() {
-  const { selectedAccountId, startDate, endDate, isStoreLoaded, coin } =
+  const { selectedAccount, startDate, endDate, isStoreLoaded, coin } =
     useUserConfigStore();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["statistics", selectedAccountId, startDate, endDate, coin],
+    queryKey: ["statistics", selectedAccount?._id, startDate, endDate, coin],
     queryFn: () =>
       getStatistics({
-        accountId: selectedAccountId,
-        startDate: transformDateToParam(startDate!),
-        endDate: transformDateToParam(endDate!),
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        accountId: selectedAccount!._id,
+        startDate: transformDateToParam(startDate as Date),
+        endDate: transformDateToParam(endDate as Date),
         coin,
       }),
-    enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
+    enabled:
+      isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
   });
 
   const t = useTranslations("statistics");
 
-  if (isStoreLoaded && !selectedAccountId) {
+  if (isStoreLoaded && !selectedAccount?._id) {
     return (
       <div>
         <p className="text-center text-xl">

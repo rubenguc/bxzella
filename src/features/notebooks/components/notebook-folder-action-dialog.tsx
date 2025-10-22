@@ -40,7 +40,7 @@ export function NotebookFolderActionDialog({
   const t = useTranslations("notebooks.notebooks_folder");
   const queryClient = useQueryClient();
 
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccount } = useUserConfigStore();
 
   const isEdit = !!selectedNotebookFolder;
   const isDefaultFolder = selectedNotebookFolder?.isDefault;
@@ -81,7 +81,7 @@ export function NotebookFolderActionDialog({
 
     const response = isEdit
       ? await updateNotebookFolderAction(selectedNotebookFolder._id, _data)
-      : await createNotebookFolderAction(_data, selectedAccountId);
+      : await createNotebookFolderAction(_data, selectedAccount!._id);
 
     if (response.error) {
       return toast.error(t(response.message));

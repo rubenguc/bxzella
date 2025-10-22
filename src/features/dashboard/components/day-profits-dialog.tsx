@@ -1,10 +1,10 @@
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { useDayProfitsContext } from "../context/day-profits-context";
 import { useTranslations } from "next-intl";
-import { getResultClass } from "@/utils/trade-utils";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { DayProfitsTradeList } from "./day-profits-trade-list";
 import { formatDecimal } from "@/utils/number-utils";
+import { getResultClass } from "@/utils/trade-utils";
+import { useDayProfitsContext } from "../context/day-profits-context";
+import { DayProfitsTradeList } from "./day-profits-trade-list";
 
 export function DayProfitsDialog() {
   const t = useTranslations("dashboard.day_profits");
@@ -26,7 +26,7 @@ export function DayProfitsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => selectDayProfit(null)}>
-      <DialogContent className="max-w-3xl!">
+      <DialogContent className="max-w-3xl!" aria-describedby={undefined}>
         <DialogTitle className="flex items-center gap-3 text-base">
           <span>{formattedDate}</span>|
           <div

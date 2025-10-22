@@ -15,7 +15,7 @@ interface TradesNotebooksProps {
 export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
   const t = useTranslations("trade_info");
 
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccount } = useUserConfigStore();
 
   const [content, setContent] = useState("");
 
@@ -29,7 +29,7 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
     const response = await updateNotebookByTradeIdAction(
       tradeId,
       content,
-      selectedAccountId,
+      selectedAccount!._id,
     );
     if (response.error) {
       toast.error(t(response.message));

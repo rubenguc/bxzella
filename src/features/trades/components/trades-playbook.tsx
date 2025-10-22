@@ -31,7 +31,7 @@ export const TradePlaybook = ({
   tradeId,
 }: TradePlaybookProps) => {
   const t = useTranslations("trade_info");
-  const { selectedAccountId } = useUserConfigStore();
+  const { selectedAccount } = useUserConfigStore();
 
   const queryClient = useQueryClient();
 
@@ -39,7 +39,11 @@ export const TradePlaybook = ({
 
   const [selectedPlaybook, setSelectedPlaybook] =
     useState<ITradePlaybook>(tradePlaybook);
-  const { data, isLoading } = useGetAllPlaybooks({ page: 1, limit: 100, accountId: selectedAccountId });
+  const { data, isLoading } = useGetAllPlaybooks({
+    page: 1,
+    limit: 100,
+    accountId: selectedAccount!._id,
+  });
 
   const playbooks = data?.data || [];
 
@@ -102,7 +106,7 @@ export const TradePlaybook = ({
       // @ts-expect-error ** response
       if (response.isUpdated) {
         queryClient.invalidateQueries({
-          queryKey: ["all-trades", selectedAccountId],
+          queryKey: ["all-trades", selectedAccount?._id],
         });
       }
 

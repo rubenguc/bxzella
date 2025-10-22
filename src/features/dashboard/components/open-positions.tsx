@@ -1,5 +1,13 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import {
+  type ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
+import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -8,32 +16,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { OpenPosition } from "@/features/trades/interfaces/trades-interfaces";
+import { getOpenPositions } from "@/features/trades/services/trades-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
-import { useQuery } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
-import { getOpenPositions } from "@/features/trades/services/trades-services";
-import { ActivePosition } from "@/features/providers/bingx/bingx-interfaces";
-import { CustomTable } from "@/components/custom-table";
 
 export function OpenPositions() {
   const t = useTranslations("dashboard.open_positions");
   const tInfo = useTranslations("trade_info");
 
-  const { selectedAccountId, coin } = useUserConfigStore();
+  const { selectedAccount, coin } = useUserConfigStore();
 
-  const columns: ColumnDef<ActivePosition>[] = [
+  const columns: ColumnDef<OpenPosition>[] = [
     {
       header: tInfo("open_date"),
       accessorKey: "date",
       cell: ({ row }) => {
-        const date = row.original.createTime;
+        const date = row.original.openTime;
         return <>{transformTimeToLocalDate(date)}</>;
       },
       meta: {
@@ -82,13 +82,13 @@ export function OpenPositions() {
   ];
 
   const { data, isLoading } = useQuery({
-    queryKey: ["open-positions", selectedAccountId, coin],
+    queryKey: ["open-positions", selectedAccount?._id, coin],
     queryFn: () =>
       getOpenPositions({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         coin,
       }),
-    enabled: !!selectedAccountId,
+    enabled: !!selectedAccount?._id,
   });
 
   const table = useReactTable({

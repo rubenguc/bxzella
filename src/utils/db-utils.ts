@@ -34,7 +34,12 @@ export async function getPaginatedData<T>(
 
   const [totalItems, data] = await Promise.all([
     model.countDocuments(findCriteria, projection),
-    model.find(findCriteria).sort(sortBy).skip(skip).limit(limit).lean<T[]>(),
+    model
+      .find(findCriteria, projection)
+      .sort(sortBy)
+      .skip(skip)
+      .limit(limit)
+      .lean<T[]>(),
   ]);
 
   const totalPages = Math.ceil(totalItems / limit);

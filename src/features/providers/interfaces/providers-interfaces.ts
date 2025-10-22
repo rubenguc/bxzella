@@ -1,14 +1,18 @@
-import type { Trade } from "@/features/trades/interfaces/trades-interfaces";
+import type {
+  OpenPosition,
+  Trade,
+} from "@/features/trades/interfaces/trades-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 
 export interface GetPositionHistoryProps {
-  startTs: number;
-  endTs: number;
   coin: Coin;
+  lastSyncTime: number;
 }
 
 export interface ProviderInterface {
   areApiKeysValid(coin: Coin): Promise<boolean>;
-  getActivePositions(coin: Coin): Promise<void>;
-  getPositionHistory(payload: GetPositionHistoryProps): Promise<Trade[]>;
+  getOpenPositions(coin: Coin): Promise<OpenPosition[]>;
+  getPositionHistory(
+    payload: GetPositionHistoryProps,
+  ): Promise<Partial<Trade>[]>;
 }

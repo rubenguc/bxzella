@@ -21,23 +21,23 @@ import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
 
 export default function PlaybookDetailPage() {
-  const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
+  const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
 
   const t = useTranslations("playbook_details");
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["playbook", id, selectedAccountId, coin, startDate, endDate],
+    queryKey: ["playbook", id, selectedAccount?._id, coin, startDate, endDate],
     queryFn: () =>
       getPlaybook({
         playbookId: id,
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
         coin,
       }),
-    enabled: !!id && !!selectedAccountId && !!startDate && !!endDate,
+    enabled: !!id && !!selectedAccount?._id && !!startDate && !!endDate,
   });
 
   const playbookInfo = data?.data || ({} as PlaybookTradeStatistics);

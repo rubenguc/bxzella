@@ -62,7 +62,6 @@ export async function getAccountsByUserId({
       projection: {
         _id: 1,
         name: 1,
-        uid: 1,
         provider: 1,
       },
       sortBy: { createdAt: -1 },

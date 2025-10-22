@@ -35,3 +35,9 @@ export interface GetAccountsByUserId {
 export type GetAccountsByUserIdResponse = Promise<
   PaginationResponse<AccountItem>
 >;
+
+export interface SelectedAccount {
+  _id: string;
+  name: string;
+  provider: Provider;
+}

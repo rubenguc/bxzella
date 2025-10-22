@@ -1,5 +1,5 @@
-import { useUserConfigStore } from "@/store/user-config-store";
 import axios from "axios";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 export const baseConfig = axios.create({
   baseURL: "/api",
@@ -14,7 +14,7 @@ baseConfig.interceptors.response.use(
     const errorCode = error.response?.data || "";
 
     if (errorCode === "incorrect_api_key_error") {
-      useUserConfigStore.getState().setSelectedAccountId("");
+      useUserConfigStore.getState().setSelectedAccount(null);
     }
 
     return Promise.reject(error);

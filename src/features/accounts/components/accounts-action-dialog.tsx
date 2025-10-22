@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -22,6 +21,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type {
   AccountDocument,
   AccountForm,
@@ -99,7 +105,7 @@ export function AccountsActionDialog({
         onOpenChange(state);
       }}
     >
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader className="text-left">
           <DialogTitle>
             {t(isEdit ? "edit_account" : "add_new_account")}
@@ -159,6 +165,29 @@ export function AccountsActionDialog({
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage className="" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="provider"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("provider")}</FormLabel>
+                        <Select
+                          value={field.value}
+                          onValueChange={(value) => field.onChange(value)}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="provider" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="bingx">Bingx</SelectItem>
+                            <SelectItem value="bitunix">Bitunix</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage className="" />
                       </FormItem>
                     )}

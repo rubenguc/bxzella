@@ -6,7 +6,7 @@
     "info": "Información",
     "create-api-key": "Crear Clave API",
     "playbooks": "Manual de operaciones",
-    "": "Dashboard",
+    "dashboard": "Cuadro de mando",
     "settings": "Panel de control",
     "notebooks": "Cuadernos"
   },
@@ -33,7 +33,7 @@
     "realised_pnl": "Ganancia/Pérdida Realizada",
     "realised_pnl_info": "Muestra la ganancia o pérdida total realizada de una operación cerrada. Se calcula como (precio de salida - precio de entrada) × tamaño de la posición, representando tu beneficio o pérdida final.",
     "result": "Resultado",
-    "isolated": "Isolado",
+    "isolated": "Aislado",
     "yes": "Si",
     "no": "No",
     "total_funding": "Financiamiento total",

@@ -34,22 +34,29 @@ export function PlaybooksList() {
   const router = useRouter();
 
   const { setOpen, setCurrentRow } = usePlaybooks();
-  const { selectedAccountId, coin, startDate, endDate } = useUserConfigStore();
+  const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
 
   const { limit, page } = usePagination();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["playbooks", selectedAccountId, limit, page, startDate, endDate],
+    queryKey: [
+      "playbooks",
+      selectedAccount?._id,
+      limit,
+      page,
+      startDate,
+      endDate,
+    ],
     queryFn: () =>
       getPlaybooks({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         page,
         limit,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
         coin,
       }),
-    enabled: !!selectedAccountId && !!startDate && !!endDate,
+    enabled: !!selectedAccount?._id && !!startDate && !!endDate,
   });
 
   const playbooks = data?.data || [];

@@ -1,7 +1,7 @@
-import type { ActivePosition } from "@/features/providers/bingx/bingx-interfaces";
 import type {
   GetOpenPositionsProps,
   GetTradesByAccountId,
+  OpenPosition,
   TradeDocument,
 } from "@/features/trades/interfaces/trades-interfaces";
 import type {
@@ -19,7 +19,7 @@ export const getTrades = async (
 
 export const getOpenPositions = async (
   params: GetOpenPositionsProps,
-): Promise<PaginationResponse<ActivePosition>> => {
+): Promise<PaginationResponse<OpenPosition>> => {
   const response = await baseConfig.get("/trades/open-positions", { params });
   return response.data;
 };

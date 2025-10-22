@@ -14,7 +14,7 @@ import { getNotebookTitle } from "../utils/notebooks-utils";
 export function NotebookDetails() {
   const t = useTranslations("notebooks.notebook_detail");
 
-  const { selectedAccountId, coin } = useUserConfigStore();
+  const { selectedAccount, coin } = useUserConfigStore();
 
   const { selectedNotebook } = useNotebooksContext();
 
@@ -24,7 +24,7 @@ export function NotebookDetails() {
     const response = await updateNotebookByTradeIdAction(
       selectedNotebook!.tradeId!._id,
       content,
-      selectedAccountId,
+      selectedAccount!._id,
     );
     if (response.error) {
       toast.error(t(response.message));

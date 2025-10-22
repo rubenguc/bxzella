@@ -1,14 +1,14 @@
 "use client";
 
-import { HTMLAttributes, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { type HTMLAttributes, useEffect, useState } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AccountsSelector } from "@/features/accounts/components/accounts-selector";
+import { cn } from "@/lib/utils";
 import { DateRangeSelector } from "./DateRangeSelector";
 import "./header.styles.css";
-import { AccountsCoinSelector } from "@/features/accounts/components/accounts-coin-selector";
-import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { AccountsCoinSelector } from "@/features/accounts/components/accounts-coin-selector";
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {
   fixed?: boolean;

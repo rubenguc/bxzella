@@ -29,7 +29,7 @@ export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
   const tInfo = useTranslations("trade_info");
 
-  const { selectedAccountId, coin, startDate, endDate, isStoreLoaded } =
+  const { selectedAccount, coin, startDate, endDate, isStoreLoaded } =
     useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
@@ -103,7 +103,7 @@ export function RecentTrades() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {coin}
+            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
           </div>
         );
       },
@@ -118,11 +118,12 @@ export function RecentTrades() {
   const { data, isLoading } = useQuery<
     PaginationResponseWithSync<TradeDocument>
   >({
-    queryKey: ["all-trades", selectedAccountId, startDate, endDate, coin],
-    enabled: isStoreLoaded && !!selectedAccountId && !!startDate && !!endDate,
+    queryKey: ["all-trades", selectedAccount?._id, startDate, endDate, coin],
+    enabled:
+      isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
     queryFn: async () => {
       const response = await getTrades({
-        accountId: selectedAccountId,
+        accountId: selectedAccount!._id,
         startDate: transformDateToParam(startDate as Date),
         endDate: transformDateToParam(endDate as Date),
         limit: 10,

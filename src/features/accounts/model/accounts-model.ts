@@ -10,10 +10,6 @@ export const AccountSchema = new Schema<Account>({
     type: String,
     required: true,
   },
-  // uid: {
-  //   type: String,
-  //   required: true,
-  // },
   apiKey: {
     type: String,
     required: true,
@@ -32,6 +28,7 @@ export const AccountSchema = new Schema<Account>({
   },
 });
 
+AccountSchema.index({ userId: 1, apiKey: 1, secretKey: 1 }, { unique: true });
 AccountSchema.index({ userId: 1, name: 1 });
 
 export const AccountModel =

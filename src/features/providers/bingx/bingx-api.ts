@@ -1,4 +1,7 @@
-import type { Trade } from "@/features/trades/interfaces/trades-interfaces";
+import type {
+  OpenPosition,
+  Trade,
+} from "@/features/trades/interfaces/trades-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 import type {
   GetPositionHistoryProps,
@@ -29,11 +32,128 @@ export class BingxProvider implements ProviderInterface {
     this.secretKey = secretKey;
   }
 
+  async areApiKeysValid(coin: Coin): Promise<boolean> {
+    const accountBalanceResponse = (await makeRequest({
+      coin,
+      apiKey: this.apiKey,
+      secretKey: this.secretKey,
+      path: PATHS.USER_BALANCE,
+    })) as UserBalanceResponse;
+
+    if (accountBalanceResponse.code === 100419) {
+      /// TODO: ip code error
+    }
+
+    return accountBalanceResponse.code === 0;
+  }
+
+  async getPositionHistory({
+    coin,
+    lastSyncTime,
+  }: GetPositionHistoryProps): Promise<Trade[]> {
+    const filledOrders = await this.fetchFilledOrders({
+      lastSyncTime,
+      coin,
+    });
+    const symbolsToFetch = this.processFilledOrders(filledOrders);
+
+    if (symbolsToFetch.length === 0) return [];
+
+    const batches = [];
+    for (let i = 0; i < symbolsToFetch.length; i += this.BATCH_SIZE) {
+      batches.push(symbolsToFetch.slice(i, i + this.BATCH_SIZE));
+    }
+
+    const allPositionHistories: Trade[] = [];
+    for (const [index, batch] of batches.entries()) {
+      const batchResults = await Promise.all(
+        batch.map((symbol) =>
+          this.fetchPositionHistory({
+            symbol,
+            coin,
+            lastSyncTime,
+          })
+            .then((r) =>
+              r.data.positionHistory.map((ph) => ({
+                ...ph,
+                openTime: new Date(ph.openTime),
+                updateTime: new Date(ph.updateTime),
+                coin,
+                type: "P",
+              })),
+            )
+            .catch((error) => {
+              console.error(
+                `Error fetching position history for symbol ${symbol}:`,
+                error,
+              );
+              return [];
+            }),
+        ),
+      );
+
+      allPositionHistories.push(...(batchResults.flat() as Trade[]));
+
+      if (index < batches.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+
+    return allPositionHistories;
+  }
+
+  async getOpenPositions(coin: Coin): Promise<OpenPosition[]> {
+    const activePositons = (await makeRequest({
+      coin,
+      apiKey: this.apiKey,
+      secretKey: this.secretKey,
+      path: PATHS.USER_ACTIVE_OPEN_POSITIONS,
+    })) as UserPositionResponse;
+
+    return activePositons.data.map((position) => ({
+      symbol: position.symbol,
+      openTime: new Date(position.createTime),
+      leverage: position.leverage,
+      positionSide: position.positionSide,
+    }));
+  }
+
+  // own methods to standardize
+  private getTimeRangeForFetchFilledOrders(lastSyncTime: number) {
+    let startTs = 0;
+    const actualDate = Date.now();
+
+    if (lastSyncTime) {
+      startTs = lastSyncTime;
+    } else {
+      const dateLess30Days = new Date(actualDate);
+      dateLess30Days.setDate(dateLess30Days.getDate() - 30);
+      startTs = dateLess30Days.getTime();
+    }
+    const endTs = actualDate;
+
+    return { startTs, endTs };
+  }
+
+  private getTimeRangeForFetchPositionsHistory(lastSyncTime: number) {
+    let startTs = lastSyncTime;
+    const endTs = Date.now();
+
+    if (!lastSyncTime) startTs = endTs - 90 * 24 * 60 * 60 * 1000;
+
+    return {
+      startTs,
+      endTs,
+    };
+  }
+
   private async fetchFilledOrders({
     coin,
-    startTs,
-    endTs,
+    lastSyncTime,
   }: GetPositionHistoryProps): Promise<UserFillOrdersResponse> {
+    const { startTs, endTs } =
+      this.getTimeRangeForFetchFilledOrders(lastSyncTime);
+
     return makeRequest({
       coin,
       apiKey: this.apiKey,
@@ -48,15 +168,15 @@ export class BingxProvider implements ProviderInterface {
 
   private async fetchPositionHistory({
     coin,
-    endTs,
+    lastSyncTime,
     symbol,
   }: {
     coin: Coin;
-    endTs: number;
+    lastSyncTime: number;
     symbol: string;
   }): Promise<UserPositionHistoryResponse> {
-    // 90 days ago
-    const startTs = endTs - 90 * 24 * 60 * 60 * 1000;
+    const { startTs, endTs } =
+      this.getTimeRangeForFetchPositionsHistory(lastSyncTime);
 
     return makeRequest({
       coin,
@@ -89,85 +209,5 @@ export class BingxProvider implements ProviderInterface {
     ];
 
     return uniqueSymbols;
-  }
-
-  async areApiKeysValid(coin: Coin): Promise<boolean> {
-    const accountBalanceResponse = (await makeRequest({
-      coin,
-      apiKey: this.apiKey,
-      secretKey: this.secretKey,
-      path: PATHS.USER_BALANCE,
-    })) as UserBalanceResponse;
-
-    if (accountBalanceResponse.code === 100419) {
-      /// TODO: ip code error
-    }
-
-    return accountBalanceResponse.code === 0;
-  }
-
-  async getPositionHistory({ startTs, endTs, coin }: GetPositionHistoryProps) {
-    const filledOrders = await this.fetchFilledOrders({
-      startTs,
-      endTs,
-      coin,
-    });
-    const symbolsToFetch = this.processFilledOrders(filledOrders);
-
-    if (symbolsToFetch.length === 0) return [];
-
-    const batches = [];
-    for (let i = 0; i < symbolsToFetch.length; i += this.BATCH_SIZE) {
-      batches.push(symbolsToFetch.slice(i, i + this.BATCH_SIZE));
-    }
-
-    const allPositionHistories: Trade[] = [];
-    for (const [index, batch] of batches.entries()) {
-      const batchResults = await Promise.all(
-        batch.map((symbol) =>
-          this.fetchPositionHistory({
-            symbol,
-
-            endTs,
-            coin,
-          })
-            .then((r) =>
-              r.data.positionHistory.map((ph) => ({
-                ...ph,
-                openTime: new Date(ph.openTime),
-                updateTime: new Date(ph.updateTime),
-                coin,
-                type: "P",
-              })),
-            )
-            .catch((error) => {
-              console.error(
-                `Error fetching position history for symbol ${symbol}:`,
-                error,
-              );
-              return [];
-            }),
-        ),
-      );
-
-      allPositionHistories.push(...(batchResults.flat() as Trade[]));
-
-      if (index < batches.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
-
-    return allPositionHistories;
-  }
-
-  async getActivePositions(coin: Coin): Promise<Trade[]> {
-    const activePositons = (await makeRequest({
-      coin,
-      apiKey: this.apiKey,
-      secretKey: this.secretKey,
-      path: PATHS.USER_ACTIVE_OPEN_POSITIONS,
-    })) as UserPositionResponse;
-
-    return activePositons.data;
   }
 }
