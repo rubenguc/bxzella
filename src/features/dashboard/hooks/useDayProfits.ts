@@ -16,37 +16,87 @@ export interface MonthlySummary {
 }
 
 // Hook to manage month selection state
-export const useMonthSelection = () => {
+export const useMonthSelection = (startDate?: string | undefined) => {
   // Set default to current month
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const today = new Date();
     return format(today, "yyyy-MM"); // Default to current month in "YYYY-MM" format
   });
 
-  // Generate the last 5 months for minimum query range
+  // Generate months list based on start date if provided
   const monthsList = useMemo(() => {
     const today = new Date();
     const months = [];
 
-    // Generate 5 months back from current month (5 months including current)
-    for (let i = 4; i >= 0; i--) {
-      const monthDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
-      months.push({
-        name: monthDate.toLocaleDateString("en-US", {
-          month: "long",
-          year: "numeric",
-        }),
-        shortName: monthDate.toLocaleDateString("en-US", {
-          month: "short",
-          year: "numeric",
-        }),
-        value: format(monthDate, "yyyy-MM"), // Format as "YYYY-MM"
-        date: monthDate,
-      });
+    // If no start date is provided, default to 5 months back (previous behavior)
+    if (!startDate) {
+      // Generate 5 months back from current month (5 months including current)
+      for (let i = 4; i >= 0; i--) {
+        const monthDate = new Date(
+          today.getFullYear(),
+          today.getMonth() - i,
+          1,
+        );
+        months.push({
+          name: monthDate.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          }),
+          shortName: monthDate.toLocaleDateString("en-US", {
+            month: "short",
+            year: "numeric",
+          }),
+          value: format(monthDate, "yyyy-MM"), // Format as "YYYY-MM"
+          date: monthDate,
+        });
+      }
+    } else {
+      // Parse the start date and create months list from start date to current month
+      const startDateTime = new Date(startDate);
+
+      // Adjust for timezone offset by subtracting the timezone offset
+      const timezoneOffset = startDateTime.getTimezoneOffset() * 60000; // Offset in milliseconds
+      const adjustedStartDate = new Date(
+        startDateTime.getTime() - timezoneOffset,
+      );
+
+      const startYear = adjustedStartDate.getFullYear();
+      const startMonth = adjustedStartDate.getMonth();
+
+      // Get the first day of start month
+      let currentDate = new Date(startYear, startMonth, 1);
+      const now = new Date();
+
+      // Add months from start date to current month
+      while (
+        currentDate.getFullYear() < now.getFullYear() ||
+        (currentDate.getFullYear() === now.getFullYear() &&
+          currentDate.getMonth() <= now.getMonth())
+      ) {
+        months.push({
+          name: currentDate.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          }),
+          shortName: currentDate.toLocaleDateString("en-US", {
+            month: "short",
+            year: "numeric",
+          }),
+          value: format(currentDate, "yyyy-MM"), // Format as "YYYY-MM"
+          date: currentDate,
+        });
+
+        // Move to next month
+        currentDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          1,
+        );
+      }
     }
 
     return months;
-  }, []);
+  }, [startDate]);
 
   // Find the selected month object based on the selectedMonth value
   const selectedMonthObject = useMemo(() => {
@@ -82,13 +132,31 @@ export const useMonthSelection = () => {
     setSelectedMonth(format(nextMonth, "yyyy-MM"));
   };
 
-  // Check if selected month is the earliest available month (5 months ago)
-  const earliestDate = new Date();
-  earliestDate.setMonth(earliestDate.getMonth() - 3); // 5 months including current (so we can go back 4 months from current)
-  const isEarliestMonth =
-    selectedYear < earliestDate.getFullYear() ||
-    (selectedYear === earliestDate.getFullYear() &&
-      selectedMonthNum < earliestDate.getMonth());
+  // isEarliestMonth must be based on START_DATE
+  let isEarliestMonth = false;
+  if (startDate) {
+    // Use the adjusted start date to determine if we're at the earliest month
+    const startDateTime = new Date(startDate);
+    const timezoneOffset = startDateTime.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const adjustedStartDate = new Date(
+      startDateTime.getTime() - timezoneOffset,
+    );
+
+    const startYear = adjustedStartDate.getFullYear();
+    const startMonth = adjustedStartDate.getMonth();
+
+    isEarliestMonth =
+      selectedYear < startYear ||
+      (selectedYear === startYear && selectedMonthNum <= startMonth);
+  } else {
+    // Fallback to old behavior if no start date
+    const earliestDate = new Date();
+    earliestDate.setMonth(earliestDate.getMonth() - 4); // 5 months including current (so we can go back 4 months from current)
+    isEarliestMonth =
+      selectedYear < earliestDate.getFullYear() ||
+      (selectedYear === earliestDate.getFullYear() &&
+        selectedMonthNum < earliestDate.getMonth());
+  }
 
   // Check if selected month is the current month
   const currentDate = new Date();

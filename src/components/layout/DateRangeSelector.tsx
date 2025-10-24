@@ -1,45 +1,51 @@
-import { useEffect, useMemo, useState } from "react";
-import { DateRange } from "react-day-picker";
-import { Calendar } from "../ui/calendar";
-import { Input } from "../ui/input";
 import {
-  format,
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
   endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
   subDays,
   subMonths,
 } from "date-fns";
 import { Calendar as CalendarIcon, ChevronDown } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { enUS } from "react-day-picker/locale";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { LOCALES, ONE_MONTH_IN_MS } from "@/utils/date-utils";
+import { Calendar } from "../ui/calendar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuTrigger,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useLocale, useTranslations } from "next-intl";
-import { es, enUS } from "react-day-picker/locale";
-
-const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
-
-const LOCALES = {
-  es,
-  en: enUS,
-};
+import { Input } from "../ui/input";
 
 export function DateRangeSelector() {
   const locale = useLocale();
   const t = useTranslations("date_range_selector");
 
-  const { startDate, endDate, updateDateRange, isStoreLoaded } =
-    useUserConfigStore();
+  const {
+    startDate,
+    endDate,
+    updateDateRange,
+    isStoreLoaded,
+    selectedAccount,
+    coin,
+  } = useUserConfigStore();
+
+  const START_DATE = selectedAccount?.earliestTradeDatePerCoin[coin];
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const startMonth = useMemo(() => {
     if (!isStoreLoaded) return new Date();
+
+    if (START_DATE) {
+      return new Date(START_DATE);
+    }
 
     if (!startDate) {
       const actualDate = new Date();
@@ -47,7 +53,7 @@ export function DateRangeSelector() {
     }
 
     return new Date(startDate.getTime() - 3 * ONE_MONTH_IN_MS);
-  }, [isStoreLoaded, startDate]);
+  }, [isStoreLoaded, startDate, START_DATE]);
 
   const endMonth = useMemo(() => {
     if (!isStoreLoaded) return new Date();
@@ -60,6 +66,7 @@ export function DateRangeSelector() {
     return new Date(endDate.getTime() + ONE_MONTH_IN_MS * 2);
   }, [isStoreLoaded, endDate]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!isStoreLoaded) return;
 
@@ -81,7 +88,6 @@ export function DateRangeSelector() {
         to: endDate,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange, startDate, endDate, isStoreLoaded]);
 
   const formattedStartDate = dateRange?.from
@@ -198,7 +204,7 @@ export function DateRangeSelector() {
         <div className="w-fit border-l p-1 bg-background">
           {predefinedRanges.map((item, index) => (
             <DropdownMenuItem
-              key={index}
+              key={index.toString()}
               className="cursor-pointer"
               onClick={(e) => selectPredefinedRange(item.range, e)}
             >

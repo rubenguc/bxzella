@@ -26,6 +26,10 @@ export const AccountSchema = new Schema<Account>({
     type: Schema.Types.Mixed, // Record<Coin, number>
     default: {},
   },
+  earliestTradeDatePerCoin: {
+    type: Schema.Types.Mixed, // Record<Coin, Date>
+    default: {},
+  },
 });
 
 AccountSchema.index({ userId: 1, apiKey: 1, secretKey: 1 }, { unique: true });

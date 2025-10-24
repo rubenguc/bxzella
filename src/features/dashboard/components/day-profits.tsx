@@ -38,6 +38,9 @@ export function DayProfits() {
   const { selectDayProfit } = useDayProfitsContext();
 
   const { selectedAccount, isStoreLoaded, coin } = useUserConfigStore();
+
+  const START_DATE = selectedAccount?.earliestTradeDatePerCoin[coin];
+
   const {
     selectedMonth,
     handleNextMonth,
@@ -45,7 +48,7 @@ export function DayProfits() {
     isPreviousMonth,
     isCurrentMonth,
     monthValue,
-  } = useMonthSelection();
+  } = useMonthSelection(START_DATE as string);
 
   const { data, isLoading } = useQuery({
     queryKey: ["day-profits", selectedAccount?._id, coin, monthValue],

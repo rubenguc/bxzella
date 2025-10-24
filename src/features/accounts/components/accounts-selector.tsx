@@ -28,9 +28,9 @@ export function AccountsSelector() {
 
   return (
     <Select value={selectedAccount?._id} onValueChange={handleSelect}>
-      <SelectTrigger className="relative min-h-9 py-1 px-2 w-fit min-w-9 md:w-32  rounded-xl flex items-center gap-1  overflow-x-hidden text-nowrap bg-card outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
+      <SelectTrigger className="relative min-h-9 py-1 px-2 w-fit min-w-9 md:w-32  rounded-xl flex items-center gap-1.5  overflow-x-hidden text-nowrap bg-card outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
         <SelectPrimitive.Icon asChild>
-          <Wallet className="h-4 w-4 opacity-50 mx-auto" />
+          <Wallet className="h-4 w-4 opacity-50 m-0" />
         </SelectPrimitive.Icon>
         <SelectValue placeholder={t("account")} />
         <SelectPrimitive.Icon asChild className="hidden md:block">

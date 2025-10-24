@@ -1,4 +1,5 @@
 import { endOfDay, format, parse, startOfDay } from "date-fns";
+import { enUS, es } from "date-fns/locale";
 
 export function transformTimeToLocalDate(time: Date | string | number) {
   if (!time) return "";
@@ -38,3 +39,12 @@ export function getUTCDay(dateStr: string, endOfDayFlag = false): Date {
     (endOfDayFlag ? endOfDay(date) : startOfDay(date)).toISOString(),
   );
 }
+
+export const Timezone = new Date().getTimezoneOffset() / -60;
+
+export const ONE_MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
+
+export const LOCALES = {
+  es,
+  en: enUS,
+};

@@ -73,6 +73,7 @@ export async function createAccountAction(unsafeData: AccountForm) {
       secretKey: encryptData(secretKey),
       provider: provider as Provider,
       lastSyncPerCoin: DEFAULT_COINS_PROVIDER[provider],
+      earliestTradeDatePerCoin: {},
     });
 
     // TODO: this sync shouldn't be here ??

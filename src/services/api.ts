@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { Timezone } from "@/utils/date-utils";
 
 export const baseConfig = axios.create({
   baseURL: "/api",
   headers: {
-    TIMEZONE: new Date().getTimezoneOffset() / -60,
+    Timezone,
   },
 });
 

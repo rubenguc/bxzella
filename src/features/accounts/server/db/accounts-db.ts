@@ -57,6 +57,7 @@ export async function getAccountsByUserId({
         _id: 1,
         name: 1,
         provider: 1,
+        earliestTradeDatePerCoin: 1,
       },
       sortBy: { createdAt: -1 },
       limit,
@@ -91,5 +92,16 @@ export async function updateLastSyncPerCoin(
     { _id: id },
     { $set: { [`lastSyncPerCoin.${coin}`]: time } },
     { session },
+  );
+}
+
+export async function updateEarliestTradeDatePerCoin(
+  id: string,
+  coin: Coin,
+  date: Date,
+) {
+  await AccountModel.updateOne(
+    { _id: id },
+    { $set: { [`earliestTradeDatePerCoin.${coin}`]: date } },
   );
 }

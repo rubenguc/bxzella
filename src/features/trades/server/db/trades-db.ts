@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import {
   getAccountById,
+  updateEarliestTradeDatePerCoin,
   updateLastSyncPerCoin,
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
@@ -62,6 +63,18 @@ export async function syncPositions(
     });
   } finally {
     session.endSession();
+
+    if (!account.earliestTradeDatePerCoin[coin]) {
+      const oldestPosition = positions.reduce((prev, curr) =>
+        prev.openTime! < curr.openTime! ? prev : curr,
+      );
+
+      await updateEarliestTradeDatePerCoin(
+        account._id,
+        coin,
+        oldestPosition.openTime!,
+      );
+    }
   }
   console.log("positions synced");
   return true;
