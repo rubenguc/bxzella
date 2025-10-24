@@ -40,9 +40,11 @@ export class BingxProvider implements ProviderInterface {
       path: PATHS.USER_BALANCE,
     })) as UserBalanceResponse;
 
-    if (accountBalanceResponse.code === 100419) {
-      /// TODO: ip code error
-    }
+    // if (isIncorrectApiKeyError) throw new Error("incorrect_api_key_error");
+
+    // if (accountBalanceResponse.code === 100419) {
+    //   /// TODO: ip code error
+    // }
 
     return accountBalanceResponse.code === 0;
   }

@@ -147,7 +147,11 @@
     "account_sync_trades_descriptions": "Si el ID de la cuenta asociada con esta cuenta no está ya registrado, sincronizaremos todas tus posiciones cerradas basadas en tus posiciones completadas basadas en tus últimos 30 días. Esto puede llevar algún tiempo",
     "create_api_key_info": "¿No sabes cómo crear una clave API? Sigue esta <link>guía</link> para aprender cómo crear una clave API.",
     "invalid_api_keys": "Claves API inválidas",
-    "invalid_account_data": "Datos de cuenta inválidos"
+    "invalid_account_data": "Datos de cuenta inválidos",
+    "account_already_exists": "La cuenta ya existe",
+    "error_creating_account": "Error al crear la cuenta",
+    "error_updating_account": "Error al actualizar la cuenta",
+    "error_deleting_account": "Error al eliminar la cuenta"
   },
   "info": {
     "create_key_tutorial": {

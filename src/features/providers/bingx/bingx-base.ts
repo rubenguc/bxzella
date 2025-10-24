@@ -59,9 +59,5 @@ export async function makeRequest({
 
   const response = await axios(config);
 
-  const isIncorrectApiKeyError = response.data?.code === 100413;
-
-  if (isIncorrectApiKeyError) throw new Error("incorrect_api_key_error");
-
   return response.data;
 }

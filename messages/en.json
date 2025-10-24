@@ -132,7 +132,6 @@
   "accounts": {
     "add_account": "Add Account",
     "name": "Name",
-    "provider": "Provider",
     "no_accounts": "No accounts",
     "add_new_account": "Add New Account",
     "edit_account": "Edit Account",
@@ -148,7 +147,11 @@
     "create_api_key_info": "Don't you know how to create an API key? Follow this <link>guide</link> to learn how to create an API key.",
     "invalid_api_keys": "Invalid API keys",
     "invalid_account_data": "Invalid account data",
-    "provider": "Provider"
+    "provider": "Provider",
+    "account_already_exists": "Account already exists",
+    "error_creating_account": "Error creating account",
+    "error_updating_account": "Error updating account",
+    "error_deleting_account": "Error deleting account"
   },
   "info": {
     "create_key_tutorial": {

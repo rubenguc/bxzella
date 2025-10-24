@@ -78,7 +78,7 @@ export function AccountsActionDialog({
       ? await updateAccountAction(currentRow._id, values)
       : await createAccountAction(values);
     if (response?.error) {
-      toast.error(response.message);
+      toast.error(t(response.message));
 
       return;
     }

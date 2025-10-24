@@ -6,9 +6,10 @@ import { accountValidationSchema } from "@/features/accounts/schemas/accounts-sc
 import {
   createAccountDb,
   deleteAccountDb,
+  getAccountsByUserIdAndProvider,
   updateAccountDb,
 } from "@/features/accounts/server/db/accounts-db";
-import { encryptData } from "@/features/accounts/utils/encryption";
+import { decryptData, encryptData } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import { syncPositions } from "@/features/trades/server/db/trades-db";
 import type { Provider } from "@/interfaces/global-interfaces";
@@ -51,6 +52,19 @@ export async function createAccountAction(unsafeData: AccountForm) {
     const isValid = await providerService.areApiKeysValid("USDT");
     if (!isValid) return handleServerActionError("invalid_api_keys");
 
+    const accountsByUserId = await getAccountsByUserIdAndProvider(
+      userId,
+      provider as Provider,
+    );
+
+    const isRepeated = accountsByUserId.some((account) => {
+      const decriptedApiKey = decryptData(account.apiKey);
+      const decriptedSecretKey = decryptData(account.secretKey);
+      return decriptedApiKey === apiKey && decriptedSecretKey === secretKey;
+    });
+
+    if (isRepeated) return handleServerActionError("account_already_exists");
+
     await connectDB();
     const account = await createAccountDb({
       name,
@@ -64,7 +78,7 @@ export async function createAccountAction(unsafeData: AccountForm) {
     // TODO: this sync shouldn't be here ??
     await syncPositions(account._id);
   } catch (error) {
-    return handleServerActionError("error_updating_account", error);
+    return handleServerActionError("error_creating_account", error);
   }
 }
 

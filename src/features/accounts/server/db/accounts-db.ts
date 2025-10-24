@@ -6,7 +6,7 @@ import type {
   GetAccountsByUserIdResponse,
 } from "@/features/accounts/interfaces/accounts-interfaces";
 import { AccountModel } from "@/features/accounts/model/accounts-model";
-import type { Coin } from "@/interfaces/global-interfaces";
+import type { Coin, Provider } from "@/interfaces/global-interfaces";
 import { getPaginatedData } from "@/utils/db-utils";
 
 export async function createAccountDb(data: Account): Promise<AccountDocument> {
@@ -24,12 +24,6 @@ export async function deleteAccountDb(
   id: string,
 ): Promise<AccountDocument | null> {
   return await AccountModel.findByIdAndDelete(id);
-}
-
-export async function getAccountByUID(
-  uid: string,
-): Promise<AccountDocument | null> {
-  return await AccountModel.findOne({ uid });
 }
 
 export async function getAccountById(
@@ -69,6 +63,13 @@ export async function getAccountsByUserId({
       page,
     },
   );
+}
+
+export async function getAccountsByUserIdAndProvider(
+  userId: string,
+  provider: Provider,
+): Promise<AccountDocument[]> {
+  return await AccountModel.find({ userId, provider });
 }
 
 export async function getAccountLastSyncPerCoin(

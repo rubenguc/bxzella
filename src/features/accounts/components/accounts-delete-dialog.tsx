@@ -1,13 +1,13 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { TriangleAlert } from "lucide-react";
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { deleteAccountAction } from "@/features/accounts/server/actions/accounts-actions";
+import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
+import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { AccountDocument } from "@/features/accounts/interfaces/accounts-interfaces";
+import { deleteAccountAction } from "@/features/accounts/server/actions/accounts-actions";
 
 interface AccountsDeleteDialogProps {
   open: boolean;
@@ -22,14 +22,13 @@ export function AccountsDeleteDialog({
 }: AccountsDeleteDialogProps) {
   const t = useTranslations("accounts");
   const tCommon = useTranslations("common_messages");
-  const tError = useTranslations("errors");
 
   const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     const response = await deleteAccountAction(currentRow._id);
     if (response?.error) {
-      toast.error(tError(response.message));
+      toast.error(t(response.message));
       return;
     }
     await queryClient.invalidateQueries({
