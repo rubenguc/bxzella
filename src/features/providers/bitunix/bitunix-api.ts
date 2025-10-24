@@ -95,7 +95,7 @@ export class BitunixProvider implements ProviderInterface {
 
     return response.data.map((pendingPosition) => ({
       symbol: this.formatSymbol(pendingPosition.symbol),
-      openTime: new Date(pendingPosition.ctime),
+      openTime: new Date(Number(pendingPosition.ctime)),
       leverage: Number(pendingPosition.leverage),
       positionSide: this.formatPositionSide(pendingPosition.side),
     }));
