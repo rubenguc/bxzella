@@ -39,7 +39,7 @@ export function DayProfits() {
 
   const { selectedAccount, isStoreLoaded, coin } = useUserConfigStore();
 
-  const START_DATE = selectedAccount?.earliestTradeDatePerCoin[coin];
+  const START_DATE = selectedAccount?.earliestTradeDatePerCoin?.[coin];
 
   const {
     selectedMonth,

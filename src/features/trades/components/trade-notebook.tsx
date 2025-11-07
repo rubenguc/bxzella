@@ -31,6 +31,7 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
       content,
       selectedAccount!._id,
     );
+
     if (response.error) {
       toast.error(t(response.message));
     }

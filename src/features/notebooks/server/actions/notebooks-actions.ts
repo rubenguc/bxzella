@@ -16,7 +16,7 @@ export async function updateNotebookByTradeIdAction(
     const notebookFolder = await getNotebookTradesFolderByAccountId(accountId);
 
     if (!notebookFolder) {
-      return handleServerActionError("note_folder_id");
+      return handleServerActionError("note_folder_id_not_found");
     }
 
     await updateNotebookByTradeId(tradeId, {

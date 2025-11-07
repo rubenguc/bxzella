@@ -36,7 +36,7 @@ export function DateRangeSelector() {
     coin,
   } = useUserConfigStore();
 
-  const START_DATE = selectedAccount?.earliestTradeDatePerCoin[coin];
+  const START_DATE = selectedAccount?.earliestTradeDatePerCoin?.[coin];
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
