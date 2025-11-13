@@ -19,7 +19,7 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
 
   const [content, setContent] = useState("");
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
     queryFn: () => getNotebookByTradeId(tradeId),
     enabled: !!tradeId,
@@ -46,6 +46,7 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
       </span>
 
       <TextEditor
+        isLoading={isLoading}
         initialValue={data?.content || ""}
         onChange={(value) => setContent(value || "")}
       />

@@ -18,18 +18,31 @@ function MyOnChangePlugin({ onChange }: { onChange: (value: string) => void }) {
       onChange(JSON.stringify(editorState.toJSON()));
     });
   }, [editor, onChange]);
+
+  useEffect(() => {
+    return editor.registerEditableListener((listener) => {
+      console.log("editable changed", listener);
+    });
+  }, [editor]);
   return null;
 }
 
 interface TextEditorProps {
   initialValue: string;
   onChange: (value: string) => void;
+  isLoading?: boolean;
 }
 
-export function TextEditor({ onChange, initialValue }: TextEditorProps) {
+export function TextEditor({
+  onChange,
+  initialValue,
+  isLoading,
+}: TextEditorProps) {
   const editorState = useMemo(() => {
     return initialValue || EMPTY_CONTENT;
   }, [initialValue]);
+
+  if (isLoading) return null;
 
   return (
     <LexicalComposer

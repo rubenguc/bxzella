@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTradeContext } from "@/features/trades/context/trades-context";
-import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { formatDecimal } from "@/utils/number-utils";
 import {
