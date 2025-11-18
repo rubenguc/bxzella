@@ -253,6 +253,21 @@
       "created": "Creado",
       "last_updated": "Última Actualización",
       "save": "Guardar"
+    },
+    "notebook_templates": {
+      "recently_used_templates": "Plantillas usadas recientemente",
+      "add_template": "Agregar Plantilla",
+      "create_new_template": "Crear Nueva Plantilla",
+      "title": "Título",
+      "notebook_template_saved": "Plantilla de cuaderno guardada exitosamente",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "delete_template": "Eliminar plantilla",
+      "notebook_template_delete": "Plantilla de cuaderno eliminada exitosamente",
+      "notebook_template_not_found": "Plantilla de cuaderno no encontrada",
+      "error_creating_notebook_template": "Error al crear plantilla de cuaderno",
+      "error_updating_notebook_template": "Error al actualizar plantilla de cuaderno",
+      "error_deleting_notebook_template": "Error al eliminar plantilla de cuaderno"
     }
   },
   "playbook_details": {

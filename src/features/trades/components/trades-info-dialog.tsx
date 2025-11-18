@@ -102,8 +102,8 @@ export function TradeInfoDialog() {
 
   const netProfitFormatted = formatDecimal(Number(netProfit));
   const realisedProfitFormatted = formatDecimal(Number(realisedProfit));
-  const avgPriceFormatted = formatDecimal(Number(avgPrice));
-  const avgClosePriceFormatted = formatDecimal(Number(avgClosePrice));
+  const avgPriceFormatted = avgPrice;
+  const avgClosePriceFormatted = avgClosePrice;
   const totalFundingFormatted = formatDecimal(Number(totalFunding), 4);
   const positionCommissionFormatted = formatDecimal(
     Number(positionCommission),
@@ -261,7 +261,7 @@ export function TradeInfoDialog() {
               </Tabs>
             </div>
           </div>
-          <div className="md:w-3/5 flex flex-col p-2">
+          <div className="md:w-3/5 flex flex-col p-2 relative">
             <TradeNotebook tradeId={_id} />
           </div>
         </div>

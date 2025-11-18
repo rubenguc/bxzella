@@ -273,6 +273,21 @@
       "created": "Created",
       "last_updated": "Last Updated",
       "save": "Save"
+    },
+    "notebook_templates": {
+      "recently_used_templates": "Recently Used Templates",
+      "add_template": "Add Template",
+      "create_new_template": "Create New Template",
+      "title": "Title",
+      "notebook_template_saved": "Notebook template saved successfully",
+      "save": "Save",
+      "delete": "Delete",
+      "delete_template": "Delete template",
+      "notebook_template_delete": "Notebook templated deleted successfully",
+      "notebook_template_not_found": "notebook_template_not_found",
+      "error_creating_notebook_template": "Error creating notebook template",
+      "error_updating_notebook_template": "Error updating notebook template",
+      "error_deleting_notebook_template": "Error deleting notebook template"
     }
   }
 }

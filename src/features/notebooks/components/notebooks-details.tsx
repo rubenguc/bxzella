@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { TextEditor } from "@/components/text-editor/text-editor";
 import { Button } from "@/components/ui/button";
+import { useEditorText } from "@/hooks/use-text-editor";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { formatDecimal } from "@/utils/number-utils";
@@ -10,6 +11,7 @@ import { checkWin } from "@/utils/trade-utils";
 import { useNotebooksContext } from "../context/notebooks-context";
 import { updateNotebookByTradeIdAction } from "../server/actions/notebooks-actions";
 import { getNotebookTitle } from "../utils/notebooks-utils";
+import { NotebookTemplatesRecentlyList } from "./notebook-templates-recently-list";
 
 export function NotebookDetails() {
   const t = useTranslations("notebooks.notebook_detail");
@@ -17,6 +19,8 @@ export function NotebookDetails() {
   const { selectedAccount, coin } = useUserConfigStore();
 
   const { selectedNotebook } = useNotebooksContext();
+
+  const { editorRef, setEditorValue } = useEditorText();
 
   const [content, setContent] = useState("");
 
@@ -33,7 +37,9 @@ export function NotebookDetails() {
     toast.success("saved");
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: not needed
   useEffect(() => {
+    setEditorValue(selectedNotebook?.content || "");
     setContent(selectedNotebook?.content || "");
   }, [selectedNotebook]);
 
@@ -60,10 +66,15 @@ export function NotebookDetails() {
         </h3>
       </div>
 
-      <TextEditor
-        initialValue={selectedNotebook?.content || ""}
-        onChange={setContent}
-      />
+      <div className="my-4">
+        <NotebookTemplatesRecentlyList
+          onSelectTemplate={(notebookTemplate) =>
+            setEditorValue(notebookTemplate.content)
+          }
+        />
+      </div>
+
+      <TextEditor ref={editorRef} onChange={setContent} />
       <div className="flex justify-end mt-3">
         <Button onClick={onSave}>{t("save")}</Button>
       </div>

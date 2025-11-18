@@ -97,7 +97,7 @@ export default function ToolbarPlugin() {
   }, [editor, $updateToolbar]);
 
   return (
-    <div className="flex flex-wrap gap-1" ref={toolbarRef}>
+    <div className="flex flex-wrap gap-1 h-fit" ref={toolbarRef}>
       <Button
         variant="ghost"
         size="icon"
