@@ -1,16 +1,7 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-import { Button } from "@/components/ui/button";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $getSelection, $isRangeSelection } from "lexical";
 import { mergeRegister } from "@lexical/utils";
 import {
-  $getSelection,
-  $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_LOW,
@@ -20,6 +11,7 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from "lexical";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import {
   AlignCenter,
   AlignJustify,
@@ -27,16 +19,15 @@ import {
   AlignRight,
   Bold,
   Italic,
+  Link,
   Redo,
   Strikethrough,
   Underline,
   Undo,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-function Divider() {
-  return <div className="divider" />;
-}
+import { Button } from "@/components/ui/button";
+import { Separator } from "../ui/separator";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -47,6 +38,7 @@ export default function ToolbarPlugin() {
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
+  const [isLink, setIsLink] = useState(false);
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -56,6 +48,13 @@ export default function ToolbarPlugin() {
       setIsItalic(selection.hasFormat("italic"));
       setIsUnderline(selection.hasFormat("underline"));
       setIsStrikethrough(selection.hasFormat("strikethrough"));
+
+      // Check if selection is within a link
+      const anchorNode = selection.anchor.getNode();
+      const focusNode = selection.focus.getNode();
+      const anchorParent = anchorNode.getParent();
+      const focusParent = focusNode.getParent();
+      setIsLink($isLinkNode(anchorParent) || $isLinkNode(focusParent));
     }
   }, []);
 
@@ -105,11 +104,9 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
-        className="toolbar-item spaced"
         aria-label="Undo"
       >
         <Undo />
-        <i className="format undo" />
       </Button>
       <Button
         variant="ghost"
@@ -118,19 +115,18 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
-        className="toolbar-item"
         aria-label="Redo"
       >
         <Redo />
       </Button>
-      <Divider />
+      <Separator orientation="vertical" className="mx-1" />
       <Button
         variant="ghost"
         size="icon"
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
         }}
-        className={"toolbar-item spaced " + (isBold ? "active" : "")}
+        className={`${isBold ? "bg-primary" : ""}`}
         aria-label="Format Bold"
       >
         <Bold />
@@ -141,7 +137,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
         }}
-        className={"toolbar-item spaced " + (isItalic ? "active" : "")}
+        className={`${isItalic ? "bg-primary" : ""}`}
         aria-label="Format Italics"
       >
         <Italic />
@@ -152,7 +148,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
         }}
-        className={"toolbar-item spaced " + (isUnderline ? "active" : "")}
+        className={`${isUnderline ? "bg-primary" : ""}`}
         aria-label="Format Underline"
       >
         <Underline />
@@ -163,19 +159,37 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
         }}
-        className={"toolbar-item spaced " + (isStrikethrough ? "active" : "")}
+        className={`  ${isStrikethrough ? "bg-primary" : ""}`}
         aria-label="Format Strikethrough"
       >
         <Strikethrough />
       </Button>
-      <Divider />
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => {
+          if (isLink) {
+            editor.dispatchCommand(TOGGLE_LINK_COMMAND, null); // Remove link
+          } else {
+            const url = prompt("Enter the URL:");
+            if (url) {
+              editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+            }
+          }
+        }}
+        className={`${isLink ? "bg-primary" : ""}`}
+        aria-label={isLink ? "Remove Link" : "Insert Link"}
+      >
+        <Link />
+      </Button>
+      <Separator orientation="vertical" className="mx-1" />
       <Button
         variant="ghost"
         size="icon"
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
         }}
-        className="toolbar-item spaced"
+        className=" "
         aria-label="Left Align"
       >
         <AlignLeft />
@@ -186,7 +200,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
         }}
-        className="toolbar-item spaced"
+        className=" "
         aria-label="Center Align"
       >
         <AlignCenter />
@@ -197,7 +211,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
         }}
-        className="toolbar-item spaced"
+        className=" "
         aria-label="Right Align"
       >
         <AlignRight />
@@ -208,11 +222,11 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
         }}
-        className="toolbar-item"
+        className=""
         aria-label="Justify Align"
       >
         <AlignJustify />
-      </Button>{" "}
+      </Button>
     </div>
   );
 }
