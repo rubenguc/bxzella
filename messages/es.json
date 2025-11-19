@@ -204,6 +204,7 @@
     "name": "Nombre",
     "description": "Descripción",
     "rules": "Reglas",
+    "rule_name": "Nombre de la Regla",
     "add_group_rule": "Agregar Grupo de Reglas",
     "entry_criteria": "Criterios de Entrada",
     "exit_criteria": "Criterios de Salida",

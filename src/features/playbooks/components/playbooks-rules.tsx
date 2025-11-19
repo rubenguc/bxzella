@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { useToggle } from "react-use";
 import { Button } from "@/components/ui/button";
@@ -17,18 +17,15 @@ export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
   const { control } = useFormContext<PlaybookForm>();
 
   const [isDialogOpen, setIsDialogOpen] = useToggle(false);
+  const [selectedRule, setSelectedRule] = useState<{
+    index: number;
+    name: string;
+  } | null>(null);
 
   const { append, fields, update, remove } = useFieldArray({
     control,
     name: "rulesGroup",
   });
-
-  const createNewRuleGroup = (name: string) => {
-    append({
-      name,
-      rules: [],
-    });
-  };
 
   const handleAddRule = useCallback(
     (groupIndex: number) => {
@@ -47,6 +44,20 @@ export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
     },
     [fields, update],
   );
+
+  const handleEditRuleName = (name: string) => {
+    if (selectedRule !== null) {
+      const updatedGroup = { ...fields[selectedRule.index], name };
+      update(selectedRule.index, updatedGroup);
+      setSelectedRule(null);
+    } else {
+      append({
+        name,
+        rules: [],
+      });
+    }
+    setIsDialogOpen(false);
+  };
 
   return (
     <>
@@ -71,7 +82,10 @@ export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
             onAddRule={() => handleAddRule(index)}
             onRemoveRule={(ruleIndex) => handleRemoveRule(index, ruleIndex)}
             onRemoveGroup={() => remove(index)}
-            onEditName={() => console.log("should edit")}
+            onEditName={() => {
+              setSelectedRule({ index, name: ruleGroup.name });
+              setIsDialogOpen(true);
+            }}
           />
         ))}
       </div>
@@ -79,7 +93,8 @@ export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
       <PlaybooksRuleGroupDialog
         isDialogOpen={isDialogOpen}
         toggleDialogOpen={setIsDialogOpen}
-        createNewRuleGroup={createNewRuleGroup}
+        createNewRuleGroup={handleEditRuleName}
+        initialName={selectedRule?.name || ""}
       />
     </>
   );

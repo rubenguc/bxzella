@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,43 +14,47 @@ interface Props {
   isDialogOpen: boolean;
   toggleDialogOpen: (state?: boolean) => void;
   createNewRuleGroup: (name: string) => void;
+  initialName?: string;
 }
 
 export const PlaybooksRuleGroupDialog = ({
   isDialogOpen,
   toggleDialogOpen,
   createNewRuleGroup,
+  initialName = "",
 }: Props) => {
   const t = useTranslations("playbooks");
 
   const [newRuleGroupName, setNewRuleGroupName] = useState("");
 
-  const onContinue = () => {
-    setNewRuleGroupName("");
+  useEffect(() => {
+    setNewRuleGroupName(initialName || "");
+  }, [initialName]);
 
+  const onContinue = () => {
     createNewRuleGroup(newRuleGroupName);
-    onClose();
   };
 
   const onClose = () => {
-    setNewRuleGroupName("");
+    setNewRuleGroupName(initialName);
     toggleDialogOpen(false);
   };
 
   return (
-    <Dialog open={isDialogOpen}>
-      <DialogContent>
+    <Dialog open={isDialogOpen} onOpenChange={toggleDialogOpen}>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{t("add_group_rule")}</DialogTitle>
+          <DialogTitle>{t("rule_name")}</DialogTitle>
         </DialogHeader>
         <div className="py-2">
           <Input
             value={newRuleGroupName}
             onChange={(e) => setNewRuleGroupName(e.target.value)}
+            autoFocus
           />
         </div>
         <DialogFooter>
-          <Button type="button" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose}>
             {t("cancel")}
           </Button>
           <Button type="button" onClick={onContinue}>

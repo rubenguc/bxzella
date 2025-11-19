@@ -204,6 +204,7 @@
     "name": "Name",
     "description": "Description",
     "rules": "Rules",
+    "rule_name": "Rule Name",
     "add_group_rule": "Add Group Rule",
     "entry_criteria": "Entry Criteria",
     "exit_criteria": "Exit Criteria",
