@@ -23,6 +23,7 @@ import { TradeModel } from "@/features/trades/model/trades-model";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
+import { adjustDateToUTC } from "../../utils/trades-utils";
 
 export async function syncPositions(
   accountId: string,
@@ -127,14 +128,12 @@ export async function getTradesByAccountId({
   });
 }
 
-export async function getTradesStatistic({
-  accountId,
-  startDate,
-  endDate,
-  coin = "USDT",
-}: GetTradesStatisticProps): Promise<TradeStatisticsResult> {
-  const parsedStartDate = getUTCDay(startDate);
-  const parsedEndDate = getUTCDay(endDate, true);
+export async function getTradesStatistic(
+  { accountId, startDate, endDate, coin = "USDT" }: GetTradesStatisticProps,
+  timezone: number,
+): Promise<TradeStatisticsResult> {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
   const result = await TradeModel.aggregate([
     {
@@ -146,7 +145,6 @@ export async function getTradesStatistic({
         updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
-
     {
       $addFields: {
         numericNetProfit: {
@@ -266,10 +264,8 @@ export function getTradeProfitByDays(
   { accountId, startDate, endDate, coin = "USDT" }: GetTradeProfitByDays,
   timezone: number,
 ) {
-  const parsedStartDate = getUTCDay(startDate);
-  const parsedEndDate = getUTCDay(endDate, true);
-
-  const offsetMs = timezone * 60 * 60 * 1000;
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
   return TradeModel.aggregate([
     {
@@ -285,7 +281,7 @@ export function getTradeProfitByDays(
         localDay: {
           $dateToString: {
             format: "%Y-%m-%d",
-            date: { $add: ["$updateTime", offsetMs] },
+            date: { $add: ["$updateTime", timezone] },
           },
         },
       },
@@ -365,15 +361,18 @@ export async function getPaginatedTradesByPlaybook({
   });
 }
 
-export async function getPlaybookRulesCompletionByPlaybookId({
-  playbookId,
-  accountId,
-  startDate,
-  endDate,
-  coin = "USDT",
-}: GetPlaybookRulesCompletionByPlaybookId): GetPlaybookRulesCompletionByPlaybookIdResponse {
-  const parsedStartDate = getUTCDay(startDate);
-  const parsedEndDate = getUTCDay(endDate, true);
+export async function getPlaybookRulesCompletionByPlaybookId(
+  {
+    playbookId,
+    accountId,
+    startDate,
+    endDate,
+    coin = "USDT",
+  }: GetPlaybookRulesCompletionByPlaybookId,
+  timezone: number,
+): GetPlaybookRulesCompletionByPlaybookIdResponse {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
   const rulesCompletion = await TradeModel.aggregate([
     {

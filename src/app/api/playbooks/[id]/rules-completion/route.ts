@@ -3,6 +3,8 @@ import connectDB from "@/db/db";
 import { playbookRulesCompletionParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getPlaybookRulesCompletionByPlaybookId } from "@/features/trades/server/db/trades-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
+import { getTimeZoneFromHeader } from "@/utils/date-utils";
+import { headers } from "next/headers";
 
 export async function GET(
   request: NextRequest,
@@ -20,13 +22,18 @@ export async function GET(
 
     await connectDB();
 
-    const data = await getPlaybookRulesCompletionByPlaybookId({
-      playbookId: id,
-      accountId,
-      startDate,
-      endDate,
-      coin,
-    });
+    const timezone = await getTimeZoneFromHeader(headers);
+
+    const data = await getPlaybookRulesCompletionByPlaybookId(
+      {
+        playbookId: id,
+        accountId,
+        startDate,
+        endDate,
+        coin,
+      },
+      timezone,
+    );
 
     return NextResponse.json(data);
   } catch (err) {

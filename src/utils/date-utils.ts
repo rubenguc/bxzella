@@ -48,3 +48,9 @@ export const LOCALES = {
   es,
   en: enUS,
 };
+
+export async function getTimeZoneFromHeader(headers: any) {
+  const headersList = await headers();
+  const timezone = parseInt((await headersList).get("Timezone") || "0", 10);
+  return timezone * 60 * 60 * 1000;
+}

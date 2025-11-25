@@ -1,3 +1,5 @@
+import { getUTCDay } from "@/utils/date-utils";
+
 export function getSyncTimeRange(startTime?: number): {
   startTs: number;
   endTs: number;
@@ -15,4 +17,12 @@ export function getSyncTimeRange(startTime?: number): {
   const endTs = actualDate;
 
   return { startTs, endTs };
+}
+
+export function adjustDateToUTC(
+  date: string,
+  timezoneMS: number,
+  endOfDay: boolean = false,
+) {
+  return new Date(getUTCDay(date, endOfDay).getTime() - timezoneMS);
 }

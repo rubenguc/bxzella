@@ -5,6 +5,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { dayProfitsSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
 import { getTradeProfitByDays } from "@/features/trades/server/db/trades-db";
+import { getTimeZoneFromHeader } from "@/utils/date-utils";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
@@ -14,9 +15,7 @@ export async function GET(request: NextRequest) {
       dayProfitsSearchParamsSchema,
     );
 
-    const headersList = headers();
-
-    const timezone = (await headersList).get("Timezone");
+    const timezone = await getTimeZoneFromHeader(headers);
 
     await connectDB();
 
@@ -34,8 +33,7 @@ export async function GET(request: NextRequest) {
       endDate = format(lastDayOfMonth, "yyyy-MM-dd");
     } else {
       const nowUTC = toZonedTime(new Date(), "UTC").getTime();
-      const offsetMs = Number(timezone) * 60 * 60 * 1000;
-      const now = nowUTC + offsetMs;
+      const now = nowUTC + timezone;
 
       const firstDayCurrentMonth = startOfMonth(now);
       const lastDayCurrentMonth = endOfMonth(now);
@@ -50,7 +48,7 @@ export async function GET(request: NextRequest) {
         endDate,
         coin,
       },
-      Number(timezone),
+      timezone,
     );
 
     return NextResponse.json(data);
