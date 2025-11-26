@@ -63,6 +63,10 @@ export interface TradeStatisticsResult {
     value: number;
     totalTrades: number;
   };
+  dayProfits: {
+    day: "string";
+    profit: number;
+  }[];
 }
 
 export interface PairStatistic {

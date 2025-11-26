@@ -9,7 +9,6 @@ import {
 import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { getTrades } from "@/features/trades/services/trades-services";
 import type { PaginationResponseWithSync } from "@/interfaces/global-interfaces";
@@ -145,18 +144,11 @@ export function RecentTrades() {
   });
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("recent_trades")}</CardTitle>
-      </CardHeader>
-      <CardContent className="px-1">
-        <CustomTable
-          table={table}
-          columnsLength={columns.length}
-          noDataMessage={t("no_recent_trades")}
-          showSkeleton={!data || isLoading}
-        />
-      </CardContent>
-    </Card>
+    <CustomTable
+      table={table}
+      columnsLength={columns.length}
+      noDataMessage={t("no_recent_trades")}
+      showSkeleton={!data || isLoading}
+    />
   );
 }

@@ -20,3 +20,5 @@ export type LeanDocument<T> = T extends {
   : "Please convert the document to a POJO via `.toObject()` or .lean()`";
 
 export type Provider = "bingx" | "bitunix";
+
+export type DayProfitsChartMode = "area" | "bar";

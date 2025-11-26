@@ -88,7 +88,10 @@
     "lost": "Lost",
     "win_rate": "Win Rate",
     "average_win": "Average win",
-    "average_loss": "Average loss"
+    "average_loss": "Average loss",
+    "profits_by_day": "Profits by Day",
+    "area_chart": "Area Chart",
+    "bar_chart": "Bar Chart"
   },
   "dashboard": {
     "open_positions": {

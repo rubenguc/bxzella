@@ -1,9 +1,9 @@
-import { Coin } from "@/interfaces/global-interfaces";
-import { baseConfig } from "@/services/api";
-import {
+import type {
   TradeProfitPerDay,
   TradeStatisticsResult,
 } from "@/features/trades/interfaces/trades-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
+import { baseConfig } from "@/services/api";
 
 export const getStatistics = async (params: {
   accountId: string;

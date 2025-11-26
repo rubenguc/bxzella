@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { SelectedAccount } from "@/features/accounts/interfaces/accounts-interfaces";
-import type { Coin, Theme } from "@/interfaces/global-interfaces";
+import type {
+  Coin,
+  DayProfitsChartMode,
+  Theme,
+} from "@/interfaces/global-interfaces";
 
 type UserConfig = {
   selectedAccount: SelectedAccount | null;
@@ -15,11 +19,14 @@ type UserConfig = {
   setHasHydrated: (state: boolean) => void;
   coin: Coin;
   setCoin: (coin: Coin) => void;
+  dayProfitsChartMode: DayProfitsChartMode;
+  setDayProfitsChartMode: (mode: DayProfitsChartMode) => void;
 };
 
 export const useUserConfigStore = create<UserConfig>()(
   persist(
     (set) => ({
+      dayProfitsChartMode: "area",
       selectedAccount: null,
       theme: "system",
       setSelectedAccount: (account) => set({ selectedAccount: account }),
@@ -30,6 +37,8 @@ export const useUserConfigStore = create<UserConfig>()(
       isStoreLoaded: false,
       coin: "USDT",
       setCoin: (coin) => set({ coin }),
+      setDayProfitsChartMode: (mode: DayProfitsChartMode) =>
+        set({ dayProfitsChartMode: mode }),
       setHasHydrated: (state) => {
         set({
           isStoreLoaded: state,

@@ -1,9 +1,9 @@
+import { useTranslations } from "next-intl";
+import type { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { formatDecimal } from "@/utils/number-utils";
-import { useTranslations } from "next-intl";
-import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./statistic-card";
 import { getResultClass } from "@/utils/trade-utils";
+import { StatisticCard } from "./statistic-card";
 
 interface NetPNLProps {
   netPnL: TradeStatisticsResult["netPnL"];

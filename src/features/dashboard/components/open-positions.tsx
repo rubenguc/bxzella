@@ -9,13 +9,6 @@ import {
 import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import type { OpenPosition } from "@/features/trades/interfaces/trades-interfaces";
 import { getOpenPositions } from "@/features/trades/services/trades-services";
 import { useUserConfigStore } from "@/store/user-config-store";
@@ -98,19 +91,11 @@ export function OpenPositions() {
   });
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("open_positions")}</CardTitle>
-        <CardDescription>{t("open_positions_description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="px-1">
-        <CustomTable
-          table={table}
-          columnsLength={columns.length}
-          noDataMessage={t("no_open_positions")}
-          showSkeleton={!data || isLoading}
-        />
-      </CardContent>
-    </Card>
+    <CustomTable
+      table={table}
+      columnsLength={columns.length}
+      noDataMessage={t("no_open_positions")}
+      showSkeleton={!data || isLoading}
+    />
   );
 }

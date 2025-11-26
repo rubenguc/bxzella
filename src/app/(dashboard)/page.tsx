@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { AvgWinLoss } from "@/features/dashboard/components/avg-win-loss";
 import { DayProfits } from "@/features/dashboard/components/day-profits";
+import { DayProfitsChart } from "@/features/dashboard/components/day-profits-chart";
 import { NetPNL } from "@/features/dashboard/components/net-pnl";
-import { OpenPositions } from "@/features/dashboard/components/open-positions";
+import { Positions } from "@/features/dashboard/components/positions";
 import { ProfitFactor } from "@/features/dashboard/components/profit-factor";
-import { RecentTrades } from "@/features/dashboard/components/recent-trades";
 import { StatisticsSkeleton } from "@/features/dashboard/components/statistics-skeleton";
 import { TradeWinPercentage } from "@/features/dashboard/components/trade-win-percentage";
 import DayProfitsProvider from "@/features/dashboard/context/day-profits-context";
@@ -16,6 +16,8 @@ import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
 
 export default function Dashboard() {
+  const t = useTranslations("statistics");
+
   const { selectedAccount, startDate, endDate, isStoreLoaded, coin } =
     useUserConfigStore();
 
@@ -32,8 +34,6 @@ export default function Dashboard() {
     enabled:
       isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
   });
-
-  const t = useTranslations("statistics");
 
   if (isStoreLoaded && !selectedAccount?._id) {
     return (
@@ -56,8 +56,8 @@ export default function Dashboard() {
         <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <OpenPositions />
-        <RecentTrades />
+        <Positions />
+        <DayProfitsChart data={data?.dayProfits || []} />
       </div>
 
       <div>
