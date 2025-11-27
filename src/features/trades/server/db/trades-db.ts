@@ -98,22 +98,25 @@ export async function saveMultipleTrades(
   );
 }
 
-export async function getTradesByAccountId({
-  accountId,
-  page,
-  limit,
-  coin = "USDT",
-  startDate,
-  endDate,
-}: GetTradesByAccountId): GetTradesByAccountIdResponse {
+export async function getTradesByAccountId(
+  {
+    accountId,
+    page,
+    limit,
+    coin = "USDT",
+    startDate,
+    endDate,
+  }: GetTradesByAccountId,
+  timezone: number,
+): GetTradesByAccountIdResponse {
   const find: Record<string, any> = {
     accountId,
     coin,
   };
 
   if (startDate && endDate) {
-    const parsedStartDate = getUTCDay(startDate);
-    const parsedEndDate = getUTCDay(endDate, true);
+    const parsedStartDate = adjustDateToUTC(startDate, timezone);
+    const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
     find.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
     find.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
