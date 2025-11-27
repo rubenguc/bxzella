@@ -222,3 +222,11 @@
 .sidebar-wrapper-with-flex [data-slot="sidebar"] {
     @apply flex! flex-col h-auto md:flex!;
 }
+
+.recharts-wrapper .recharts-surface {
+    outline: 0 !important;
+}
+
+.recharts-sector:focus {
+    outline: 0 !important;
+}

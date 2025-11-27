@@ -91,7 +91,8 @@
     "average_loss": "Pérdida promedio",
     "profits_by_day": "Ganancias por día",
     "area_chart": "Gráfico de Áreas",
-    "bar_chart": "Gráfico de Barras"
+    "bar_chart": "Gráfico de Barras",
+    "no_data_to_show": "No hay datos para mostrar"
   },
   "dashboard": {
     "open_positions": {

@@ -91,7 +91,8 @@
     "average_loss": "Average loss",
     "profits_by_day": "Profits by Day",
     "area_chart": "Area Chart",
-    "bar_chart": "Bar Chart"
+    "bar_chart": "Bar Chart",
+    "no_data_to_show": "No data to show"
   },
   "dashboard": {
     "open_positions": {
