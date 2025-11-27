@@ -14,9 +14,16 @@ import DayProfitsProvider from "@/features/dashboard/context/day-profits-context
 import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Info } from "lucide-react";
 
 export default function Dashboard() {
-  const t = useTranslations("statistics");
+  const t = useTranslations("dashboard");
 
   const { selectedAccount, startDate, endDate, isStoreLoaded, coin } =
     useUserConfigStore();
@@ -45,26 +52,45 @@ export default function Dashboard() {
     );
   }
 
+  const lastSync = selectedAccount?.lastSyncPerCoin[coin]
+    ? new Date(selectedAccount?.lastSyncPerCoin[coin]).toLocaleString()
+    : "";
+
   if (isLoading || !data) return <StatisticsSkeleton />;
 
   return (
-    <div className="grid gap-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <NetPNL netPnL={data?.netPnL || {}} />
-        <ProfitFactor profitFactor={data?.profitFactor || {}} />
-        <TradeWinPercentage tradeWin={data?.tradeWin || {}} />
-        <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />
+    <>
+      <div className="flex items-center gap-2 mb-3">
+        <span className=" text-muted-foreground">
+          {t("last_sync_time")}: {lastSync}
+        </span>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Info className="text-gray-500 dark:text-gray-300" size={16} />
+          </TooltipTrigger>
+          <TooltipContent className="max-w-[300px]">
+            {t("last_sync_time_tooltip")}
+          </TooltipContent>
+        </Tooltip>
       </div>
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <Positions />
-        <DayProfitsChart data={data?.dayProfits || []} />
-      </div>
+      <div className="grid gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <NetPNL netPnL={data?.netPnL || {}} />
+          <ProfitFactor profitFactor={data?.profitFactor || {}} />
+          <TradeWinPercentage tradeWin={data?.tradeWin || {}} />
+          <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <Positions />
+          <DayProfitsChart data={data?.dayProfits || []} />
+        </div>
 
-      <div>
-        <DayProfitsProvider>
-          <DayProfits />
-        </DayProfitsProvider>
+        <div>
+          <DayProfitsProvider>
+            <DayProfits />
+          </DayProfitsProvider>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

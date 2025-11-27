@@ -7,6 +7,7 @@ export interface PaginationResponse<T> {
 
 export interface PaginationResponseWithSync<T> extends PaginationResponse<T> {
   synced?: boolean;
+  syncTime: number;
 }
 
 export type Theme = "dark" | "light" | "system";

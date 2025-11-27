@@ -39,4 +39,5 @@ export type GetAccountsByUserIdResponse = Promise<
 export interface SelectedAccount extends Pick<Account, "name" | "provider"> {
   _id: string;
   earliestTradeDatePerCoin: Partial<Record<Coin, Date | string>>;
+  lastSyncPerCoin: Partial<Record<Coin, Date | string>>;
 }

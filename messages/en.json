@@ -95,6 +95,8 @@
     "no_data_to_show": "No data to show"
   },
   "dashboard": {
+    "last_sync_time": "Last Sync Time",
+    "last_sync_time_tooltip": "This time represents the last time the data was synced. If there's not new trades after this date this value won't change",
     "open_positions": {
       "open_positions": "Open Positions",
       "open_positions_description": "currently open positions, these don't depend on the time range",
@@ -102,7 +104,9 @@
     },
     "recent_trades": {
       "recent_trades": "Recent Trades",
-      "no_recent_trades": "No recent trades"
+      "no_recent_trades": "No recent trades",
+      "syncing_new_trades": "Syncing new trades...",
+      "new_trades_synced": "New trades synced"
     },
     "day_profits": {
       "day_profits": "Day Profits",

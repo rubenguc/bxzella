@@ -21,6 +21,7 @@ type UserConfig = {
   setCoin: (coin: Coin) => void;
   dayProfitsChartMode: DayProfitsChartMode;
   setDayProfitsChartMode: (mode: DayProfitsChartMode) => void;
+  updateLastSyncTime: (time: number) => void;
 };
 
 export const useUserConfigStore = create<UserConfig>()(
@@ -39,6 +40,17 @@ export const useUserConfigStore = create<UserConfig>()(
       setCoin: (coin) => set({ coin }),
       setDayProfitsChartMode: (mode: DayProfitsChartMode) =>
         set({ dayProfitsChartMode: mode }),
+      updateLastSyncTime: (time: number) =>
+        set((state) => ({
+          ...state,
+          selectedAccount: {
+            ...(state.selectedAccount as SelectedAccount),
+            lastSyncPerCoin: {
+              ...state.selectedAccount?.lastSyncPerCoin,
+              [state.coin]: time,
+            },
+          },
+        })),
       setHasHydrated: (state) => {
         set({
           isStoreLoaded: state,

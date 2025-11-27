@@ -58,6 +58,7 @@ export async function getAccountsByUserId({
         name: 1,
         provider: 1,
         earliestTradeDatePerCoin: 1,
+        lastSyncPerCoin: 1,
       },
       sortBy: { createdAt: -1 },
       limit,

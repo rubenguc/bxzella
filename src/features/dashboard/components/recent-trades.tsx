@@ -23,13 +23,20 @@ import {
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
+import { toast } from "sonner";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
   const tInfo = useTranslations("trade_info");
 
-  const { selectedAccount, coin, startDate, endDate, isStoreLoaded } =
-    useUserConfigStore();
+  const {
+    selectedAccount,
+    coin,
+    startDate,
+    endDate,
+    isStoreLoaded,
+    updateLastSyncTime,
+  } = useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
@@ -121,6 +128,9 @@ export function RecentTrades() {
     enabled:
       isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
     queryFn: async () => {
+      toast.loading(t("syncing_new_trades"), {
+        position: "top-right",
+      });
       const response = await getTrades({
         accountId: selectedAccount!._id,
         startDate: transformDateToParam(startDate as Date),
@@ -129,10 +139,17 @@ export function RecentTrades() {
         page: 0,
         coin,
       });
+      toast.dismiss();
+
       if (response.synced) {
+        toast.success(t("new_trades_synced"), {
+          position: "top-right",
+        });
         queryClient.invalidateQueries({ queryKey: ["statistics"] });
         queryClient.invalidateQueries({ queryKey: ["day-profits"] });
+        updateLastSyncTime(response.syncTime);
       }
+
       return response;
     },
   });

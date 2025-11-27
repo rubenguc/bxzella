@@ -28,16 +28,22 @@ import { adjustDateToUTC } from "../../utils/trades-utils";
 export async function syncPositions(
   accountId: string,
   coin: Coin = "USDT",
-): Promise<boolean> {
+): Promise<{
+  synced: boolean;
+  syncTime: number;
+}> {
   console.log(`syncing positions for: ${accountId}...`);
 
   const account = await getAccountById(accountId);
-  if (!account) return false;
+  if (!account)
+    return {
+      synced: false,
+      syncTime: 0,
+    };
 
   const coinToSearch = account.provider === "bitunix" ? "USDT" : coin;
 
   const lastSyncTime = account.lastSyncPerCoin[coinToSearch] || 0;
-  const syncTime = Date.now();
 
   const { decriptedApiKey, decryptedSecretKey } =
     getDecryptedAccountCredentials(account);
@@ -53,10 +59,15 @@ export async function syncPositions(
     lastSyncTime,
   });
 
-  if (!positions.length) return false;
+  if (!positions.length)
+    return {
+      synced: false,
+      syncTime: 0,
+    };
 
   const session = await mongoose.startSession();
 
+  const syncTime = Date.now();
   try {
     await session.withTransaction(async () => {
       await updateLastSyncPerCoin(account._id, coinToSearch, syncTime, session);
@@ -78,7 +89,10 @@ export async function syncPositions(
     }
   }
   console.log("positions synced");
-  return true;
+  return {
+    synced: true,
+    syncTime,
+  };
 }
 
 export async function saveMultipleTrades(

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
 import { useUserConfigStore } from "@/store/user-config-store";
+import type { SelectedAccount } from "../interfaces/accounts-interfaces";
 
 export function AccountsSelector() {
   const t = useTranslations("header");
@@ -23,7 +24,7 @@ export function AccountsSelector() {
     const account = accounts.find((account) => account._id === value);
     if (!account) return;
 
-    setSelectedAccount(account);
+    setSelectedAccount(account as SelectedAccount);
   };
 
   return (

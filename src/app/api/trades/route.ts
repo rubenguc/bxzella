@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       parseSearchParams(request, tradesSearchParamsSchema);
 
     await connectDB();
-    const synced = await syncPositions(accountId, coin);
+    const { synced, syncTime } = await syncPositions(accountId, coin);
     const timezone = await getTimeZoneFromHeader(headers);
 
     const data = await getTradesByAccountId(
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       timezone,
     );
 
-    return NextResponse.json({ ...data, synced });
+    return NextResponse.json({ ...data, synced, syncTime });
   } catch (err) {
     return handleApiError(err);
   }

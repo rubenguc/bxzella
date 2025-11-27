@@ -95,6 +95,8 @@
     "no_data_to_show": "No hay datos para mostrar"
   },
   "dashboard": {
+    "last_sync_time": "Última Hora de Sincronización",
+    "last_sync_time_tooltip": "Esta hora representa la última vez que se sincronizaron los datos. Si no hay nuevas operaciones después de esta fecha, este valor no cambiará",
     "open_positions": {
       "open_positions": "Posiciones Abiertas",
       "open_positions_description": "posiciones actualmente abiertas, estas no dependen del rango de tiempo",
@@ -102,7 +104,9 @@
     },
     "recent_trades": {
       "recent_trades": "Operaciones Recientes",
-      "no_recent_trades": "No hay operaciones recientes"
+      "no_recent_trades": "No hay operaciones recientes",
+      "syncing_new_trades": "Sincronizando nuevas operaciones...",
+      "new_trades_synced": "Nuevas operaciones sincronizadas"
     },
     "day_profits": {
       "day_profits": "Profits por día",

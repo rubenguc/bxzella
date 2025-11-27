@@ -1,9 +1,15 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { JSX } from "react";
 
@@ -35,17 +41,18 @@ export function StatisticCard({
           >
             <div className="flex items-center gap-2 text-gray-500 dark:text-gray-300 text-sm">
               <p>{title}</p>
-              <Popover>
-                <PopoverTrigger asChild>
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Info
                     className="text-gray-500 dark:text-gray-300"
                     size={16}
                   />
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
+                </TooltipTrigger>
+                <TooltipContent className="max-w-[300px]">
                   <p className="text-balance text-sm">{popoverInfo}</p>
-                </PopoverContent>
-              </Popover>
+                </TooltipContent>
+              </Tooltip>
+
               {extraInfo}
             </div>
             <div className={`w-full flex ${contentClassName}`}>{content}</div>
