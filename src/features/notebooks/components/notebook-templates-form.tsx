@@ -45,6 +45,7 @@ export function NotebookTemplatesForm({
 
   const { editorRef, setEditorValue } = useEditorText();
   const [isOpen, setIsOpen] = useToggle(false);
+  const [isDeleting, setIsDeleting] = useToggle(false);
 
   const isEdit = !!selectedNotebookTemplate;
   const form = useForm<NotebooksTemplateForm>({
@@ -67,9 +68,10 @@ export function NotebookTemplatesForm({
   }, [selectedNotebookTemplate]);
 
   const onSubmit = async (data: NotebooksTemplateForm) => {
-    const response = isEdit
-      ? await updateNotebookTemplateAction(selectedNotebookTemplate._id, data)
-      : await createNotebookTemplateAction(data);
+    const response =
+      isEdit && selectedNotebookTemplate._id
+        ? await updateNotebookTemplateAction(selectedNotebookTemplate._id, data)
+        : await createNotebookTemplateAction(data);
 
     if (response?.error) {
       return toast.error(response.message);
@@ -92,11 +94,14 @@ export function NotebookTemplatesForm({
   };
 
   const onDelete = async () => {
+    setIsDeleting(true);
     const response = await deleteNotebookTemplateAction(
       selectedNotebookTemplate?._id as string,
     );
 
     if (response?.error) {
+      setIsDeleting(false);
+
       return toast.error(response.message);
     }
 
@@ -114,6 +119,7 @@ export function NotebookTemplatesForm({
       content: "",
     });
     onSaved();
+    setIsDeleting(false);
   };
 
   return (
@@ -154,11 +160,20 @@ export function NotebookTemplatesForm({
 
           <div className="flex items-center">
             {isEdit && (
-              <Button type="button" variant="destructive" onClick={setIsOpen}>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={setIsOpen}
+                disabled={form.formState.isSubmitting || isDeleting}
+              >
                 {t("delete")}
               </Button>
             )}
-            <Button type="submit" className="ml-auto mt-3">
+            <Button
+              type="submit"
+              className="ml-auto mt-3"
+              disabled={form.formState.isSubmitting || isDeleting}
+            >
               {t("save")}
             </Button>
           </div>
@@ -197,6 +212,8 @@ export function NotebookTemplatesForm({
           </div>
         }
         confirmText={tCommon("delete")}
+        isLoading={isDeleting}
+        disabled={isDeleting}
         destructive
       />
     </>

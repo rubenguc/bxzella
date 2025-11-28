@@ -264,6 +264,8 @@
       "save": "Guardar"
     },
     "notebook_templates": {
+      "templates": "Plantillas",
+      "new_template": "Nueva Plantilla",
       "recently_used_templates": "Plantillas usadas recientemente",
       "add_template": "Agregar Plantilla",
       "create_new_template": "Crear Nueva Plantilla",

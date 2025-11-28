@@ -284,6 +284,8 @@
       "save": "Save"
     },
     "notebook_templates": {
+      "templates": "Templates",
+      "new_template": "New Template",
       "recently_used_templates": "Recently Used Templates",
       "add_template": "Add Template",
       "create_new_template": "Create New Template",
