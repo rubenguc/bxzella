@@ -13,7 +13,7 @@ export function transformSymbol(symbol: string) {
 export function getResultClass(amount: string | number) {
   const _amount = String(amount);
 
-  if (_amount == "0") return "";
+  if (_amount === "0") return "";
 
   return checkWin(_amount) ? "text-green-500" : "text-red-500";
 }
@@ -28,10 +28,20 @@ export function formatSymbolAmount(positionAmt: string) {
 export function getRealPositionAmount({
   positionAmt = "",
   avgPrice = "",
+  comission = "",
+  funding = "",
+  leverage = 1,
 }: {
   positionAmt: string;
   avgPrice: string;
+  comission: string;
+  funding: string;
+  leverage: number;
 }) {
-  const symbolAmount = formatSymbolAmount(positionAmt);
-  return symbolAmount * Number(avgPrice);
+  return (Number(positionAmt) * Number(avgPrice)) / leverage;
+}
+
+export function calculatePercentageGain(valorInicial = 0, ganancia = 0) {
+  if (valorInicial <= 0) return 0;
+  return ((ganancia / valorInicial) * 100).toFixed(2);
 }

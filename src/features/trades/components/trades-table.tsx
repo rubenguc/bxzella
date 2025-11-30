@@ -16,7 +16,6 @@ import { useTradeContext } from "@/features/trades/context/trades-context";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
-import { formatDecimal } from "@/utils/number-utils";
 import {
   checkLongPosition,
   checkWin,
@@ -117,7 +116,7 @@ export function TradesTable() {
         const isWin = checkWin(netProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
+            {Number(netProfit)} {row.original.coin}
           </div>
         );
       },
@@ -133,7 +132,7 @@ export function TradesTable() {
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(realisedProfit), 4)} {row.original.coin}
+            {Number(realisedProfit)} {row.original.coin}
           </div>
         );
       },

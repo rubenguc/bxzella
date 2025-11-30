@@ -38,8 +38,8 @@
     "no": "No",
     "total_funding": "Total Funding",
     "total_funding_info": "Total Funding shows the cumulative funding fees paid or received for holding a perpetual position. It’s calculated as (total open positions × funding rate) and can be positive (paid) or negative (received).",
-    "approx_entry_amount": "Approx Entry Amount",
-    "approx_entry_amount_info": "Reflects the actual capital used for your position after deducting fees",
+    "entry_amount": "Approx Entry Amount",
+    "entry_amount_info": "Reflects the actual capital used for your position after deducting fees",
     "position_commission": "Position Commission",
     "open_position_value": "Open position Value",
     "close_position_value": "Close position Value",
@@ -54,7 +54,9 @@
     "check_all": "Check All",
     "no_trades": "No trades",
     "save": "Save",
-    "trade_note": "Trade Note"
+    "trade_note": "Trade Note",
+    "pnl_ratio": "PnL Ratio",
+    "pnl_ratio_after_fees": "PnL Ratio (After Fees)"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",

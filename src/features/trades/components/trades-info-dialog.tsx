@@ -20,9 +20,9 @@ import { useTradeContext } from "@/features/trades/context/trades-context";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { formatDecimal } from "@/utils/number-utils";
 import {
+  calculatePercentageGain,
   checkLongPosition,
   checkWin,
-  formatSymbolAmount,
   getRealPositionAmount,
   getResultClass,
   transformSymbol,
@@ -86,7 +86,6 @@ export function TradeInfoDialog() {
     positionCommission = "",
     positionSide = "0",
     positionAmt = "0",
-    closePositionAmt = "",
     coin = "USDT",
     playbook = {
       id: "",
@@ -100,8 +99,8 @@ export function TradeInfoDialog() {
   const isLongPosition = checkLongPosition(positionSide);
   const formattedSymbol = transformSymbol(symbol);
 
-  const netProfitFormatted = formatDecimal(Number(netProfit));
-  const realisedProfitFormatted = formatDecimal(Number(realisedProfit));
+  const netProfitFormatted = Number(netProfit);
+  const realisedProfitFormatted = Number(realisedProfit);
   const avgPriceFormatted = avgPrice;
   const avgClosePriceFormatted = avgClosePrice;
   const totalFundingFormatted = formatDecimal(Number(totalFunding), 4);
@@ -110,24 +109,25 @@ export function TradeInfoDialog() {
     4,
   );
 
-  const aproxEntryAmount = formatDecimal(
-    getRealPositionAmount({ avgPrice, positionAmt }),
-  );
-  const aproxEntryAmountWithLeverage = formatDecimal(
-    Number(aproxEntryAmount) / leverage,
-    2,
-  );
-  const openPositionValue = formatDecimal(
-    getRealPositionAmount({ avgPrice, positionAmt }),
-  );
-  const closePositionValue = formatDecimal(
+  const entryAmount = formatDecimal(
     getRealPositionAmount({
-      avgPrice: avgClosePrice,
+      avgPrice,
       positionAmt,
+      funding: totalFunding,
+      comission: positionCommission,
+      leverage,
     }),
+    4,
   );
-  const openPositionAmountFormatted = formatSymbolAmount(positionAmt);
-  const closePositionAmountFormatted = formatSymbolAmount(closePositionAmt);
+
+  const pnlRatio = calculatePercentageGain(
+    Number(entryAmount),
+    Number(realisedProfit),
+  );
+  const pnlRatioWithFee = calculatePercentageGain(
+    Number(entryAmount),
+    Number(netProfitFormatted),
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setCurrentTrade(null)}>
@@ -222,29 +222,21 @@ export function TradeInfoDialog() {
                     />
 
                     <InfoRow
-                      label={t("approx_entry_amount")}
-                      tooltipInfo={t("approx_entry_amount_info")}
-                      value={`≈ ${aproxEntryAmountWithLeverage} ${coin}`}
+                      label={t("entry_amount")}
+                      tooltipInfo={t("entry_amount_info")}
+                      value={`${entryAmount} ${coin}`}
                     />
 
                     <InfoRow
-                      label={`${t("open_position_value")} (${leverage}x)`}
-                      value={`≈ ${openPositionValue} ${coin}`}
+                      label={t("pnl_ratio")}
+                      value={`≈ ${pnlRatio} %`}
+                      valueClassName={getResultClass(pnlRatio)}
                     />
 
                     <InfoRow
-                      label={`${t("close_position_value")} (${leverage}x)`}
-                      value={`≈ ${closePositionValue} ${coin}`}
-                    />
-
-                    <InfoRow
-                      label={`${t("open_position_amount")} (${leverage}x)`}
-                      value={`≈ ${openPositionAmountFormatted} ${formattedSymbol}`}
-                    />
-
-                    <InfoRow
-                      label={`${t("close_position_amount")} (${leverage}x)`}
-                      value={`≈ ${closePositionAmountFormatted} ${formattedSymbol}`}
+                      label={t("pnl_ratio_after_fees")}
+                      value={`≈ ${pnlRatioWithFee} %`}
+                      valueClassName={getResultClass(pnlRatioWithFee)}
                     />
 
                     <p className="text-sm text-gray-400 mt-4">

@@ -28,9 +28,9 @@
     "closed_date": "Fecha de Cierre",
     "avg_entry_price": "Precio Promedio de Entrada",
     "avg_exit_price": "Precio Promedio de Salida",
-    "position_pnl": "Ganancia/Pérdida de Posición",
+    "position_pnl": "PnL de Posición",
     "position_pnl_info": "Muestra tu ganancia total después de deducir todas las comisiones y costos de una operación cerrada. Refleja la cantidad real de dinero que ganaste o perdiste.",
-    "realised_pnl": "Ganancia/Pérdida Realizada",
+    "realised_pnl": "PnL Realizada",
     "realised_pnl_info": "Muestra la ganancia o pérdida total realizada de una operación cerrada. Se calcula como (precio de salida - precio de entrada) × tamaño de la posición, representando tu beneficio o pérdida final.",
     "result": "Resultado",
     "isolated": "Aislado",
@@ -38,8 +38,8 @@
     "no": "No",
     "total_funding": "Financiamiento total",
     "total_funding_info": "El Total Funding muestra las tarifas acumuladas pagadas o recibidas por mantener una posición perpetua. Se calcula como (posiciones abiertas × tasa de funding) y puede ser positivo (pagado) o negativo (recibido).",
-    "approx_entry_amount": "Monto aproximado de entrada",
-    "approx_entry_amount_info": "Muestra el capital real utilizado para tu posición tras deducir comisiones.",
+    "entry_amount": "Monto aproximado de entrada",
+    "entry_amount_info": "Muestra el capital real utilizado para tu posición tras deducir comisiones.",
     "position_commission": "Comisión de posición",
     "open_position_value": "Valor de posición al abrir",
     "close_position_value": "Valor de posición al cerrar",
@@ -54,7 +54,9 @@
     "check_all": "Marcar Todo",
     "no_trades": "Sin operaciones",
     "save": "Guardar",
-    "trade_note": "Nota de operación"
+    "trade_note": "Nota de operación",
+    "pnl_ratio": "Relación PnL",
+    "pnl_ratio_after_fees": "Relación PnL (Depués de comisiones)"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
