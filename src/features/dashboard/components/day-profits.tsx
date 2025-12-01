@@ -22,6 +22,7 @@ import { getResultClass } from "@/utils/trade-utils";
 import { useDayProfitsContext } from "../context/day-profits-context";
 import { DayProfitsCell } from "./day-profits-cell";
 import { WeekSummaryCell } from "./week-summary-cell";
+import { Profit } from "@/components/profit";
 
 const daysOfWeekKeys = [
   "sunday",
@@ -98,14 +99,10 @@ export function DayProfits() {
             </div>
           </div>
         </CardTitle>
-        <CardAction className="flex flex-col sm:flex-row justify-between items-center sm:gap-1 text-xs">
-          <span className="font-medium">{t("monthly_stats")}:</span>{" "}
-          <span
-            className={`${getResultClass(monthlySummary.totalNetProfit)} font-bold`}
-          >
-            {formatDecimal(monthlySummary.totalNetProfit)} {coin}
-          </span>
-          <Badge variant="secondary">
+        <CardAction className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
+          <span className="font-medium">{t("monthly_stats")}:</span>
+          <Profit amount={monthlySummary.totalNetProfit} coin={coin} />
+          <Badge variant="outline">
             {monthlySummary.daysTraded} {t("total_days")}
           </Badge>
         </CardAction>
@@ -133,7 +130,7 @@ export function DayProfits() {
               ))}
               {calendarData.map((item, index) => (
                 <DayProfitsCell
-                  key={index}
+                  key={index.toString()}
                   {...item}
                   coin={coin}
                   onClick={() => selectDayProfit(item)}
@@ -143,7 +140,11 @@ export function DayProfits() {
             <div className="gap-1 hidden invisible md:grid md:visible">
               <div className="h-8" />
               {weeklySummaries.map((summary, index) => (
-                <WeekSummaryCell key={index} {...summary} coin={coin} />
+                <WeekSummaryCell
+                  key={index.toString()}
+                  {...summary}
+                  coin={coin}
+                />
               ))}
             </div>
           </div>

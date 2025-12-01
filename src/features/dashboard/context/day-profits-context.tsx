@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import { DayProfitsDialog } from "../components/day-profits-dialog";
-import { CalendarCell } from "../interfaces/dashboard-interfaces";
+import type { CalendarCell } from "../interfaces/dashboard-interfaces";
 
 interface DayProfitsContextProps {
   selectDayProfit: (day: CalendarCell | null) => void;

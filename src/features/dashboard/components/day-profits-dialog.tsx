@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
+import { Profit } from "@/components/profit";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { formatDecimal } from "@/utils/number-utils";
 import { getResultClass } from "@/utils/trade-utils";
 import { useDayProfitsContext } from "../context/day-profits-context";
 import { DayProfitsTradeList } from "./day-profits-trade-list";
@@ -33,9 +33,7 @@ export function DayProfitsDialog() {
             className={`flex items-center gap-1 ${getResultClass(dayProfit?.amount || 0)}`}
           >
             <span> {`${t("net_pnl")} `}</span>
-            <span>
-              {formatDecimal(dayProfit?.amount || 0, 4)} {coin}
-            </span>
+            <Profit amount={dayProfit?.amount || 0} coin={coin} />
           </div>
         </DialogTitle>
         <div className="overflow-auto">

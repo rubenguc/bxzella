@@ -10,17 +10,14 @@ import { Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { CustomTable } from "@/components/custom-table";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useTradeContext } from "@/features/trades/context/trades-context";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
-import {
-  checkLongPosition,
-  checkWin,
-  transformSymbol,
-} from "@/utils/trade-utils";
+import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
 import { getTrades } from "../services/trades-services";
 
 export function TradesTable() {
@@ -43,7 +40,18 @@ export function TradesTable() {
         className: "text-center",
       },
     },
-
+    {
+      header: tInfo("closed_date"),
+      accessorKey: "updateTime",
+      cell: ({ row }) => (
+        <div className="font-medium">
+          {transformTimeToLocalDate(row.original.updateTime)}
+        </div>
+      ),
+      meta: {
+        className: "text-center",
+      },
+    },
     {
       header: tInfo("symbol"),
       accessorKey: "symbol",
@@ -83,18 +91,6 @@ export function TradesTable() {
       },
     },
     {
-      header: tInfo("closed_date"),
-      accessorKey: "updateTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.updateTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
       header: tInfo("avg_entry_price"),
       accessorKey: "avgPrice",
       meta: {
@@ -111,31 +107,13 @@ export function TradesTable() {
     {
       header: tInfo("position_pnl"),
       accessorKey: "netProfit",
-      cell: ({ row }) => {
-        const netProfit = row.original.netProfit;
-        const isWin = checkWin(netProfit);
-        return (
-          <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {Number(netProfit)} {row.original.coin}
-          </div>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("realised_pnl"),
-      accessorKey: "realisedProfit",
-      cell: ({ row }) => {
-        const realisedProfit = row.original.realisedProfit;
-        const isWin = checkWin(realisedProfit);
-        return (
-          <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {Number(realisedProfit)} {row.original.coin}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <Profit
+          amount={Number(row.original.netProfit)}
+          coin={row.original.coin}
+          decimals={4}
+        />
+      ),
       meta: {
         className: "text-center",
       },

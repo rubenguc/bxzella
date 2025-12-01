@@ -1,14 +1,25 @@
-export function formatDecimal(value: number, precision = 2): string {
+export function formatDecimal(
+  value: number,
+  precision = 2,
+  showSign: boolean = false,
+): string {
+  if (value === 0) {
+    return "0";
+  }
+
   const suffix = formatSuffix(value);
-
   const _value = value / (SUFFIXES[suffix] || 1);
-
   const _precision = suffix ? 2 : precision;
 
-  return _value.toFixed(_precision) + suffix;
+  let formattedValue = _value.toFixed(_precision);
+
+  formattedValue = formattedValue.replace(/\.?0+$/, "");
+
+  const sign = showSign && value > 0 ? "+" : "";
+
+  return sign + formattedValue + suffix;
 }
 
-// create a function to determine if the abs number is bigger than 1k, 1m, etc, and return the appropriate suffix and the number
 export function formatSuffix(value: number): string {
   if (Math.abs(value) >= 1e9) return "B";
   if (Math.abs(value) >= 1e6) return "M";

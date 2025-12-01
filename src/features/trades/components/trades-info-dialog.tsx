@@ -2,6 +2,7 @@
 
 import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -62,7 +63,11 @@ export function InfoRow({
           </Popover>
         )}
       </div>
-      <p className={valueClassName}>{value}</p>
+      {typeof value === "string" ? (
+        <p className={`${valueClassName || ""}`}>{value}</p>
+      ) : (
+        value
+      )}
     </div>
   );
 }
@@ -99,16 +104,6 @@ export function TradeInfoDialog() {
   const isLongPosition = checkLongPosition(positionSide);
   const formattedSymbol = transformSymbol(symbol);
 
-  const netProfitFormatted = Number(netProfit);
-  const realisedProfitFormatted = Number(realisedProfit);
-  const avgPriceFormatted = avgPrice;
-  const avgClosePriceFormatted = avgClosePrice;
-  const totalFundingFormatted = formatDecimal(Number(totalFunding), 4);
-  const positionCommissionFormatted = formatDecimal(
-    Number(positionCommission),
-    4,
-  );
-
   const entryAmount = formatDecimal(
     getRealPositionAmount({
       avgPrice,
@@ -126,7 +121,7 @@ export function TradeInfoDialog() {
   );
   const pnlRatioWithFee = calculatePercentageGain(
     Number(entryAmount),
-    Number(netProfitFormatted),
+    Number(netProfit),
   );
 
   return (
@@ -178,16 +173,20 @@ export function TradeInfoDialog() {
                         <span className="text-sm md:text-gray-300">
                           {t("position_pnl")}
                         </span>
-                        <strong
-                          className={`${isWin ? "text-green-500" : "text-red-500"} text-xl`}
-                        >{`${netProfitFormatted} ${coin}`}</strong>
+                        <Profit
+                          className="text-xl font-bold"
+                          amount={Number(netProfit)}
+                          coin={coin}
+                        />
                       </div>
                     </div>
 
                     <InfoRow
                       label={t("realised_pnl")}
                       tooltipInfo={t("realised_pnl_info")}
-                      value={`${realisedProfitFormatted} ${coin}`}
+                      value={
+                        <Profit amount={Number(realisedProfit)} coin={coin} />
+                      }
                       valueClassName={isWin ? "text-green-500" : "text-red-500"}
                     />
 
@@ -195,12 +194,12 @@ export function TradeInfoDialog() {
 
                     <InfoRow
                       label={t("avg_entry_price")}
-                      value={`${avgPriceFormatted} ${coin}`}
+                      value={`${avgPrice} ${coin}`}
                     />
 
                     <InfoRow
                       label={t("avg_exit_price")}
-                      value={`${avgClosePriceFormatted} ${coin}`}
+                      value={`${avgClosePrice} ${coin}`}
                     />
 
                     <InfoRow
@@ -211,13 +210,25 @@ export function TradeInfoDialog() {
                     <InfoRow
                       label={t("total_funding")}
                       tooltipInfo={t("total_funding_info")}
-                      value={`${totalFundingFormatted} ${coin}`}
+                      value={
+                        <Profit
+                          amount={Number(totalFunding)}
+                          decimals={6}
+                          coin={coin}
+                        />
+                      }
                       valueClassName={getResultClass(totalFunding)}
                     />
 
                     <InfoRow
                       label={t("position_commission")}
-                      value={`${positionCommissionFormatted} ${coin}`}
+                      value={
+                        <Profit
+                          amount={Number(positionCommission)}
+                          decimals={4}
+                          coin={coin}
+                        />
+                      }
                       valueClassName={getResultClass(positionCommission)}
                     />
 
@@ -229,14 +240,26 @@ export function TradeInfoDialog() {
 
                     <InfoRow
                       label={t("pnl_ratio")}
-                      value={`≈ ${pnlRatio} %`}
-                      valueClassName={getResultClass(pnlRatio)}
+                      value={
+                        <Profit
+                          amount={Number(pnlRatio)}
+                          decimals={2}
+                          coin="%"
+                          isApprox
+                        />
+                      }
                     />
 
                     <InfoRow
                       label={t("pnl_ratio_after_fees")}
-                      value={`≈ ${pnlRatioWithFee} %`}
-                      valueClassName={getResultClass(pnlRatioWithFee)}
+                      value={
+                        <Profit
+                          amount={Number(pnlRatioWithFee)}
+                          decimals={2}
+                          coin="%"
+                          isApprox
+                        />
+                      }
                     />
 
                     <p className="text-sm text-gray-400 mt-4">

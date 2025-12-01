@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
@@ -23,7 +24,7 @@ import {
   checkWin,
   transformSymbol,
 } from "@/utils/trade-utils";
-import { toast } from "sonner";
+import { Profit } from "@/components/profit";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
@@ -104,15 +105,12 @@ export function RecentTrades() {
     {
       header: tInfo("position_pnl"),
       accessorKey: "netProfit",
-      cell: ({ row }) => {
-        const netProfit = row.original.netProfit;
-        const isWin = checkWin(netProfit);
-        return (
-          <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <Profit
+          amount={Number(row.original.netProfit)}
+          coin={row.original.coin}
+        />
+      ),
       meta: {
         className: "text-center",
       },

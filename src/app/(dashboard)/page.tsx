@@ -1,7 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { Info } from "lucide-react";
 import { useTranslations } from "next-intl";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { AvgWinLoss } from "@/features/dashboard/components/avg-win-loss";
 import { DayProfits } from "@/features/dashboard/components/day-profits";
 import { DayProfitsChart } from "@/features/dashboard/components/day-profits-chart";
@@ -14,13 +20,6 @@ import DayProfitsProvider from "@/features/dashboard/context/day-profits-context
 import { getStatistics } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
 
 export default function Dashboard() {
   const t = useTranslations("dashboard");

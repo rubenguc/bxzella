@@ -1,8 +1,8 @@
-import { WeekSummary } from "@/features/dashboard/interfaces/dashboard-interfaces";
-import { formatDecimal } from "@/utils/number-utils";
-import { Coin } from "@/interfaces/global-interfaces";
 import { useTranslations } from "next-intl";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
+import type { WeekSummary } from "@/features/dashboard/interfaces/dashboard-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
 
 interface WeekSummaryCellProps extends WeekSummary {
   coin: Coin;
@@ -21,12 +21,12 @@ export function WeekSummaryCell({
       <div className="text-[10px] sm:text-xs font-medium">
         {t("week")} {weekNumber}
       </div>
-      <div
-        className={`text-[10px] sm:text-xs font-bold ${totalNetProfit >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
-      >
-        {formatDecimal(totalNetProfit)} {coin}
-      </div>
-      <Badge variant="secondary" className="mt-2">
+      <Profit
+        className={`text-[10px] sm:text-xs font-bold`}
+        amount={totalNetProfit}
+        coin={coin}
+      />
+      <Badge variant="secondary" className="mt-1">
         {daysTraded} {t("total_days")}
       </Badge>
     </div>

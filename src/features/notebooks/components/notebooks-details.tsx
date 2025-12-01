@@ -1,12 +1,12 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Profit } from "@/components/profit";
 import { TextEditor } from "@/components/text-editor/text-editor";
 import { Button } from "@/components/ui/button";
 import { useEditorText } from "@/hooks/use-text-editor";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
-import { formatDecimal } from "@/utils/number-utils";
 import { checkWin } from "@/utils/trade-utils";
 import { useNotebooksContext } from "../context/notebooks-context";
 import { updateNotebookByTradeIdAction } from "../server/actions/notebooks-actions";
@@ -61,9 +61,12 @@ export function NotebookDetails() {
       </div>
 
       <div className="border-2 border-accent rounded-md p-2 mb-3">
-        <h3 className={isWin ? "text-green-600" : "text-red-600"}>
-          {t("net_pnl")} {formatDecimal(Number(netProfit), 4)} {coin}
-        </h3>
+        <div className="flex items-center gap-1">
+          <span className={isWin ? "text-green-500" : "text-red-500"}>
+            {t("net_pnl")}
+          </span>
+          <Profit amount={Number(netProfit)} coin={coin} />
+        </div>
       </div>
 
       <div className="my-4">

@@ -1,6 +1,6 @@
+import type { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
 import { formatDecimal } from "@/utils/number-utils";
-import { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
-import { Coin } from "@/interfaces/global-interfaces";
 
 interface CalendarCellProps extends CalendarCell {
   coin: Coin;
