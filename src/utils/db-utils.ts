@@ -1,4 +1,4 @@
-import type { FilterQuery, Model } from "mongoose";
+import type { FilterQuery, Model, PopulateOptions } from "mongoose";
 
 type AnyObject = Record<string, any>;
 
@@ -7,15 +7,12 @@ export interface PaginationParams {
   limit?: number;
   sortBy?: AnyObject;
   projection?: AnyObject;
+  populate?: PopulateOptions | string | (PopulateOptions | string)[];
 }
 
 export interface PaginationResponse<T> {
   data: T[];
   totalPages: number;
-  // totalItems: number;
-  // currentPage: number;
-  // hasNextPage: boolean;
-  // hasPrevPage: boolean;
 }
 
 export async function getPaginatedData<T>(
@@ -28,18 +25,21 @@ export async function getPaginatedData<T>(
     sortBy = {
       _id: -1,
     },
+    populate,
   }: PaginationParams = {},
 ): Promise<PaginationResponse<T>> {
   const skip = page * limit;
 
+  const query = model.find(findCriteria, projection);
+
+  if (populate) {
+    // @ts-expect-error ---
+    query.populate(populate);
+  }
+
   const [totalItems, data] = await Promise.all([
     model.countDocuments(findCriteria, projection),
-    model
-      .find(findCriteria, projection)
-      .sort(sortBy)
-      .skip(skip)
-      .limit(limit)
-      .lean<T[]>(),
+    query.sort(sortBy).skip(skip).limit(limit).lean<T[]>(),
   ]);
 
   const totalPages = Math.ceil(totalItems / limit);
@@ -47,9 +47,5 @@ export async function getPaginatedData<T>(
   return {
     data,
     totalPages,
-    // totalItems,
-    // currentPage: page,
-    // hasNextPage: page < totalPages,
-    // hasPrevPage: page > 1,
   };
 }

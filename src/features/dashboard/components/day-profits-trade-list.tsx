@@ -7,19 +7,20 @@ import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
 import { Badge } from "@/components/ui/badge";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import type { LimitedTrade } from "../interfaces/dashboard-interfaces";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
 import { Profit } from "@/components/profit";
 
 interface DayProfitsTradeListProps {
-  trades: TradeDocument[];
+  trades: LimitedTrade[];
 }
 
 export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
 
-  const columns: ColumnDef<TradeDocument>[] = [
+  const columns: ColumnDef<LimitedTrade>[] = [
     {
       header: tInfo("open_date"),
       accessorKey: "openTime",

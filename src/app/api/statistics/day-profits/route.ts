@@ -4,9 +4,9 @@ import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { dayProfitsSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
-import { getTradeProfitByDays } from "@/features/trades/server/db/trades-db";
 import { getTimeZoneFromHeader } from "@/utils/date-utils";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
+import { getDayProfitsWithTrades } from "@/features/day-log/server/db/day-log-db";
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,15 +41,12 @@ export async function GET(request: NextRequest) {
       endDate = format(lastDayCurrentMonth, "yyyy-MM-dd");
     }
 
-    const data = await getTradeProfitByDays(
-      {
-        accountId,
-        startDate,
-        endDate,
-        coin,
-      },
-      timezone,
-    );
+    const data = await getDayProfitsWithTrades({
+      accountId,
+      startDate,
+      endDate,
+      coin,
+    });
 
     return NextResponse.json(data);
   } catch (err) {

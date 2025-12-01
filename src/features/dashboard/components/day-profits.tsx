@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,12 +18,9 @@ import {
 } from "@/features/dashboard/hooks/useDayProfits";
 import { getDayProfits } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { formatDecimal } from "@/utils/number-utils";
-import { getResultClass } from "@/utils/trade-utils";
 import { useDayProfitsContext } from "../context/day-profits-context";
 import { DayProfitsCell } from "./day-profits-cell";
 import { WeekSummaryCell } from "./week-summary-cell";
-import { Profit } from "@/components/profit";
 
 const daysOfWeekKeys = [
   "sunday",
@@ -65,6 +63,12 @@ export function DayProfits() {
   const { calendarData, weeklySummaries, monthlySummary } = useDayProfitsData({
     data: data || [],
     month: monthValue,
+  });
+
+  console.log({
+    calendarData,
+    weeklySummaries,
+    monthlySummary,
   });
 
   return (

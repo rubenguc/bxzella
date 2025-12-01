@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useMemo, useState } from "react";
 import type { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
-import type { TradeProfitPerDay } from "@/features/trades/interfaces/trades-interfaces";
+import type { GetDayProfitsWithTradesResponse } from "@/features/day-log/interfaces/day-log-interfaces";
 
 export interface WeekSummary {
   weekNumber: number;
@@ -179,7 +179,7 @@ export const useDayProfitsData = ({
   data,
   month,
 }: {
-  data: TradeProfitPerDay[];
+  data: GetDayProfitsWithTradesResponse[];
   month: string;
 }) => {
   // Parse the month string to get year and month number
@@ -200,7 +200,7 @@ export const useDayProfitsData = ({
     const tradingMap = new Map();
     data.forEach((day) => {
       // Directly parse the date string "yyyy-mm-dd"
-      const dateParts = day._id.split("-");
+      const dateParts = day.date.split("-");
       const dayOfMonth = parseInt(dateParts[2], 10);
       const monthNum = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
       const year = parseInt(dateParts[0], 10);
@@ -208,9 +208,9 @@ export const useDayProfitsData = ({
       // Ensure the parsed date belongs to the currently displayed month and year
       if (year === currentYear && monthNum === currentMonthNum) {
         tradingMap.set(dayOfMonth, {
-          amount: day.netProfit,
-          trades: day.trades.length,
-          type: day.netProfit >= 0 ? "profit" : "loss",
+          amount: day.netPnL,
+          trades: day.totalTrades,
+          type: day.netPnL >= 0 ? "profit" : "loss",
           allTrades: day.trades,
         });
       }
@@ -281,7 +281,7 @@ export const useDayProfitsData = ({
         const cell = processCalendarData[index];
 
         if (cell && cell.date !== null && cell.amount !== null) {
-          totalNetProfit += cell.amount;
+          totalNetProfit += Number(cell.amount);
           totalTrades += cell.trades || 0;
           if (
             cell.amount !== 0 ||
@@ -310,7 +310,7 @@ export const useDayProfitsData = ({
 
     processCalendarData.forEach((cell) => {
       if (cell && cell.date !== null && cell.amount !== null) {
-        totalNetProfit += cell.amount;
+        totalNetProfit += Number(cell.amount);
         if (
           cell.amount !== 0 ||
           (cell.amount === 0 && cell.trades && cell.trades > 0)

@@ -6,6 +6,7 @@ import {
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
+import { registerDayLogs } from "@/features/day-log/service/day-log-service";
 import type {
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
@@ -16,6 +17,7 @@ import type {
   GetTradesByAccountIdResponse,
   GetTradesStatisticProps,
   Trade,
+  TradeDocument,
   TradePlaybook,
   TradeStatisticsResult,
 } from "@/features/trades/interfaces/trades-interfaces";
@@ -28,6 +30,7 @@ import { adjustDateToUTC } from "../../utils/trades-utils";
 export async function syncPositions(
   accountId: string,
   coin: Coin = "USDT",
+  timezone: number = 0,
 ): Promise<{
   synced: boolean;
   syncTime: number;
@@ -68,10 +71,22 @@ export async function syncPositions(
   const session = await mongoose.startSession();
 
   const syncTime = Date.now();
+
   try {
     await session.withTransaction(async () => {
       await updateLastSyncPerCoin(account._id, coinToSearch, syncTime, session);
       await saveMultipleTrades(positions, account._id, session);
+
+      await registerDayLogs(
+        {
+          accountId,
+          coin: coinToSearch,
+          positionIds:
+            positions.map((position) => position.positionId as string) || [],
+          timezone,
+        },
+        session,
+      );
     });
   } finally {
     session.endSession();
@@ -110,6 +125,18 @@ export async function saveMultipleTrades(
     })),
     { session },
   );
+}
+
+export async function getTradesByPositionIds(
+  accountId: string,
+  positionIds: string[],
+  coin: Coin,
+) {
+  return await TradeModel.find({
+    accountId,
+    positionId: { $in: positionIds },
+    coin,
+  }).lean<TradeDocument[]>();
 }
 
 export async function getTradesByAccountId(

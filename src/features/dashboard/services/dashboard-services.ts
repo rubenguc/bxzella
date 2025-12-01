@@ -1,7 +1,5 @@
-import type {
-  TradeProfitPerDay,
-  TradeStatisticsResult,
-} from "@/features/trades/interfaces/trades-interfaces";
+import type { GetDayProfitsWithTradesResponse } from "@/features/day-log/interfaces/day-log-interfaces";
+import type { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { baseConfig } from "@/services/api";
 
@@ -19,7 +17,7 @@ export const getDayProfits = async (params: {
   accountId: string;
   coin: Coin;
   month?: string;
-}): Promise<TradeProfitPerDay[]> => {
+}): Promise<GetDayProfitsWithTradesResponse[]> => {
   const response = await baseConfig.get("/statistics/day-profits", { params });
   return response.data;
 };
