@@ -16,7 +16,7 @@ import {
   useDayProfitsData,
   useMonthSelection,
 } from "@/features/dashboard/hooks/useDayProfits";
-import { getDayProfits } from "@/features/dashboard/services/dashboard-services";
+import { getDayProfitsByMonth } from "@/features/dashboard/services/dashboard-services";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { useDayProfitsContext } from "../context/day-profits-context";
 import { DayProfitsCell } from "./day-profits-cell";
@@ -52,7 +52,7 @@ export function DayProfits() {
   const { data, isLoading } = useQuery({
     queryKey: ["day-profits", selectedAccount?._id, coin, monthValue],
     queryFn: () =>
-      getDayProfits({
+      getDayProfitsByMonth({
         accountId: selectedAccount!._id,
         coin,
         month: monthValue,
@@ -63,12 +63,6 @@ export function DayProfits() {
   const { calendarData, weeklySummaries, monthlySummary } = useDayProfitsData({
     data: data || [],
     month: monthValue,
-  });
-
-  console.log({
-    calendarData,
-    weeklySummaries,
-    monthlySummary,
   });
 
   return (

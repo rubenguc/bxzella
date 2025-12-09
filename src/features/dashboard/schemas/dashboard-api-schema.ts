@@ -12,7 +12,7 @@ export const statictisSearchParamsSchema = z.object({
   coin: coinParamValidation(),
 });
 
-export const dayProfitsSearchParamsSchema = z.object({
+export const dayProfitsByMonthSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   coin: coinParamValidation(),
   month: z

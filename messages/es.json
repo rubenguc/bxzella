@@ -5,8 +5,9 @@
     "accounts": "Cuentas",
     "info": "Información",
     "create-api-key": "Crear Clave API",
+    "daily-journal": "Diario diario",
     "playbooks": "Manual de operaciones",
-    "dashboard": "Cuadro de mando",
+    "": "Cuadro de mando",
     "settings": "Panel de control",
     "notebooks": "Cuadernos"
   },
@@ -142,7 +143,6 @@
   "accounts": {
     "add_account": "Agregar Cuenta",
     "name": "Nombre",
-    "provider": "Proveedor",
     "no_accounts": "No hay cuentas",
     "add_new_account": "Agregar Nueva Cuenta",
     "edit_account": "Editar Cuenta",
@@ -158,6 +158,7 @@
     "create_api_key_info": "¿No sabes cómo crear una clave API? Sigue esta <link>guía</link> para aprender cómo crear una clave API.",
     "invalid_api_keys": "Claves API inválidas",
     "invalid_account_data": "Datos de cuenta inválidos",
+    "provider": "Proveedor",
     "account_already_exists": "La cuenta ya existe",
     "error_creating_account": "Error al crear la cuenta",
     "error_updating_account": "Error al actualizar la cuenta",
@@ -302,5 +303,15 @@
       "avg_winner": "Ganancia Promedio",
       "avg_loser": "Pérdida Promedio"
     }
+  },
+  "daily-journal": {
+    "net_pnl": "Ganancia Neta",
+    "view_notes": "Ver Notas",
+    "total_trades": "Operaciones Totales",
+    "winrate": "Tasa de Ganancia",
+    "winners": "Ganadores",
+    "losers": "Perdedores",
+    "profit_factor": "Factor de Ganancia",
+    "commisions": "Comisiones"
   }
 }

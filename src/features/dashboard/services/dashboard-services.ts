@@ -13,7 +13,7 @@ export const getStatistics = async (params: {
   return response.data;
 };
 
-export const getDayProfits = async (params: {
+export const getDayProfitsByMonth = async (params: {
   accountId: string;
   coin: Coin;
   month?: string;

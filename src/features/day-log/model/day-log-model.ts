@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import type { DayLog } from "../interfaces/day-log-interfaces";
 
 export const DayLogSchema = new Schema<DayLog>(
@@ -10,7 +10,7 @@ export const DayLogSchema = new Schema<DayLog>(
     },
     trades: [{ type: Schema.Types.ObjectId, ref: "Trade" }],
     accountId: {
-      type: Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "Account",
       required: true,
     },

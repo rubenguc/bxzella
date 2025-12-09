@@ -45,6 +45,24 @@ export interface GetDayProfitsWithTradesProps {
   startDate?: string;
   endDate?: string;
   coin?: Coin;
+  page: number;
+  limit: number;
+}
+
+export interface GetFullDayProfitsWithTradesResponse
+  extends Omit<DayLogDocument, "trades"> {
+  trades: Array<
+    Pick<
+      TradeDocument,
+      | "_id"
+      | "openTime"
+      | "updateTime"
+      | "symbol"
+      | "positionSide"
+      | "leverage"
+      | "netProfit"
+    >
+  >;
 }
 
 export interface GetDayProfitsWithTradesResponse

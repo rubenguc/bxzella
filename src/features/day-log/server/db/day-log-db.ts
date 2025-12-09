@@ -7,8 +7,10 @@ import type {
   GetDayLogsByAccountIdResponse,
   GetDayProfitsWithTradesProps,
   GetDayProfitsWithTradesResponse,
+  GetFullDayProfitsWithTradesResponse,
 } from "@/features/day-log/interfaces/day-log-interfaces";
 import { DayLogModel } from "@/features/day-log/model/day-log-model";
+import type { PaginationResponse } from "@/interfaces/global-interfaces";
 import { getPaginatedData } from "@/utils/db-utils";
 
 export async function createOrUpdateDayLogs(
@@ -88,24 +90,68 @@ export async function getDayProfitsWithTrades({
   coin,
   startDate,
   endDate,
-}: GetDayProfitsWithTradesProps): Promise<GetDayProfitsWithTradesResponse[]> {
-  return await DayLogModel.find(
-    {
-      accountId: new mongoose.Types.ObjectId(accountId),
-      coin,
-      date: { $gte: startDate, $lte: endDate },
+  limit,
+  page,
+}: GetDayProfitsWithTradesProps): Promise<
+  PaginationResponse<GetDayProfitsWithTradesResponse>
+> {
+  const find: Record<string, any> = {
+    accountId: new mongoose.Types.ObjectId(accountId),
+    coin,
+  };
+
+  if (startDate && endDate) {
+    find.date = { $gte: startDate, $lte: endDate };
+  }
+
+  return await getPaginatedData(DayLogModel, find, {
+    page,
+    limit,
+    sortBy: {
+      date: -1,
     },
-    {
+    projection: {
       _id: 1,
       date: 1,
       trades: 1,
       netPnL: 1,
       totalTrades: 1,
     },
-  )
-    .populate({
+    populate: {
       path: "trades",
       select: "openTime updateTime symbol positionSide leverage netProfit",
-    })
-    .lean<GetDayProfitsWithTradesResponse[]>();
+    },
+  });
+}
+
+export async function getFullDayProfitsWithTrades({
+  accountId,
+  coin,
+  startDate,
+  endDate,
+  limit,
+  page,
+}: GetDayProfitsWithTradesProps): Promise<
+  PaginationResponse<GetFullDayProfitsWithTradesResponse>
+> {
+  const find: Record<string, any> = {
+    accountId: new mongoose.Types.ObjectId(accountId),
+    coin,
+  };
+
+  if (startDate && endDate) {
+    find.date = { $gte: startDate, $lte: endDate };
+  }
+
+  return await getPaginatedData(DayLogModel, find, {
+    page,
+    limit,
+    sortBy: {
+      date: -1,
+    },
+    populate: {
+      path: "trades",
+      select: "openTime updateTime symbol positionSide leverage netProfit",
+    },
+  });
 }

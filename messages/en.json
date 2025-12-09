@@ -5,6 +5,7 @@
     "accounts": "Accounts",
     "info": "Info",
     "create-api-key": "Create API Key",
+    "daily-journal": "Daily Journal",
     "playbooks": "Playbooks",
     "": "Dashboard",
     "settings": "Settings",
@@ -302,5 +303,15 @@
       "error_updating_notebook_template": "Error updating notebook template",
       "error_deleting_notebook_template": "Error deleting notebook template"
     }
+  },
+  "daily-journal": {
+    "net_pnl": "Net PnL",
+    "view_notes": "View Notes",
+    "total_trades": "Total Trades",
+    "winrate": "Winrate",
+    "winners": "Winners",
+    "losers": "Losers",
+    "profit_factor": "Profit Factor",
+    "commisions": "Commisions"
   }
 }

@@ -10,6 +10,7 @@ interface ProfitProps
   decimals?: number;
   showSign?: boolean;
   isApprox?: boolean;
+  preffix?: string;
 }
 
 export function Profit({
@@ -19,10 +20,11 @@ export function Profit({
   className = "",
   showSign = true,
   isApprox = false,
+  preffix = "",
   ...props
 }: ProfitProps) {
   const colorText = getResultClass(amount);
-  const formattedAmount = `${isApprox ? "≈" : ""} ${formatDecimal(amount, decimals, showSign)} ${coin}`;
+  const formattedAmount = `${isApprox ? "≈" : ""} ${preffix} ${formatDecimal(amount, decimals, showSign)} ${coin}`;
 
   return (
     <span {...props} className={`${colorText} ${className}`}>

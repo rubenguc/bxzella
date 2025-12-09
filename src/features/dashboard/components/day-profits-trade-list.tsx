@@ -5,12 +5,11 @@ import {
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
-import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import type { LimitedTrade } from "../interfaces/dashboard-interfaces";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
-import { Profit } from "@/components/profit";
+import type { LimitedTrade } from "../interfaces/dashboard-interfaces";
 
 interface DayProfitsTradeListProps {
   trades: LimitedTrade[];

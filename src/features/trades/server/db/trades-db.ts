@@ -6,7 +6,6 @@ import {
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
-import { registerDayLogs } from "@/features/day-log/service/day-log-service";
 import type {
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
@@ -26,6 +25,7 @@ import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 import { adjustDateToUTC } from "../../utils/trades-utils";
+import { registerDayLogs } from "@/features/day-log/utils/day-log-utils";
 
 export async function syncPositions(
   accountId: string,

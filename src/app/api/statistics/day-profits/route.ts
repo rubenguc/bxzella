@@ -3,16 +3,16 @@ import { toZonedTime } from "date-fns-tz";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
-import { dayProfitsSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
+import { dayProfitsByMonthSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
+import { getDayProfitsWithTrades } from "@/features/day-log/server/db/day-log-db";
 import { getTimeZoneFromHeader } from "@/utils/date-utils";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
-import { getDayProfitsWithTrades } from "@/features/day-log/server/db/day-log-db";
 
 export async function GET(request: NextRequest) {
   try {
     const { accountId, coin, month } = parseSearchParams(
       request,
-      dayProfitsSearchParamsSchema,
+      dayProfitsByMonthSearchParamsSchema,
     );
 
     const timezone = await getTimeZoneFromHeader(headers);
@@ -46,9 +46,11 @@ export async function GET(request: NextRequest) {
       startDate,
       endDate,
       coin,
+      limit: 31,
+      page: 0,
     });
 
-    return NextResponse.json(data);
+    return NextResponse.json(data.data || []);
   } catch (err) {
     return handleApiError(err);
   }
