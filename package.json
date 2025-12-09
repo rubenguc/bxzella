@@ -44,7 +44,7 @@
     "lexical": "^0.37.0",
     "lucide-react": "^0.513.0",
     "mongoose": "^8.15.1",
-    "next": "15.5.4",
+    "next": "15.5.7",
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "react": "19.2.0",
