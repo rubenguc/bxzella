@@ -90,7 +90,9 @@ export function DayProfitsChart({
     <>
       <XAxis
         dataKey="day"
-        tickFormatter={(value) => new Date(value).toLocaleDateString()}
+        tickFormatter={(value) =>
+          new Date(`${value}T12:00:00`).toLocaleDateString()
+        }
         interval="equidistantPreserveStart"
         tick={{ textAnchor: "middle" }}
         tickMargin={10}
@@ -107,7 +109,9 @@ export function DayProfitsChart({
           </span>,
           null,
         ]}
-        labelFormatter={(label) => new Date(label).toLocaleDateString()}
+        labelFormatter={(label) =>
+          new Date(`${label}T12:00:00`).toLocaleDateString()
+        }
       />
     </>
   );
