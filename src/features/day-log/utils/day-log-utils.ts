@@ -99,7 +99,11 @@ export async function registerDayLogs(
     accountId,
     positionIds,
     coin,
+    session,
   );
+
+  if (positions.length === 0) throw new Error("invalid_positions");
+
   const tradesByDate: { [date: string]: TradeDocument[] } = {};
   for (const position of positions) {
     if (position.updateTime) {
@@ -112,10 +116,12 @@ export async function registerDayLogs(
       tradesByDate[dateStr].push(position);
     }
   }
+
   // Collect all day logs to be updated
   const dayLogsToSave: DayLog[] = [];
   for (const [date, dateTrades] of Object.entries(tradesByDate)) {
     let dayLog = await getDayLogByDate({ accountId, date, coin });
+
     if (!dayLog) {
       // @ts-expect-error ---
       dayLog = {

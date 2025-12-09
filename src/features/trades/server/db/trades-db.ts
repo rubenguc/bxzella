@@ -131,12 +131,19 @@ export async function getTradesByPositionIds(
   accountId: string,
   positionIds: string[],
   coin: Coin,
+  session?: mongoose.ClientSession,
 ) {
-  return await TradeModel.find({
-    accountId,
-    positionId: { $in: positionIds },
-    coin,
-  }).lean<TradeDocument[]>();
+  return await TradeModel.find(
+    {
+      accountId,
+      positionId: { $in: positionIds },
+      coin,
+    },
+    null,
+    {
+      session,
+    },
+  ).lean<TradeDocument[]>();
 }
 
 export async function getTradesByAccountId(
