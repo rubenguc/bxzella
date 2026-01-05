@@ -313,5 +313,13 @@
     "losers": "Perdedores",
     "profit_factor": "Factor de Ganancia",
     "commisions": "Comisiones"
+  },
+  "coin-performance": {
+    "net_pnl": "Ganancia Neta",
+    "view_notes": "Ver Notas",
+    "total_trades": "Operaciones Totales",
+    "winrate": "Tasa de Ganancia",
+    "winners": "Ganadores",
+    "losers": "Perdedores"
   }
 }

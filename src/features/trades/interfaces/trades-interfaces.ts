@@ -157,3 +157,18 @@ export interface GetTradeProfitByDays {
   endDate: string;
   coin?: Coin;
 }
+
+export interface GetCoinPerformanceProps {
+  accountId: string;
+  startDate: string;
+  endDate: string;
+  coin?: Coin;
+}
+
+export type GetCoinPerformanceResponse = Record<
+  string,
+  {
+    LONG: Partial<TradeStatisticsResult>;
+    SHORT: Partial<TradeStatisticsResult>;
+  }
+>;

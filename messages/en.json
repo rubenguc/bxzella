@@ -313,5 +313,13 @@
     "losers": "Losers",
     "profit_factor": "Profit Factor",
     "commisions": "Commisions"
+  },
+  "coin-performance": {
+    "net_pnl": "Net PnL",
+    "view_notes": "View Notes",
+    "total_trades": "Total Trades",
+    "winrate": "Winrate",
+    "winners": "Winners",
+    "losers": "Losers"
   }
 }

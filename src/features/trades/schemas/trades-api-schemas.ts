@@ -20,3 +20,10 @@ export const openPositionsSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
   coin: coinParamValidation(),
 });
+
+export const coinPerformanceSearchParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+  startDate: dateParamValidationOptional({ field: "startDate" }),
+  endDate: dateParamValidationOptional({ field: "endDate" }),
+  coin: coinParamValidation(),
+});

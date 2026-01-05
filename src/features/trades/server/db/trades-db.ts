@@ -7,6 +7,7 @@ import {
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
+  GetCoinPerformanceResponse,
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
   GetPlaybookRulesCompletionByPlaybookId,
@@ -561,4 +562,169 @@ export async function getPlaybookRulesCompletionByPlaybookId(
   return {
     rulesGroupCompletion,
   };
+}
+
+export async function getTradesStatisticsBySymbol(
+  { accountId, startDate, endDate, coin }: GetTradesStatisticProps,
+  timezone: number,
+): Promise<GetCoinPerformanceResponse> {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
+
+  const matchStage: mongoose.PipelineStage.Match = {
+    $match: {
+      accountId: new mongoose.Types.ObjectId(accountId),
+      closeAllPositions: true,
+      coin: coin as string,
+      openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+      updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+    },
+  };
+
+  const addFieldsStage: mongoose.PipelineStage.AddFields = {
+    $addFields: {
+      numericNetProfit: {
+        $convert: {
+          input: "$netProfit",
+          to: "double",
+          onError: 0,
+        },
+      },
+    },
+  };
+
+  const facetStage: mongoose.PipelineStage.Facet = {
+    $facet: {
+      // 1. Agrupación por Posición (LONG/SHORT)
+      by_position: [
+        {
+          $group: {
+            _id: {
+              symbol: "$symbol",
+              positionSide: "$positionSide", // Agrupa por dirección
+            },
+            totalTrades: { $sum: 1 },
+            totalWin: {
+              $sum: { $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0] },
+            },
+            totalLoss: {
+              $sum: { $cond: [{ $lt: ["$numericNetProfit", 0] }, 1, 0] },
+            },
+            netPnL: { $sum: "$numericNetProfit" },
+          },
+        },
+        // Proyecto con la estructura plana simplificada (LONG/SHORT)
+        {
+          $project: {
+            _id: 0,
+            symbol: "$_id.symbol",
+            positionSide: "$_id.positionSide",
+            netPnL: "$netPnL",
+            totalTrades: "$totalTrades",
+            winners: "$totalWin",
+            lossers: "$totalLoss",
+            winRate: {
+              $multiply: [
+                {
+                  $divide: [
+                    "$totalWin",
+                    {
+                      $cond: [{ $eq: ["$totalTrades", 0] }, 1, "$totalTrades"],
+                    },
+                  ],
+                },
+                100,
+              ],
+            },
+          },
+        },
+      ],
+
+      // 2. Agrupación GENERAL (por Symbol solamente)
+      general: [
+        {
+          $group: {
+            _id: {
+              symbol: "$symbol", // Solo agrupa por symbol
+            },
+            totalTrades: { $sum: 1 },
+            netPnL: { $sum: "$numericNetProfit" },
+          },
+        },
+        // Proyecto para la estructura plana del GENERAL
+        {
+          $project: {
+            _id: 0,
+            symbol: "$_id.symbol",
+            netPnL: "$netPnL",
+            totalTrades: "$totalTrades",
+          },
+        },
+      ],
+    },
+  };
+
+  // Ejecutar el pipeline
+  const aggregationResult = await TradeModel.aggregate([
+    matchStage,
+    addFieldsStage,
+    facetStage,
+  ]);
+
+  const facetResult = aggregationResult[0]; // El resultado de $facet es un solo documento
+
+  // 4. POST-PROCESSING (Reestructurar los resultados de $facet)
+  const finalResult: GetCoinPerformanceResponse =
+    {} as GetCoinPerformanceResponse;
+
+  // Procesar las estadísticas LONG/SHORT (by_position)
+  for (const item of facetResult.by_position) {
+    const symbolKey = item.symbol as string;
+    const positionSide = item.positionSide as "LONG" | "SHORT";
+
+    if (!finalResult[symbolKey]) {
+      // Inicializamos para este par de trading (symbol)
+      finalResult[symbolKey] = {
+        LONG: {},
+        SHORT: {},
+        GENERAL: {}, // ¡Ahora también inicializamos GENERAL!
+      } as {
+        LONG: Partial<TradeStatisticsResult>;
+        SHORT: Partial<TradeStatisticsResult>;
+        GENERAL: Partial<TradeStatisticsResult>;
+      };
+    }
+
+    delete item.symbol;
+    delete item.positionSide;
+
+    // Asignamos las métricas a LONG o SHORT
+    finalResult[symbolKey][positionSide] =
+      item as Partial<TradeStatisticsResult>;
+  }
+
+  // Procesar las estadísticas GENERAL (general)
+  for (const item of facetResult.general) {
+    const symbolKey = item.symbol as string;
+
+    // Aseguramos que la estructura para este symbol exista
+    if (!finalResult[symbolKey]) {
+      finalResult[symbolKey] = {
+        LONG: {},
+        SHORT: {},
+        GENERAL: {},
+      } as {
+        LONG: Partial<TradeStatisticsResult>;
+        SHORT: Partial<TradeStatisticsResult>;
+        GENERAL: Partial<TradeStatisticsResult>;
+      };
+    }
+
+    delete item.symbol;
+
+    // Asignamos las métricas a GENERAL
+    finalResult[symbolKey]["GENERAL"] = item as Partial<TradeStatisticsResult>;
+  }
+
+  return finalResult;
 }

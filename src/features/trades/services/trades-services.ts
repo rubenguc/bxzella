@@ -1,4 +1,6 @@
 import type {
+  GetCoinPerformanceProps,
+  GetCoinPerformanceResponse,
   GetOpenPositionsProps,
   GetTradesByAccountId,
   OpenPosition,
@@ -21,5 +23,14 @@ export const getOpenPositions = async (
   params: GetOpenPositionsProps,
 ): Promise<PaginationResponse<OpenPosition>> => {
   const response = await baseConfig.get("/trades/open-positions", { params });
+  return response.data;
+};
+
+export const getCoinPerformance = async (
+  params: GetCoinPerformanceProps,
+): Promise<GetCoinPerformanceResponse> => {
+  const response = await baseConfig.get("/reports/coin-performance", {
+    params,
+  });
   return response.data;
 };
