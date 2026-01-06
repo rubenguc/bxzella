@@ -101,8 +101,12 @@ export async function updateEarliestTradeDatePerCoin(
   coin: Coin,
   date: Date,
 ) {
-  await AccountModel.updateOne(
+  return await AccountModel.findOneAndUpdate(
     { _id: id },
     { $set: { [`earliestTradeDatePerCoin.${coin}`]: date } },
+    {
+      new: true,
+      upsert: true,
+    },
   );
 }

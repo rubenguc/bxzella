@@ -22,6 +22,7 @@ type UserConfig = {
   dayProfitsChartMode: DayProfitsChartMode;
   setDayProfitsChartMode: (mode: DayProfitsChartMode) => void;
   updateLastSyncTime: (time: number) => void;
+  updateEarliestTradeDate: (date: string) => void;
 };
 
 export const useUserConfigStore = create<UserConfig>()(
@@ -48,6 +49,17 @@ export const useUserConfigStore = create<UserConfig>()(
             lastSyncPerCoin: {
               ...state.selectedAccount?.lastSyncPerCoin,
               [state.coin]: time,
+            },
+          },
+        })),
+      updateEarliestTradeDate: (date: string) =>
+        set((state) => ({
+          ...state,
+          selectedAccount: {
+            ...(state.selectedAccount as SelectedAccount),
+            earliestTradeDatePerCoin: {
+              ...state.selectedAccount?.earliestTradeDatePerCoin,
+              [state.coin]: date,
             },
           },
         })),
