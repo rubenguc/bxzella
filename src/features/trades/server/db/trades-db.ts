@@ -35,6 +35,7 @@ export async function syncPositions(
 ): Promise<{
   synced: boolean;
   syncTime: number;
+  earliestTradeDate: string;
 }> {
   console.log(`syncing positions for: ${accountId}...`);
 
@@ -43,6 +44,7 @@ export async function syncPositions(
     return {
       synced: false,
       syncTime: 0,
+      earliestTradeDate: 0,
     };
 
   const coinToSearch = account.provider === "bitunix" ? "USDT" : coin;
@@ -67,11 +69,13 @@ export async function syncPositions(
     return {
       synced: false,
       syncTime: 0,
+      earliestTradeDate: 0,
     };
 
   const session = await mongoose.startSession();
 
   const syncTime = Date.now();
+  let earliestTradeDate = "";
 
   try {
     await session.withTransaction(async () => {
@@ -97,17 +101,20 @@ export async function syncPositions(
         prev.openTime! < curr.openTime! ? prev : curr,
       );
 
-      await updateEarliestTradeDatePerCoin(
+      const result = await updateEarliestTradeDatePerCoin(
         account._id,
         coin,
         oldestPosition.openTime!,
       );
+
+      earliestTradeDate = result.earliestTradeDatePerCoin[coin] || 0;
+      console.log("result:", earliestTradeDate);
     }
   }
-  console.log("positions synced");
   return {
     synced: true,
     syncTime,
+    earliestTradeDate,
   };
 }
 
@@ -727,4 +734,11 @@ export async function getTradesStatisticsBySymbol(
   }
 
   return finalResult;
+}
+
+export function getTradeByAccountId({
+  accountId,
+  positionId,
+}: Pick<Trade, "positionId" | "accountId">): Promise<TradeDocument | null> {
+  return TradeModel.findOne({ accountId, positionId }).lean<TradeDocument>();
 }

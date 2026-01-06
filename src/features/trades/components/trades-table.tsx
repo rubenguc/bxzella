@@ -7,13 +7,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useTradeContext } from "@/features/trades/context/trades-context";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
@@ -24,8 +23,6 @@ export function TradesTable() {
   const { selectedAccount, coin } = useUserConfigStore();
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
-
-  const { setCurrentTrade } = useTradeContext();
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
@@ -121,14 +118,15 @@ export function TradesTable() {
     {
       id: "actions",
       cell: ({ row }) => (
-        <Button
-          variant="ghost"
+        <Link
+          // variant="ghost"
+          href={`/trades/details/${row.original.positionId}`}
           className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
-          onClick={() => setCurrentTrade(row.original)}
+          // onClick={() => setCurrentTrade(row.original)}
         >
           <Eye className="h-4 w-4" />
           <span className="sr-only">Open menu</span>
-        </Button>
+        </Link>
       ),
     },
   ];

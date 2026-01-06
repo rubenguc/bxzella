@@ -114,6 +114,7 @@ export const TradeSchema = new Schema<Trade>({
 
 // Create an interface for playbook
 
+TradeSchema.index({ positionId: 1, accountId: 1 });
 TradeSchema.index({ accountId: 1 });
 TradeSchema.index({ accountId: 1, openTime: 1, coin: 1 });
 TradeSchema.index({ accountId: 1, openTime: -1, coin: 1 });

@@ -27,3 +27,7 @@ export const coinPerformanceSearchParamsSchema = z.object({
   endDate: dateParamValidationOptional({ field: "endDate" }),
   coin: coinParamValidation(),
 });
+
+export const positionDetailsParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+});
