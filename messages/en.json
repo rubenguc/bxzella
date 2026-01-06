@@ -86,7 +86,6 @@
     "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader’s strategy results in profitable outcomes.",
     "avg_win_loss": "Avg win/loss trade %",
     "avg_win_loss_info": "The average gain from winning trades and the average loss from losing trades. It helps assess the typical size of profits versus losses per trade.",
-    "please_select_account_to_fetch_data": "Please select an account to fetch data.",
     "win": "Win",
     "lost": "Lost",
     "win_rate": "Win Rate",
@@ -98,6 +97,7 @@
     "no_data_to_show": "No data to show"
   },
   "dashboard": {
+    "please_select_account_to_fetch_data": "Please select an account to fetch data.",
     "last_sync_time": "Last Sync Time",
     "last_sync_time_tooltip": "This time represents the last time the data was synced. If there's not new trades after this date this value won't change",
     "open_positions": {
