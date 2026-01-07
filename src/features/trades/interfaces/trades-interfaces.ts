@@ -168,7 +168,23 @@ export interface GetCoinPerformanceProps {
 export type GetCoinPerformanceResponse = Record<
   string,
   {
-    LONG: Partial<TradeStatisticsResult>;
-    SHORT: Partial<TradeStatisticsResult>;
+    GENERAL: {
+      netPnL: number;
+      totalTrades: number;
+    };
+    LONG: {
+      netPnL: number;
+      totalTrades: number;
+      lossers: number;
+      winRate: number;
+      winners: number;
+    };
+    SHORT: {
+      netPnL: number;
+      totalTrades: number;
+      lossers: number;
+      winRate: number;
+      winners: number;
+    };
   }
 >;

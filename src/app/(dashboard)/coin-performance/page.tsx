@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Profit } from "@/components/profit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -8,8 +10,6 @@ import { useUserConfigStore } from "@/store/user-config-store";
 import { transformDateToParam } from "@/utils/date-utils";
 import { formatDecimal } from "@/utils/number-utils";
 import { transformSymbol } from "@/utils/trade-utils";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
 
 const Item = ({ text, value }: { text: string; value: string | number }) => (
   <div className="flex flex-col">
@@ -70,8 +70,7 @@ export default function CoinPerformance() {
       {Object.keys(coins)
         .sort(
           (coinA, coinB) =>
-            coins[coinB]["GENERAL"]["netPnL"] -
-            coins[coinA]["GENERAL"]["netPnL"],
+            coins?.[coinB]?.GENERAL.netPnL - coins?.[coinA]?.GENERAL.netPnL,
         )
         .map((coin) => (
           <Card key={coin}>
@@ -79,22 +78,19 @@ export default function CoinPerformance() {
               <CardTitle className="flex items-center space-x-2">
                 <span>{transformSymbol(coin)}</span>
                 <Profit
-                  amount={coins[coin]["GENERAL"]["netPnL"]}
+                  amount={coins[coin].GENERAL.netPnL}
                   coin={selectedCoin}
                 />
                 <span className="text-muted-foreground font-light">
-                  {coins[coin]["GENERAL"]["totalTrades"]} trades
+                  {coins[coin].GENERAL.totalTrades} trades
                 </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-1 space-x-3 justify-evenly px-1">
-                <PositionSideData side={"LONG"} values={coins[coin]["LONG"]} />
+                <PositionSideData side={"LONG"} values={coins[coin].LONG} />
                 <Separator orientation="vertical" className="h-28!" />
-                <PositionSideData
-                  side={"SHORT"}
-                  values={coins[coin]["SHORT"]}
-                />
+                <PositionSideData side={"SHORT"} values={coins[coin].SHORT} />
               </div>
             </CardContent>
           </Card>
