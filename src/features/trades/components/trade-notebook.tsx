@@ -53,17 +53,13 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
 
   return (
     <>
-      {/* Loading overlay */}
-
       {isLoading && (
         <div className="absolute top-0 left-0 w-full h-full bg-black/30 flex justify-center items-center">
           <Spinner />
         </div>
       )}
 
-      <span className="text-sm mb-3 bg-accent w-fit rounded-md py-1 px-2">
-        {t("trade_note")}
-      </span>
+      <span className="text-sm mb-2">{t("notes")}</span>
 
       <div className="my-4">
         <NotebookTemplatesRecentlyList

@@ -35,8 +35,8 @@ export function InfoRow({
     <div
       className={`flex items-center justify-between text-sm lg:text-base ${className || ""}`}
     >
-      <div className="flex items-center gap-1.5">
-        <p className="font-medium md:text-gray-300">{label}</p>
+      <div className="flex items-center gap-1.5 text-sm">
+        <p className="text-muted-foreground">{label}</p>
         {tooltipInfo && (
           <Popover>
             <PopoverTrigger asChild>
@@ -177,7 +177,7 @@ export function TradeInfo({
         }
       />
 
-      <p className="text-sm text-gray-400 mt-4">
+      <p className="text-xs text-muted-foreground mt-4">
         * {t("not_exact_values_description")}
       </p>
     </div>
