@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Profit } from "@/components/profit";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,13 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import { DayProfitsTradeList } from "@/features/dashboard/components/day-profits-trade-list";
 import { getDayProfits } from "@/features/day-log/service/day-log-service";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { usePagination } from "@/hooks/use-pagination";
 import { useUserConfigStore } from "@/store/user-config-store";
-import { Button } from "@/components/ui/button";
 import { formatDecimal } from "@/utils/number-utils";
-import { DayProfitsTradeList } from "@/features/dashboard/components/day-profits-trade-list";
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 const Item = ({ text, value }: { text: string; value: string | number }) => (
   <div className="flex flex-col">
@@ -30,7 +31,7 @@ export default function DailyJournal() {
   const t = useTranslations("daily-journal");
   const { selectedAccount, isStoreLoaded, coin } = useUserConfigStore();
 
-  const { limit, page, setPagination } = usePagination();
+  const { limit, page } = usePagination();
 
   const { data, isLoading } = useQuery({
     queryKey: ["day-profits", selectedAccount?._id, coin, limit, page],
@@ -52,12 +53,14 @@ export default function DailyJournal() {
     return format(fechaCorrecta, "E, MMM dd, yyyy");
   };
 
+  if (isLoading) return <Spinner className="mx-auto size-6" />;
+
   return (
     <div className="flex flex-col space-y-5">
       {dailyLogs.map((log) => (
         <Card key={log._id}>
           <CardHeader>
-            <CardTitle className="flex items-center space-x-5">
+            <CardTitle className="flex flex-col md:flex-row  md:items-center space-x-5 space-y-2">
               <span>{formatdDate(log.date)}</span>
               <Profit amount={log.netPnL} coin={coin} preffix={t("net_pnl")} />
             </CardTitle>

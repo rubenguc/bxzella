@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d"
+    "docker:dev:up": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
@@ -34,6 +35,7 @@
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-table": "^8.21.3",
     "ai": "^4.3.16",
+    "apexcharts": "^5.3.6",
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -48,6 +50,7 @@
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "react": "19.2.0",
+    "react-apexcharts": "^1.9.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.57.0",

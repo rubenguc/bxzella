@@ -7,6 +7,10 @@ export function checkLongPosition(positionSide: string) {
 }
 
 export function transformSymbol(symbol: string) {
+  if (symbol.includes("2USD")) {
+    return symbol.replace("NCSK", "").replace("2USD-USDT", "");
+  }
+
   return symbol.split("-")?.[0] || "";
 }
 
@@ -28,8 +32,6 @@ export function formatSymbolAmount(positionAmt: string) {
 export function getRealPositionAmount({
   positionAmt = "",
   avgPrice = "",
-  comission = "",
-  funding = "",
   leverage = 1,
 }: {
   positionAmt: string;

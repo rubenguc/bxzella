@@ -61,6 +61,7 @@ export interface GetFullDayProfitsWithTradesResponse
       | "positionSide"
       | "leverage"
       | "netProfit"
+      | "positionId"
     >
   >;
 }
@@ -77,6 +78,7 @@ export interface GetDayProfitsWithTradesResponse
       | "positionSide"
       | "leverage"
       | "netProfit"
+      | "positionId"
     >
   >;
 }

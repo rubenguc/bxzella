@@ -15,47 +15,34 @@ export interface MonthlySummary {
   daysTraded: number;
 }
 
-// Hook to manage month selection state
 export const useMonthSelection = (startDate?: string | undefined) => {
-  // Set default to current month
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const today = new Date();
-    return format(today, "yyyy-MM"); // Default to current month in "YYYY-MM" format
+    return format(today, "yyyy-MM");
   });
 
-  // Generate months list based on start date if provided
   const monthsList = useMemo(() => {
     const today = new Date();
     const months = [];
 
-    // If no start date is provided, default to 5 months back (previous behavior)
     if (!startDate) {
-      // Generate 5 months back from current month (5 months including current)
-      for (let i = 4; i >= 0; i--) {
-        const monthDate = new Date(
-          today.getFullYear(),
-          today.getMonth() - i,
-          1,
-        );
-        months.push({
-          name: monthDate.toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          }),
-          shortName: monthDate.toLocaleDateString("en-US", {
-            month: "short",
-            year: "numeric",
-          }),
-          value: format(monthDate, "yyyy-MM"), // Format as "YYYY-MM"
-          date: monthDate,
-        });
-      }
+      const monthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      months.push({
+        name: monthDate.toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        }),
+        shortName: monthDate.toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+        }),
+        value: format(monthDate, "yyyy-MM"),
+        date: monthDate,
+      });
     } else {
-      // Parse the start date and create months list from start date to current month
       const startDateTime = new Date(startDate);
 
-      // Adjust for timezone offset by subtracting the timezone offset
-      const timezoneOffset = startDateTime.getTimezoneOffset() * 60000; // Offset in milliseconds
+      const timezoneOffset = startDateTime.getTimezoneOffset() * 60000;
       const adjustedStartDate = new Date(
         startDateTime.getTime() - timezoneOffset,
       );
@@ -63,11 +50,9 @@ export const useMonthSelection = (startDate?: string | undefined) => {
       const startYear = adjustedStartDate.getFullYear();
       const startMonth = adjustedStartDate.getMonth();
 
-      // Get the first day of start month
       let currentDate = new Date(startYear, startMonth, 1);
       const now = new Date();
 
-      // Add months from start date to current month
       while (
         currentDate.getFullYear() < now.getFullYear() ||
         (currentDate.getFullYear() === now.getFullYear() &&
@@ -82,11 +67,10 @@ export const useMonthSelection = (startDate?: string | undefined) => {
             month: "short",
             year: "numeric",
           }),
-          value: format(currentDate, "yyyy-MM"), // Format as "YYYY-MM"
+          value: format(currentDate, "yyyy-MM"),
           date: currentDate,
         });
 
-        // Move to next month
         currentDate = new Date(
           currentDate.getFullYear(),
           currentDate.getMonth() + 1,
@@ -98,7 +82,6 @@ export const useMonthSelection = (startDate?: string | undefined) => {
     return months;
   }, [startDate]);
 
-  // Find the selected month object based on the selectedMonth value
   const selectedMonthObject = useMemo(() => {
     return (
       monthsList.find((month) => month.value === selectedMonth) ||
@@ -106,13 +89,14 @@ export const useMonthSelection = (startDate?: string | undefined) => {
     );
   }, [monthsList, selectedMonth]);
 
-  // Parse selected month to get year and month number
   const [selectedYear, selectedMonthNum] = useMemo(() => {
     const [year, month] = selectedMonth.split("-").map(Number);
-    return [year, month - 1]; // Convert to 0-indexed month
+    return [year, month - 1];
   }, [selectedMonth]);
 
   const handlePrevMonth = () => {
+    if (!startDate) return;
+
     const selectedDate = new Date(selectedYear, selectedMonthNum, 1);
     const prevMonth = new Date(
       selectedDate.getFullYear(),
@@ -123,6 +107,8 @@ export const useMonthSelection = (startDate?: string | undefined) => {
   };
 
   const handleNextMonth = () => {
+    if (!startDate) return;
+
     const selectedDate = new Date(selectedYear, selectedMonthNum, 1);
     const nextMonth = new Date(
       selectedDate.getFullYear(),
@@ -132,12 +118,10 @@ export const useMonthSelection = (startDate?: string | undefined) => {
     setSelectedMonth(format(nextMonth, "yyyy-MM"));
   };
 
-  // isEarliestMonth must be based on START_DATE
   let isEarliestMonth = false;
   if (startDate) {
-    // Use the adjusted start date to determine if we're at the earliest month
     const startDateTime = new Date(startDate);
-    const timezoneOffset = startDateTime.getTimezoneOffset() * 60000; // Offset in milliseconds
+    const timezoneOffset = startDateTime.getTimezoneOffset() * 60000;
     const adjustedStartDate = new Date(
       startDateTime.getTime() - timezoneOffset,
     );
@@ -149,16 +133,9 @@ export const useMonthSelection = (startDate?: string | undefined) => {
       selectedYear < startYear ||
       (selectedYear === startYear && selectedMonthNum <= startMonth);
   } else {
-    // Fallback to old behavior if no start date
-    const earliestDate = new Date();
-    earliestDate.setMonth(earliestDate.getMonth() - 4); // 5 months including current (so we can go back 4 months from current)
-    isEarliestMonth =
-      selectedYear < earliestDate.getFullYear() ||
-      (selectedYear === earliestDate.getFullYear() &&
-        selectedMonthNum < earliestDate.getMonth());
+    isEarliestMonth = true;
   }
 
-  // Check if selected month is the current month
   const currentDate = new Date();
   const isCurrentMonth =
     selectedYear === currentDate.getFullYear() &&
@@ -174,7 +151,6 @@ export const useMonthSelection = (startDate?: string | undefined) => {
   };
 };
 
-// Hook to process data for a specific month
 export const useDayProfitsData = ({
   data,
   month,
@@ -182,30 +158,26 @@ export const useDayProfitsData = ({
   data: GetDayProfitsWithTradesResponse[];
   month: string;
 }) => {
-  // Parse the month string to get year and month number
   const [selectedYear, selectedMonthNum] = useMemo(() => {
     if (!month) {
       const today = new Date();
       return [today.getFullYear(), today.getMonth()];
     }
     const [year, monthStr] = month.split("-").map(Number);
-    return [year, monthStr - 1]; // Convert to 0-indexed month
+    return [year, monthStr - 1];
   }, [month]);
 
   const processCalendarData = useMemo(() => {
     const currentYear = selectedYear;
     const currentMonthNum = selectedMonthNum;
 
-    // Create a map of trading data by date (day of the month)
     const tradingMap = new Map();
     data.forEach((day) => {
-      // Directly parse the date string "yyyy-mm-dd"
       const dateParts = day.date.split("-");
       const dayOfMonth = parseInt(dateParts[2], 10);
-      const monthNum = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+      const monthNum = parseInt(dateParts[1], 10) - 1;
       const year = parseInt(dateParts[0], 10);
 
-      // Ensure the parsed date belongs to the currently displayed month and year
       if (year === currentYear && monthNum === currentMonthNum) {
         tradingMap.set(dayOfMonth, {
           amount: day.netPnL,
@@ -216,7 +188,6 @@ export const useDayProfitsData = ({
       }
     });
 
-    // Generate the calendar for the selected month
     const firstDayOfMonth = new Date(currentYear, currentMonthNum, 1);
     const startOfCalendar = new Date(firstDayOfMonth);
     startOfCalendar.setDate(
@@ -226,7 +197,6 @@ export const useDayProfitsData = ({
     const calendarData: CalendarCell[] = [];
     const current = new Date(startOfCalendar);
 
-    // Generate 42 cells (6 weeks x 7 days)
     for (let i = 0; i < 42; i++) {
       const currentDayMonth = current.getMonth();
       const currentDayYear = current.getFullYear();
@@ -269,13 +239,11 @@ export const useDayProfitsData = ({
   const weeklySummaries = useMemo(() => {
     const summaries: WeekSummary[] = [];
 
-    // Process each week (6 weeks)
     for (let week = 0; week < 6; week++) {
       let totalNetProfit = 0;
       let totalTrades = 0;
       let daysTraded = 0;
 
-      // Process each day in the week (7 days)
       for (let day = 0; day < 7; day++) {
         const index = week * 7 + day;
         const cell = processCalendarData[index];
@@ -304,7 +272,6 @@ export const useDayProfitsData = ({
   }, [processCalendarData]);
 
   const monthlySummary = useMemo(() => {
-    // Calculate total net profit and days traded for the month
     let totalNetProfit = 0;
     let daysTraded = 0;
 

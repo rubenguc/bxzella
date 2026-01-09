@@ -7,6 +7,7 @@ import {
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
+  GetCoinPerformanceResponse,
   GetPaginatedTradesByPlaybook,
   GetPaginatedTradesByPlaybookReponse,
   GetPlaybookRulesCompletionByPlaybookId,
@@ -34,6 +35,7 @@ export async function syncPositions(
 ): Promise<{
   synced: boolean;
   syncTime: number;
+  earliestTradeDate: string;
 }> {
   console.log(`syncing positions for: ${accountId}...`);
 
@@ -42,6 +44,7 @@ export async function syncPositions(
     return {
       synced: false,
       syncTime: 0,
+      earliestTradeDate: "",
     };
 
   const coinToSearch = account.provider === "bitunix" ? "USDT" : coin;
@@ -66,11 +69,13 @@ export async function syncPositions(
     return {
       synced: false,
       syncTime: 0,
+      earliestTradeDate: "",
     };
 
   const session = await mongoose.startSession();
 
   const syncTime = Date.now();
+  let earliestTradeDate = "";
 
   try {
     await session.withTransaction(async () => {
@@ -96,17 +101,20 @@ export async function syncPositions(
         prev.openTime! < curr.openTime! ? prev : curr,
       );
 
-      await updateEarliestTradeDatePerCoin(
+      const result = await updateEarliestTradeDatePerCoin(
         account._id,
         coin,
         oldestPosition.openTime!,
       );
+
+      earliestTradeDate = result.earliestTradeDatePerCoin[coin] || 0;
+      console.log("result:", earliestTradeDate);
     }
   }
-  console.log("positions synced");
   return {
     synced: true,
     syncTime,
+    earliestTradeDate,
   };
 }
 
@@ -561,4 +569,185 @@ export async function getPlaybookRulesCompletionByPlaybookId(
   return {
     rulesGroupCompletion,
   };
+}
+
+export async function getTradesStatisticsBySymbol(
+  { accountId, startDate, endDate, coin }: GetTradesStatisticProps,
+  timezone: number,
+): Promise<GetCoinPerformanceResponse> {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
+
+  const matchStage: mongoose.PipelineStage.Match = {
+    $match: {
+      accountId: new mongoose.Types.ObjectId(accountId),
+      closeAllPositions: true,
+      coin: coin as string,
+      openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+      updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
+    },
+  };
+
+  const addFieldsStage: mongoose.PipelineStage.AddFields = {
+    $addFields: {
+      numericNetProfit: {
+        $convert: {
+          input: "$netProfit",
+          to: "double",
+          onError: 0,
+        },
+      },
+    },
+  };
+
+  const facetStage: mongoose.PipelineStage.Facet = {
+    $facet: {
+      by_position: [
+        {
+          $group: {
+            _id: {
+              symbol: "$symbol",
+              positionSide: "$positionSide",
+            },
+            totalTrades: { $sum: 1 },
+            totalWin: {
+              $sum: { $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0] },
+            },
+            totalLoss: {
+              $sum: { $cond: [{ $lt: ["$numericNetProfit", 0] }, 1, 0] },
+            },
+            netPnL: { $sum: "$numericNetProfit" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            symbol: "$_id.symbol",
+            positionSide: "$_id.positionSide",
+            netPnL: "$netPnL",
+            totalTrades: "$totalTrades",
+            winners: "$totalWin",
+            lossers: "$totalLoss",
+            winRate: {
+              $multiply: [
+                {
+                  $divide: [
+                    "$totalWin",
+                    {
+                      $cond: [{ $eq: ["$totalTrades", 0] }, 1, "$totalTrades"],
+                    },
+                  ],
+                },
+                100,
+              ],
+            },
+          },
+        },
+      ],
+
+      general: [
+        {
+          $group: {
+            _id: {
+              symbol: "$symbol",
+            },
+            totalTrades: { $sum: 1 },
+            netPnL: { $sum: "$numericNetProfit" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            symbol: "$_id.symbol",
+            netPnL: "$netPnL",
+            totalTrades: "$totalTrades",
+          },
+        },
+      ],
+    },
+  };
+
+  const aggregationResult = await TradeModel.aggregate([
+    matchStage,
+    addFieldsStage,
+    facetStage,
+  ]);
+
+  const facetResult = aggregationResult[0];
+
+  const finalResult: GetCoinPerformanceResponse =
+    {} as GetCoinPerformanceResponse;
+
+  for (const item of facetResult.by_position) {
+    const symbolKey = item.symbol as string;
+    const positionSide = item.positionSide as "LONG" | "SHORT";
+
+    if (!finalResult[symbolKey]) {
+      finalResult[symbolKey] = {
+        LONG: {
+          netPnL: 0,
+          totalTrades: 0,
+          lossers: 0,
+          winRate: 0,
+          winners: 0,
+        },
+        SHORT: {
+          netPnL: 0,
+          totalTrades: 0,
+          lossers: 0,
+          winRate: 0,
+          winners: 0,
+        },
+        GENERAL: {
+          netPnL: 0,
+          totalTrades: 0,
+        },
+      };
+    }
+
+    delete item.symbol;
+    delete item.positionSide;
+
+    finalResult[symbolKey][positionSide] = item;
+  }
+
+  for (const item of facetResult.general) {
+    const symbolKey = item.symbol as string;
+
+    if (!finalResult[symbolKey]) {
+      finalResult[symbolKey] = {
+        LONG: {
+          netPnL: 0,
+          totalTrades: 0,
+          lossers: 0,
+          winRate: 0,
+          winners: 0,
+        },
+        SHORT: {
+          netPnL: 0,
+          totalTrades: 0,
+          lossers: 0,
+          winRate: 0,
+          winners: 0,
+        },
+        GENERAL: {
+          netPnL: 0,
+          totalTrades: 0,
+        },
+      };
+    }
+
+    delete item.symbol;
+
+    finalResult[symbolKey].GENERAL = item;
+  }
+
+  return finalResult;
+}
+
+export function getTradeByAccountId({
+  accountId,
+  positionId,
+}: Pick<Trade, "positionId" | "accountId">): Promise<TradeDocument | null> {
+  return TradeModel.findOne({ accountId, positionId }).lean<TradeDocument>();
 }

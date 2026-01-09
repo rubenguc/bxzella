@@ -72,7 +72,7 @@ export const PlaybooksRules = ({ error }: PlaybooksRulesProps) => {
         </Button>
       </div>
       <div
-        className={`border ${error ? "border-destructive" : ""} bg-slate-50  dark:bg-gray-900 rounded-md min-h-32 overflow-y-scroll p-3 gap-5 flex flex-col`}
+        className={`border ${error ? "border-destructive" : ""}  rounded-md min-h-32 overflow-y-scroll p-3 gap-5 flex flex-col`}
       >
         {fields.map((ruleGroup, index) => (
           <PlaybooksRuleGroup

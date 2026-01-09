@@ -9,6 +9,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { CustomTable } from "@/components/custom-table";
+import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { getTrades } from "@/features/trades/services/trades-services";
@@ -18,13 +19,9 @@ import {
   transformDateToParam,
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
-import { formatDecimal } from "@/utils/number-utils";
-import {
-  checkLongPosition,
-  checkWin,
-  transformSymbol,
-} from "@/utils/trade-utils";
-import { Profit } from "@/components/profit";
+import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
@@ -37,6 +34,7 @@ export function RecentTrades() {
     endDate,
     isStoreLoaded,
     updateLastSyncTime,
+    updateEarliestTradeDate,
   } = useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
@@ -115,6 +113,18 @@ export function RecentTrades() {
         className: "text-center",
       },
     },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Link
+          href={`/trades/details/${row.original.positionId}`}
+          className="data-[state=open]:bg-muted h-auto"
+        >
+          <Eye className="w-4" />
+          <span className="sr-only">Open menu</span>
+        </Link>
+      ),
+    },
   ];
 
   const queryClient = useQueryClient();
@@ -146,6 +156,9 @@ export function RecentTrades() {
         queryClient.invalidateQueries({ queryKey: ["statistics"] });
         queryClient.invalidateQueries({ queryKey: ["day-profits"] });
         updateLastSyncTime(response.syncTime);
+        if (response.earliestTradeDate) {
+          updateEarliestTradeDate(response.earliestTradeDate);
+        }
       }
 
       return response;

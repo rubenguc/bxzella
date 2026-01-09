@@ -59,8 +59,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex items-center gap-2 mb-3">
-        <span className=" text-muted-foreground">
+      <div className="flex items-center gap-2 mb-3 text-sm md:text-base">
+        <span className="text-muted-foreground">
           {t("last_sync_time")}: {lastSync}
         </span>
         <Tooltip>

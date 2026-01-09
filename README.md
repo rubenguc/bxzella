@@ -72,6 +72,25 @@ pnpm run dev
 bun run dev
 ```
 
+4. Run Mongo in Docker (Optional):
+- Create Key:
+```bash
+openssl rand -base64 756 > mongodb.key
+chmod 400 mongodb.key
+```
+
+- Open the hosts file:
+```
+Windows: C:\Windows\System32\drivers\etc\hosts
+Mac/Linux: /etc/hosts
+```
+- Add:
+```bash
+127.0.0.1 mongo
+```
+
+
+
 ## Project Structure
 
 The project follows a typical Next.js application structure with a focus on organizing code by features. Here's a simplified view of the core directories:

@@ -2,24 +2,51 @@ services:
   mongo:
     image: mongo
     container_name: bxzella-db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+    command:
+      [
+        "--replSet",
+        "rs0",
+        "--bind_ip_all",
+        "--keyFile",
+        "/data/configdb/mongodb.key",
+        "--auth",
+      ]
     ports:
       - "27017:27017"
     volumes:
       - ./volumes/mongo:/data/db
+      - ./mongodb.key:/data/configdb/mongodb.key
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+    healthcheck:
+      test: mongosh --quiet "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:27017/admin?authSource=admin" --eval 'db.runCommand("ping").ok'
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo-init:
+    image: mongo:latest
+    depends_on:
+      mongo:
+        condition: service_healthy
+    command: >
+      mongosh "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/admin?authSource=admin" --eval '
+        rs.initiate({
+          _id: "rs0",
+          members: [{ _id: 0, host: "mongo:27017" }]
+        })
+      '
 
   mongo-express:
     image: mongo-express
     container_name: bxzella-db-admin
     environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_USERNAME}
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_PASSWORD}
-      - ME_CONFIG_MONGODB_URL=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
+      - ME_CONFIG_MONGODB_URL=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/?replicaSet=rs0&authSource=admin
       - ME_CONFIG_BASICAUTH=false
     ports:
       - "8081:8081"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy

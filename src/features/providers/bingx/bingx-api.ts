@@ -75,15 +75,17 @@ export class BingxProvider implements ProviderInterface {
             coin,
             lastSyncTime,
           })
-            .then((r) =>
-              r.data.positionHistory.map((ph) => ({
-                ...ph,
-                openTime: new Date(ph.openTime),
-                updateTime: new Date(ph.updateTime),
-                coin,
-                type: "P",
-              })),
-            )
+            .then((r) => {
+              return (
+                r.data.positionHistory?.map((ph) => ({
+                  ...ph,
+                  openTime: new Date(ph.openTime),
+                  updateTime: new Date(ph.updateTime),
+                  coin,
+                  type: "P",
+                })) || []
+              );
+            })
             .catch((error) => {
               console.error(
                 `Error fetching position history for symbol ${symbol}:`,

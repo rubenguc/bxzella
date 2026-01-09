@@ -1,4 +1,4 @@
-import { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export type LimitedTrade = Pick<
   TradeDocument,
@@ -10,6 +10,7 @@ export type LimitedTrade = Pick<
   | "leverage"
   | "netProfit"
   | "coin"
+  | "positionId"
 >;
 
 export interface CalendarCell {

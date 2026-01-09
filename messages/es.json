@@ -55,9 +55,10 @@
     "check_all": "Marcar Todo",
     "no_trades": "Sin operaciones",
     "save": "Guardar",
-    "trade_note": "Nota de operación",
+    "notes": "Notas",
     "pnl_ratio": "Relación PnL",
-    "pnl_ratio_after_fees": "Relación PnL (Depués de comisiones)"
+    "pnl_ratio_after_fees": "Relación PnL (Depués de comisiones)",
+    "no_trade_data": "Sin datos de operación"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",
@@ -86,7 +87,6 @@
     "trade_win_percentage_info": "Porcentaje de operaciones ganadoras respecto al total de operaciones realizadas. Muestra con qué frecuencia la estrategia del trader genera resultados rentables.",
     "avg_win_loss": "% Prom. de operaciones Ganadoras/Perdedoras ",
     "avg_win_loss_info": "Ganancia promedio en operaciones ganadoras y pérdida promedio en operaciones perdedoras. Mide el tamaño típico de las ganancias y pérdidas por operación.",
-    "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos.",
     "win": "Ganado",
     "lost": "Perdido",
     "win_rate": "Tasa de Ganancia",
@@ -98,6 +98,7 @@
     "no_data_to_show": "No hay datos para mostrar"
   },
   "dashboard": {
+    "please_select_account_to_fetch_data": "Por favor, selecciona una cuenta para obtener datos.",
     "last_sync_time": "Última Hora de Sincronización",
     "last_sync_time_tooltip": "Esta hora representa la última vez que se sincronizaron los datos. Si no hay nuevas operaciones después de esta fecha, este valor no cambiará",
     "open_positions": {
@@ -313,5 +314,13 @@
     "losers": "Perdedores",
     "profit_factor": "Factor de Ganancia",
     "commisions": "Comisiones"
+  },
+  "coin-performance": {
+    "net_pnl": "Ganancia Neta",
+    "view_notes": "Ver Notas",
+    "total_trades": "Operaciones Totales",
+    "winrate": "Tasa de Ganancia",
+    "winners": "Ganadores",
+    "losers": "Perdedores"
   }
 }
