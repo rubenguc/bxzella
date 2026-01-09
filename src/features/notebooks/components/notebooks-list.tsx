@@ -40,7 +40,7 @@ export function NotebooksList() {
         </span>
       )}
 
-      <div className="flex md:flex-col gap-2 justify-start px-1">
+      <div className="flex md:flex-col gap-2 justify-start px-1 overflow-scroll">
         {notebooks.map((notebook) => (
           <Button
             variant="ghost"

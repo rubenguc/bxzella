@@ -119,10 +119,8 @@ export function TradesTable() {
       id: "actions",
       cell: ({ row }) => (
         <Link
-          // variant="ghost"
           href={`/trades/details/${row.original.positionId}`}
-          className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
-          // onClick={() => setCurrentTrade(row.original)}
+          className="data-[state=open]:bg-muted h-fit md:h-6 w-6 px-1"
         >
           <Eye className="h-4 w-4" />
           <span className="sr-only">Open menu</span>

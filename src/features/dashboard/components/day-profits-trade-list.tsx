@@ -3,6 +3,8 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
@@ -94,6 +96,18 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
       meta: {
         className: "text-center",
       },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Link
+          href={`/trades/details/${row.original.positionId}`}
+          className="data-[state=open]:bg-muted h-auto"
+        >
+          <Eye className="w-4" />
+          <span className="sr-only">Open menu</span>
+        </Link>
+      ),
     },
   ];
 

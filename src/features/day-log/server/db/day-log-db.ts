@@ -119,7 +119,8 @@ export async function getDayProfitsWithTrades({
     },
     populate: {
       path: "trades",
-      select: "openTime updateTime symbol positionSide leverage netProfit",
+      select:
+        "openTime updateTime symbol positionSide leverage netProfit positionId",
     },
   });
 }
@@ -151,7 +152,8 @@ export async function getFullDayProfitsWithTrades({
     },
     populate: {
       path: "trades",
-      select: "openTime updateTime symbol positionSide leverage netProfit",
+      select:
+        "openTime updateTime symbol positionSide leverage netProfit positionId",
     },
   });
 }

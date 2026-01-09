@@ -20,6 +20,8 @@ import {
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
@@ -110,6 +112,18 @@ export function RecentTrades() {
       meta: {
         className: "text-center",
       },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Link
+          href={`/trades/details/${row.original.positionId}`}
+          className="data-[state=open]:bg-muted h-auto"
+        >
+          <Eye className="w-4" />
+          <span className="sr-only">Open menu</span>
+        </Link>
+      ),
     },
   ];
 

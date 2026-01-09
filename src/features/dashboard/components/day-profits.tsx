@@ -65,12 +65,14 @@ export function DayProfits() {
     month: monthValue,
   });
 
+  console.log(data);
+
   return (
     <Card className="col-span-2 gap-3">
       <CardHeader>
         <CardTitle>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Button
                 disabled={isPreviousMonth}
                 variant="ghost"
@@ -98,7 +100,9 @@ export function DayProfits() {
           </div>
         </CardTitle>
         <CardAction className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs">
-          <span className="font-medium">{t("monthly_stats")}:</span>
+          <span className="font-medium text-muted-foreground">
+            {t("monthly_stats")}:
+          </span>
           <Profit amount={monthlySummary.totalNetProfit} coin={coin} />
           <Badge variant="outline">
             {monthlySummary.daysTraded} {t("total_days")}

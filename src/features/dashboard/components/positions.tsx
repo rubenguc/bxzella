@@ -20,7 +20,7 @@ export function Positions() {
             </TabsTrigger>
           </TabsList>
         </CardHeader>
-        <CardContent className="h-[420px]">
+        <CardContent className="md:h-[420px]">
           <TabsContent value="open_positions">
             <OpenPositions />
           </TabsContent>

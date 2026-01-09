@@ -58,8 +58,8 @@ export default function TradeDetails() {
             : `${formattedOpenTime} - ${formattedUpdateTime}`}
         </span>
       </div>
-      <div className="flex space-x-4">
-        <Tabs className="w-3/10" defaultValue="info">
+      <div className="flex flex-col md:flex-row gap-4">
+        <Tabs className="md:w-3/10" defaultValue="info">
           <TabsList>
             <TabsTrigger
               value="info"
@@ -88,7 +88,7 @@ export default function TradeDetails() {
           </TabsContent>
         </Tabs>
 
-        <Card className="w-7/10 py-3">
+        <Card className="md:w-7/10 py-3">
           <CardContent className="flex flex-col flex-1 px-3">
             <TradeNotebook tradeId={_id} />
           </CardContent>

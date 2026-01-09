@@ -28,7 +28,7 @@ export const PlaybooksRuleGroup = ({
   const { register } = useFormContext<PlaybookForm>();
 
   return (
-    <div className="flex flex-col gap-3  bg-white dark:bg-gray-800 border rounded-lg py-2 px-4">
+    <div className="flex flex-col gap-3  bg-card border rounded-lg py-2 px-4">
       <div className="flex items-center gap-4">
         <span>{name}</span>
 
