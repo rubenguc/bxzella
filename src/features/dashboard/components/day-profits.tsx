@@ -65,8 +65,6 @@ export function DayProfits() {
     month: monthValue,
   });
 
-  console.log(data);
-
   return (
     <Card className="col-span-2 gap-3">
       <CardHeader>
