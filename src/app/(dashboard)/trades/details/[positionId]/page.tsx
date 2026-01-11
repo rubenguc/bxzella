@@ -11,6 +11,7 @@ import { TradeNotebook } from "@/features/trades/components/trade-notebook";
 import { TradePlaybook } from "@/features/trades/components/trades-playbook";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { getTradeByAccountId } from "@/features/trades/services/trades-services";
+import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { transformSymbol } from "@/utils/trade-utils";
@@ -32,6 +33,7 @@ export default function TradeDetails() {
     symbol = "",
     openTime = "",
     updateTime = "",
+    coin,
     playbook = {
       id: "",
       totalRules: 0,
@@ -90,7 +92,7 @@ export default function TradeDetails() {
 
         <Card className="md:w-7/10 py-3">
           <CardContent className="flex flex-col flex-1 px-3">
-            <TradeNotebook tradeId={_id} />
+            <TradeNotebook tradeId={_id} coin={coin as Coin} />
           </CardContent>
         </Card>
       </div>

@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import type { Coin } from "@/interfaces/global-interfaces";
 import type { Notebook } from "../interfaces/notebooks-interfaces";
 
 export const NotebookSchema = new Schema<Notebook>(
@@ -28,6 +29,11 @@ export const NotebookSchema = new Schema<Notebook>(
       type: mongoose.Types.ObjectId,
       ref: "NotebookFolder",
       required: true,
+    },
+    coin: {
+      type: String,
+      required: true,
+      enum: ["VST", "USDT", "USDC"],
     },
   },
   {

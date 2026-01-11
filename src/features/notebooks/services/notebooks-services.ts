@@ -1,4 +1,4 @@
-import type { PaginationResponse } from "@/interfaces/global-interfaces";
+import type { Coin, PaginationResponse } from "@/interfaces/global-interfaces";
 import { baseConfig } from "@/services/api";
 import type {
   NotebookDocument,
@@ -10,6 +10,7 @@ export async function getNotebooksByFolderId(
   params: {
     page: number;
     limit: number;
+    coin: Coin;
   },
 ): Promise<PaginationResponse<NotebookDocumentWithTrade>> {
   const response = await baseConfig.get(`/notebooks/folder/${folderId || -1}`, {

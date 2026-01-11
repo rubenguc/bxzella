@@ -3,7 +3,7 @@ import type {
   NotebookDocument,
 } from "@/features/notebooks/interfaces/notebooks-interfaces";
 import { NotebooksModel } from "@/features/notebooks/model/notebooks-model";
-import type { PaginationResponse } from "@/interfaces/global-interfaces";
+import type { Coin } from "@/interfaces/global-interfaces";
 
 export async function createNotebook(
   data: Notebook,
@@ -12,40 +12,22 @@ export async function createNotebook(
   return await newNotebook.save();
 }
 
-export async function getNotebooks({
-  page = 1,
-  limit = 20,
-}: {
-  page?: number;
-  limit?: number;
-}): Promise<PaginationResponse<NotebookDocument>> {
-  const skip = (page - 1) * limit;
-  const playbooks = await NotebooksModel.find()
-    .skip(skip)
-    .limit(limit)
-    .sort({ _id: -1 });
-
-  const total = await NotebooksModel.countDocuments();
-  const totalPages = Math.ceil(total / limit);
-
-  return {
-    data: playbooks,
-    totalPages,
-  };
-}
-
 export async function getNotebooksByFolderId({
   folderId,
+  coin,
   page = 1,
   limit = 20,
 }: {
+  coin: Coin;
   folderId: string;
   page?: number;
   limit?: number;
 }) {
   const skip = page * limit;
 
-  const query: Record<string, any> = {};
+  const query: Record<string, any> = {
+    coin,
+  };
 
   if (folderId !== "all") {
     query.folderId = folderId;
@@ -93,9 +75,21 @@ export async function updateNotebookByTradeId(
   data: {
     content: string;
     folderId: string;
+    coin: Coin;
   },
 ) {
-  return await NotebooksModel.findOneAndUpdate({ tradeId }, data, {
-    upsert: true,
-  });
+  // Find the trade to get coin
+  const { TradeModel } = await import("@/features/trades/model/trades-model");
+  const trade = await TradeModel.findById(tradeId);
+  if (!trade) {
+    throw new Error("Trade not found");
+  }
+
+  return await NotebooksModel.findOneAndUpdate(
+    { tradeId },
+    { ...data, coin: trade.coin },
+    {
+      upsert: true,
+    },
+  );
 }

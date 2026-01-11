@@ -29,6 +29,7 @@ export function NotebookDetails() {
       selectedNotebook!.tradeId!._id,
       content,
       selectedAccount!._id,
+      coin,
     );
     if (response.error) {
       toast.error(t(response.message));

@@ -8,11 +8,13 @@ import { useNotebookFoldersContext } from "../context/notebook-folders-context";
 import { useNotebooksContext } from "../context/notebooks-context";
 import { getNotebooksByFolderId } from "../services/notebooks-services";
 import { getNotebookTitle } from "../utils/notebooks-utils";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 export function NotebooksList() {
   const t = useTranslations("notebooks.notebooks");
-  const { selectedNotebookFolder } = useNotebookFoldersContext();
 
+  const { coin } = useUserConfigStore();
+  const { selectedNotebookFolder } = useNotebookFoldersContext();
   const { selectedNotebook, setSelectedNotebook } = useNotebooksContext();
 
   const { limit, page } = usePagination();
@@ -20,12 +22,14 @@ export function NotebooksList() {
   const folderId = selectedNotebookFolder?._id ?? "all";
 
   const { data, isLoading } = useQuery({
-    queryKey: ["notebooks-by-folder-id", folderId],
+    queryKey: ["notebooks-by-folder-id", folderId, coin],
     queryFn: () =>
       getNotebooksByFolderId(folderId, {
         limit,
         page,
+        coin,
       }),
+    enabled: !!folderId && !!coin,
   });
 
   const notebooks = data?.data || [];
