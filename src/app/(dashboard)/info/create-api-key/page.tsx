@@ -1,10 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import Image from "next/image";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 
 export default function CreateAPIKeyInfo() {
   const t = useTranslations("info.create_key_tutorial");
+  const tCommon = useTranslationsCommon("common_messages");
 
   if (typeof window === "undefined") return null;
 
@@ -25,6 +29,7 @@ export default function CreateAPIKeyInfo() {
                   className="text-blue-400 hover:underline"
                   href="https://bingx.com/en/accounts/info"
                   target="_blank"
+                  rel="noopener"
                 >
                   {chunks}
                 </a>
@@ -42,7 +47,7 @@ export default function CreateAPIKeyInfo() {
             src="/images/create_api_key/1.webp"
             width={300}
             height={300}
-            alt="API Management"
+            alt={tCommon("api_management_screenshot")}
           />
         </li>
         <li>
@@ -55,7 +60,7 @@ export default function CreateAPIKeyInfo() {
             src="/images/create_api_key/2.png"
             width={500}
             height={450}
-            alt="API Management"
+            alt={tCommon("api_key_creation_screenshot")}
           />
         </li>
         <li>
@@ -90,7 +95,7 @@ export default function CreateAPIKeyInfo() {
             src="/images/create_api_key/3.png"
             width={500}
             height={450}
-            alt="API Management"
+            alt={tCommon("api_configuration_screenshot")}
           />
         </li>
         <li>
@@ -107,7 +112,7 @@ export default function CreateAPIKeyInfo() {
             src="/images/create_api_key/4.webp"
             width={500}
             height={450}
-            alt="API Management"
+            alt={tCommon("api_configuration_screenshot")}
           />
         </li>
       </ol>

@@ -23,6 +23,7 @@ export function TradesTable() {
   const { selectedAccount, coin } = useUserConfigStore();
   const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
+  const tCommon = useTranslations("common_messages");
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
@@ -121,9 +122,9 @@ export function TradesTable() {
         <Link
           href={`/trades/details/${row.original.positionId}`}
           className="data-[state=open]:bg-muted h-fit md:h-6 w-6 px-1"
+          aria-label={tCommon("aria_view_details")}
         >
           <Eye className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
         </Link>
       ),
     },

@@ -30,9 +30,17 @@ const getCoinImage = (coin: Coin) => {
   return coinData ? coinData.image : "/assets/coins/VST.webp";
 };
 
+const getCoinAltText = (coin: Coin) => {
+  return `${coin} cryptocurrency logo`;
+};
+
 export function AccountsCoinSelector() {
   const t = useTranslations("header");
   const { coin, setCoin } = useUserConfigStore();
+
+  const getCoinAltText = (coin: Coin) => {
+    return `${coin} cryptocurrency logo`;
+  };
 
   const handleSelect = (value: Coin) => {
     setCoin(value);
@@ -42,7 +50,12 @@ export function AccountsCoinSelector() {
     <Select value={coin} onValueChange={handleSelect}>
       <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit rounded-xl flex items-center gap-1  overflow-x-hidden text-nowrap bg-card outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
         <SelectPrimitive.Icon asChild className="block md:hidden mx-auto">
-          <Image src={getCoinImage(coin)} alt="coin" width={20} height={20} />
+          <Image
+            src={getCoinImage(coin)}
+            alt={getCoinAltText(coin)}
+            width={20}
+            height={20}
+          />
         </SelectPrimitive.Icon>
         <SelectValue className="hola" placeholder={t("select_coin")} />
         <SelectPrimitive.Icon asChild className="hidden md:block">
@@ -59,7 +72,7 @@ export function AccountsCoinSelector() {
             <div className="flex items-center gap-1.5">
               <Image
                 src={getCoinImage(_coin.label as Coin)}
-                alt="coin"
+                alt={getCoinAltText(_coin.label as Coin)}
                 width={20}
                 height={20}
               />

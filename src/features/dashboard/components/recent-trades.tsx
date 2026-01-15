@@ -6,7 +6,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
+import { Eye } from "lucide-react";
+import Link from "next/link";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { toast } from "sonner";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
@@ -20,12 +25,11 @@ import {
   transformTimeToLocalDate,
 } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
-import Link from "next/link";
-import { Eye } from "lucide-react";
 
 export function RecentTrades() {
   const t = useTranslations("dashboard.recent_trades");
   const tInfo = useTranslations("trade_info");
+  const tCommon = useTranslationsCommon("common_messages");
 
   const {
     selectedAccount,
@@ -119,9 +123,9 @@ export function RecentTrades() {
         <Link
           href={`/trades/details/${row.original.positionId}`}
           className="data-[state=open]:bg-muted h-auto"
+          aria-label={tCommon("aria_view_details")}
         >
           <Eye className="w-4" />
-          <span className="sr-only">Open menu</span>
         </Link>
       ),
     },

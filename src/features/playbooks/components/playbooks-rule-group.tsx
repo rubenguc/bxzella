@@ -1,5 +1,8 @@
 import { GripVertical, Pencil, Plus, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +27,7 @@ export const PlaybooksRuleGroup = ({
   onEditName,
 }: PlaybooksRuleGroupProps) => {
   const t = useTranslations("playbooks");
+  const tCommon = useTranslationsCommon("common_messages");
 
   const { register } = useFormContext<PlaybookForm>();
 
@@ -38,6 +42,7 @@ export const PlaybooksRuleGroup = ({
             size="sm"
             onClick={onEditName}
             className="dark:hover:bg-gray-700"
+            aria-label={t("aria_edit_rule_group")}
           >
             <Pencil className="w-4 h-4" />
           </Button>
@@ -46,6 +51,7 @@ export const PlaybooksRuleGroup = ({
             size="sm"
             onClick={onRemoveGroup}
             className="text-red-500 hover:text-red-700 dark:hover:bg-gray-700"
+            aria-label={tCommon("aria_delete_rule_group")}
           >
             <Trash2 className="w-4 h-4" />
           </Button>
@@ -55,11 +61,14 @@ export const PlaybooksRuleGroup = ({
       <div className="flex flex-col gap-2">
         {rules.map((rule, index) => (
           <div
-            key={`${rule}-${index}`}
+            key={`${name}-${index}-${rule}`}
             className="flex items-center justify-between py-2"
           >
             <div className="flex items-center w-full">
-              <GripVertical className="w-4 h-4 text-gray-400 mr-3" />
+              <GripVertical
+                className="w-4 h-4 text-gray-400 mr-3"
+                aria-label={tCommon("aria_drag_handle")}
+              />
               <Input
                 className="border"
                 {...register(`rulesGroup.${groupIndex}.rules.${index}`)}
@@ -70,6 +79,7 @@ export const PlaybooksRuleGroup = ({
               size="sm"
               onClick={() => onRemoveRule(index)}
               className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              aria-label={tCommon("aria_delete_rule")}
             >
               <Trash2 className="w-4 h-4" />
             </Button>

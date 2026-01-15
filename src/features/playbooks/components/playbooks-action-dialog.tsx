@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import EmojiPicker from "emoji-picker-react";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { useForm } from "react-hook-form";
 import { useToggle } from "react-use";
 import { toast } from "sonner";
@@ -28,6 +31,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useUserConfigStore } from "@/store/user-config-store";
 import type { PlaybookDocument } from "../interfaces/playbooks-interfaces";
 import { playbookValidationSchema } from "../schemas/playbooks-schema";
 import {
@@ -35,7 +39,6 @@ import {
   updatePlaybookAction,
 } from "../server/actions/playbooks-actions";
 import { PlaybooksRules } from "./playbooks-rules";
-import { useUserConfigStore } from "@/store/user-config-store";
 
 interface PlaybooksActionDialogProps {
   currentRow?: PlaybookDocument;
@@ -51,6 +54,7 @@ export const PlaybooksActionDialog = ({
   onOpenChange,
 }: PlaybooksActionDialogProps) => {
   const t = useTranslations("playbooks");
+  const tCommon = useTranslations("common_messages");
   const queryClient = useQueryClient();
 
   const { selectedAccount } = useUserConfigStore();
@@ -126,6 +130,9 @@ export const PlaybooksActionDialog = ({
                           variant="outline"
                           size="sm"
                           className="border-l w-fit"
+                          aria-label={
+                            value ? t("add_icon") : tCommon("aria_select_icon")
+                          }
                         >
                           {value ? (
                             <span>{value}</span>

@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,6 +34,7 @@ import { PlaybookListSkeleton } from "./playbooks-list-skeleton";
 export function PlaybooksList() {
   const t = useTranslations("playbooks");
   const tStatistics = useTranslations("statistics");
+  const tCommon = useTranslationsCommon("common_messages");
   const router = useRouter();
 
   const { setOpen, setCurrentRow } = usePlaybooks();
@@ -82,7 +86,10 @@ export function PlaybooksList() {
               <CardAction>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">
+                    <Button
+                      variant="ghost"
+                      aria-label={tCommon("aria_menu_more")}
+                    >
                       <Menu />
                     </Button>
                   </DropdownMenuTrigger>

@@ -1,9 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useToggle } from "react-use";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { TextEditor } from "@/components/text-editor/text-editor";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,6 +18,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEditorText } from "@/hooks/use-text-editor";
 import type { NotebookTemplateDocument } from "../interfaces/notebooks-template-interfaces";
 import {
   type NotebooksTemplateForm,
@@ -23,12 +29,6 @@ import {
   deleteNotebookTemplateAction,
   updateNotebookTemplateAction,
 } from "../server/actions/notebooks-template-actions";
-import { useEffect } from "react";
-import { useEditorText } from "@/hooks/use-text-editor";
-import { useToggle } from "react-use";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { TriangleAlert } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface NotebookTemplatesFormProps {
   selectedNotebookTemplate: NotebookTemplateDocument | null;
@@ -165,6 +165,9 @@ export function NotebookTemplatesForm({
                 variant="destructive"
                 onClick={setIsOpen}
                 disabled={form.formState.isSubmitting || isDeleting}
+                aria-label={tCommon("aria_delete", {
+                  item: t("delete_template"),
+                })}
               >
                 {t("delete")}
               </Button>
@@ -173,6 +176,7 @@ export function NotebookTemplatesForm({
               type="submit"
               className="ml-auto mt-3"
               disabled={form.formState.isSubmitting || isDeleting}
+              aria-label={tCommon("aria_add", { item: t("save") })}
             >
               {t("save")}
             </Button>

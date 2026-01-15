@@ -2,7 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { Profit } from "@/components/profit";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +32,7 @@ const Item = ({ text, value }: { text: string; value: string | number }) => (
 
 export default function DailyJournal() {
   const t = useTranslations("daily-journal");
+  const tCommon = useTranslationsCommon("common_messages");
   const { selectedAccount, isStoreLoaded, coin } = useUserConfigStore();
 
   const { limit, page } = usePagination();
@@ -65,7 +69,9 @@ export default function DailyJournal() {
               <Profit amount={log.netPnL} coin={coin} preffix={t("net_pnl")} />
             </CardTitle>
             <CardAction>
-              <Button size="sm">{t("view_notes")}</Button>
+              <Button size="sm" aria-label={tCommon("aria_view_details")}>
+                {t("view_notes")}
+              </Button>
             </CardAction>
           </CardHeader>
           <CardContent>
