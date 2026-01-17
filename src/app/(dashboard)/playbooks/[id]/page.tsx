@@ -3,7 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,6 +27,7 @@ export default function PlaybookDetailPage() {
   const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
 
   const t = useTranslations("playbook_details");
+  const tCommon = useTranslationsCommon("common_messages");
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
 
@@ -60,7 +64,11 @@ export default function PlaybookDetailPage() {
 
   return (
     <div className="space-y-6">
-      <Button variant="outline" onClick={() => router.back()}>
+      <Button
+        variant="outline"
+        onClick={() => router.back()}
+        aria-label={tCommon("aria_back")}
+      >
         <ArrowLeft className="mr-2 h-4 w-4" />
         {t("back")}
       </Button>

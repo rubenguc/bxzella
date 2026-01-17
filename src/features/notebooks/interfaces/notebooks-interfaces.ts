@@ -1,4 +1,5 @@
 import type { Types } from "mongoose";
+import type { Coin } from "@/interfaces/global-interfaces";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 
 export interface Notebook {
@@ -8,6 +9,7 @@ export interface Notebook {
   content: string;
   title: string;
   folderId: Types.ObjectId | string | null;
+  coin: Coin;
 }
 
 export interface NotebookDocument extends Notebook {

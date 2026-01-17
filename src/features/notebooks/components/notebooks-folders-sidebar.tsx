@@ -2,7 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, Ellipsis, FolderPlus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { useToggle } from "react-use";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -21,6 +24,7 @@ import { FOLDER_COLORS } from "../utils/notebooks-folder-utils";
 
 export function NotebooksFoldersSidebar() {
   const t = useTranslations("notebooks.notebooks_folder");
+  const tCommon = useTranslationsCommon("common_messages");
 
   const [isOpen, toggleOpen] = useToggle(true);
 
@@ -69,7 +73,11 @@ export function NotebooksFoldersSidebar() {
       <div
         className={`flex p-2 items-center justify-between ${isOpen ? "flex-row" : "flex-col"} `}
       >
-        <Button variant="ghost" onClick={() => setOpen("add")}>
+        <Button
+          variant="ghost"
+          onClick={() => setOpen("add")}
+          aria-label={tCommon("aria_add", { item: t("folder") })}
+        >
           <FolderPlus />
           <span className={`${!isOpen && "md:hidden"}`}>{t("add_folder")}</span>
         </Button>
@@ -77,6 +85,9 @@ export function NotebooksFoldersSidebar() {
           className="hidden md:block"
           variant="ghost"
           onClick={toggleOpen}
+          aria-label={
+            isOpen ? tCommon("aria_previous_month") : tCommon("aria_next_month")
+          }
         >
           <ChevronLeft />
         </Button>
@@ -128,9 +139,13 @@ export function NotebooksFoldersSidebar() {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <div className="rounded-xl hover:bg-primary p-1">
+                      <button
+                        className="rounded-xl hover:bg-primary p-1"
+                        aria-label={tCommon("aria_menu_more")}
+                        type="button"
+                      >
                         <Ellipsis className="z-50" />
-                      </div>
+                      </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem

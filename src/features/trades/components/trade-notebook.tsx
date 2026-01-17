@@ -9,13 +9,15 @@ import { NotebookTemplatesRecentlyList } from "@/features/notebooks/components/n
 import { updateNotebookByTradeIdAction } from "@/features/notebooks/server/actions/notebooks-actions";
 import { getNotebookByTradeId } from "@/features/notebooks/services/notebooks-services";
 import { useEditorText } from "@/hooks/use-text-editor";
+import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 
 interface TradesNotebooksProps {
   tradeId: string;
+  coin: Coin;
 }
 
-export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
+export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
   const t = useTranslations("trade_info");
 
   const { selectedAccount } = useUserConfigStore();
@@ -31,14 +33,17 @@ export function TradeNotebook({ tradeId }: TradesNotebooksProps) {
   });
 
   const onSave = async () => {
+    if (!coin) return;
+
     const response = await updateNotebookByTradeIdAction(
       tradeId,
       content,
       selectedAccount!._id,
+      coin,
     );
 
     if (response.error) {
-      toast.error(t(response.message));
+      return toast.error(t(response.message));
     }
 
     toast.success("saved");

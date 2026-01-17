@@ -1,4 +1,7 @@
-import { useTranslations } from "next-intl";
+import {
+  useTranslations,
+  useTranslations as useTranslationsCommon,
+} from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Profit } from "@/components/profit";
@@ -15,6 +18,7 @@ import { NotebookTemplatesRecentlyList } from "./notebook-templates-recently-lis
 
 export function NotebookDetails() {
   const t = useTranslations("notebooks.notebook_detail");
+  const tCommon = useTranslationsCommon("common_messages");
 
   const { selectedAccount, coin } = useUserConfigStore();
 
@@ -29,6 +33,7 @@ export function NotebookDetails() {
       selectedNotebook!.tradeId!._id,
       content,
       selectedAccount!._id,
+      coin,
     );
     if (response.error) {
       toast.error(t(response.message));
@@ -79,7 +84,9 @@ export function NotebookDetails() {
 
       <TextEditor ref={editorRef} onChange={setContent} />
       <div className="flex justify-end mt-3">
-        <Button onClick={onSave}>{t("save")}</Button>
+        <Button onClick={onSave} aria-label={tCommon("aria_add_note")}>
+          {t("save")}
+        </Button>
       </div>
     </div>
   );

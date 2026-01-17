@@ -108,7 +108,6 @@ export async function syncPositions(
       );
 
       earliestTradeDate = result.earliestTradeDatePerCoin[coin] || 0;
-      console.log("result:", earliestTradeDate);
     }
   }
   return {
@@ -200,7 +199,6 @@ export async function getTradesStatistic(
         accountId: new mongoose.Types.ObjectId(accountId),
         coin,
         closeAllPositions: true,
-        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
         updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
