@@ -21,13 +21,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import type {
   AccountDocument,
   AccountForm,
@@ -170,7 +170,7 @@ export function AccountsActionDialog({
                     )}
                   />
 
-                  <FormField
+                  {/*<FormField
                     control={form.control}
                     name="provider"
                     render={({ field }) => (
@@ -191,7 +191,7 @@ export function AccountsActionDialog({
                         <FormMessage className="" />
                       </FormItem>
                     )}
-                  />
+                  />*/}
                 </>
               )}
             </form>

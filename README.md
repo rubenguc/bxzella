@@ -3,13 +3,13 @@
 <img src="public/logo.png" width="120" heigth="120" />
 <p align="center" style="color: #60A5FA; font-size: 4rem; font-weight: bold;">BXZella<p>
 
-BXzella is a platform designed to help traders analyze their performance by integrating with the BingX and Bitunix API. It allows users to view their transaction history, open positions, and track key trading statistics to make informed decisions and improve their strategies.
+BXzella is a platform designed to help traders analyze their performance by integrating with the BingX API. It allows users to view their transaction history, open positions, and track key trading statistics to make informed decisions and improve their strategies.
 
 ## Features
 
 - **User Authentication:** Secure user login and management powered by Clerk.
-- **Account Management:** Add, edit, and delete your BingX and Bitunix accounts.
-- **BingX and Bitunix Integration:** Connect securely using your API keys to fetch trading data.
+- **Account Management:** Add, edit, and delete your BingXaccounts.
+- **BingX Integration:** Connect securely using your API keys to fetch trading data.
 - **Dashboard:**
     - View key statistics like Net PNL, Profit Factor, Trade Win Percentage, and Average Win/Lossxw ratio.
     - See your current open positions at a glance.
