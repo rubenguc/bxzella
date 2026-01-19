@@ -76,7 +76,7 @@ export function NotebooksFoldersSidebar() {
         <Button
           variant="ghost"
           onClick={() => setOpen("add")}
-          aria-label={tCommon("aria_add", { item: t("folder") })}
+          aria-label={t("add_folder")}
         >
           <FolderPlus />
           <span className={`${!isOpen && "md:hidden"}`}>{t("add_folder")}</span>
