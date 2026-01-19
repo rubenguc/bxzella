@@ -11,7 +11,10 @@ import {
 } from "@/features/accounts/server/db/accounts-db";
 import { decryptData, encryptData } from "@/features/accounts/utils/encryption";
 import { getProvider } from "@/features/providers/utils/providers-utils";
-import { syncPositions } from "@/features/trades/server/db/trades-db";
+import {
+  deleteTradesByAccountId,
+  syncPositions,
+} from "@/features/trades/server/db/trades-db";
 import type { Provider } from "@/interfaces/global-interfaces";
 import { getUserAuth, handleServerActionError } from "@/utils/server-api-utils";
 import type { AccountForm } from "../../interfaces/accounts-interfaces";
@@ -111,6 +114,7 @@ export async function deleteAccountAction(id: string) {
   try {
     await connectDB();
     await deleteAccountDb(id);
+    await deleteTradesByAccountId(id);
   } catch (error) {
     return handleServerActionError("error_deleting_account", error);
   }

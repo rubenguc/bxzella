@@ -749,3 +749,7 @@ export function getTradeByAccountId({
 }: Pick<Trade, "positionId" | "accountId">): Promise<TradeDocument | null> {
   return TradeModel.findOne({ accountId, positionId }).lean<TradeDocument>();
 }
+
+export async function deleteTradesByAccountId(accountId: string) {
+  await TradeModel.deleteMany({ accountId });
+}

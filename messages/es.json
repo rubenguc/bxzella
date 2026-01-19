@@ -169,7 +169,7 @@
     "api_key": "Clave API",
     "secret_key": "Clave Secreta",
     "save_changes": "Guardar Cambios",
-    "delete_account": "Eliminar Cuenta",
+    "delete_account": "Eliminar Cuenta y operaciones relacionadas con ella",
     "account_saved_message": "Cuenta guardada exitosamente",
     "account_updated_message": "Cuenta actualizada exitosamente",
     "account_deleted_message": "Cuenta eliminada exitosamente",

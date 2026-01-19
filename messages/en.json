@@ -169,7 +169,7 @@
     "api_key": "API Key",
     "secret_key": "SECRET Key",
     "save_changes": "Save Changes",
-    "delete_account": "Delete Account",
+    "delete_account": "Delete Account and trades related to it",
     "account_saved_message": "Account saved successfully",
     "account_updated_message": "Account updated successfully",
     "account_deleted_message": "Account deleted successfully",
