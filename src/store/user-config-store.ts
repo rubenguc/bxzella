@@ -23,21 +23,35 @@ type UserConfig = {
   setDayProfitsChartMode: (mode: DayProfitsChartMode) => void;
   updateLastSyncTime: (time: number) => void;
   updateEarliestTradeDate: (date: string) => void;
+  cleanStore: () => void;
+};
+
+const DEFAULT_STATE: Pick<
+  UserConfig,
+  | "dayProfitsChartMode"
+  | "selectedAccount"
+  | "theme"
+  | "startDate"
+  | "endDate"
+  | "isStoreLoaded"
+  | "coin"
+> = {
+  dayProfitsChartMode: "area",
+  selectedAccount: null,
+  theme: "system",
+  startDate: null,
+  endDate: null,
+  isStoreLoaded: false,
+  coin: "USDT",
 };
 
 export const useUserConfigStore = create<UserConfig>()(
   persist(
     (set) => ({
-      dayProfitsChartMode: "area",
-      selectedAccount: null,
-      theme: "system",
+      ...DEFAULT_STATE,
       setSelectedAccount: (account) => set({ selectedAccount: account }),
       setTheme: (theme) => set({ theme }),
-      startDate: null,
-      endDate: null,
       updateDateRange: (startDate, endDate) => set({ startDate, endDate }),
-      isStoreLoaded: false,
-      coin: "USDT",
       setCoin: (coin) => set({ coin }),
       setDayProfitsChartMode: (mode: DayProfitsChartMode) =>
         set({ dayProfitsChartMode: mode }),
@@ -63,6 +77,7 @@ export const useUserConfigStore = create<UserConfig>()(
             },
           },
         })),
+      cleanStore: () => set((state) => ({ ...state, ...DEFAULT_STATE })),
       setHasHydrated: (state) => {
         set({
           isStoreLoaded: state,

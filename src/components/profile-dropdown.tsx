@@ -1,3 +1,6 @@
+import { useClerk, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,9 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { useUserConfigStore } from "@/store/user-config-store";
 
 interface ProfileDropdownProps {
   showText: boolean;
@@ -19,8 +20,15 @@ interface ProfileDropdownProps {
 export function ProfileDropdown({ showText }: ProfileDropdownProps) {
   const t = useTranslations("header");
 
+  const { cleanStore } = useUserConfigStore();
+
   const { user } = useUser();
   const { signOut } = useClerk();
+
+  const handleSignOut = async () => {
+    await signOut();
+    cleanStore();
+  };
 
   return (
     <DropdownMenu modal={false}>
@@ -48,7 +56,7 @@ export function ProfileDropdown({ showText }: ProfileDropdownProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
+        <DropdownMenuItem onClick={handleSignOut}>
           {t("log_out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
