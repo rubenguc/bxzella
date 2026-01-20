@@ -1,7 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useToggle } from "react-use";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,32 +15,55 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
 import { useGetAllPlaybooks } from "@/features/playbooks/hooks/useGetAllPlaybooks";
 import type { PlaybookDocument } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
-import type { TradePlaybook as ITradePlaybook } from "../interfaces/trades-interfaces";
-import { updateTradePlaybookAction } from "../server/actions/trades-actions";
+import { updatePlaybookTradeProgressAction } from "../playbook-trade-progress/actions/playbook-trade-progress-actions";
+import { getPlaybookTradeProgress } from "../services/trades-services";
+
+type ITradePlaybook = {
+  id: string | null;
+  rulesProgress: {
+    groupName: string;
+    rules: {
+      name: string;
+      isCompleted: boolean;
+    }[];
+  }[];
+};
 
 interface TradePlaybookProps {
-  tradePlaybook: ITradePlaybook;
   tradeId: string;
 }
 
-export const TradePlaybook = ({
-  tradePlaybook,
-  tradeId,
-}: TradePlaybookProps) => {
+export const TradePlaybook = ({ tradeId }: TradePlaybookProps) => {
   const t = useTranslations("trade_info");
   const { selectedAccount } = useUserConfigStore();
 
-  const queryClient = useQueryClient();
-
   const [isSaving, toggleSaving] = useToggle(false);
 
-  const [selectedPlaybook, setSelectedPlaybook] =
-    useState<ITradePlaybook>(tradePlaybook);
+  const { data: playbookProgress, isLoading: isLoadingPlaybook } = useQuery({
+    queryKey: ["playbook-trade-progress", tradeId],
+    queryFn: () => getPlaybookTradeProgress(tradeId),
+  });
+
+  const [selectedPlaybook, setSelectedPlaybook] = useState<ITradePlaybook>({
+    id: null,
+    rulesProgress: [],
+  });
+
+  useEffect(() => {
+    if (playbookProgress) {
+      setSelectedPlaybook({
+        id: playbookProgress.playbookId?._id || null,
+        rulesProgress: playbookProgress.rulesProgress || [],
+      });
+    }
+  }, [playbookProgress]);
+
   const { data, isLoading } = useGetAllPlaybooks({
-    page: 1,
+    page: 0,
     limit: 100,
     accountId: selectedAccount!._id,
   });
@@ -93,24 +116,18 @@ export const TradePlaybook = ({
   const onSavePlaybook = async () => {
     toggleSaving(true);
     try {
-      const response = await updateTradePlaybookAction(
+      const response = await updatePlaybookTradeProgressAction({
         tradeId,
-        selectedPlaybook,
-      );
+        playbookId: selectedPlaybook.id,
+        rulesProgress: selectedPlaybook.rulesProgress,
+      });
 
       if (response?.error) {
         toast.error(response.message);
         return;
       }
 
-      // @ts-expect-error ** response
-      if (response.isUpdated) {
-        queryClient.invalidateQueries({
-          queryKey: ["all-trades", selectedAccount?._id],
-        });
-      }
-
-      toast(t("playbook_data_updated"));
+      toast.success(t("playbook_data_updated"));
     } catch (error) {
       console.error("Error updating playbook:", error);
     }
@@ -161,6 +178,8 @@ export const TradePlaybook = ({
       progressPercentage: percentage,
     };
   }, [selectedPlaybook]);
+
+  if (isLoadingPlaybook) return <Spinner className="m-auto size-8" />;
 
   return (
     <div className="flex flex-col flex-1 mt-2">

@@ -12,8 +12,10 @@ import type {
 } from "@/features/playbooks/interfaces/playbooks-interfaces";
 import { PlaybookModel } from "@/features/playbooks/model/playbooks-model";
 import { TradeModel } from "@/features/trades/model/trades-model";
+import { PlaybookTradeProgressModel } from "@/features/trades/playbook-trade-progress/model/playbook-trade-progress-model";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
+import { adjustDateToUTC } from "@/features/trades/utils/trades-utils";
 
 export async function createPlaybook(
   playbookData: Partial<Playbook>,
@@ -35,7 +37,7 @@ export async function getAllPlaybooks({
 }: GetAllPlaybooksProps): GetAllPlaybooksPropsResponse {
   return await getPaginatedData(
     PlaybookModel,
-    { accountId },
+    {},
     {
       page,
       limit,
@@ -59,14 +61,20 @@ export async function deletePlaybook(
   return await PlaybookModel.findByIdAndDelete(id);
 }
 
-export async function getTradesStatisticByPlaybook({
-  accountId,
-  startDate,
-  endDate,
-  coin = "USDT",
-  page = 1,
-  limit = 10,
-}: GetTradesStatisticByPlaybookProps): GetTradesStatisticByPlaybookResponse {
+export async function getTradesStatisticByPlaybook(
+  {
+    accountId,
+    startDate,
+    endDate,
+    coin = "USDT",
+    page = 1,
+    limit = 10,
+  }: GetTradesStatisticByPlaybookProps,
+  timezone: number,
+): GetTradesStatisticByPlaybookResponse {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
+
   const { data: playbooks, totalPages } = await getPaginatedData(
     PlaybookModel,
     {
@@ -80,27 +88,43 @@ export async function getTradesStatisticByPlaybook({
 
   const playbookIds = playbooks.map((pb) => pb._id);
 
-  const tradesAgg = await TradeModel.aggregate([
+  const tradesAgg = await PlaybookTradeProgressModel.aggregate([
     {
       $match: {
-        accountId,
-        coin,
-        closeAllPositions: true,
-        openTime: { $gte: startDate, $lte: endDate },
-        updateTime: { $gte: startDate, $lte: endDate },
-        "playbook.id": { $in: playbookIds },
+        playbookId: {
+          $in: playbookIds.map((id) => new mongoose.Types.ObjectId(id)),
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "trades",
+        localField: "tradeId",
+        foreignField: "_id",
+        as: "trade",
+      },
+    },
+    {
+      $unwind: "$trade",
+    },
+    {
+      $match: {
+        // "trade.accountId": new mongoose.Types.ObjectId(accountId),
+        // "trade.coin": coin,
+        // "trade.closeAllPositions": true,
+        "trade.updateTime": { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
     {
       $addFields: {
         numericNetProfit: {
-          $convert: { input: "$netProfit", to: "double", onError: 0 },
+          $convert: { input: "$trade.netProfit", to: "double", onError: 0 },
         },
       },
     },
     {
       $group: {
-        _id: "$playbook.id",
+        _id: "$playbookId",
         totalTrades: { $sum: 1 },
         totalWin: {
           $sum: { $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0] },
@@ -200,27 +224,42 @@ export async function getTradesStatisticByPlaybookId({
   const parsedStartDate = getUTCDay(startDate);
   const parsedEndDate = getUTCDay(endDate, true);
 
-  const tradesAgg = await TradeModel.aggregate([
+  const tradesAgg = await PlaybookTradeProgressModel.aggregate([
     {
       $match: {
-        accountId,
-        coin,
-        closeAllPositions: true,
-        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
-        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
-        "playbook.id": new mongoose.Types.ObjectId(playbookId),
+        playbookId: new mongoose.Types.ObjectId(playbookId),
+      },
+    },
+    {
+      $lookup: {
+        from: "trades",
+        localField: "tradeId",
+        foreignField: "_id",
+        as: "trade",
+      },
+    },
+    {
+      $unwind: "$trade",
+    },
+    {
+      $match: {
+        "trade.accountId": new mongoose.Types.ObjectId(accountId),
+        "trade.coin": coin,
+        "trade.closeAllPositions": true,
+        "trade.openTime": { $gte: parsedStartDate, $lte: parsedEndDate },
+        "trade.updateTime": { $gte: parsedStartDate, $lte: parsedEndDate },
       },
     },
     {
       $addFields: {
         numericNetProfit: {
-          $convert: { input: "$netProfit", to: "double", onError: 0 },
+          $convert: { input: "$trade.netProfit", to: "double", onError: 0 },
         },
       },
     },
     {
       $group: {
-        _id: "$playbook.id",
+        _id: "$playbookId",
         totalTrades: { $sum: 1 },
         totalWin: {
           $sum: { $cond: [{ $gt: ["$numericNetProfit", 0] }, 1, 0] },

@@ -21,6 +21,8 @@ import {
   transformSymbol,
 } from "@/utils/trade-utils";
 import { getTradesByPlaybookId } from "../services/playbooks-services";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 interface PlaybooksTradesProps {
   id: string;
@@ -28,6 +30,7 @@ interface PlaybooksTradesProps {
 
 export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
   const tInfo = useTranslations("trade_info");
+  const tCommon = useTranslations("common_messages");
 
   const { selectedAccount, coin, startDate, endDate } = useUserConfigStore();
   const { limit, page, setPagination } = usePagination();
@@ -97,22 +100,6 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
       },
     },
     {
-      header: tInfo("position_pnl"),
-      accessorKey: "netProfit",
-      cell: ({ row }) => {
-        const netProfit = row.original.netProfit;
-        const isWin = checkWin(netProfit);
-        return (
-          <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(netProfit), 4)} {row.original.coin}
-          </div>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
       header: tInfo("realised_pnl"),
       accessorKey: "realisedProfit",
       cell: ({ row }) => {
@@ -127,6 +114,18 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
       meta: {
         className: "text-center",
       },
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <Link
+          href={`/trades/details/${row.original.positionId}`}
+          className="data-[state=open]:bg-muted h-fit md:h-6 w-6 px-1"
+          aria-label={tCommon("aria_view_details")}
+        >
+          <Eye className="h-4 w-4" />
+        </Link>
+      ),
     },
   ];
 

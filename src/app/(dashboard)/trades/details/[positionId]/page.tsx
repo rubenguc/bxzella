@@ -28,18 +28,13 @@ export default function TradeDetails() {
       getTradeByAccountId(positionId, { accountId: selectedAccount!._id }),
     enabled: !!selectedAccount?._id,
   });
+
   const {
     _id = "",
     symbol = "",
     openTime = "",
     updateTime = "",
     coin,
-    playbook = {
-      id: "",
-      totalRules: 0,
-      totalCompletedRules: 0,
-      rulesProgress: [],
-    },
   } = data || {};
   const formattedSymbol = transformSymbol(symbol);
 
@@ -86,7 +81,7 @@ export default function TradeDetails() {
             value="playbooks"
             className="flex flex-col flex-1 border border-muted rounded-xl py-2 px-4 bg-card"
           >
-            <TradePlaybook tradePlaybook={playbook} tradeId={_id} />
+            <TradePlaybook tradeId={_id} />
           </TabsContent>
         </Tabs>
 

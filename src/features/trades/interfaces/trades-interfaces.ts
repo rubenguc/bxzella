@@ -4,17 +4,6 @@ import type { PlaybookRulesCompletionResponse } from "./playbook-rules-completio
 
 export type ContractType = "P" | "S"; // P = Perpetual | S = "Standard"
 
-export type TradePlaybook = {
-  id: string | null;
-  rulesProgress: {
-    groupName: string;
-    rules: {
-      name: string;
-      isCompleted: boolean;
-    }[];
-  }[];
-} | null;
-
 export interface Trade {
   accountId: Types.ObjectId | string | null;
   positionId: string;
@@ -35,7 +24,6 @@ export interface Trade {
   totalFunding: string;
   type: "P" | "S";
   coin: Coin;
-  playbook: TradePlaybook;
 }
 
 export type TradeDocument = Trade & {

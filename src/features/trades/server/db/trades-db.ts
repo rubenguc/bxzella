@@ -5,6 +5,7 @@ import {
   updateLastSyncPerCoin,
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
+import { registerDayLogs } from "@/features/day-log/utils/day-log-utils";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
   GetCoinPerformanceResponse,
@@ -18,15 +19,14 @@ import type {
   GetTradesStatisticProps,
   Trade,
   TradeDocument,
-  TradePlaybook,
   TradeStatisticsResult,
 } from "@/features/trades/interfaces/trades-interfaces";
 import { TradeModel } from "@/features/trades/model/trades-model";
+import { PlaybookTradeProgressModel } from "@/features/trades/playbook-trade-progress/model/playbook-trade-progress-model";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 import { adjustDateToUTC } from "../../utils/trades-utils";
-import { registerDayLogs } from "@/features/day-log/utils/day-log-utils";
 
 export async function syncPositions(
   accountId: string,
@@ -427,46 +427,105 @@ export function getTradeProfitByDays(
   ]);
 }
 
-export async function updateTradePlaybook(
-  tradeId: string,
-  tradePlaybook: TradePlaybook,
-) {
-  return await TradeModel.updateOne(
-    { _id: tradeId },
-    { playbook: tradePlaybook },
-  );
-}
-
-export async function getPaginatedTradesByPlaybook({
-  accountId,
-  startDate,
-  endDate,
-  coin = "USDT",
-  playbookId,
-  page = 1,
-  limit = 10,
-}: GetPaginatedTradesByPlaybook): GetPaginatedTradesByPlaybookReponse {
-  const findCriteria: Record<string, unknown> = {
+export async function getPaginatedTradesByPlaybook(
+  {
     accountId,
-    coin,
-    "playbook.id": playbookId,
-  };
+    startDate,
+    endDate,
+    coin = "USDT",
+    playbookId,
+    page = 1,
+    limit = 10,
+  }: GetPaginatedTradesByPlaybook,
+  timezone: number,
+): GetPaginatedTradesByPlaybookReponse {
+  const parsedStartDate = adjustDateToUTC(startDate, timezone);
+  const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
-  if (startDate && endDate) {
-    const parsedStartDate = getUTCDay(startDate);
-    const parsedEndDate = getUTCDay(endDate, true);
-
-    findCriteria.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
-    findCriteria.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
-  }
-
-  return await getPaginatedData(TradeModel, findCriteria, {
-    page,
-    limit,
-    sortBy: {
-      updateTime: -1,
+  const aggregationResult = await PlaybookTradeProgressModel.aggregate([
+    {
+      $match: {
+        playbookId: new mongoose.Types.ObjectId(playbookId),
+      },
     },
-  });
+    {
+      $lookup: {
+        from: "trades",
+        localField: "tradeId",
+        foreignField: "_id",
+        as: "trade",
+      },
+    },
+    {
+      $unwind: "$trade",
+    },
+    {
+      $match: {
+        "trade.accountId": new mongoose.Types.ObjectId(accountId),
+        "trade.coin": coin,
+        ...(parsedStartDate && parsedEndDate
+          ? {
+              "trade.updateTime": {
+                $gte: parsedStartDate,
+                $lte: parsedEndDate,
+              },
+            }
+          : {}),
+      },
+    },
+    {
+      $sort: { "trade.updateTime": -1 },
+    },
+    {
+      $skip: page * limit,
+    },
+    {
+      $limit: limit,
+    },
+    {
+      $replaceRoot: { newRoot: "$trade" },
+    },
+  ]);
+
+  const totalCount = await PlaybookTradeProgressModel.aggregate([
+    {
+      $match: {
+        playbookId: new mongoose.Types.ObjectId(playbookId),
+      },
+    },
+    {
+      $lookup: {
+        from: "trades",
+        localField: "tradeId",
+        foreignField: "_id",
+        as: "trade",
+      },
+    },
+    {
+      $unwind: "$trade",
+    },
+    {
+      $match: {
+        "trade.accountId": new mongoose.Types.ObjectId(accountId),
+        "trade.coin": coin,
+        ...(startDate && endDate
+          ? {
+              "trade.updateTime": { $gte: startDate, $lte: endDate },
+            }
+          : {}),
+      },
+    },
+    {
+      $count: "total",
+    },
+  ]);
+
+  const total = totalCount[0]?.total || 0;
+
+  return {
+    data: aggregationResult,
+    totalPages: Math.ceil(total / limit),
+  };
 }
 
 export async function getPlaybookRulesCompletionByPlaybookId(
@@ -482,33 +541,47 @@ export async function getPlaybookRulesCompletionByPlaybookId(
   const parsedStartDate = adjustDateToUTC(startDate, timezone);
   const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
-  const rulesCompletion = await TradeModel.aggregate([
+  const rulesCompletion = await PlaybookTradeProgressModel.aggregate([
     {
       $match: {
-        accountId,
-        coin,
-        closeAllPositions: true,
-        openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
-        updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
-        "playbook.id": new mongoose.Types.ObjectId(playbookId),
+        playbookId: new mongoose.Types.ObjectId(playbookId),
       },
     },
     {
-      $unwind: "$playbook.rulesProgress",
+      $lookup: {
+        from: "trades",
+        localField: "tradeId",
+        foreignField: "_id",
+        as: "trade",
+      },
     },
     {
-      $unwind: "$playbook.rulesProgress.rules",
+      $unwind: "$trade",
+    },
+    {
+      $match: {
+        "trade.accountId": new mongoose.Types.ObjectId(accountId),
+        "trade.coin": coin,
+        "trade.closeAllPositions": true,
+        "trade.updateTime": { $gte: parsedStartDate, $lte: parsedEndDate },
+      },
+    },
+    {
+      $unwind: "$rulesProgress",
+    },
+    {
+      $unwind: "$rulesProgress.rules",
     },
     {
       $group: {
         _id: {
-          groupName: "$playbook.rulesProgress.groupName",
-          ruleName: "$playbook.rulesProgress.rules.name",
+          groupName: "$rulesProgress.groupName",
+          ruleName: "$rulesProgress.rules.name",
         },
         total: { $sum: 1 },
         completed: {
           $sum: {
-            $cond: ["$playbook.rulesProgress.rules.isCompleted", 1, 0],
+            $cond: ["$rulesProgress.rules.isCompleted", 1, 0],
           },
         },
       },
@@ -529,7 +602,6 @@ export async function getPlaybookRulesCompletionByPlaybookId(
     },
   ]);
 
-  // Reestructurar para mantener la misma estructura que el playbook
   const rulesGroupCompletion = rulesCompletion.reduce(
     (acc, rule) => {
       const groupIndex = acc.findIndex(
@@ -581,7 +653,6 @@ export async function getTradesStatisticsBySymbol(
       accountId: new mongoose.Types.ObjectId(accountId),
       closeAllPositions: true,
       coin: coin as string,
-      openTime: { $gte: parsedStartDate, $lte: parsedEndDate },
       updateTime: { $gte: parsedStartDate, $lte: parsedEndDate },
     },
   };
