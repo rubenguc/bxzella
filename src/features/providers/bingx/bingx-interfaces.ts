@@ -82,3 +82,14 @@ export type UserPositionHistoryResponse = GenericResponse<{
     totalFunding: string;
   }[];
 }>;
+
+export type KLine = {
+  open: string;
+  close: string;
+  high: string;
+  low: string;
+  volume: string;
+  time: number;
+};
+
+export type KLineResponse = GenericResponse<KLine[]>;

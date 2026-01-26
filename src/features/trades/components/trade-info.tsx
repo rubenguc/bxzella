@@ -101,7 +101,7 @@ export function TradeInfo({
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 ">
       <div className="flex gap-2 b rounded-xl py-2">
         <div
           className={`w-1 h-12  rounded-xl ${isWin ? "bg-green-500" : "bg-red-500"}`}

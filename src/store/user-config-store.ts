@@ -24,6 +24,8 @@ type UserConfig = {
   updateLastSyncTime: (time: number) => void;
   updateEarliestTradeDate: (date: string) => void;
   cleanStore: () => void;
+  tradeChartTimeframe: string;
+  setTradeChartTimeframe: (timeframe: string) => void;
 };
 
 const DEFAULT_STATE: Pick<
@@ -35,6 +37,7 @@ const DEFAULT_STATE: Pick<
   | "endDate"
   | "isStoreLoaded"
   | "coin"
+  | "tradeChartTimeframe"
 > = {
   dayProfitsChartMode: "area",
   selectedAccount: null,
@@ -43,6 +46,7 @@ const DEFAULT_STATE: Pick<
   endDate: null,
   isStoreLoaded: false,
   coin: "USDT",
+  tradeChartTimeframe: "1h",
 };
 
 export const useUserConfigStore = create<UserConfig>()(
@@ -78,6 +82,11 @@ export const useUserConfigStore = create<UserConfig>()(
           },
         })),
       cleanStore: () => set((state) => ({ ...state, ...DEFAULT_STATE })),
+      setTradeChartTimeframe: (timeframe: string) =>
+        set((state) => ({
+          ...state,
+          tradeChartTimeframe: timeframe,
+        })),
       setHasHydrated: (state) => {
         set({
           isStoreLoaded: state,
@@ -91,8 +100,15 @@ export const useUserConfigStore = create<UserConfig>()(
           const parsedStartDate = state?.startDate
             ? new Date(state.startDate)
             : null;
+
+          // Default Date range
           const parsedEndDate = state?.endDate ? new Date(state.endDate) : null;
           state?.updateDateRange(parsedStartDate, parsedEndDate);
+
+          // Default Trade Chart Timeframe
+          const parsedTradeChartTimeframe = state?.tradeChartTimeframe || "1h";
+          state?.setTradeChartTimeframe(parsedTradeChartTimeframe);
+
           state?.setHasHydrated(true);
         };
       },

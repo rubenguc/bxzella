@@ -4,6 +4,7 @@ import type {
 } from "@/features/trades/interfaces/trades-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 import type {
+  GetKLineData,
   GetPositionHistoryProps,
   ProviderInterface,
 } from "../interfaces/providers-interfaces";
@@ -40,6 +41,11 @@ export class BitunixProvider implements ProviderInterface {
     });
 
     return accountBalance.code === 0;
+  }
+
+  async getKLine(props: GetKLineData) {
+    ///
+    return [];
   }
 
   async getPositionHistory({
