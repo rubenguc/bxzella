@@ -104,6 +104,11 @@ export class BitunixProvider implements ProviderInterface {
       openTime: new Date(Number(pendingPosition.ctime)),
       leverage: Number(pendingPosition.leverage),
       positionSide: this.formatPositionSide(pendingPosition.side),
+      coin: "USDT" as Coin,
+      realisedProfit: "",
+      unrealizedProfit: "",
+      pnlRatio: "",
+      margin: "",
     }));
   }
 

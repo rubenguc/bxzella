@@ -122,6 +122,11 @@ export class BingxProvider implements ProviderInterface {
       openTime: new Date(position.createTime),
       leverage: position.leverage,
       positionSide: position.positionSide,
+      realisedProfit: position.realisedProfit,
+      unrealizedProfit: position.unrealizedProfit,
+      coin: coin,
+      margin: position.margin,
+      pnlRatio: position.pnlRatio,
     }));
   }
 

@@ -58,7 +58,9 @@
     "notes": "Notes",
     "pnl_ratio": "PnL Ratio",
     "pnl_ratio_after_fees": "PnL Ratio (After Fees)",
-    "no_trade_data": "No trade data available"
+    "no_trade_data": "No trade data available",
+    "realisedProfit": "Realised Profit",
+    "unrealizedProfit": "Unrealized Profit"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",

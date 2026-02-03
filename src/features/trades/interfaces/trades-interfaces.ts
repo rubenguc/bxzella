@@ -72,8 +72,19 @@ export interface TradeProfitPerDay {
   trades: TradeDocument[];
 }
 
-export interface OpenPosition
-  extends Pick<Trade, "openTime" | "symbol" | "positionSide" | "leverage"> {}
+export interface OpenPosition extends Pick<
+  Trade,
+  | "openTime"
+  | "symbol"
+  | "positionSide"
+  | "leverage"
+  | "realisedProfit"
+  | "coin"
+> {
+  unrealizedProfit: string;
+  pnlRatio: string;
+  margin: string;
+}
 
 // Queries
 

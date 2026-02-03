@@ -58,7 +58,9 @@
     "notes": "Notas",
     "pnl_ratio": "Relación PnL",
     "pnl_ratio_after_fees": "Relación PnL (Depués de comisiones)",
-    "no_trade_data": "Sin datos de operación"
+    "no_trade_data": "Sin datos de operación",
+    "realisedProfit": "PnL Realizado",
+    "unrealizedProfit": "PnL No Realizado"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "¿Estás seguro que deseas eliminar",

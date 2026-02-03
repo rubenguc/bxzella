@@ -3,14 +3,17 @@ import type { Coin } from "@/interfaces/global-interfaces";
 import { formatDecimal } from "@/utils/number-utils";
 import { getResultClass } from "@/utils/trade-utils";
 
-interface ProfitProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
+interface ProfitProps extends DetailedHTMLProps<
+  HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
+> {
   amount: number;
   coin?: Coin | string;
   decimals?: number;
   showSign?: boolean;
   isApprox?: boolean;
   preffix?: string;
+  postfix?: string;
 }
 
 export function Profit({
@@ -21,10 +24,11 @@ export function Profit({
   showSign = true,
   isApprox = false,
   preffix = "",
+  postfix = "",
   ...props
 }: ProfitProps) {
   const colorText = getResultClass(amount);
-  const formattedAmount = `${isApprox ? "≈" : ""} ${preffix} ${formatDecimal(amount, decimals, showSign)} ${coin}`;
+  const formattedAmount = `${isApprox ? "≈" : ""} ${preffix} ${formatDecimal(amount, decimals, showSign)} ${coin} ${postfix}`;
 
   return (
     <span {...props} className={`${colorText} ${className}`}>
