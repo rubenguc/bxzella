@@ -3,6 +3,8 @@ import connectDB from "@/db/db";
 import { playbookTradesParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
 import { getPaginatedTradesByPlaybook } from "@/features/trades/server/db/trades-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
+import { getTimeZoneFromHeader } from "@/utils/date-utils";
+import { headers } from "next/headers";
 
 export async function GET(
   request: NextRequest,
@@ -16,15 +18,20 @@ export async function GET(
 
     await connectDB();
 
-    const data = await getPaginatedTradesByPlaybook({
-      playbookId: id,
-      accountId,
-      startDate,
-      endDate,
-      coin,
-      page,
-      limit,
-    });
+    const timezone = await getTimeZoneFromHeader(headers);
+
+    const data = await getPaginatedTradesByPlaybook(
+      {
+        playbookId: id,
+        accountId,
+        startDate,
+        endDate,
+        coin,
+        page,
+        limit,
+      },
+      timezone,
+    );
 
     return NextResponse.json(data);
   } catch (err) {

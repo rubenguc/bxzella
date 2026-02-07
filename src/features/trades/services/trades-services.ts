@@ -37,10 +37,15 @@ export const getCoinPerformance = async (
 
 export const getTradeByAccountId = async (
   positionId: string,
-  params: { accountId: string },
+  { accountId }: { accountId: string },
 ): Promise<TradeDocument | null> => {
   const response = await baseConfig.get(`/trades/details/${positionId}`, {
-    params,
+    params: { accountId },
   });
+  return response.data;
+};
+
+export const getPlaybookTradeProgress = async (tradeId: string) => {
+  const response = await baseConfig.get(`/trades/playbook-progress/${tradeId}`);
   return response.data;
 };

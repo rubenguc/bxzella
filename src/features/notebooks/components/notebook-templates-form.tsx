@@ -165,9 +165,7 @@ export function NotebookTemplatesForm({
                 variant="destructive"
                 onClick={setIsOpen}
                 disabled={form.formState.isSubmitting || isDeleting}
-                aria-label={tCommon("aria_delete", {
-                  item: t("delete_template"),
-                })}
+                aria-label={t("delete_")}
               >
                 {t("delete")}
               </Button>
@@ -176,7 +174,7 @@ export function NotebookTemplatesForm({
               type="submit"
               className="ml-auto mt-3"
               disabled={form.formState.isSubmitting || isDeleting}
-              aria-label={tCommon("aria_add", { item: t("save") })}
+              aria-label={t("save")}
             >
               {t("save")}
             </Button>

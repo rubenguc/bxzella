@@ -1,6 +1,8 @@
 "use client";
 
-import { ComponentProps } from "react";
+import Image from "next/image";
+import type { ComponentProps } from "react";
+import { ProfileDropdown } from "../profile-dropdown";
 import {
   Sidebar,
   SidebarContent,
@@ -9,8 +11,6 @@ import {
 } from "../ui/sidebar";
 import { sidebarItems } from "./data/sidebar-data";
 import { NavGroup } from "./nav-group";
-import Image from "next/image";
-import { ProfileDropdown } from "../profile-dropdown";
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
   const { open, isMobile, openMobile } = useSidebar();
@@ -23,7 +23,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
         <div className="flex items-center gap-1 mx-auto pt-5  w-full justify-center">
           <Image src="/logo.png" alt="Logo" width={32} height={32} />
           <span
-            className={`text-2xl transition-opacity duration-300 ${showText ? "block" : "hidden"} bg-clip-text text-transparent bg-gradient-to-r from-blue-400 dark:to-white to-gray-500`}
+            className={`text-2xl transition-opacity duration-300 ${showText ? "block" : "hidden"} bg-clip-text text-transparent bg-linear-to-r from-blue-400 dark:to-white to-gray-500`}
           >
             BXZella
           </span>

@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { playbooksSearchParamsSchema } from "@/features/playbooks/schemas/playbooks-api-schema";
@@ -5,6 +6,7 @@ import {
   createPlaybook,
   getTradesStatisticByPlaybook,
 } from "@/features/playbooks/server/db/playbooks-db";
+import { getTimeZoneFromHeader } from "@/utils/date-utils";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
 export async function GET(request: NextRequest) {
@@ -14,14 +16,19 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    const data = await getTradesStatisticByPlaybook({
-      page,
-      limit,
-      accountId,
-      startDate,
-      endDate,
-      coin,
-    });
+    const timezone = await getTimeZoneFromHeader(headers);
+
+    const data = await getTradesStatisticByPlaybook(
+      {
+        page,
+        limit,
+        accountId,
+        startDate,
+        endDate,
+        coin,
+      },
+      timezone,
+    );
     return NextResponse.json(data);
   } catch (err) {
     return handleApiError(err);

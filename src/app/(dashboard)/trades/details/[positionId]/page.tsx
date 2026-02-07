@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TradeChart } from "@/features/trades/components/trade-chart";
 import { TradeInfo } from "@/features/trades/components/trade-info";
 import { TradeNotebook } from "@/features/trades/components/trade-notebook";
 import { TradePlaybook } from "@/features/trades/components/trades-playbook";
@@ -28,18 +29,15 @@ export default function TradeDetails() {
       getTradeByAccountId(positionId, { accountId: selectedAccount!._id }),
     enabled: !!selectedAccount?._id,
   });
+
   const {
     _id = "",
     symbol = "",
     openTime = "",
     updateTime = "",
     coin,
-    playbook = {
-      id: "",
-      totalRules: 0,
-      totalCompletedRules: 0,
-      rulesProgress: [],
-    },
+    avgPrice = "",
+    avgClosePrice = "",
   } = data || {};
   const formattedSymbol = transformSymbol(symbol);
 
@@ -61,7 +59,7 @@ export default function TradeDetails() {
         </span>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
-        <Tabs className="md:w-3/10" defaultValue="info">
+        <Tabs className="md:w-3/10 h-fit" defaultValue="info">
           <TabsList>
             <TabsTrigger
               value="info"
@@ -86,12 +84,20 @@ export default function TradeDetails() {
             value="playbooks"
             className="flex flex-col flex-1 border border-muted rounded-xl py-2 px-4 bg-card"
           >
-            <TradePlaybook tradePlaybook={playbook} tradeId={_id} />
+            <TradePlaybook tradeId={_id} />
           </TabsContent>
         </Tabs>
 
         <Card className="md:w-7/10 py-3">
-          <CardContent className="flex flex-col flex-1 px-3">
+          <CardContent className="flex flex-col flex-1 px-3 space-y-4">
+            <TradeChart
+              coin={coin as Coin}
+              symbol={symbol}
+              openTime={openTime as string}
+              updateTime={updateTime as string}
+              avgClosePrice={avgClosePrice}
+              avgPrice={avgPrice}
+            />
             <TradeNotebook tradeId={_id} coin={coin as Coin} />
           </CardContent>
         </Card>

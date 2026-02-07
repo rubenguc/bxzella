@@ -4,11 +4,13 @@ import type {
 } from "@/features/trades/interfaces/trades-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 import type {
+  GetKLineData,
   GetPositionHistoryProps,
   ProviderInterface,
 } from "../interfaces/providers-interfaces";
 import { makeRequest } from "./bingx-base";
 import type {
+  KLineResponse,
   UserBalanceResponse,
   UserFillOrdersResponse,
   UserPositionHistoryResponse,
@@ -20,6 +22,7 @@ const PATHS = {
   USER_ACTIVE_OPEN_POSITIONS: "/openApi/swap/v2/user/positions",
   USER_FILLED_ORDERS: "/openApi/swap/v2/trade/allFillOrders",
   USER_POSITION_HISTORY: "/openApi/swap/v1/trade/positionHistory",
+  K_LINES: "/openApi/swap/v3/quote/klines",
 };
 
 export class BingxProvider implements ProviderInterface {
@@ -119,7 +122,29 @@ export class BingxProvider implements ProviderInterface {
       openTime: new Date(position.createTime),
       leverage: position.leverage,
       positionSide: position.positionSide,
+      realisedProfit: position.realisedProfit,
+      unrealizedProfit: position.unrealizedProfit,
+      coin: coin,
+      margin: position.margin,
+      pnlRatio: position.pnlRatio,
     }));
+  }
+
+  async getKLine({ coin, startTime, symbol, interval = "1h" }: GetKLineData) {
+    const response = (await makeRequest({
+      coin,
+      apiKey: this.apiKey,
+      secretKey: this.secretKey,
+      path: PATHS.K_LINES,
+      payload: {
+        symbol,
+        interval,
+        startTime,
+        limit: 500,
+      },
+    })) as KLineResponse;
+
+    return response.data;
   }
 
   // own methods to standardize

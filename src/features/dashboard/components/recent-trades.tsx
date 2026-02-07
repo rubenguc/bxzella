@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   type ColumnDef,
   getCoreRowModel,
@@ -12,34 +11,21 @@ import {
   useTranslations,
   useTranslations as useTranslationsCommon,
 } from "next-intl";
-import { toast } from "sonner";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { getTrades } from "@/features/trades/services/trades-services";
-import type { PaginationResponseWithSync } from "@/interfaces/global-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
-import {
-  transformDateToParam,
-  transformTimeToLocalDate,
-} from "@/utils/date-utils";
+
+import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
+import { useRecentTrades } from "../context/recent-trades-context";
 
 export function RecentTrades() {
+  const { isLoading, recentTrades } = useRecentTrades();
+
   const t = useTranslations("dashboard.recent_trades");
   const tInfo = useTranslations("trade_info");
   const tCommon = useTranslationsCommon("common_messages");
-
-  const {
-    selectedAccount,
-    coin,
-    startDate,
-    endDate,
-    isStoreLoaded,
-    updateLastSyncTime,
-    updateEarliestTradeDate,
-  } = useUserConfigStore();
 
   const columns: ColumnDef<TradeDocument>[] = [
     {
@@ -131,46 +117,8 @@ export function RecentTrades() {
     },
   ];
 
-  const queryClient = useQueryClient();
-
-  const { data, isLoading } = useQuery<
-    PaginationResponseWithSync<TradeDocument>
-  >({
-    queryKey: ["all-trades", selectedAccount?._id, startDate, endDate, coin],
-    enabled:
-      isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
-    queryFn: async () => {
-      toast.loading(t("syncing_new_trades"), {
-        position: "top-right",
-      });
-      const response = await getTrades({
-        accountId: selectedAccount!._id,
-        startDate: transformDateToParam(startDate as Date),
-        endDate: transformDateToParam(endDate as Date),
-        limit: 10,
-        page: 0,
-        coin,
-      });
-      toast.dismiss();
-
-      if (response.synced) {
-        toast.success(t("new_trades_synced"), {
-          position: "top-right",
-        });
-        queryClient.invalidateQueries({ queryKey: ["statistics"] });
-        queryClient.invalidateQueries({ queryKey: ["day-profits"] });
-        updateLastSyncTime(response.syncTime);
-        if (response.earliestTradeDate) {
-          updateEarliestTradeDate(response.earliestTradeDate);
-        }
-      }
-
-      return response;
-    },
-  });
-
   const table = useReactTable({
-    data: data?.data ?? [],
+    data: recentTrades,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -180,7 +128,7 @@ export function RecentTrades() {
       table={table}
       columnsLength={columns.length}
       noDataMessage={t("no_recent_trades")}
-      showSkeleton={!data || isLoading}
+      showSkeleton={!recentTrades || isLoading}
     />
   );
 }

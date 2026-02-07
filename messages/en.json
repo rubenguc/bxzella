@@ -58,7 +58,9 @@
     "notes": "Notes",
     "pnl_ratio": "PnL Ratio",
     "pnl_ratio_after_fees": "PnL Ratio (After Fees)",
-    "no_trade_data": "No trade data available"
+    "no_trade_data": "No trade data available",
+    "realisedProfit": "Realised Profit",
+    "unrealizedProfit": "Unrealized Profit"
   },
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",
@@ -72,9 +74,6 @@
     "rows_per_page": "Rows per page",
     "page": "Page",
     "of": "of",
-    "aria_add": "Add {{item}}",
-    "aria_edit": "Edit {{item}}",
-    "aria_delete": "Delete {{item}}",
     "aria_previous_month": "Previous month",
     "aria_next_month": "Next month",
     "aria_close_dialog": "Close dialog",
@@ -172,7 +171,7 @@
     "api_key": "API Key",
     "secret_key": "SECRET Key",
     "save_changes": "Save Changes",
-    "delete_account": "Delete Account",
+    "delete_account": "Delete Account and trades related to it",
     "account_saved_message": "Account saved successfully",
     "account_updated_message": "Account updated successfully",
     "account_deleted_message": "Account deleted successfully",
