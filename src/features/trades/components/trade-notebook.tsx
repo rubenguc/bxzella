@@ -11,6 +11,7 @@ import { getNotebookByTradeId } from "@/features/notebooks/services/notebooks-se
 import { useEditorText } from "@/hooks/use-text-editor";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { Badge } from "@/components/ui/badge";
 
 interface TradesNotebooksProps {
   tradeId: string;
@@ -64,9 +65,9 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
         </div>
       )}
 
-      <span className="text-sm mb-2">{t("notes")}</span>
+      <Badge className="text-sm">{t("notes")}</Badge>
 
-      <div className="my-4">
+      <div>
         <NotebookTemplatesRecentlyList
           onSelectTemplate={(notebookTemplate) => {
             setEditorValue(notebookTemplate.content);

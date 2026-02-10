@@ -51,7 +51,7 @@ export const NotebookTemplatesRecentlyList = ({
             ))}
             <Button
               className="text-xs"
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={toggle}
             >
