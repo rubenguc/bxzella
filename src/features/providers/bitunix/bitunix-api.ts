@@ -14,11 +14,13 @@ import type {
   HistoryPositionResponse,
   OpenPositionRespone,
 } from "./bitunix-interfaces";
+import { KLineResponse } from "../bingx/bingx-interfaces";
 
 const PATHS = {
   HISTORY_POSITIONS: "/api/v1/futures/position/get_history_positions",
   PENDING_POSITONS: "/api/v1/futures/position/get_pending_positions",
   SINGLE_ACCOUNT: "/api/v1/futures/account",
+  K_LINES: "/api/v1/futures/market/kline",
 };
 
 export class BitunixProvider implements ProviderInterface {
@@ -43,11 +45,6 @@ export class BitunixProvider implements ProviderInterface {
     return accountBalance.code === 0;
   }
 
-  async getKLine(props: GetKLineData) {
-    ///
-    return [];
-  }
-
   async getPositionHistory({
     lastSyncTime,
     coin,
@@ -67,7 +64,7 @@ export class BitunixProvider implements ProviderInterface {
       const realizedPNL = parseFloat(bitunixPosition.realizedPNL);
       const fee = parseFloat(bitunixPosition.fee);
       const funding = parseFloat(bitunixPosition.funding);
-      const netProfit = realizedPNL + fee + funding;
+      const realisedProfit = realizedPNL + fee + funding;
 
       return {
         type: "P",
@@ -79,8 +76,8 @@ export class BitunixProvider implements ProviderInterface {
         updateTime: new Date(Number(bitunixPosition.mtime)),
         avgPrice: bitunixPosition.entryPrice,
         avgClosePrice: bitunixPosition.closePrice,
-        realisedProfit: bitunixPosition.realizedPNL,
-        netProfit: netProfit.toString(),
+        realisedProfit: realisedProfit.toString(),
+        netProfit: bitunixPosition.realizedPNL,
         positionAmt: bitunixPosition.qty,
         closePositionAmt: bitunixPosition.qty,
         leverage: Number(bitunixPosition.leverage),
@@ -105,21 +102,40 @@ export class BitunixProvider implements ProviderInterface {
       leverage: Number(pendingPosition.leverage),
       positionSide: this.formatPositionSide(pendingPosition.side),
       coin: "USDT" as Coin,
-      realisedProfit: "",
-      unrealizedProfit: "",
+      realisedProfit: pendingPosition.realizedPNL,
+      unrealizedProfit: pendingPosition.unrealizedPNL,
       pnlRatio: "",
-      margin: "",
+      margin: pendingPosition.margin,
     }));
   }
 
-  // own methods to standardize
+  async getKLine({ startTime, symbol, interval = "1h" }: GetKLineData) {
+    const response = (await makeRequest({
+      apiKey: this.apiKey,
+      secretKey: this.secretKey,
+      path: PATHS.K_LINES,
+      params: {
+        symbol: this.trasnformSymbolToOriginal(symbol),
+        interval,
+        startTime,
+        limit: 500,
+      },
+    })) as KLineResponse;
 
+    return response.data;
+  }
+
+  // own methods to standardize
   private formatSymbol(symbol: string) {
     return symbol.replace(/(USDT)$/, "-$1");
   }
 
   private formatPositionSide(side: HistoryPosition["side"]): "LONG" | "SHORT" {
     return side === "BUY" ? "LONG" : "SHORT";
+  }
+
+  private trasnformSymbolToOriginal(symbol: string) {
+    return symbol.replace(/-(USDT)$/, "$1");
   }
 
   private getTimeRangeForGetPositionHistory(

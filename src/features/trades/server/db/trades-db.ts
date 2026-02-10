@@ -103,7 +103,7 @@ export async function syncPositions(
 
       const result = await updateEarliestTradeDatePerCoin(
         account._id,
-        coin,
+        coinToSearch,
         oldestPosition.openTime!,
       );
 

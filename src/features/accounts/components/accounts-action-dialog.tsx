@@ -21,13 +21,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type {
   AccountDocument,
   AccountForm,
@@ -170,7 +170,7 @@ export function AccountsActionDialog({
                     )}
                   />
 
-                  {/*<FormField
+                  <FormField
                     control={form.control}
                     name="provider"
                     render={({ field }) => (
@@ -184,14 +184,32 @@ export function AccountsActionDialog({
                             <SelectValue placeholder="provider" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="bingx">Bingx</SelectItem>
-                            <SelectItem value="bitunix">Bitunix</SelectItem>
+                            <SelectItem value="bingx">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src="/assets/providers/bingx.jpeg"
+                                  alt="BingX"
+                                  className="h-5 w-5 rounded-full object-cover"
+                                />
+                                <span>BingX</span>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="bitunix">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src="/assets/providers/bitunix.webp"
+                                  alt="Bitunix"
+                                  className="h-5 w-5 rounded-full object-cover"
+                                />
+                                <span>Bitunix</span>
+                              </div>
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage className="" />
                       </FormItem>
                     )}
-                  />*/}
+                  />
                 </>
               )}
             </form>
