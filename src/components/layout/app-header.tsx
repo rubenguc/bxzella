@@ -50,8 +50,8 @@ export default function AppHeader({ className, fixed, ...props }: HeaderProps) {
       </span>
       <div className="ml-auto flex items-center space-x-4">
         <DateRangeSelector />
-        <AccountsSelector />
         <AccountsCoinSelector />
+        <AccountsSelector />
       </div>
     </header>
   );

@@ -1,66 +1,36 @@
-import * as SelectPrimitive from "@radix-ui/react-select";
-import { SelectTrigger } from "@radix-ui/react-select";
-import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectValue,
+  SelectTrigger,
 } from "@/components/ui/select";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
-
-const COINS = [
-  {
-    label: "USDT",
-    isDisabled: false,
-    image: "/assets/coins/USDT.webp",
-  },
-  {
-    label: "VST",
-    isDisabled: false,
-    image: "/assets/coins/VST.webp",
-  },
-];
-
-const getCoinImage = (coin: Coin) => {
-  const coinData = COINS.find((c) => c.label === coin);
-  return coinData ? coinData.image : "/assets/coins/VST.webp";
-};
-
-const getCoinAltText = (coin: Coin) => {
-  return `${coin} cryptocurrency logo`;
-};
+import {
+  getCoinAltText,
+  getCoinImage,
+  getCoinsToSelect,
+} from "@/utils/accounts-utils";
 
 export function AccountsCoinSelector() {
-  const t = useTranslations("header");
-  const { coin, setCoin } = useUserConfigStore();
-
-  const getCoinAltText = (coin: Coin) => {
-    return `${coin} cryptocurrency logo`;
-  };
+  const { coin, setCoin, selectedAccount } = useUserConfigStore();
 
   const handleSelect = (value: Coin) => {
     setCoin(value);
   };
 
+  const COINS = getCoinsToSelect(selectedAccount?.provider) || [];
+
   return (
     <Select value={coin} onValueChange={handleSelect}>
-      <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit rounded-xl flex items-center gap-1  overflow-x-hidden text-nowrap bg-card outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
-        <SelectPrimitive.Icon asChild className="block md:hidden mx-auto">
-          <Image
-            src={getCoinImage(coin)}
-            alt={getCoinAltText(coin)}
-            width={20}
-            height={20}
-          />
-        </SelectPrimitive.Icon>
-        <SelectValue className="hola" placeholder={t("select_coin")} />
-        <SelectPrimitive.Icon asChild className="hidden md:block">
-          <ChevronDown className="h-4 w-4 opacity-50 ml-auto" />
-        </SelectPrimitive.Icon>
+      <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit rounded-xl flex items-center justify-center overflow-x-hidden text-nowrap bg-card">
+        <Image
+          src={getCoinImage(coin)}
+          alt={getCoinAltText(coin)}
+          width={20}
+          height={20}
+        />
       </SelectTrigger>
       <SelectContent>
         {COINS.map((_coin) => (
@@ -71,8 +41,8 @@ export function AccountsCoinSelector() {
           >
             <div className="flex items-center gap-1.5">
               <Image
-                src={getCoinImage(_coin.label as Coin)}
-                alt={getCoinAltText(_coin.label as Coin)}
+                src={_coin.image}
+                alt={getCoinAltText(_coin.label)}
                 width={20}
                 height={20}
               />

@@ -90,15 +90,29 @@ export function DayProfitsChart({
     <>
       <XAxis
         dataKey="day"
-        tickFormatter={(value) =>
-          new Date(`${value}T12:00:00`).toLocaleDateString()
-        }
-        interval="equidistantPreserveStart"
-        tick={{ textAnchor: "middle" }}
+        tickFormatter={(value) => {
+          const date = new Date(`${value}T12:00:00`);
+          return date.toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          });
+        }}
+        interval={data.length <= 7 ? 0 : "equidistantPreserveStart"}
+        tick={{ textAnchor: "middle", fontSize: 11 }}
         tickMargin={10}
+        angle={data.length > 10 ? -45 : 0}
+        height={data.length > 10 ? 60 : 30}
       />
-      <YAxis width="auto" domain={["auto", (dataMax) => dataMax * 1.15]} />
+      <YAxis
+        width={60}
+        domain={["auto", (dataMax: number) => dataMax * 1.15]}
+        tickFormatter={(value) => formatDecimal(Number(value), 0)}
+        tick={{ fontSize: 11 }}
+      />
       <Tooltip
+        cursor={{
+          opacity: 0.1,
+        }}
         wrapperClassName="bg-card! text-white!"
         formatter={(profit, index) => [
           <span
@@ -137,13 +151,19 @@ export function DayProfitsChart({
       </CardHeader>
       <CardContent className="h-[420px] outline-0!">
         {data.length === 0 ? (
-          <div>
-            <span>{t("no_data_to_show")}</span>
+          <div className="flex items-center justify-center h-full">
+            <span className="text-muted-foreground">
+              {t("no_data_to_show")}
+            </span>
           </div>
         ) : (
-          <ResponsiveContainer>
+          <ResponsiveContainer width="100%" height="100%">
             {dayProfitsChartMode === "area" ? (
-              <AreaChart {...commonChartProps} className="ring-0">
+              <AreaChart
+                {...commonChartProps}
+                className="ring-0"
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+              >
                 {commonAxisProps}
                 <defs>
                   <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
@@ -179,10 +199,14 @@ export function DayProfitsChart({
                 </Area>
               </AreaChart>
             ) : (
-              <BarChart {...commonChartProps}>
+              <BarChart
+                {...commonChartProps}
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+              >
                 {commonAxisProps}
                 <Bar
                   dataKey="profit"
+                  maxBarSize={data.length <= 5 ? 60 : 40}
                   label={{
                     position: "top",
                     fontSize: 10,
@@ -190,7 +214,14 @@ export function DayProfitsChart({
                   }}
                 >
                   {data.map(({ profit }, index) => (
-                    <Cell key={index.toString()} fill={getBarColor(profit)} />
+                    <Cell
+                      key={index.toString()}
+                      fill={getBarColor(profit)}
+                      className="transition-all duration-200 hover:opacity-100"
+                      enableBackground={0}
+                      fillOpacity={10}
+                      cursor="pointer"
+                    />
                   ))}
                 </Bar>
               </BarChart>

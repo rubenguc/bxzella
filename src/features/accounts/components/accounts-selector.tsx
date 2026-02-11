@@ -1,5 +1,4 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -7,6 +6,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
@@ -39,7 +39,7 @@ export function AccountsSelector() {
 
   return (
     <Select value={selectedAccount?._id} onValueChange={handleSelect}>
-      <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit rounded-xl flex items-center gap-1 overflow-x-hidden text-nowrap bg-card outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
+      <SelectTrigger className="relative min-h-9 min-w-9 py-1 px-2 w-fit rounded-xl flex items-center gap-1 overflow-x-hidden text-nowrap bg-card">
         <SelectPrimitive.Icon asChild className="block md:hidden mx-auto">
           {selectedAccount && (
             <Image
@@ -52,9 +52,6 @@ export function AccountsSelector() {
           )}
         </SelectPrimitive.Icon>
         <SelectValue placeholder={t("account")} />
-        <SelectPrimitive.Icon asChild className="hidden md:block">
-          <ChevronDown className="h-4 w-4 opacity-50 ml-auto" />
-        </SelectPrimitive.Icon>
       </SelectTrigger>
       <SelectContent>
         {accounts.map((account) => (
