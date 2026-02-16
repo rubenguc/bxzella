@@ -1,6 +1,9 @@
+"use client";
+
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +20,16 @@ interface ProfileDropdownProps {
   showText: boolean;
 }
 
+function getInitials(name: string | null | undefined): string {
+  if (!name) return "?";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 export function ProfileDropdown({ showText }: ProfileDropdownProps) {
   const t = useTranslations("header");
 
@@ -24,11 +37,20 @@ export function ProfileDropdown({ showText }: ProfileDropdownProps) {
 
   const { user } = useUser();
   const { signOut } = useClerk();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
     cleanStore();
   };
+
+  const displayName = mounted ? user?.fullName : undefined;
+  const imageUrl = mounted ? user?.imageUrl : undefined;
+  const initials = getInitials(displayName);
 
   return (
     <DropdownMenu modal={false}>
@@ -38,14 +60,14 @@ export function ProfileDropdown({ showText }: ProfileDropdownProps) {
           className={`relative rounded-full mx-auto ${!showText && "h-8 w-8"}`}
         >
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user?.imageUrl} alt="@shadcn" />
-            <AvatarFallback>{user?.fullName}</AvatarFallback>
+            <AvatarImage src={imageUrl} alt={displayName || ""} />
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
 
           <p
             className={`text-sm leading-none font-medium ${!showText && "hidden"}`}
           >
-            {user?.fullName}
+            {displayName}
           </p>
         </Button>
       </DropdownMenuTrigger>

@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export function DateRangeSelector() {
   const locale = useLocale();
@@ -175,14 +176,19 @@ export function DateRangeSelector() {
 
   return (
     <DropdownMenu onOpenChange={updateRange}>
-      <DropdownMenuTrigger className="px-2 rounded-xl h-9 min-w-9  bg-card relative flex items-center outline dark:outline-transparent hover:outline-primary aria-expanded:outline-primary">
-        <CalendarIcon size={17} className="opacity-50" />
-        <Input
-          readOnly
-          className="hidden px-1 py-0 md:block max-w-30 cursor-pointer select-none border-none shadow-none bg-transparent!"
-          value={value}
-        />
-        <ChevronDown className="hidden md:block ph-4 w-4 opacity-50" />
+      <DropdownMenuTrigger
+        asChild
+        className="rounded-xl h-9 min-w-9 bg-card relative flex px-2! hover:text-white"
+      >
+        <Button variant="outline">
+          <CalendarIcon size={17} className="opacity-50" />
+          <Input
+            readOnly
+            className="hidden px-1 md:block max-w-30 cursor-pointer select-none border-none shadow-none bg-transparent!"
+            value={value}
+          />
+          <ChevronDown className="hidden md:block h-4 w-4 opacity-50" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex">
         <div className="flex-1">

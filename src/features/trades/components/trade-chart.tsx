@@ -6,6 +6,7 @@ import {
   type CandlestickSeriesOptions,
   type CandlestickStyleOptions,
   ColorType,
+  CrosshairMode,
   createChart,
   createSeriesMarkers,
   type DeepPartial,
@@ -95,6 +96,9 @@ export function TradeChart({
     };
 
     const chart = createChart(chartContainerRef?.current, {
+      crosshair: {
+        mode: CrosshairMode.Normal,
+      },
       grid: {
         horzLines: {
           color: "#121212",

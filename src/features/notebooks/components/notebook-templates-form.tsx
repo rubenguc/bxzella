@@ -165,7 +165,7 @@ export function NotebookTemplatesForm({
                 variant="destructive"
                 onClick={setIsOpen}
                 disabled={form.formState.isSubmitting || isDeleting}
-                aria-label={t("delete_")}
+                aria-label={t("delete")}
               >
                 {t("delete")}
               </Button>

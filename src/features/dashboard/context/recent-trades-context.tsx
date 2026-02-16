@@ -41,7 +41,7 @@ export default function RecentTradesProvider({ children }: PropsWithChildren) {
       isStoreLoaded && !!selectedAccount?._id && !!startDate && !!endDate,
     queryFn: async () => {
       toast.loading(t("syncing_new_trades"), {
-        position: "top-right",
+        position: "top-center",
       });
       const response = await getTrades({
         accountId: selectedAccount!._id,
@@ -55,7 +55,7 @@ export default function RecentTradesProvider({ children }: PropsWithChildren) {
 
       if (response.synced) {
         toast.success(t("new_trades_synced"), {
-          position: "top-right",
+          position: "top-center",
         });
         queryClient.invalidateQueries({ queryKey: ["statistics"] });
         queryClient.invalidateQueries({ queryKey: ["day-profits"] });

@@ -53,4 +53,5 @@ export interface HistoryPosition {
   liqPrice: string;
   ctime: string;
   mtime: string;
+  isolated: boolean;
 }

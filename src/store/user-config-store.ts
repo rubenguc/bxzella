@@ -53,7 +53,8 @@ export const useUserConfigStore = create<UserConfig>()(
   persist(
     (set) => ({
       ...DEFAULT_STATE,
-      setSelectedAccount: (account) => set({ selectedAccount: account }),
+      setSelectedAccount: (account) =>
+        set({ selectedAccount: account, coin: "USDT" }),
       setTheme: (theme) => set({ theme }),
       updateDateRange: (startDate, endDate) => set({ startDate, endDate }),
       setCoin: (coin) => set({ coin }),
