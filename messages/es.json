@@ -7,6 +7,7 @@
     "create-api-key": "Crear Clave API",
     "daily-journal": "Diario diario",
     "playbooks": "Manual de operaciones",
+    "trading-assistant": "Asistente de Trading",
     "": "Cuadro de mando",
     "settings": "Panel de control",
     "notebooks": "Cuadernos"
@@ -343,5 +344,24 @@
     "winrate": "Tasa de Ganancia",
     "winners": "Ganadores",
     "losers": "Perdedores"
+  },
+  "trading-assistant": {
+    "title": "Asistente de Trading",
+    "description": "Pregúntame sobre tus operaciones, análisis de P&L, o rendimiento de trading. Puedo analizar tus datos y proporcionar información.",
+    "suggestions": {
+      "pnl_this_month": "Mostrar mi P&L este mes",
+      "analyze_winning_trades": "Analizar mis operaciones ganadoras",
+      "win_rate": "¿Cuál es mi tasa de ganancia?",
+      "recent_trade_notes": "Mostrar notas recientes"
+    },
+    "chat": {
+      "assistant_name": "Asistente",
+      "ai_avatar": "IA",
+      "analyzing": "Analizando",
+      "analyzing_data": "Analizando tus datos...",
+      "input_placeholder": "Pregunta sobre tus operaciones...",
+      "error_title": "Algo salió mal",
+      "error_default": "Error al enviar mensaje. Por favor intenta de nuevo."
+    }
   }
 }

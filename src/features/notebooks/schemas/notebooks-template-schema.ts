@@ -9,6 +9,7 @@ export const notebooksTemplateSearchParamsSchema = z.object({
 export const notebooksTemplateValidationSchema = z.object({
   title: z.string().min(1, "title_required").trim(),
   content: z.string().min(1, "content_required").trim(),
+  contentPlainText: z.string(),
 });
 
 export type NotebooksTemplateForm = z.infer<

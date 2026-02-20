@@ -7,6 +7,7 @@
     "create-api-key": "Create API Key",
     "daily-journal": "Daily Journal",
     "playbooks": "Playbooks",
+    "trading-assistant": "Trading Assistant",
     "": "Dashboard",
     "settings": "Settings",
     "notebooks": "Notebooks"
@@ -343,5 +344,24 @@
     "winrate": "Winrate",
     "winners": "Winners",
     "losers": "Losers"
+  },
+  "trading-assistant": {
+    "title": "Trading Assistant",
+    "description": "Ask me about your trades, P&L analysis, or trading performance. I can analyze your data and provide insights.",
+    "suggestions": {
+      "pnl_this_month": "Show my P&L this month",
+      "analyze_winning_trades": "Analyze my winning trades",
+      "win_rate": "What's my win rate?",
+      "recent_trade_notes": "Show recent trade notes"
+    },
+    "chat": {
+      "assistant_name": "Assistant",
+      "ai_avatar": "AI",
+      "analyzing": "Analyzing",
+      "analyzing_data": "Analyzing your data...",
+      "input_placeholder": "Ask about your trades...",
+      "error_title": "Something went wrong",
+      "error_default": "Failed to send message. Please try again."
+    }
   }
 }

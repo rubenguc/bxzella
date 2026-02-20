@@ -74,6 +74,7 @@ export async function updateNotebookByTradeId(
   tradeId: string,
   data: {
     content: string;
+    contentPlainText: string;
     folderId: string;
     coin: Coin;
   },

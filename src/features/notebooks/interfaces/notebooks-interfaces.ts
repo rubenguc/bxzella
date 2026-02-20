@@ -7,6 +7,7 @@ export interface Notebook {
   endDate?: Date;
   tradeId?: string;
   content: string;
+  contentPlainText: string;
   title: string;
   folderId: Types.ObjectId | string | null;
   coin: Coin;

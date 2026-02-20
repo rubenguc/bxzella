@@ -173,7 +173,7 @@ export async function getTradesByAccountId(
     const parsedStartDate = adjustDateToUTC(startDate, timezone);
     const parsedEndDate = adjustDateToUTC(endDate, timezone, true);
 
-    find.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
+    // find.openTime = { $gte: parsedStartDate, $lte: parsedEndDate };
     find.updateTime = { $gte: parsedStartDate, $lte: parsedEndDate };
   }
 

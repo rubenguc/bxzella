@@ -4,6 +4,7 @@ import {
   ChartNoAxesColumn,
   House,
   Info,
+  MessageSquareText,
   NotebookText,
   SquareAsterisk,
   Users,
@@ -28,6 +29,11 @@ export const sidebarItems = {
           title: "trades",
           url: "/trades",
           icon: BookText,
+        },
+        {
+          title: "trading-assistant",
+          url: "/trading-assistant",
+          icon: MessageSquareText,
         },
         {
           title: "accounts",
