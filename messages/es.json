@@ -78,6 +78,10 @@
     "rows_per_page": "Filas por página",
     "page": "Página",
     "of": "de",
+    "go_to_first_page": "Ir a la primera página",
+    "go_to_previous_page": "Ir a la página anterior",
+    "go_to_next_page": "Ir a la página siguiente",
+    "go_to_last_page": "Ir a la última página",
     "aria_previous_month": "Mes anterior",
     "aria_next_month": "Mes siguiente",
     "aria_close_dialog": "Cerrar diálogo",
@@ -164,7 +168,8 @@
     }
   },
   "trades": {
-    "no_trades": "No hay operaciones"
+    "no_trades": "No hay operaciones",
+    "trades": "Operaciones"
   },
   "accounts": {
     "add_account": "Agregar Cuenta",
@@ -338,7 +343,9 @@
     "winners": "Ganadores",
     "losers": "Perdedores",
     "profit_factor": "Factor de Ganancia",
-    "commisions": "Comisiones"
+    "commisions": "Comisiones",
+    "trades": "Operaciones",
+    "no_more_entries": "No hay más entradas para cargar"
   },
   "coin-performance": {
     "net_pnl": "Ganancia Neta",

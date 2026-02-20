@@ -1,3 +1,5 @@
+"use client";
+
 import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,10 +31,6 @@ export function DataTablePagination<TData>({
       className="flex items-center justify-between overflow-clip px-2"
       style={{ overflowClipMargin: 1 }}
     >
-      {/* <div className="text-muted-foreground hidden flex-1 text-sm sm:block">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div> */}
       <div className="flex items-center sm:space-x-6 lg:space-x-8 ml-auto">
         <div className="flex items-center space-x-2">
           <p className="hidden text-sm font-medium sm:block">
@@ -44,7 +42,10 @@ export function DataTablePagination<TData>({
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger
+              className="h-8 w-[70px]"
+              aria-label={t("rows_per_page")}
+            >
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -66,8 +67,9 @@ export function DataTablePagination<TData>({
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
+            aria-label={t("go_to_first_page")}
           >
-            <span className="sr-only">Go to first page</span>
+            <span className="sr-only">{t("go_to_first_page")}</span>
             <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -75,8 +77,9 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            aria-label={t("go_to_previous_page")}
           >
-            <span className="sr-only">Go to previous page</span>
+            <span className="sr-only">{t("go_to_previous_page")}</span>
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -84,8 +87,9 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
+            aria-label={t("go_to_next_page")}
           >
-            <span className="sr-only">Go to next page</span>
+            <span className="sr-only">{t("go_to_next_page")}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
@@ -93,8 +97,9 @@ export function DataTablePagination<TData>({
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
+            aria-label={t("go_to_last_page")}
           >
-            <span className="sr-only">Go to last page</span>
+            <span className="sr-only">{t("go_to_last_page")}</span>
             <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>

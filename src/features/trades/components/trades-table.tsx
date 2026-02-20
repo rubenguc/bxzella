@@ -9,7 +9,7 @@ import {
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
@@ -25,110 +25,113 @@ export function TradesTable() {
   const tInfo = useTranslations("trade_info");
   const tCommon = useTranslations("common_messages");
 
-  const columns: ColumnDef<TradeDocument>[] = [
-    {
-      header: tInfo("open_date"),
-      accessorKey: "openTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.openTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
+  const columns = useMemo<ColumnDef<TradeDocument>[]>(
+    () => [
+      {
+        header: tInfo("open_date"),
+        accessorKey: "openTime",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {transformTimeToLocalDate(row.original.openTime)}
+          </div>
+        ),
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("closed_date"),
-      accessorKey: "updateTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.updateTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("closed_date"),
+        accessorKey: "updateTime",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {transformTimeToLocalDate(row.original.updateTime)}
+          </div>
+        ),
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("symbol"),
-      accessorKey: "symbol",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformSymbol(row.original.symbol)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("symbol"),
+        accessorKey: "symbol",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {transformSymbol(row.original.symbol)}
+          </div>
+        ),
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("position"),
-      accessorKey: "positionSide",
-      cell: ({ row }) => {
-        const positionSide = row.getValue("positionSide") as string;
-        const isLongPosition = checkLongPosition(positionSide);
-        return (
-          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
-            {positionSide}
-          </Badge>
-        );
+      {
+        header: tInfo("position"),
+        accessorKey: "positionSide",
+        cell: ({ row }) => {
+          const positionSide = row.getValue("positionSide") as string;
+          const isLongPosition = checkLongPosition(positionSide);
+          return (
+            <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
+              {positionSide}
+            </Badge>
+          );
+        },
+        meta: {
+          className: "text-center",
+        },
       },
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("leverage"),
+        accessorKey: "leverage",
+        cell: ({ row }) => (
+          <div className="font-medium">{row.original.leverage}x</div>
+        ),
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("leverage"),
-      accessorKey: "leverage",
-      cell: ({ row }) => (
-        <div className="font-medium">{row.original.leverage}x</div>
-      ),
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("avg_entry_price"),
+        accessorKey: "avgPrice",
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("avg_entry_price"),
-      accessorKey: "avgPrice",
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("avg_exit_price"),
+        accessorKey: "avgClosePrice",
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("avg_exit_price"),
-      accessorKey: "avgClosePrice",
-      meta: {
-        className: "text-center",
+      {
+        header: tInfo("position_pnl"),
+        accessorKey: "netProfit",
+        cell: ({ row }) => (
+          <Profit
+            amount={Number(row.original.netProfit)}
+            coin={row.original.coin}
+            decimals={4}
+          />
+        ),
+        meta: {
+          className: "text-center",
+        },
       },
-    },
-    {
-      header: tInfo("position_pnl"),
-      accessorKey: "netProfit",
-      cell: ({ row }) => (
-        <Profit
-          amount={Number(row.original.netProfit)}
-          coin={row.original.coin}
-          decimals={4}
-        />
-      ),
-      meta: {
-        className: "text-center",
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <Link
+            href={`/trades/details/${row.original.positionId}`}
+            className="group inline-flex items-center justify-center h-8 w-8 rounded-md hover:bg-accent transition-colors"
+            aria-label={tCommon("aria_view_details")}
+          >
+            <Eye className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </Link>
+        ),
       },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => (
-        <Link
-          href={`/trades/details/${row.original.positionId}`}
-          className="data-[state=open]:bg-muted h-fit md:h-6 w-6 px-1"
-          aria-label={tCommon("aria_view_details")}
-        >
-          <Eye className="h-4 w-4" />
-        </Link>
-      ),
-    },
-  ];
+    ],
+    [tInfo, tCommon],
+  );
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -168,7 +171,7 @@ export function TradesTable() {
   return (
     <div className="space-y-4">
       <CustomTable
-        containerClassName="rounded-md border"
+        containerClassName="rounded-xl border bg-card shadow-sm overflow-hidden"
         table={table}
         columnsLength={columns.length}
         noDataMessage={t("no_trades")}

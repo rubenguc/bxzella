@@ -12,7 +12,7 @@ interface ProfitProps extends DetailedHTMLProps<
   decimals?: number;
   showSign?: boolean;
   isApprox?: boolean;
-  preffix?: string;
+  prefix?: string;
   postfix?: string;
 }
 
@@ -23,12 +23,12 @@ export function Profit({
   className = "",
   showSign = true,
   isApprox = false,
-  preffix = "",
+  prefix = "",
   postfix = "",
   ...props
 }: ProfitProps) {
   const colorText = getResultClass(amount);
-  const formattedAmount = `${isApprox ? "≈" : ""} ${preffix} ${formatDecimal(amount, decimals, showSign)} ${coin} ${postfix}`;
+  const formattedAmount = `${isApprox ? "≈" : ""} ${prefix} ${formatDecimal(amount, decimals, showSign)} ${coin} ${postfix}`;
 
   return (
     <span {...props} className={`${colorText} ${className}`}>
