@@ -5,6 +5,7 @@ import {
 } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { Profit } from "@/components/profit";
 import { TextEditor } from "@/components/text-editor/text-editor";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkWin } from "@/utils/trade-utils";
 import { useNotebooksContext } from "../context/notebooks-context";
+import { useNotebookFoldersContext } from "../context/notebook-folders-context";
 import { updateNotebookByTradeIdAction } from "../server/actions/notebooks-actions";
 import { getNotebookTitle } from "../utils/notebooks-utils";
 import { NotebookTemplatesRecentlyList } from "./notebook-templates-recently-list";
@@ -20,14 +22,17 @@ import { NotebookTemplatesRecentlyList } from "./notebook-templates-recently-lis
 export function NotebookDetails() {
   const t = useTranslations("notebooks.notebook_detail");
   const tCommon = useTranslationsCommon("common_messages");
+  const queryClient = useQueryClient();
 
   const { selectedAccount, coin } = useUserConfigStore();
-
-  const { selectedNotebook } = useNotebooksContext();
+  const { selectedNotebookFolder } = useNotebookFoldersContext();
+  const { selectedNotebook, setSelectedNotebook } = useNotebooksContext();
 
   const { editorRef, setEditorValue } = useEditorText();
 
   const [content, setContent] = useState("");
+
+  const folderId = selectedNotebookFolder?._id ?? "all";
 
   const onSave = async () => {
     const response = await updateNotebookByTradeIdAction(
@@ -38,6 +43,43 @@ export function NotebookDetails() {
     );
     if (response.error) {
       toast.error(t(response.message));
+      return;
+    }
+
+    const updatedNotebook = (response as { data?: any }).data;
+
+    if (updatedNotebook) {
+      setSelectedNotebook((prev) =>
+        prev
+          ? {
+              ...prev,
+              content: updatedNotebook.content,
+              updatedAt: updatedNotebook.updatedAt,
+            }
+          : null,
+      );
+
+      queryClient.setQueryData(
+        ["notebooks-by-folder-id", folderId, coin],
+        (oldData: any) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: any) => ({
+              ...page,
+              data: page.data.map((notebook: any) =>
+                notebook._id === updatedNotebook._id
+                  ? {
+                      ...notebook,
+                      content: updatedNotebook.content,
+                      updatedAt: updatedNotebook.updatedAt,
+                    }
+                  : notebook,
+              ),
+            })),
+          };
+        },
+      );
     }
 
     toast.success("saved");

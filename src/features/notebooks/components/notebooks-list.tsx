@@ -1,15 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { startTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { usePagination } from "@/hooks/use-pagination";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { useNotebookFoldersContext } from "../context/notebook-folders-context";
 import { useNotebooksContext } from "../context/notebooks-context";
 import { getNotebooksByFolderId } from "../services/notebooks-services";
 import { getNotebookTitle } from "../utils/notebooks-utils";
 import { useUserConfigStore } from "@/store/user-config-store";
+
+const PAGE_SIZE = 10;
 
 export function NotebooksList() {
   const t = useTranslations("notebooks.notebooks");
@@ -18,22 +20,28 @@ export function NotebooksList() {
   const { selectedNotebookFolder } = useNotebookFoldersContext();
   const { selectedNotebook, setSelectedNotebook } = useNotebooksContext();
 
-  const { limit, page } = usePagination();
-
   const folderId = selectedNotebookFolder?._id ?? "all";
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["notebooks-by-folder-id", folderId, coin],
-    queryFn: () =>
-      getNotebooksByFolderId(folderId, {
-        limit,
-        page,
-        coin,
-      }),
-    enabled: !!folderId && !!coin,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["notebooks-by-folder-id", folderId, coin],
+      queryFn: ({ pageParam = 0 }) =>
+        getNotebooksByFolderId(folderId, {
+          page: pageParam,
+          limit: PAGE_SIZE,
+          coin,
+        }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        if (allPages.length < lastPage.totalPages) {
+          return allPages.length;
+        }
+        return undefined;
+      },
+      enabled: !!folderId && !!coin,
+    });
 
-  const notebooks = data?.data || [];
+  const notebooks = data?.pages.flatMap((page) => page.data) || [];
 
   return (
     <div className="border-b md:border-r md:border-b-0 border-border/50 md:w-1/5 bg-muted/20">
@@ -49,7 +57,7 @@ export function NotebooksList() {
         </motion.span>
       )}
 
-      <div className="flex md:flex-col gap-2 justify-start px-2 py-3 overflow-scroll">
+      <div className="flex md:flex-col gap-2 justify-start px-3 py-4 overflow-scroll">
         {notebooks.map((notebook, index) => (
           <motion.div
             key={notebook._id}
@@ -59,23 +67,44 @@ export function NotebooksList() {
           >
             <Button
               variant="ghost"
-              className={`flex flex-col items-start py-4 px-3 gap-1 border-r md:border-r-0 md:border-b border-border/50 rounded-lg hover:bg-accent/50 dark:hover:bg-accent/30 transition-all duration-200 w-full justify-start ${
+              className={`h-auto text-start flex flex-col items-start py-2 px-4 gap-1.5 border-r md:border-r-0 md:border-b border-border/50 rounded-lg hover:bg-accent/50 dark:hover:bg-accent/30 transition-all duration-200 w-full justify-start min-w-0 ${
                 selectedNotebook?._id === notebook._id
                   ? "bg-accent/70 dark:bg-accent/40"
                   : ""
               }`}
               onClick={() => setSelectedNotebook(notebook)}
             >
-              <span className="font-semibold text-sm line-clamp-2 text-left">
+              <span className="font-semibold text-sm text-left  w-full overflow-hidden">
                 {getNotebookTitle(notebook)}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-sm  text-muted-foreground whitespace-nowrap truncate w-full overflow-hidden">
                 {transformTimeToLocalDate(notebook.updatedAt as Date)}
               </span>
             </Button>
           </motion.div>
         ))}
       </div>
+
+      {hasNextPage && (
+        <div className="p-3 border-t border-border/50">
+          <Button
+            variant="ghost"
+            className="w-full"
+            onClick={() =>
+              startTransition(() => {
+                fetchNextPage();
+              })
+            }
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              t("load_more")
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

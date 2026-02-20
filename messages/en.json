@@ -309,7 +309,8 @@
       "all_notes": "All Notes"
     },
     "notebooks": {
-      "no_notebooks_to_show": "No notebooks to show"
+      "no_notebooks_to_show": "No notebooks to show",
+      "load_more": "Load More"
     },
     "notebook_detail": {
       "net_pnl": "Net PnL",

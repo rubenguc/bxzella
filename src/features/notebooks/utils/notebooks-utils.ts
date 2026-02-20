@@ -7,4 +7,6 @@ export const getNotebookTitle = (notebook: NotebookDocumentWithTrade) => {
 
   if (isNotebookTrade)
     return `${transformSymbol(notebook.tradeId!.symbol)}: ${transformTimeToLocalDate(notebook.tradeId!.updateTime)}`;
+
+  return "Untitled Notebook";
 };

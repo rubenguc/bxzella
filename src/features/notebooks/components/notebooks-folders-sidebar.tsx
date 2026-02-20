@@ -151,13 +151,12 @@ export function NotebooksFoldersSidebar() {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button
-                        className="rounded-lg hover:bg-accent/50 p-1 transition-colors"
+                      <div
+                        className="rounded-lg hover:bg-accent/50 p-1 transition-colors cursor-pointer"
                         aria-label={tCommon("aria_menu_more")}
-                        type="button"
                       >
                         <Ellipsis className="h-4 w-4" />
-                      </button>
+                      </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem

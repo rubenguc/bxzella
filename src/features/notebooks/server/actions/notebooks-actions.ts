@@ -3,7 +3,11 @@
 import connectDB from "@/db/db";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { handleServerActionError } from "@/utils/server-api-utils";
-import { updateNotebookByTradeId } from "../db/notebooks-db";
+import { transformDocument } from "@/utils/mongoose-utils";
+import {
+  getNotebookByTradeId,
+  updateNotebookByTradeId,
+} from "../db/notebooks-db";
 import { getNotebookTradesFolderByAccountId } from "../db/notebooks-folder-db";
 
 function extractPlainTextFromLexicalContent(lexicalContent: string): string {
@@ -48,13 +52,19 @@ export async function updateNotebookByTradeIdAction(
 
     const contentPlainText = extractPlainTextFromLexicalContent(content);
 
-    await updateNotebookByTradeId(tradeId, {
+    const updatedNotebook = await updateNotebookByTradeId(tradeId, {
       content,
       contentPlainText,
       coin,
       folderId: notebookFolder._id,
     });
-    return { error: false, message: "" };
+
+    // Convert Mongoose document to plain JSON object with stringified IDs
+    return {
+      error: false,
+      message: "",
+      data: transformDocument(updatedNotebook),
+    };
   } catch (error) {
     return handleServerActionError("error_updating_notebook_trade", error);
   }
