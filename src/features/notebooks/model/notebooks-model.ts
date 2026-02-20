@@ -11,6 +11,9 @@ export const NotebookSchema = new Schema<Notebook>(
     content: {
       type: String,
     },
+    contentPlainText: {
+      type: String,
+    },
     startDate: {
       type: Date,
       required: true,

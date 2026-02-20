@@ -1,9 +1,10 @@
-import { PaginationResponse } from "@/utils/db-utils";
+import type { PaginationResponse } from "@/utils/db-utils";
 
 export interface NotebookTemplate {
   userId: string;
   title: string;
   content: string;
+  contentPlainText: string;
 }
 
 export interface NotebookTemplateDocument extends NotebookTemplate {

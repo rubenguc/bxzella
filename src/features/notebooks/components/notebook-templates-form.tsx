@@ -53,6 +53,9 @@ export function NotebookTemplatesForm({
     defaultValues: {
       title: isEdit ? selectedNotebookTemplate.title : "",
       content: isEdit ? selectedNotebookTemplate.content : "",
+      contentPlainText: isEdit
+        ? (selectedNotebookTemplate.contentPlainText ?? "")
+        : "",
     },
   });
 
@@ -62,6 +65,7 @@ export function NotebookTemplatesForm({
       form.reset({
         title: selectedNotebookTemplate.title,
         content: selectedNotebookTemplate.content,
+        contentPlainText: selectedNotebookTemplate.contentPlainText ?? "",
       });
       setEditorValue(selectedNotebookTemplate.content);
     }
