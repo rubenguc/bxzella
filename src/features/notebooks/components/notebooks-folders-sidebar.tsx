@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "motion/react";
 import { ChevronLeft, Ellipsis, FolderPlus } from "lucide-react";
 import {
   useTranslations,
@@ -68,17 +69,21 @@ export function NotebooksFoldersSidebar() {
 
   return (
     <Card
-      className={`${isOpen ? "md:w-(--sidebar-width)" : "md:w-(--sidebar-width-icon)"} transition-[left,right,width] duration-200 ease-linear overflow-hidden py-0 gap-2`}
+      className={`${isOpen ? "md:w-(--sidebar-width)" : "md:w-(--sidebar-width-icon)"} transition-[left,right,width] duration-200 ease-linear overflow-hidden py-0 gap-2 border-border/50 bg-muted/30`}
     >
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
         className={`flex p-2 items-center justify-between ${isOpen ? "flex-row" : "flex-col"} `}
       >
         <Button
           variant="ghost"
           onClick={() => setOpen("add")}
           aria-label={t("add_folder")}
+          className="gap-2"
         >
-          <FolderPlus />
+          <FolderPlus className="h-5 w-5" />
           <span className={`${!isOpen && "md:hidden"}`}>{t("add_folder")}</span>
         </Button>
         <Button
@@ -89,62 +94,69 @@ export function NotebooksFoldersSidebar() {
             isOpen ? tCommon("aria_previous_month") : tCommon("aria_next_month")
           }
         >
-          <ChevronLeft />
+          <ChevronLeft className="h-5 w-5" />
         </Button>
-      </div>
-      <div className="flex-1">
+      </motion.div>
+      <div className="flex-1 overflow-y-auto">
         {showLoading ? (
-          <div className="flex justify-center">
+          <div className="flex justify-center py-8">
             <Spinner />
           </div>
         ) : (
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-1 p-2">
             <li>
               <Button
-                className={`rounded-none justify-start px-3 w-full ${selectedNotebookFolder === null ? "bg-accent/90" : ""}`}
+                className={`rounded-lg justify-start px-3 w-full transition-all duration-200 ${selectedNotebookFolder === null ? "bg-accent/80" : ""}`}
                 variant="ghost"
                 onClick={() => {
                   setSelectedNotebookFolder(null);
                 }}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <div
-                    className="w-1 h-6 rounded-xl"
+                    className="w-1.5 h-6 rounded-full shadow-sm"
                     style={{ backgroundColor: FOLDER_COLORS[0] }}
                   />
-                  <span>
+                  <span className="font-medium">
                     {isOpen ? t("all_notes") : t("all_notes").charAt(0)}
                   </span>
                 </div>
               </Button>
             </li>
-            {notebooksFolders.map((notebookFolder) => (
-              <li key={notebookFolder._id}>
+            {notebooksFolders.map((notebookFolder, index) => (
+              <motion.li
+                key={notebookFolder._id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, delay: index * 0.05 }}
+              >
                 <Button
                   data-active="false"
-                  className={`px-3 w-full justify-between ${selectedNotebookFolder?._id === notebookFolder._id ? "bg-accent/90" : ""}`}
+                  className={`px-3 w-full justify-between rounded-lg transition-all duration-200 ${selectedNotebookFolder?._id === notebookFolder._id ? "bg-accent/80" : ""}`}
                   variant="ghost"
                   onClick={(e) => {
                     setSelectedNotebookFolder(notebookFolder);
                   }}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <div
-                      className="w-1 h-6 rounded-xl"
+                      className="w-1.5 h-6 rounded-full shadow-sm"
                       style={{
                         backgroundColor: getTagColor(notebookFolder),
                       }}
                     />
-                    <span>{getFolderName(notebookFolder, isOpen)}</span>
+                    <span className="font-medium">
+                      {getFolderName(notebookFolder, isOpen)}
+                    </span>
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className="rounded-xl hover:bg-primary p-1"
+                        className="rounded-lg hover:bg-accent/50 p-1 transition-colors"
                         aria-label={tCommon("aria_menu_more")}
                         type="button"
                       >
-                        <Ellipsis className="z-50" />
+                        <Ellipsis className="h-4 w-4" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -171,7 +183,7 @@ export function NotebooksFoldersSidebar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </Button>
-              </li>
+              </motion.li>
             ))}
           </ul>
         )}

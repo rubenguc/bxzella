@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import {
   useTranslations,
   useTranslations as useTranslationsCommon,
@@ -55,24 +56,52 @@ export function NotebookDetails() {
   const isWin = checkWin(netProfit);
 
   return (
-    <div className="md:w-4/5 flex flex-col px-2 flex-1">
-      <div className="flex flex-col mb-4">
-        <h3 className="font-bold text-xl">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="md:w-4/5 flex flex-col px-4 py-2 flex-1"
+    >
+      <div className="flex flex-col mb-6 pb-4 border-b border-border/50">
+        <h3 className="font-bold text-2xl text-foreground mb-2">
           {getNotebookTitle(selectedNotebook)}
         </h3>
         <div className="flex gap-2 items-center text-muted-foreground text-sm">
-          {`${t("created")} ${transformTimeToLocalDate(selectedNotebook.createdAt)} ${t("last_updated")} ${transformTimeToLocalDate(selectedNotebook.updatedAt)}`}
+          <span>{t("created")}</span>
+          <time className="font-medium text-foreground">
+            {transformTimeToLocalDate(selectedNotebook.createdAt)}
+          </time>
+          <span>•</span>
+          <span>{t("last_updated")}</span>
+          <time className="font-medium text-foreground">
+            {transformTimeToLocalDate(selectedNotebook.updatedAt)}
+          </time>
         </div>
       </div>
 
-      <div className="border-2 border-accent rounded-md p-2 mb-3">
-        <div className="flex items-center gap-1">
-          <span className={isWin ? "text-green-500" : "text-red-500"}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className={`rounded-xl p-4 mb-4 border-2 ${
+          isWin
+            ? "bg-emerald-500/10 border-emerald-500/30"
+            : "bg-red-500/10 border-red-500/30"
+        }`}
+      >
+        <div className="flex items-center gap-2">
+          <span
+            className={`font-semibold ${isWin ? "text-emerald-500" : "text-red-500"}`}
+          >
             {t("net_pnl")}
           </span>
-          <Profit amount={Number(netProfit)} coin={coin} />
+          <Profit
+            amount={Number(netProfit)}
+            coin={coin}
+            className={isWin ? "text-emerald-500" : "text-red-500"}
+          />
         </div>
-      </div>
+      </motion.div>
 
       <div className="my-4">
         <NotebookTemplatesRecentlyList
@@ -82,12 +111,18 @@ export function NotebookDetails() {
         />
       </div>
 
-      <TextEditor ref={editorRef} onChange={setContent} />
-      <div className="flex justify-end mt-3">
-        <Button onClick={onSave} aria-label={tCommon("aria_add_note")}>
-          {t("save")}
-        </Button>
+      <div className="flex-1 flex flex-col">
+        <TextEditor ref={editorRef} onChange={setContent} />
+        <div className="flex justify-end mt-4">
+          <Button
+            onClick={onSave}
+            aria-label={tCommon("aria_add_note")}
+            className="min-w-[120px]"
+          >
+            {t("save")}
+          </Button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
