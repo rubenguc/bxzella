@@ -1,5 +1,8 @@
+"use client";
+
 import { flexRender } from "@tanstack/react-table";
 import { Table as ITable, RowData } from "@tanstack/table-core";
+import { motion } from "motion/react";
 import {
   Table,
   TableBody,
@@ -43,7 +46,10 @@ export function CustomTable<T>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row">
+              <TableRow
+                key={headerGroup.id}
+                className="group/row border-b bg-muted/30"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
@@ -65,11 +71,14 @@ export function CustomTable<T>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
+              table.getRowModel().rows.map((row, index) => (
+                <motion.tr
                   key={row.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: index * 0.02 }}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group/row"
+                  className="group/row hover:bg-accent/50 data-[state=selected]:bg-accent border-b transition-colors last:border-b-0"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -82,7 +91,7 @@ export function CustomTable<T>({
                       )}
                     </TableCell>
                   ))}
-                </TableRow>
+                </motion.tr>
               ))
             ) : (
               <>
@@ -106,7 +115,15 @@ export function CustomTable<T>({
           </TableBody>
         </Table>
       </div>
-      {showPagination && <DataTablePagination table={table} />}
+      {showPagination && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <DataTablePagination table={table} />
+        </motion.div>
+      )}
     </>
   );
 }

@@ -125,6 +125,12 @@ export function TradeInfo({
 
       <InfoRow label={t("leverage")} value={`${leverage}x`} />
 
+      <InfoRow
+        label={t("side")}
+        value={positionSide === "LONG" ? t("long") : t("short")}
+        valueClassName={positionSide === "LONG" ? "text-green-500" : "text-red-500"}
+      />
+
       <InfoRow label={t("avg_entry_price")} value={`${avgPrice} ${coin}`} />
 
       <InfoRow label={t("avg_exit_price")} value={`${avgClosePrice} ${coin}`} />

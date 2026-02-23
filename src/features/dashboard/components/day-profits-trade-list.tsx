@@ -21,40 +21,15 @@ interface DayProfitsTradeListProps {
 }
 
 export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
-  const t = useTranslations("trades");
   const tInfo = useTranslations("trade_info");
   const tCommon = useTranslationsCommon("common_messages");
 
   const columns: ColumnDef<LimitedTrade>[] = [
     {
-      header: tInfo("open_date"),
-      accessorKey: "openTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.openTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("closed_date"),
-      accessorKey: "updateTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.updateTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
       header: tInfo("symbol"),
       accessorKey: "symbol",
       cell: ({ row }) => (
-        <div className="font-medium">
+        <div className="font-semibold">
           {transformSymbol(row.original.symbol)}
         </div>
       ),
@@ -69,7 +44,10 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
         const positionSide = row.getValue("positionSide") as string;
         const isLongPosition = checkLongPosition(positionSide);
         return (
-          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
+          <Badge
+            variant={isLongPosition ? "green-filled" : "red-filled"}
+            className="min-w-[70px]"
+          >
             {positionSide}
           </Badge>
         );
@@ -82,7 +60,21 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
       header: tInfo("leverage"),
       accessorKey: "leverage",
       cell: ({ row }) => (
-        <div className="font-medium">{row.original.leverage}x</div>
+        <div className="font-medium text-muted-foreground">
+          {row.original.leverage}x
+        </div>
+      ),
+      meta: {
+        className: "text-center",
+      },
+    },
+    {
+      header: tInfo("open_date"),
+      accessorKey: "openTime",
+      cell: ({ row }) => (
+        <div className="text-muted-foreground">
+          {transformTimeToLocalDate(row.original.openTime)}
+        </div>
       ),
       meta: {
         className: "text-center",
@@ -95,6 +87,7 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
         <Profit
           amount={Number(row.original.netProfit)}
           coin={row.original.coin}
+          className="font-semibold"
         />
       ),
       meta: {
@@ -106,10 +99,10 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
       cell: ({ row }) => (
         <Link
           href={`/trades/details/${row.original.positionId}`}
-          className="data-[state=open]:bg-muted h-auto"
+          className="group inline-flex items-center justify-center rounded-md p-1.5 hover:bg-accent transition-colors"
           aria-label={tCommon("aria_view_details")}
         >
-          <Eye className="w-4" />
+          <Eye className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
         </Link>
       ),
     },
@@ -123,13 +116,11 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
   });
 
   return (
-    <div className="space-y-4">
-      <CustomTable
-        containerClassName="rounded-md border"
-        table={table}
-        columnsLength={columns.length}
-        noDataMessage={t("no_trades")}
-      />
-    </div>
+    <CustomTable
+      containerClassName="rounded-lg border bg-muted/20 overflow-hidden"
+      table={table}
+      columnsLength={columns.length}
+      noDataMessage=""
+    />
   );
 };

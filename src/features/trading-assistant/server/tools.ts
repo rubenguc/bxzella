@@ -103,7 +103,6 @@ export function createChatTools({
           page,
           limit,
         });
-        console.log(notebooks.data);
         return notebooks.data;
       },
     }),

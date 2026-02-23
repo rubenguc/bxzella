@@ -25,6 +25,9 @@
     "open_date": "Open Date",
     "position": "Position",
     "leverage": "Leverage",
+    "side": "Side",
+    "long": "LONG",
+    "short": "SHORT",
     "symbol": "Symbol",
     "volume": "Volume",
     "closed_date": "Closed Date",
@@ -75,6 +78,10 @@
     "rows_per_page": "Rows per page",
     "page": "Page",
     "of": "of",
+    "go_to_first_page": "Go to first page",
+    "go_to_previous_page": "Go to previous page",
+    "go_to_next_page": "Go to next page",
+    "go_to_last_page": "Go to last page",
     "aria_previous_month": "Previous month",
     "aria_next_month": "Next month",
     "aria_close_dialog": "Close dialog",
@@ -161,7 +168,8 @@
     }
   },
   "trades": {
-    "no_trades": "No trades"
+    "no_trades": "No trades",
+    "trades": "Trades"
   },
   "accounts": {
     "add_account": "Add Account",
@@ -301,7 +309,8 @@
       "all_notes": "All Notes"
     },
     "notebooks": {
-      "no_notebooks_to_show": "No notebooks to show"
+      "no_notebooks_to_show": "No notebooks to show",
+      "load_more": "Load More"
     },
     "notebook_detail": {
       "net_pnl": "Net PnL",
@@ -331,11 +340,13 @@
     "net_pnl": "Net PnL",
     "view_notes": "View Notes",
     "total_trades": "Total Trades",
-    "winrate": "Winrate",
+    "winrate": "Win Rate",
     "winners": "Winners",
     "losers": "Losers",
     "profit_factor": "Profit Factor",
-    "commisions": "Commisions"
+    "commisions": "Commissions",
+    "trades": "Trades",
+    "no_more_entries": "No more entries to load"
   },
   "coin-performance": {
     "net_pnl": "Net PnL",

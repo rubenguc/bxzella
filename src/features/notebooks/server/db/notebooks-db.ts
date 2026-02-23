@@ -79,18 +79,12 @@ export async function updateNotebookByTradeId(
     coin: Coin;
   },
 ) {
-  // Find the trade to get coin
-  const { TradeModel } = await import("@/features/trades/model/trades-model");
-  const trade = await TradeModel.findById(tradeId);
-  if (!trade) {
-    throw new Error("Trade not found");
-  }
-
   return await NotebooksModel.findOneAndUpdate(
     { tradeId },
-    { ...data, coin: trade.coin },
+    { ...data },
     {
       upsert: true,
+      new: true,
     },
-  );
+  ).lean();
 }

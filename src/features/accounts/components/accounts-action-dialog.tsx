@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Key, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -107,16 +110,29 @@ export function AccountsActionDialog({
     >
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader className="text-left">
-          <DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10"
+            >
+              <Globe className="h-5 w-5 text-primary" />
+            </motion.div>
             {t(isEdit ? "edit_account" : "add_new_account")}
           </DialogTitle>
+          <DialogDescription>
+            {isEdit
+              ? "Update your exchange account details"
+              : "Connect your exchange account to start tracking trades"}
+          </DialogDescription>
         </DialogHeader>
-        <div className="h-[26.25rem] w-full overflow-y-auto py-1">
+        <div className="h-[26.25rem] w-full overflow-y-auto py-1 pr-1">
           <Form {...form}>
             <form
               id="user-form"
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4 p-0.5"
+              className="space-y-4"
             >
               <FormField
                 control={form.control}
@@ -125,9 +141,13 @@ export function AccountsActionDialog({
                   <FormItem>
                     <FormLabel>{t("name")}</FormLabel>
                     <FormControl>
-                      <Input autoComplete="off" {...field} />
+                      <Input
+                        autoComplete="off"
+                        placeholder="My Trading Account"
+                        {...field}
+                      />
                     </FormControl>
-                    <FormMessage className="" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -138,16 +158,20 @@ export function AccountsActionDialog({
                     name="apiKey"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("api_key")}</FormLabel>
+                        <FormLabel className="flex items-center gap-2">
+                          <Key className="h-3.5 w-3.5" />
+                          {t("api_key")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            className="select-none"
+                            className="select-none font-mono"
                             type="password"
                             autoComplete="off"
+                            placeholder="Enter your API key"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage className="" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -156,16 +180,20 @@ export function AccountsActionDialog({
                     name="secretKey"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("secret_key")}</FormLabel>
+                        <FormLabel className="flex items-center gap-2">
+                          <Key className="h-3.5 w-3.5" />
+                          {t("secret_key")}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            className="select-none"
+                            className="select-none font-mono"
                             type="password"
                             autoComplete="off"
+                            placeholder="Enter your secret key"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage className="" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -181,7 +209,7 @@ export function AccountsActionDialog({
                           onValueChange={(value) => field.onChange(value)}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="provider" />
+                            <SelectValue placeholder="Select a provider" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="bingx">
@@ -206,7 +234,7 @@ export function AccountsActionDialog({
                             </SelectItem>
                           </SelectContent>
                         </Select>
-                        <FormMessage className="" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -214,27 +242,36 @@ export function AccountsActionDialog({
               )}
             </form>
           </Form>
-          <p className="mt-5 text-gray-400 text-sm">
-            *{t("account_sync_trades_descriptions")}
-          </p>
-          <p className="mt-5 text-gray-400 text-sm">
-            {t.rich("create_api_key_info", {
-              link: (chunks) => (
-                <Link
-                  className="text-blue-400 hover:underline"
-                  href="/info/create-api-key"
-                >
-                  {chunks}
-                </Link>
-              ),
-            })}
-          </p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mt-6 space-y-3"
+          >
+            <p className="text-muted-foreground text-sm">
+              <span className="text-amber-500">*</span>{" "}
+              {t("account_sync_trades_descriptions")}
+            </p>
+            <p className="text-muted-foreground text-sm">
+              {t.rich("create_api_key_info", {
+                link: (chunks) => (
+                  <Link
+                    className="text-primary font-medium hover:underline"
+                    href="/info/create-api-key"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
+          </motion.div>
         </div>
         <DialogFooter>
           <Button
             disabled={form.formState.isSubmitting}
             type="submit"
             form="user-form"
+            className="min-w-[120px]"
           >
             {t("save_changes")}
           </Button>

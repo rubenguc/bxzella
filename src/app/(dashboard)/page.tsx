@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Info } from "lucide-react";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import {
   Tooltip,
@@ -43,11 +44,15 @@ export default function Dashboard() {
 
   if (isStoreLoaded && !selectedAccount?._id) {
     return (
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         <p className="text-center text-xl">
           {t("please_select_account_to_fetch_data")}
         </p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -58,8 +63,17 @@ export default function Dashboard() {
   if (isLoading || !data) return <StatisticsSkeleton />;
 
   return (
-    <>
-      <div className="flex items-center gap-2 mb-3 text-sm md:text-base">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex items-center gap-2 mb-3 text-sm md:text-base"
+      >
         <span className="text-muted-foreground">
           {t("last_sync_time")}: {lastSync}
         </span>
@@ -71,25 +85,44 @@ export default function Dashboard() {
             {t("last_sync_time_tooltip")}
           </TooltipContent>
         </Tooltip>
-      </div>
-      <div className="grid gap-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      </motion.div>
+      <motion.div
+        className="grid gap-5"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2, staggerChildren: 0.1 }}
+        >
           <NetPNL netPnL={data?.netPnL || {}} />
           <ProfitFactor profitFactor={data?.profitFactor || {}} />
           <TradeWinPercentage tradeWin={data?.tradeWin || {}} />
           <AvgWinLoss avgWinLoss={data?.avgWinLoss || {}} />
-        </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        </motion.div>
+        <motion.div
+          className="grid grid-cols-1 xl:grid-cols-2 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
           <Positions />
           <DayProfitsChart data={data?.dayProfits || []} />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
           <DayProfitsProvider>
             <DayProfits />
           </DayProfitsProvider>
-        </div>
-      </div>
-    </>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }
