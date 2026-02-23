@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./models"; // Register all Mongoose models
 
 // @ts-expect-error -- *
 let cached = global.mongoose;
