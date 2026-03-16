@@ -38,6 +38,7 @@ export default function TradeDetails() {
     coin,
     avgPrice = "",
     avgClosePrice = "",
+    positionSide = "",
   } = data || {};
   const formattedSymbol = transformSymbol(symbol);
 
@@ -97,6 +98,7 @@ export default function TradeDetails() {
               updateTime={updateTime as string}
               avgClosePrice={avgClosePrice}
               avgPrice={avgPrice}
+              positionSide={positionSide}
             />
             <TradeNotebook tradeId={_id} coin={coin as Coin} />
           </CardContent>
