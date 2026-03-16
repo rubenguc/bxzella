@@ -37,6 +37,7 @@ interface TradeChartProps {
   updateTime: string;
   avgPrice: string;
   avgClosePrice: string;
+  positionSide: string;
   coin: Coin;
 }
 
@@ -67,6 +68,7 @@ export function TradeChart({
   updateTime,
   avgPrice,
   avgClosePrice,
+  positionSide,
 }: TradeChartProps) {
   const { selectedAccount, tradeChartTimeframe, setTradeChartTimeframe } =
     useUserConfigStore();
@@ -179,23 +181,25 @@ export function TradeChart({
     const markerOpenTime = findBarTime(openTime, chartSeriesData);
     const markerUpdateTime = findBarTime(updateTime, chartSeriesData);
 
+    const isLong = positionSide === "LONG";
+
     // open
     markers.push({
       time: markerOpenTime,
-      position: "belowBar",
+      position: isLong ? "belowBar" : "aboveBar",
       color: "#2196F3",
-      shape: "arrowUp",
-      text: `Buy @ ${avgPrice}`,
+      shape: isLong ? "arrowUp" : "arrowDown",
+      text: `Entry @ ${avgPrice}`,
       price: Number(avgPrice),
     });
 
     // close
     markers.push({
       time: markerUpdateTime,
-      position: "aboveBar",
+      position: isLong ? "aboveBar" : "belowBar",
       color: "#e91e63",
-      shape: "arrowDown",
-      text: `Sell @ ${avgClosePrice}`,
+      shape: isLong ? "arrowDown" : "arrowUp",
+      text: `Close @ ${avgClosePrice}`,
       price: Number(avgClosePrice),
     });
 

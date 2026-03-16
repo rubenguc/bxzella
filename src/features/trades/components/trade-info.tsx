@@ -128,7 +128,9 @@ export function TradeInfo({
       <InfoRow
         label={t("side")}
         value={positionSide === "LONG" ? t("long") : t("short")}
-        valueClassName={positionSide === "LONG" ? "text-green-500" : "text-red-500"}
+        valueClassName={
+          positionSide === "LONG" ? "text-green-500" : "text-red-500"
+        }
       />
 
       <InfoRow label={t("avg_entry_price")} value={`${avgPrice} ${coin}`} />
@@ -150,7 +152,7 @@ export function TradeInfo({
         label={t("position_commission")}
         value={
           <Profit
-            amount={Number(positionCommission)}
+            amount={-Number(positionCommission)}
             decimals={4}
             coin={coin}
           />
