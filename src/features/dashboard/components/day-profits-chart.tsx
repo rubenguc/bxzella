@@ -104,10 +104,10 @@ export function DayProfitsChart({
         height={data.length > 10 ? 60 : 30}
       />
       <YAxis
-        width={60}
+        width={45}
         domain={["auto", (dataMax: number) => dataMax * 1.15]}
         tickFormatter={(value) => formatDecimal(Number(value), 0)}
-        tick={{ fontSize: 11 }}
+        tick={{ fontSize: 10 }}
       />
       <Tooltip
         cursor={{
@@ -149,7 +149,7 @@ export function DayProfitsChart({
           </Select>
         </CardAction>
       </CardHeader>
-      <CardContent className="h-[420px] outline-0!">
+      <CardContent className="h-[420px] outline-0! px-2">
         {data.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <span className="text-muted-foreground">

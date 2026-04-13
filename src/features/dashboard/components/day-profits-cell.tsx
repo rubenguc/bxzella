@@ -30,20 +30,20 @@ export function DayProfitsCell({
   return (
     <div
       onClick={amount !== null ? onClick : undefined}
-      className={`min-h-24 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
+      className={`min-h-20 md:min-h-30 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
     >
       {date !== null && (
         <>
-          <div className="text-xs sm:text-sm  font-medium mb-0.5 sm:mb-1">
+          <div className="text-xs md:text-sm  font-medium mb-0.5 sm:mb-1">
             {date}
           </div>
 
           {amount !== null && (
             <>
               <div
-                className={`text-[8px] sm:text-[10px] lg:text-[1rem] font-bold leading-tight`}
+                className={`text-[9px]  md:text-base lg:text-xl font-bold leading-tight`}
               >
-                {formatDecimal(amount)} {coin}
+                {formatDecimal(amount)}{" "}
               </div>
               <div className="text-[10px] sm:text-xs  leading-tight">
                 <span className="hidden sm:inline">{trades} trades</span>
