@@ -233,13 +233,26 @@ export const useDayProfitsData = ({
       current.setDate(current.getDate() + 1);
     }
 
-    return calendarData;
+    // Remove trailing empty weeks (weeks where all cells have date === null)
+    let lastValidIndex = calendarData.length - 1;
+    while (lastValidIndex >= 0) {
+      const weekStartIndex = Math.floor(lastValidIndex / 7) * 7;
+      const weekCells = calendarData.slice(weekStartIndex, weekStartIndex + 7);
+      const hasValidDays = weekCells.some((cell) => cell.date !== null);
+
+      if (hasValidDays) break;
+
+      lastValidIndex = weekStartIndex - 1;
+    }
+
+    return calendarData.slice(0, lastValidIndex + 1);
   }, [selectedYear, selectedMonthNum, data]);
 
   const weeklySummaries = useMemo(() => {
     const summaries: WeekSummary[] = [];
+    const totalWeeks = Math.ceil(processCalendarData.length / 7);
 
-    for (let week = 0; week < 6; week++) {
+    for (let week = 0; week < totalWeeks; week++) {
       let totalNetProfit = 0;
       let totalTrades = 0;
       let daysTraded = 0;

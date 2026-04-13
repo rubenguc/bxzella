@@ -67,7 +67,7 @@ export function DayProfits() {
 
   return (
     <Card className="col-span-2 gap-3">
-      <CardHeader>
+      <CardHeader className="px-2 md:px-6">
         <CardTitle>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
@@ -107,7 +107,7 @@ export function DayProfits() {
           </Badge>
         </CardAction>
       </CardHeader>
-      <CardContent className="overflow-hidden">
+      <CardContent className="overflow-hidden px-2 md:px-6">
         <div className="relative w-full overflow-auto">
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
@@ -116,7 +116,7 @@ export function DayProfits() {
           )}
 
           <div className="grid grid-cols-7 md:grid-cols-8 gap-3">
-            <div className="grid grid-cols-7 col-span-7 gap-1">
+            <div className="grid grid-cols-7 col-span-7 gap-0.5 md:gap-1">
               {daysOfWeekKeys.map((day) => (
                 <div
                   key={day}
