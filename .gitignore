@@ -47,3 +47,5 @@ mongodb.key
 */skills
 mcp.json
 skills-lock.json
+.env*.local
+.opencode

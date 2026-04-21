@@ -133,9 +133,15 @@ export function TradeInfo({
         }
       />
 
-      <InfoRow label={t("avg_entry_price")} value={`${avgPrice} ${coin}`} />
+      <InfoRow
+        label={t("avg_entry_price")}
+        value={`${formatDecimal(Number(avgPrice))} ${coin}`}
+      />
 
-      <InfoRow label={t("avg_exit_price")} value={`${avgClosePrice} ${coin}`} />
+      <InfoRow
+        label={t("avg_exit_price")}
+        value={`${formatDecimal(Number(avgClosePrice))} ${coin}`}
+      />
 
       <InfoRow label={t("isolated")} value={isolated ? t("yes") : t("no")} />
 
