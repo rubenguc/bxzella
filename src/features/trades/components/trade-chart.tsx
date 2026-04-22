@@ -30,6 +30,7 @@ import { getKLineData } from "@/features/providers/services/providers-service";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { Timezone } from "@/utils/date-utils";
+import { formatDecimal } from "@/utils/number-utils";
 
 interface TradeChartProps {
   symbol: string;
@@ -183,14 +184,23 @@ export function TradeChart({
 
     const isLong = positionSide === "LONG";
 
+    const formattedOpenPrice = formatDecimal(avgPrice, {
+      showNumberSuffix: false,
+      precision: 6,
+    });
+    const formattedClosePrice = formatDecimal(avgClosePrice, {
+      showNumberSuffix: false,
+      precision: 6,
+    });
+
     // open
     markers.push({
       time: markerOpenTime,
       position: isLong ? "belowBar" : "aboveBar",
       color: "#2196F3",
       shape: isLong ? "arrowUp" : "arrowDown",
-      text: `Entry @ ${avgPrice}`,
-      price: Number(avgPrice),
+      text: `Entry @ ${formattedOpenPrice}`,
+      price: Number(formattedOpenPrice),
     });
 
     // close
@@ -199,8 +209,8 @@ export function TradeChart({
       position: isLong ? "aboveBar" : "belowBar",
       color: "#e91e63",
       shape: isLong ? "arrowDown" : "arrowUp",
-      text: `Close @ ${avgClosePrice}`,
-      price: Number(avgClosePrice),
+      text: `Close @ ${formattedClosePrice}`,
+      price: Number(formattedClosePrice),
     });
 
     // series.setMarkers(markers);

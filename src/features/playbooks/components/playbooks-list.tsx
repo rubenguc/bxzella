@@ -134,7 +134,7 @@ export function PlaybooksList() {
                     {tStatistics("net_pnl")}
                   </span>
                   <span className={getResultClass(netPnL.value)}>
-                    {formatDecimal(netPnL.value)} {coin}
+                    {formatDecimal(netPnL.value, { suffix: coin })}
                   </span>
                 </div>
 
@@ -143,7 +143,7 @@ export function PlaybooksList() {
                     {tStatistics("average_win")}
                   </span>
                   <span>
-                    {formatDecimal(avgWinLoss.avgWin)} {coin}
+                    {formatDecimal(avgWinLoss.avgWin, { suffix: coin })}
                   </span>
                 </div>
                 <div className="flex flex-col">
@@ -151,7 +151,7 @@ export function PlaybooksList() {
                     {tStatistics("average_loss")}
                   </span>
                   <span>
-                    {formatDecimal(avgWinLoss.avgLoss)} {coin}
+                    {formatDecimal(avgWinLoss.avgLoss, { suffix: coin })}
                   </span>
                 </div>
 

@@ -1,23 +1,40 @@
+interface FormatDecimalOptions {
+  precision?: number;
+  showSign?: boolean;
+  showNumberSuffix?: boolean;
+  suffix?: string;
+}
+
 export function formatDecimal(
-  value: number,
-  precision = 2,
-  showSign: boolean = false,
+  value: number | string,
+  options: FormatDecimalOptions = {},
 ): string {
-  if (value === 0) {
+  const {
+    precision = 2,
+    showSign = false,
+    showNumberSuffix = true,
+    suffix = "",
+  } = options;
+
+  const _value = typeof value === "string" ? parseFloat(value) : value;
+
+  if (Number.isNaN(_value) || _value === 0) {
     return "0";
   }
 
-  const suffix = formatSuffix(value);
-  const _value = value / (SUFFIXES[suffix] || 1);
-  const _precision = suffix ? 2 : precision;
+  const numberSuffix = showNumberSuffix ? formatSuffix(_value) : "";
+  const dividedValue = _value / (SUFFIXES[numberSuffix] || 1);
+  const _precision = numberSuffix ? 2 : precision;
 
-  let formattedValue = _value.toFixed(_precision);
+  let formattedValue = dividedValue.toFixed(_precision);
 
   formattedValue = formattedValue.replace(/\.?0+$/, "");
 
-  const sign = showSign && value > 0 ? "+" : "";
+  const sign = showSign && _value > 0 ? "+" : "";
 
-  return sign + formattedValue + suffix;
+  return (
+    sign + formattedValue + numberSuffix + (suffix ? ` ${suffix}` : suffix)
+  );
 }
 
 export function formatSuffix(value: number): string {

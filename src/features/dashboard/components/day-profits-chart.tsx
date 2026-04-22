@@ -67,7 +67,7 @@ export function DayProfitsChart({
   const CustomLabel = (props: any) => {
     const { x, y, value } = props;
     const numericValue = Number(value);
-    const formattedValue = formatDecimal(numericValue, 2);
+    const formattedValue = formatDecimal(numericValue, { precision: 2, showNumberSuffix: false });
     const textColor = getBarColor(numericValue);
 
     const dy = numericValue >= 0 ? -10 : 10;
@@ -106,7 +106,7 @@ export function DayProfitsChart({
       <YAxis
         width={45}
         domain={["auto", (dataMax: number) => dataMax * 1.15]}
-        tickFormatter={(value) => formatDecimal(Number(value), 0)}
+        tickFormatter={(value) => formatDecimal(value, { precision: 0, showNumberSuffix: false })}
         tick={{ fontSize: 10 }}
       />
       <Tooltip
@@ -119,7 +119,7 @@ export function DayProfitsChart({
             key={index}
             className={`${getResultClass(Number(profit) || 0)}`}
           >
-            {formatDecimal(Number(profit), 2)} {coin}
+            {formatDecimal(profit, { precision: 2, showNumberSuffix: false, suffix: coin })}
           </span>,
           null,
         ]}
@@ -210,7 +210,7 @@ export function DayProfitsChart({
                   label={{
                     position: "top",
                     fontSize: 10,
-                    formatter: (value) => formatDecimal(Number(value), 2),
+                    formatter: (value) => formatDecimal(value, { precision: 2, showNumberSuffix: false }),
                   }}
                 >
                   {data.map(({ profit }, index) => (

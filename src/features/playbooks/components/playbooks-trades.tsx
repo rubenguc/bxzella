@@ -107,7 +107,7 @@ export function PlaybooksTrades({ id }: PlaybooksTradesProps) {
         const isWin = checkWin(realisedProfit);
         return (
           <div className={isWin ? "text-green-600" : "text-red-600"}>
-            {formatDecimal(Number(realisedProfit), 4)} {row.original.coin}
+            {formatDecimal(realisedProfit, { precision: 4, showNumberSuffix: false, suffix: row.original.coin })}
           </div>
         );
       },

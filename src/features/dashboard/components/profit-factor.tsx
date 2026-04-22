@@ -50,7 +50,7 @@ export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
                 <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
                 <Tooltip
                   formatter={(value) =>
-                    `${formatDecimal(Number(value) || 0)} ${coin}`
+                    formatDecimal(value, { suffix: coin })
                   }
                 />
               </Pie>

@@ -71,7 +71,7 @@ export function calculateDayLogValues(
   return {
     trades,
     totalTrades,
-    winRate: Number(formatDecimal(winRate, 2)),
+    winRate: Number(formatDecimal(winRate, { precision: 2, showNumberSuffix: false })),
     winners,
     lossers,
     commissions: totalCommissions,
