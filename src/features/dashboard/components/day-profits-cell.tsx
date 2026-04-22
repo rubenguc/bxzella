@@ -41,9 +41,9 @@ export function DayProfitsCell({
           {amount !== null && (
             <>
               <div
-                className={`text-[9px]  md:text-base lg:text-xl font-bold leading-tight`}
+                className={`text-[9px]  md:text-base lg:text-lg font-bold leading-tight`}
               >
-                {formatDecimal(amount)}{" "}
+                {formatDecimal(amount, { suffix: coin })}
               </div>
               <div className="text-[10px] sm:text-xs  leading-tight">
                 <span className="hidden sm:inline">{trades} trades</span>

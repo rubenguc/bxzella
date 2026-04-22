@@ -33,7 +33,7 @@ const PositionSideData = ({ side, values }: { side: string; values: any }) => {
         <Item text={t("losers")} value={values.lossers || 0} />
         <Item
           text={t("winrate")}
-          value={`${formatDecimal(values.winRate || 0, 2)}%`}
+          value={`${formatDecimal(values.winRate || 0, { precision: 2, showNumberSuffix: false })}%`}
         />
       </div>
     </div>

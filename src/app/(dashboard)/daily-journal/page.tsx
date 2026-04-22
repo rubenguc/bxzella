@@ -172,18 +172,18 @@ export default function DailyJournal() {
                   />
                   <StatItem
                     text={t("winrate")}
-                    value={`${formatDecimal(log.winRate, 2)}%`}
+                    value={`${formatDecimal(log.winRate, { precision: 2, showNumberSuffix: false })}%`}
                     highlight
                   />
                   <StatItem text={t("winners")} value={log.winners} />
                   <StatItem text={t("losers")} value={log.lossers} />
                   <StatItem
                     text={t("profit_factor")}
-                    value={formatDecimal(log.profitFactor, 2)}
+                    value={formatDecimal(log.profitFactor, { precision: 2, showNumberSuffix: false })}
                   />
                   <StatItem
                     text={t("commisions")}
-                    value={formatDecimal(log.commissions, 4)}
+                    value={formatDecimal(log.commissions, { precision: 4, showNumberSuffix: false })}
                   />
                 </div>
                 <DayProfitsTradeList trades={log.trades as TradeDocument[]} />

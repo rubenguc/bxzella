@@ -26,7 +26,7 @@ export function PlaybooksOverview({
             title={t("net_pnl")}
             value={
               <span className={`text-lg ${getResultClass(netPnL.value || 0)}`}>
-                {formatDecimal(netPnL.value || 0)} {coin}
+                {formatDecimal(netPnL.value || 0, { suffix: coin })}
               </span>
             }
           />

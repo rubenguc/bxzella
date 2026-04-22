@@ -34,10 +34,10 @@ export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
             />
             <div className="flex justify-between">
               <span className="text-green-500 text-xs">
-                {formatDecimal(avgWinLoss.avgWin || 0)} {coin}
+                {formatDecimal(avgWinLoss.avgWin || 0, { suffix: coin })}
               </span>
               <span className="text-red-500 text-xs">
-                {formatDecimal(avgWinLoss.avgLoss || 0)} {coin}
+                {formatDecimal(avgWinLoss.avgLoss || 0, { suffix: coin })}
               </span>
             </div>
           </div>

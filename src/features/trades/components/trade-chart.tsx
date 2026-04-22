@@ -184,8 +184,14 @@ export function TradeChart({
 
     const isLong = positionSide === "LONG";
 
-    const formattedOpenPrice = formatDecimal(Number(avgPrice));
-    const formattedClosePrice = formatDecimal(Number(avgClosePrice));
+const formattedOpenPrice = formatDecimal(avgPrice, {
+      showNumberSuffix: false,
+      precision: 6,
+    });
+    const formattedClosePrice = formatDecimal(avgClosePrice, {
+      showNumberSuffix: false,
+      precision: 6,
+    });
 
     // open
     markers.push({

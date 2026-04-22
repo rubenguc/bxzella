@@ -28,7 +28,7 @@ export function Profit({
   ...props
 }: ProfitProps) {
   const colorText = getResultClass(amount);
-  const formattedAmount = `${isApprox ? "≈" : ""} ${prefix} ${formatDecimal(amount, decimals, showSign)} ${coin} ${postfix}`;
+  const formattedAmount = `${isApprox ? "≈" : ""} ${prefix} ${formatDecimal(amount, { precision: decimals, showSign })} ${coin} ${postfix}`;
 
   return (
     <span {...props} className={`${colorText} ${className}`}>
