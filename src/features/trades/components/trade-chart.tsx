@@ -184,7 +184,7 @@ export function TradeChart({
 
     const isLong = positionSide === "LONG";
 
-    const formattedOpenPrice = formatDecimal(avgPrice, {
+const formattedOpenPrice = formatDecimal(avgPrice, {
       showNumberSuffix: false,
       precision: 6,
     });
