@@ -169,7 +169,15 @@
   },
   "trades": {
     "no_trades": "No hay operaciones",
-    "trades": "Operaciones"
+    "trades": "Operaciones",
+    "export": "Exportar",
+    "export_description": "Selecciona los datos que quieres incluir y el formato de exportación.",
+    "include": "Incluir",
+    "export_as": "Exportar como",
+    "notes": "Notas",
+    "json": "JSON",
+    "cancel": "Cancelar",
+    "exporting": "Exportando..."
   },
   "accounts": {
     "add_account": "Agregar Cuenta",

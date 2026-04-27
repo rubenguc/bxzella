@@ -169,7 +169,15 @@
   },
   "trades": {
     "no_trades": "No trades",
-    "trades": "Trades"
+    "trades": "Trades",
+    "export": "Export",
+    "export_description": "Select the data you want to include and the export format.",
+    "include": "Include",
+    "export_as": "Export",
+    "notes": "Notes",
+    "json": "JSON",
+    "cancel": "Cancel",
+    "exporting": "Exporting..."
   },
   "accounts": {
     "add_account": "Add Account",

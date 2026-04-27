@@ -824,3 +824,57 @@ export function getTradeByAccountId({
 export async function deleteTradesByAccountId(accountId: string) {
   await TradeModel.deleteMany({ accountId });
 }
+
+export interface GetAllTradesForExportProps {
+  accountId: string;
+  coin: Coin;
+}
+
+export async function getAllTradesForExport({
+  accountId,
+  coin,
+}: GetAllTradesForExportProps) {
+  return await TradeModel.aggregate([
+    {
+      $match: {
+        accountId: new mongoose.Types.ObjectId(accountId),
+        coin,
+      },
+    },
+    {
+      $sort: { positionId: -1 },
+    },
+    {
+      $lookup: {
+        from: "notebooks",
+        let: { tradeId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$tradeId", "$$tradeId"] },
+              coin,
+            },
+          },
+          {
+            $project: {
+              contentPlainText: 1,
+            },
+          },
+        ],
+        as: "notebookData",
+      },
+    },
+    {
+      $addFields: {
+        notes: {
+          $arrayElemAt: ["$notebookData.contentPlainText", 0],
+        },
+      },
+    },
+    {
+      $project: {
+        notebookData: 0,
+      },
+    },
+  ]);
+}

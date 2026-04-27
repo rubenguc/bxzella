@@ -1,9 +1,9 @@
-import { formatDecimal } from "@/utils/number-utils";
 import { useTranslations } from "next-intl";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./statistic-card";
+import type { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
+import { formatDecimal } from "@/utils/number-utils";
+import { StatisticCard } from "./statistic-card";
 
 interface ProfitFactorProps {
   profitFactor: TradeStatisticsResult["profitFactor"];
@@ -50,7 +50,7 @@ export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
                 <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
                 <Tooltip
                   formatter={(value) =>
-                    formatDecimal(value, { suffix: coin })
+                    formatDecimal(value as string, { suffix: coin })
                   }
                 />
               </Pie>

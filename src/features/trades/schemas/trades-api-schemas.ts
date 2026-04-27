@@ -31,3 +31,16 @@ export const coinPerformanceSearchParamsSchema = z.object({
 export const positionDetailsParamsSchema = z.object({
   accountId: accountIdParamValidation(),
 });
+
+export const exportTradesSearchParamsSchema = z.object({
+  accountId: accountIdParamValidation(),
+  coin: coinParamValidation(),
+  includeNotes: z
+    .string()
+    .optional()
+    .transform((val) => val === "true")
+    .default("false"),
+  format: z.enum(["json"]),
+});
+
+export type ExportTradesBody = z.infer<typeof exportTradesSearchParamsSchema>;

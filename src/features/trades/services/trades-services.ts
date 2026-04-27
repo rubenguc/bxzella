@@ -49,3 +49,18 @@ export const getPlaybookTradeProgress = async (tradeId: string) => {
   const response = await baseConfig.get(`/trades/playbook-progress/${tradeId}`);
   return response.data;
 };
+
+export const exportTrades = async (
+  params: {
+    accountId: string;
+    coin: string;
+    includeNotes: boolean;
+    format: "json";
+  },
+): Promise<Blob> => {
+  const response = await baseConfig.post("/trades/export", null, {
+    params,
+    responseType: "blob",
+  });
+  return response.data;
+};

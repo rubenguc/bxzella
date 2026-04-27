@@ -4,6 +4,7 @@ import type {
 } from "@/features/notebooks/interfaces/notebooks-interfaces";
 import { NotebooksModel } from "@/features/notebooks/model/notebooks-model";
 import type { Coin } from "@/interfaces/global-interfaces";
+import { TradeModel } from "@/features/trades/model/trades-model";
 
 export async function createNotebook(
   data: Notebook,
@@ -68,6 +69,24 @@ export async function deleteNotebook(id: string): Promise<boolean> {
 
 export async function getNotebookByTradeId(tradeId: string) {
   return NotebooksModel.findOne({ tradeId });
+}
+
+export async function getNotebooksByTradeIds(
+  accountId: string,
+  positionIds: string[],
+  coin: Coin
+) {
+  const trades = await TradeModel.find({
+    accountId,
+    positionId: { $in: positionIds },
+  }).select("_id").lean();
+
+  const tradeObjectIds = trades.map((t) => t._id);
+
+  return NotebooksModel.find({
+    coin,
+    tradeId: { $in: tradeObjectIds },
+  }).lean();
 }
 
 export async function updateNotebookByTradeId(
