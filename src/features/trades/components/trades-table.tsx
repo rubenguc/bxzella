@@ -6,18 +6,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
+import { Eye, Download } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
 import { getTrades } from "../services/trades-services";
+import { ExportTradesDialog } from "./export-trades-dialog";
 
 export function TradesTable() {
   const { selectedAccount, coin } = useUserConfigStore();
@@ -170,6 +172,9 @@ export function TradesTable() {
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <ExportTradesDialog />
+      </div>
       <CustomTable
         containerClassName="rounded-xl border bg-card shadow-sm overflow-hidden"
         table={table}
