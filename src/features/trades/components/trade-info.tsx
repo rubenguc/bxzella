@@ -88,7 +88,9 @@ export function TradeInfo({
       comission: positionCommission,
       leverage,
     }),
-    4,
+    {
+      precision: 4,
+    },
   );
 
   const pnlRatio = calculatePercentageGain(
