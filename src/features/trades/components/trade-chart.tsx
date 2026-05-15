@@ -40,6 +40,7 @@ interface TradeChartProps {
   avgClosePrice: string;
   positionSide: string;
   coin: Coin;
+  netProfit: string;
 }
 
 type ChartSeries = ISeriesApi<
@@ -70,6 +71,7 @@ export function TradeChart({
   avgPrice,
   avgClosePrice,
   positionSide,
+  netProfit,
 }: TradeChartProps) {
   const { selectedAccount, tradeChartTimeframe, setTradeChartTimeframe } =
     useUserConfigStore();
@@ -184,7 +186,7 @@ export function TradeChart({
 
     const isLong = positionSide === "LONG";
 
-const formattedOpenPrice = formatDecimal(avgPrice, {
+    const formattedOpenPrice = formatDecimal(avgPrice, {
       showNumberSuffix: false,
       precision: 6,
     });
@@ -203,25 +205,34 @@ const formattedOpenPrice = formatDecimal(avgPrice, {
       price: Number(formattedOpenPrice),
     });
 
+    const isWinning = Number(netProfit) > 0;
+    const isCloseAbove =
+      Number(formattedClosePrice) > Number(formattedOpenPrice);
+
     // close
     markers.push({
       time: markerUpdateTime,
-      position: isLong ? "aboveBar" : "belowBar",
-      color: "#e91e63",
-      shape: isLong ? "arrowDown" : "arrowUp",
+      position: isCloseAbove ? "aboveBar" : "belowBar",
+      color: isWinning ? "#26a69a" : "#e91e63",
+      shape: isCloseAbove ? "arrowDown" : "arrowUp",
       text: `Close @ ${formattedClosePrice}`,
       price: Number(formattedClosePrice),
     });
 
-    // series.setMarkers(markers);
     createSeriesMarkers(series, markers);
 
-    const margin = 20 * 3600;
+    const candleDiff =
+      chartSeriesData.length > 1
+        ? (chartSeriesData[1].time as number) -
+          (chartSeriesData[0].time as number)
+        : 3600;
+
+    const horizontalMargin = candleDiff * 50;
 
     requestAnimationFrame(() => {
       chart.timeScale().setVisibleRange({
-        from: (markerOpenTime as number) - margin,
-        to: (markerOpenTime as number) + margin,
+        from: (markerOpenTime as number) - horizontalMargin,
+        to: (markerOpenTime as number) + horizontalMargin,
       });
     });
   }, [data]);

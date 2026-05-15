@@ -26,6 +26,7 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
   const { editorRef, setEditorValue } = useEditorText();
 
   const [content, setContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
@@ -36,12 +37,16 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
   const onSave = async () => {
     if (!coin) return;
 
+    setIsSaving(true);
+
     const response = await updateNotebookByTradeIdAction(
       tradeId,
       content,
       selectedAccount!._id,
       coin,
     );
+
+    setIsSaving(false);
 
     if (response.error) {
       return toast.error(t(response.message));
@@ -78,8 +83,10 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
       <TextEditor
         ref={editorRef}
         onChange={(value) => setContent(value || "")}
+        isLoading={isSaving}
       />
-      <Button className="ml-auto mt-3" onClick={onSave}>
+      <Button className="ml-auto mt-3" onClick={onSave} disabled={isSaving}>
+        {isSaving && <Spinner data-icon="inline-start" />}
         {t("save")}
       </Button>
     </>

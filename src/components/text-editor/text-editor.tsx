@@ -86,6 +86,16 @@ function SetInitialValuePlugin({
   return null;
 }
 
+function EditablePlugin({ disabled }: { disabled: boolean }) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    editor.setEditable(!disabled);
+  }, [editor, disabled]);
+
+  return null;
+}
+
 interface TextEditorProps {
   initialValue?: string;
   onChange: (value: string) => void;
@@ -94,6 +104,7 @@ interface TextEditorProps {
 
 export interface TextEditorRef {
   setInitialValue: (value: string) => void;
+  setDisabled: (disabled: boolean) => void;
 }
 
 const urlRegExp = new RegExp(
@@ -140,6 +151,7 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
         <SetValuePlugin initialValue={initialValue as string} />
         <MyOnChangePlugin onChange={onChange} />
         <SetInitialValuePlugin ref={ref} />
+        <EditablePlugin disabled={isLoading ?? false} />
         <LinkPlugin validateUrl={validateUrl} />
         <AutoLinkPlugin matchers={MATCHERS} />
       </LexicalComposer>
