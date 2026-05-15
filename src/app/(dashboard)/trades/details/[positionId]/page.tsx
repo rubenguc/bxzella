@@ -100,7 +100,7 @@ export default function TradeDetails() {
               avgClosePrice={avgClosePrice}
               avgPrice={avgPrice}
               positionSide={positionSide}
-              netProfit={netProfit}
+              netProfit={netProfit as string}
             />
             <TradeNotebook tradeId={_id} coin={coin as Coin} />
           </CardContent>
