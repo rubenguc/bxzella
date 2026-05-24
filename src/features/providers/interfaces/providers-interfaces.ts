@@ -14,6 +14,7 @@ export interface GetKLineData {
   coin: Coin;
   symbol: string;
   startTime: number;
+  endTime: number;
   interval?: string;
 }
 

@@ -109,7 +109,12 @@ export class BitunixProvider implements ProviderInterface {
     }));
   }
 
-  async getKLine({ startTime, symbol, interval = "1h" }: GetKLineData) {
+  async getKLine({
+    startTime,
+    endTime,
+    symbol,
+    interval = "1h",
+  }: GetKLineData) {
     const response = (await makeRequest({
       apiKey: this.apiKey,
       secretKey: this.secretKey,
@@ -118,7 +123,8 @@ export class BitunixProvider implements ProviderInterface {
         symbol: this.trasnformSymbolToOriginal(symbol),
         interval,
         startTime,
-        limit: 500,
+        endTime,
+        limit: 200,
       },
     })) as KLineResponse;
 

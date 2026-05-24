@@ -32,17 +32,19 @@ export function calculateIdealStartTime(
   openTimeISO: string,
   timeFrame: string,
   timezone = 0,
-  candleCount = 500,
+  candleCount = 200,
 ) {
   const openDate = parseISO(openTimeISO);
 
   const match = timeFrame.match(/^(\d+)([smhdw]$)/);
-  if (!match) return getTime(openTimeISO);
+  if (!match) {
+    const ts = getTime(openDate);
+    return { startTime: ts - timezone, endTime: ts - timezone };
+  }
 
   const value = parseInt(match[1]);
   const unit = match[2];
 
-  // 2. Mapa de milisegundos por unidad
   const unitToMs: Record<string, number> = {
     s: 1000,
     m: 60 * 1000,
@@ -53,9 +55,11 @@ export function calculateIdealStartTime(
 
   const msPerCandle = value * (unitToMs[unit] || 0);
 
-  const offsetMs = Math.floor(candleCount * 0.8) * msPerCandle;
+  const candlesLeft = 99;
 
-  const idealStartDate = subMilliseconds(openDate, offsetMs);
+  const startDate = subMilliseconds(openDate, candlesLeft * msPerCandle);
+  const startTime = getTime(startDate) - timezone;
+  const endTime = startTime + candleCount * msPerCandle;
 
-  return getTime(idealStartDate) - timezone;
+  return { startTime, endTime };
 }

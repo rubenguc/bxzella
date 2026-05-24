@@ -6,20 +6,20 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Eye, Download } from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
 import { useUserConfigStore } from "@/store/user-config-store";
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
 import { getTrades } from "../services/trades-services";
 import { ExportTradesDialog } from "./export-trades-dialog";
+import { formatDecimal } from "@/utils/number-utils";
 
 export function TradesTable() {
   const { selectedAccount, coin } = useUserConfigStore();
@@ -94,6 +94,14 @@ export function TradesTable() {
       {
         header: tInfo("avg_entry_price"),
         accessorKey: "avgPrice",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {formatDecimal(row.original.avgPrice, {
+              precision: 4,
+              showNumberSuffix: false,
+            })}
+          </div>
+        ),
         meta: {
           className: "text-center",
         },
@@ -101,6 +109,14 @@ export function TradesTable() {
       {
         header: tInfo("avg_exit_price"),
         accessorKey: "avgClosePrice",
+        cell: ({ row }) => (
+          <div className="font-medium">
+            {formatDecimal(row.original.avgClosePrice, {
+              precision: 4,
+              showNumberSuffix: false,
+            })}
+          </div>
+        ),
         meta: {
           className: "text-center",
         },
