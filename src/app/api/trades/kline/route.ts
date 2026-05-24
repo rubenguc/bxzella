@@ -46,11 +46,13 @@ export async function GET(request: NextRequest) {
       decryptedSecretKey,
     );
 
-    const finalMs = calculateIdealStartTime(startTime, interval, timezone);
+    const { startTime: startTimeKLine, endTime: endTimeKLine } =
+      calculateIdealStartTime(startTime, interval, timezone);
 
     const data = await provider.getKLine({
       coin,
-      startTime: finalMs,
+      startTime: startTimeKLine,
+      endTime: endTimeKLine,
       symbol,
       interval,
     });

@@ -71,7 +71,9 @@ export function calculateDayLogValues(
   return {
     trades,
     totalTrades,
-    winRate: Number(formatDecimal(winRate, { precision: 2, showNumberSuffix: false })),
+    winRate: Number(
+      formatDecimal(winRate, { precision: 2, showNumberSuffix: false }),
+    ),
     winners,
     lossers,
     commissions: totalCommissions,
@@ -154,7 +156,7 @@ export async function registerDayLogs(
       ...dayLog,
       ...calculatedValues,
     };
-    dayLogsToSave.push(updatedDayLog as DayLogDocument);
+    dayLogsToSave.unshift(updatedDayLog as DayLogDocument);
   }
   // Save all day logs in a single bulk operation
   if (dayLogsToSave.length > 0) {
