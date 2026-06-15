@@ -27,23 +27,23 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <ClerkProvider
-      appearance={{
-        layout: {
-          logoImageUrl: "/logo.png",
-        },
-      }}
-    >
-      <ThemeProvider>
-        <html lang={locale}>
-          <body>
+    <ThemeProvider>
+      <html lang={locale}>
+        <body>
+          <ClerkProvider
+            appearance={{
+              options: {
+                logoImageUrl: "/logo.png",
+              },
+            }}
+          >
             <NextIntlClientProvider>
               <Providers>{children}</Providers>
               <Toaster position="top-center" richColors />
             </NextIntlClientProvider>
-          </body>
-        </html>
-      </ThemeProvider>
-    </ClerkProvider>
+          </ClerkProvider>
+        </body>
+      </html>
+    </ThemeProvider>
   );
 }

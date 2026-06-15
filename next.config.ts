@@ -6,9 +6,6 @@ const nextConfig: NextConfig = {
     removeConsole:
       process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 };
 
 const withNextIntl = createNextIntlPlugin();

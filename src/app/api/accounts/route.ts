@@ -14,7 +14,6 @@ const accountSearchParamsSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
-    if (!userId) return new Response("Missing userId", { status: 400 });
 
     const { page, limit } = parseSearchParams(
       request,
