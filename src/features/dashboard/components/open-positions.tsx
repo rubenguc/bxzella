@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import type { OpenPosition } from "@/features/trades/interfaces/trades-interfaces";
@@ -28,7 +28,7 @@ export function OpenPositions() {
 
   const { selectedAccount, coin } = useUserConfigStore();
 
-  const columns: ColumnDef<OpenPosition>[] = [
+  const columns = useMemo<ColumnDef<OpenPosition>[]>(() => [
     {
       header: tInfo("open_date"),
       accessorKey: "openTime",
@@ -111,7 +111,7 @@ export function OpenPositions() {
         className: "text-center",
       },
     },
-  ];
+  ], [tInfo]);
 
   const [sorting, setSorting] = useState<SortingState>([
     {

@@ -117,8 +117,9 @@ export const useMonthSelection = (startDate?: string | undefined) => {
     setSelectedMonth(format(nextMonth, "yyyy-MM"));
   };
 
-  let isEarliestMonth = false;
-  if (startDate) {
+  const isEarliestMonth = useMemo(() => {
+    if (!startDate) return true;
+
     const startDateTime = new Date(startDate);
     const timezoneOffset = startDateTime.getTimezoneOffset() * 60000;
     const adjustedStartDate = new Date(
@@ -128,17 +129,18 @@ export const useMonthSelection = (startDate?: string | undefined) => {
     const startYear = adjustedStartDate.getFullYear();
     const startMonth = adjustedStartDate.getMonth();
 
-    isEarliestMonth =
+    return (
       selectedYear < startYear ||
-      (selectedYear === startYear && selectedMonthNum <= startMonth);
-  } else {
-    isEarliestMonth = true;
-  }
+      (selectedYear === startYear && selectedMonthNum <= startMonth)
+    );
+  }, [startDate, selectedYear, selectedMonthNum]);
 
-  const currentDate = new Date();
-  const isCurrentMonth =
-    selectedYear === currentDate.getFullYear() &&
-    selectedMonthNum === currentDate.getMonth();
+  const isCurrentMonth = useMemo(() => {
+    const now = new Date();
+    return (
+      selectedYear === now.getFullYear() && selectedMonthNum === now.getMonth()
+    );
+  }, [selectedYear, selectedMonthNum]);
 
   return {
     selectedMonth: selectedMonthObject,
@@ -166,7 +168,7 @@ export const useDayProfitsData = ({
     return [year, monthStr - 1];
   }, [month]);
 
-  const processCalendarData = useMemo(() => {
+  const { calendarData: processCalendarData, weeklySummaries, monthlySummary } = useMemo(() => {
     const currentYear = selectedYear;
     const currentMonthNum = selectedMonthNum;
 
@@ -244,66 +246,55 @@ export const useDayProfitsData = ({
       lastValidIndex = weekStartIndex - 1;
     }
 
-    return calendarData.slice(0, lastValidIndex + 1);
-  }, [selectedYear, selectedMonthNum, data]);
+    const trimmedCalendar = calendarData.slice(0, lastValidIndex + 1);
 
-  const weeklySummaries = useMemo(() => {
+    // Compute weekly summaries and monthly summary in a single pass
+    const totalWeeks = Math.ceil(trimmedCalendar.length / 7);
+    let totalNetProfit = 0;
+    let daysTraded = 0;
     const summaries: WeekSummary[] = [];
-    const totalWeeks = Math.ceil(processCalendarData.length / 7);
 
     for (let week = 0; week < totalWeeks; week++) {
-      let totalNetProfit = 0;
-      let totalTrades = 0;
-      let daysTraded = 0;
+      let weekNetProfit = 0;
+      let weekTrades = 0;
+      let weekDaysTraded = 0;
 
       for (let day = 0; day < 7; day++) {
         const index = week * 7 + day;
-        const cell = processCalendarData[index];
+        const cell = trimmedCalendar[index];
 
         if (cell && cell.date !== null && cell.amount !== null) {
-          totalNetProfit += Number(cell.amount);
-          totalTrades += cell.trades || 0;
+          weekNetProfit += Number(cell.amount);
+          weekTrades += cell.trades || 0;
           if (
             cell.amount !== 0 ||
             (cell.amount === 0 && cell.trades && cell.trades > 0)
           ) {
-            daysTraded++;
+            weekDaysTraded++;
           }
         }
       }
 
       summaries.push({
         weekNumber: week + 1,
-        totalNetProfit,
-        totalTrades,
-        daysTraded,
+        totalNetProfit: weekNetProfit,
+        totalTrades: weekTrades,
+        daysTraded: weekDaysTraded,
       });
     }
 
-    return summaries;
-  }, [processCalendarData]);
-
-  const monthlySummary = useMemo(() => {
-    let totalNetProfit = 0;
-    let daysTraded = 0;
-
-    processCalendarData.forEach((cell) => {
-      if (cell && cell.date !== null && cell.amount !== null) {
-        totalNetProfit += Number(cell.amount);
-        if (
-          cell.amount !== 0 ||
-          (cell.amount === 0 && cell.trades && cell.trades > 0)
-        ) {
-          daysTraded++;
-        }
-      }
+    // Aggregate monthly totals from weekly data
+    summaries.forEach((week) => {
+      totalNetProfit += week.totalNetProfit;
+      daysTraded += week.daysTraded;
     });
 
     return {
-      totalNetProfit,
-      daysTraded,
+      calendarData: trimmedCalendar,
+      weeklySummaries: summaries,
+      monthlySummary: { totalNetProfit, daysTraded },
     };
-  }, [processCalendarData]);
+  }, [selectedYear, selectedMonthNum, data]);
 
   return {
     calendarData: processCalendarData,

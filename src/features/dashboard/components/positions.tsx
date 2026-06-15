@@ -9,7 +9,7 @@ export function Positions() {
 
   return (
     <Tabs defaultValue="open_positions">
-      <Card>
+      <Card className="flex-1">
         <CardHeader>
           <TabsList>
             <TabsTrigger value="open_positions">
@@ -20,7 +20,7 @@ export function Positions() {
             </TabsTrigger>
           </TabsList>
         </CardHeader>
-        <CardContent className="md:h-[420px]">
+        <CardContent>
           <TabsContent value="open_positions">
             <OpenPositions />
           </TabsContent>

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   type ColumnDef,
   getCoreRowModel,
@@ -24,7 +25,7 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
   const tInfo = useTranslations("trade_info");
   const tCommon = useTranslationsCommon("common_messages");
 
-  const columns: ColumnDef<LimitedTrade>[] = [
+  const columns = useMemo<ColumnDef<LimitedTrade>[]>(() => [
     {
       header: tInfo("symbol"),
       accessorKey: "symbol",
@@ -106,7 +107,7 @@ export const DayProfitsTradeList = ({ trades }: DayProfitsTradeListProps) => {
         </Link>
       ),
     },
-  ];
+  ], [tInfo, tCommon]);
 
   const table = useReactTable({
     data: trades ?? [],
