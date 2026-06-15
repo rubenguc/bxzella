@@ -21,7 +21,11 @@ export async function GET(request: NextRequest) {
     );
 
     await connectDB();
-    const data = await getAccountsByUserId({ userId, page, limit });
+    const data = await getAccountsByUserId({
+      userId: userId as string,
+      page,
+      limit,
+    });
     return NextResponse.json(data);
   } catch (err) {
     return handleApiError(err);
