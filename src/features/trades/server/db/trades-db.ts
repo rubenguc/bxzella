@@ -5,7 +5,6 @@ import {
   updateLastSyncPerCoin,
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
-import { registerDayLogs } from "@/features/day-log/utils/day-log-utils";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
   GetCoinPerformanceResponse,
@@ -81,17 +80,6 @@ export async function syncPositions(
     await session.withTransaction(async () => {
       await updateLastSyncPerCoin(account._id, coinToSearch, syncTime, session);
       await saveMultipleTrades(positions, account._id, session);
-
-      await registerDayLogs(
-        {
-          accountId,
-          coin: coinToSearch,
-          positionIds:
-            positions.map((position) => position.positionId as string) || [],
-          timezone,
-        },
-        session,
-      );
     });
   } finally {
     session.endSession();

@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import { useMemo, useState } from "react";
-import type { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
-import type { GetDayProfitsWithTradesResponse } from "@/features/day-log/interfaces/day-log-interfaces";
+import type { CalendarCell, DayProfit } from "@/features/dashboard/interfaces/dashboard-interfaces";
 
 export interface WeekSummary {
   weekNumber: number;
@@ -155,7 +154,7 @@ export const useDayProfitsData = ({
   data,
   month,
 }: {
-  data: GetDayProfitsWithTradesResponse[];
+  data: DayProfit[];
   month: string;
 }) => {
   const [selectedYear, selectedMonthNum] = useMemo(() => {

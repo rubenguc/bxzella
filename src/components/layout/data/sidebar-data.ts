@@ -1,7 +1,6 @@
 import {
   BookCheck,
   BookText,
-  ChartNoAxesColumn,
   House,
   Info,
   MessageSquareText,
@@ -19,11 +18,6 @@ export const sidebarItems = {
           title: "home",
           url: "/",
           icon: House,
-        },
-        {
-          title: "daily-journal",
-          url: "/daily-journal",
-          icon: ChartNoAxesColumn,
         },
         {
           title: "trades",
