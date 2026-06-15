@@ -6,6 +6,7 @@ import {
   MessageSquareText,
   NotebookText,
   SquareAsterisk,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
@@ -43,6 +44,11 @@ export const sidebarItems = {
           title: "notebooks",
           url: "/notebooks",
           icon: NotebookText,
+        },
+        {
+          title: "coin-performance",
+          url: "/coin-performance",
+          icon: TrendingUp,
         },
         {
           title: "info",
