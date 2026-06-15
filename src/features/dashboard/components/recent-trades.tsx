@@ -15,6 +15,7 @@ import { CustomTable } from "@/components/custom-table";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
 import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
+import { useMemo } from "react";
 
 import { transformTimeToLocalDate } from "@/utils/date-utils";
 import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
@@ -27,7 +28,7 @@ export function RecentTrades() {
   const tInfo = useTranslations("trade_info");
   const tCommon = useTranslationsCommon("common_messages");
 
-  const columns: ColumnDef<TradeDocument>[] = [
+  const columns = useMemo<ColumnDef<TradeDocument>[]>(() => [
     {
       header: tInfo("open_date"),
       accessorKey: "openTime",
@@ -115,7 +116,7 @@ export function RecentTrades() {
         </Link>
       ),
     },
-  ];
+  ], [tInfo, tCommon]);
 
   const table = useReactTable({
     data: recentTrades,

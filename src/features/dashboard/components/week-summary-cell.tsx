@@ -1,3 +1,4 @@
+import React from "react";
 import { useTranslations } from "next-intl";
 import { Profit } from "@/components/profit";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +9,10 @@ interface WeekSummaryCellProps extends WeekSummary {
   coin: Coin;
 }
 
-export function WeekSummaryCell({
+export const WeekSummaryCell = React.memo(function WeekSummaryCell({
   weekNumber,
   totalNetProfit,
+  totalTrades,
   daysTraded,
   coin,
 }: WeekSummaryCellProps) {
@@ -31,4 +33,4 @@ export function WeekSummaryCell({
       </Badge>
     </div>
   );
-}
+});

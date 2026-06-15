@@ -11,7 +11,7 @@ interface ProfitFactorProps {
 
 export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
   const t = useTranslations("statistics");
-  const { coin } = useUserConfigStore();
+  const coin = useUserConfigStore((state) => state.coin);
 
   return (
     <StatisticCard

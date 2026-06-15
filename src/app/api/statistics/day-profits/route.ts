@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/db/db";
 import { dayProfitsByMonthSearchParamsSchema } from "@/features/dashboard/schemas/dashboard-api-schema";
-import { getDayProfitsWithTrades } from "@/features/day-log/server/db/day-log-db";
+import { getTradeProfitByDays } from "@/features/trades/server/db/trades-db";
 import { getTimeZoneFromHeader } from "@/utils/date-utils";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 
@@ -41,16 +41,21 @@ export async function GET(request: NextRequest) {
       endDate = format(lastDayCurrentMonth, "yyyy-MM-dd");
     }
 
-    const data = await getDayProfitsWithTrades({
-      accountId,
-      startDate,
-      endDate,
-      coin,
-      limit: 31,
-      page: 0,
-    });
+    const data = await getTradeProfitByDays(
+      { accountId, startDate, endDate, coin },
+      timezone,
+    );
 
-    return NextResponse.json(data.data || []);
+    const mapped = data.map(
+      (d: { _id: string; netProfit: number; trades: unknown[] }) => ({
+        date: d._id,
+        netPnL: d.netProfit,
+        totalTrades: d.trades.length,
+        trades: d.trades,
+      }),
+    );
+
+    return NextResponse.json(mapped);
   } catch (err) {
     return handleApiError(err);
   }

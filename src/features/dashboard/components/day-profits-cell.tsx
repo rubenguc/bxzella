@@ -1,3 +1,4 @@
+import React from "react";
 import type { CalendarCell } from "@/features/dashboard/interfaces/dashboard-interfaces";
 import type { Coin } from "@/interfaces/global-interfaces";
 import { formatDecimal } from "@/utils/number-utils";
@@ -7,38 +8,39 @@ interface CalendarCellProps extends CalendarCell {
   onClick: () => void;
 }
 
-export function DayProfitsCell({
-  date,
-  amount,
-  trades,
-  coin,
-  type,
-  onClick,
-}: CalendarCellProps) {
-  const getCellClassName = () => {
-    if (type === "profit") {
-      return `cursor-pointer hover:bg-green-200 dark:hover:bg-green-800 text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900`;
-    } else if (type === "loss") {
-      return `cursor-pointer hover:bg-red-200 dark:hover:bg-red-800 text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900`;
-    } else if (date !== null) {
-      return `text-gray-800 dark:text-gray-300 bg-sidebar`;
-    }
+export const DayProfitsCell = React.memo(
+  function DayProfitsCell({
+    date,
+    amount,
+    trades,
+    coin,
+    type,
+    onClick,
+  }: CalendarCellProps) {
+    const getCellClassName = () => {
+      if (type === "profit") {
+        return `cursor-pointer hover:bg-green-200 dark:hover:bg-green-800 text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900`;
+      } else if (type === "loss") {
+        return `cursor-pointer hover:bg-red-200 dark:hover:bg-red-800 text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900`;
+      } else if (date !== null) {
+        return `text-gray-800 dark:text-gray-300 bg-sidebar`;
+      }
 
-    return "";
-  };
+      return "";
+    };
 
-  return (
-    <div
-      onClick={amount !== null ? onClick : undefined}
-      className={`min-h-20 md:min-h-30 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
-    >
-      {date !== null && (
+    return (
+      <div
+        onClick={amount !== null ? onClick : undefined}
+        className={`min-h-20 md:min-h-30 border border-gray-200 dark:border-gray-700 rounded-lg flex flex-col  text-end  p-1 md:px-2 ${getCellClassName()}`}
+      >
+      {date !== null ? (
         <>
           <div className="text-xs md:text-sm  font-medium mb-0.5 sm:mb-1">
             {date}
           </div>
 
-          {amount !== null && (
+          {amount !== null ? (
             <>
               <div
                 className={`text-[9px]  md:text-base lg:text-lg font-bold leading-tight`}
@@ -50,9 +52,18 @@ export function DayProfitsCell({
                 <span className="sm:hidden">{trades}T</span>
               </div>
             </>
-          )}
+          ) : null}
         </>
-      )}
-    </div>
-  );
-}
+      ) : null}
+      </div>
+    );
+  },
+  (prevProps, nextProps) =>
+    prevProps.date === nextProps.date &&
+    prevProps.amount === nextProps.amount &&
+    prevProps.trades === nextProps.trades &&
+    prevProps.coin === nextProps.coin &&
+    prevProps.type === nextProps.type &&
+    prevProps.month === nextProps.month &&
+    prevProps.allTrades === nextProps.allTrades,
+);

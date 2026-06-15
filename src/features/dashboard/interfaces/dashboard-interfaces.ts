@@ -13,6 +13,13 @@ export type LimitedTrade = Pick<
   | "positionId"
 >;
 
+export interface DayProfit {
+  date: string;
+  netPnL: number;
+  totalTrades: number;
+  trades: TradeDocument[];
+}
+
 export interface CalendarCell {
   date: number | null;
   amount: number | null;

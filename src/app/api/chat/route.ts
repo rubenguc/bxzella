@@ -8,6 +8,7 @@ import {
   NoContentGeneratedError,
 } from "ai";
 import { headers } from "next/headers";
+import logger from "@/lib/logger";
 import { getSystemPrompt } from "@/features/trading-assistant/server/system-prompt";
 import { createChatTools } from "@/features/trading-assistant/server/tools";
 import { chatRequestSchema } from "@/features/trading-assistant/schemas/chat-request.schema";
@@ -108,13 +109,13 @@ export async function POST(req: Request) {
       stopWhen: stepCountIs(5),
       tools: createChatTools({ accountId, coin, timezone }),
       onError: (error) => {
-        console.error("[Chat API] Stream error:", error);
+        logger.error({ err: error }, "Chat API stream error");
       },
     });
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
-    console.error("[Chat API] Error:", error);
+    logger.error({ err: error }, "Chat API error");
 
     const { status, message } = getErrorMessage(error);
 

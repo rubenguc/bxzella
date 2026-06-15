@@ -11,11 +11,13 @@ import { transformDateToParam } from "@/utils/date-utils";
 interface RecentTradesContextValue {
   recentTrades: TradeDocument[];
   isLoading: boolean;
+  refetch: () => void;
 }
 
 const RecentTradesContext = createContext<RecentTradesContextValue>({
   recentTrades: [],
   isLoading: false,
+  refetch: () => {},
 });
 
 export default function RecentTradesProvider({ children }: PropsWithChildren) {
@@ -33,7 +35,7 @@ export default function RecentTradesProvider({ children }: PropsWithChildren) {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery<
+  const { data, isLoading, refetch } = useQuery<
     PaginationResponseWithSync<TradeDocument>
   >({
     queryKey: ["all-trades", selectedAccount?._id, startDate, endDate, coin],
@@ -74,6 +76,7 @@ export default function RecentTradesProvider({ children }: PropsWithChildren) {
       value={{
         recentTrades: data?.data || [],
         isLoading,
+        refetch,
       }}
     >
       {children}

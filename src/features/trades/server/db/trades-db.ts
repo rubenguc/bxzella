@@ -5,7 +5,6 @@ import {
   updateLastSyncPerCoin,
 } from "@/features/accounts/server/db/accounts-db";
 import { getDecryptedAccountCredentials } from "@/features/accounts/utils/encryption";
-import { registerDayLogs } from "@/features/day-log/utils/day-log-utils";
 import { getProvider } from "@/features/providers/utils/providers-utils";
 import type {
   GetCoinPerformanceResponse,
@@ -27,6 +26,7 @@ import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 import { adjustDateToUTC } from "../../utils/trades-utils";
+import logger from "@/lib/logger";
 
 export async function syncPositions(
   accountId: string,
@@ -37,7 +37,7 @@ export async function syncPositions(
   syncTime: number;
   earliestTradeDate: string;
 }> {
-  console.log(`syncing positions for: ${accountId}...`);
+  logger.info({ accountId }, "Syncing positions");
 
   const account = await getAccountById(accountId);
   if (!account)
@@ -81,17 +81,6 @@ export async function syncPositions(
     await session.withTransaction(async () => {
       await updateLastSyncPerCoin(account._id, coinToSearch, syncTime, session);
       await saveMultipleTrades(positions, account._id, session);
-
-      await registerDayLogs(
-        {
-          accountId,
-          coin: coinToSearch,
-          positionIds:
-            positions.map((position) => position.positionId as string) || [],
-          timezone,
-        },
-        session,
-      );
     });
   } finally {
     session.endSession();

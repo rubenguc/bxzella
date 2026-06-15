@@ -4,7 +4,6 @@
 // when populating referenced documents
 
 import "@/features/accounts/model/accounts-model";
-import "@/features/day-log/model/day-log-model";
 import "@/features/trades/model/trades-model";
 import "@/features/trades/playbook-trade-progress/model/playbook-trade-progress-model";
 import "@/features/notebooks/model/notebooks-model";

@@ -1,12 +1,12 @@
 import {
   BookCheck,
   BookText,
-  ChartNoAxesColumn,
   House,
   Info,
   MessageSquareText,
   NotebookText,
   SquareAsterisk,
+  TrendingUp,
   Users,
 } from "lucide-react";
 
@@ -19,11 +19,6 @@ export const sidebarItems = {
           title: "home",
           url: "/",
           icon: House,
-        },
-        {
-          title: "daily-journal",
-          url: "/daily-journal",
-          icon: ChartNoAxesColumn,
         },
         {
           title: "trades",
@@ -49,6 +44,11 @@ export const sidebarItems = {
           title: "notebooks",
           url: "/notebooks",
           icon: NotebookText,
+        },
+        {
+          title: "coin-performance",
+          url: "/coin-performance",
+          icon: TrendingUp,
         },
         {
           title: "info",

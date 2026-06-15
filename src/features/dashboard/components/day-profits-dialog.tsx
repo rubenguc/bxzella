@@ -9,7 +9,7 @@ import { DayProfitsTradeList } from "./day-profits-trade-list";
 export function DayProfitsDialog() {
   const t = useTranslations("dashboard.day_profits");
   const { dayProfit, selectDayProfit } = useDayProfitsContext();
-  const { coin } = useUserConfigStore();
+  const coin = useUserConfigStore((state) => state.coin);
 
   const isOpen = dayProfit !== null;
 

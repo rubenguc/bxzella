@@ -109,11 +109,11 @@ export function DayProfits() {
       </CardHeader>
       <CardContent className="overflow-hidden px-2 md:px-6">
         <div className="relative w-full overflow-auto">
-          {isLoading && (
+          {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50">
               <Spinner className="size-10" />
             </div>
-          )}
+          ) : null}
 
           <div className="grid grid-cols-7 md:grid-cols-8 gap-3">
             <div className="grid grid-cols-7 col-span-7 gap-0.5 md:gap-1">
