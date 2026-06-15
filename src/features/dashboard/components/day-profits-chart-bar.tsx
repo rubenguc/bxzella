@@ -73,8 +73,10 @@ export function DayProfitsChartBar({ data, coin }: DayProfitsChartBarProps) {
             </span>,
             null,
           ]}
-          labelFormatter={(label: string) =>
-            new Date(`${label}T12:00:00`).toLocaleDateString()
+          labelFormatter={(label) =>
+            typeof label === "string"
+              ? new Date(`${label}T12:00:00`).toLocaleDateString()
+              : ""
           }
         />
         <Bar
