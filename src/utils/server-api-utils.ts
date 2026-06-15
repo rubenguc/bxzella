@@ -1,9 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import logger from "@/lib/logger";
 
 export function handleApiError(err: unknown) {
-  console.error(err);
+  logger.error({ err }, "API Error");
 
   if (err instanceof z.ZodError) {
     return NextResponse.json(
@@ -31,7 +32,7 @@ export function handleServerActionError(
   error: unknown = null,
 ) {
   if (error) {
-    console.error(message, error);
+    logger.error({ err: error }, "Server Action Error: %s", message);
   }
 
   return {

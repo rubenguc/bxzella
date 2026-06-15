@@ -7,6 +7,7 @@ import {
   getDefaultFolderNames,
   getDefaultNotebookFolders,
 } from "@/features/notebooks/utils/notebooks-folder-init-db";
+import logger from "@/lib/logger";
 
 export async function createNotebookFolder(
   data: NotebookFolder,
@@ -52,15 +53,15 @@ export async function initializeNotebooksFolder(
     });
 
     if (existingCount === 0) {
-      console.log("Insertando notebooks folders iniciales...");
+      logger.info("Insertando notebooks folders iniciales...");
       await NotebookFolderModel.insertMany(
         getDefaultNotebookFolders(accountId),
       );
-      console.log("Notebooks iniciales insertados correctamente.");
+      logger.info("Notebooks iniciales insertados correctamente.");
     } else {
-      console.log(`Ya existen ${existingCount} notebooks iniciales.`);
+      logger.info({ existingCount }, "Ya existen notebooks iniciales");
     }
   } catch (error) {
-    console.error("Error initializing notebooks folder: #error", error);
+    logger.error({ err: error }, "Error initializing notebooks folder");
   }
 }

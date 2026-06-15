@@ -26,6 +26,7 @@ import type { Coin } from "@/interfaces/global-interfaces";
 import { getUTCDay } from "@/utils/date-utils";
 import { getPaginatedData } from "@/utils/db-utils";
 import { adjustDateToUTC } from "../../utils/trades-utils";
+import logger from "@/lib/logger";
 
 export async function syncPositions(
   accountId: string,
@@ -36,7 +37,7 @@ export async function syncPositions(
   syncTime: number;
   earliestTradeDate: string;
 }> {
-  console.log(`syncing positions for: ${accountId}...`);
+  logger.info({ accountId }, "Syncing positions");
 
   const account = await getAccountById(accountId);
   if (!account)

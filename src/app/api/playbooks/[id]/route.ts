@@ -30,7 +30,6 @@ export async function GET(
 
     return NextResponse.json(data);
   } catch (err) {
-    console.error(err);
     return handleApiError(err);
   }
 }

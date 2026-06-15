@@ -16,6 +16,7 @@ import type {
   UserPositionHistoryResponse,
   UserPositionResponse,
 } from "./bingx-interfaces";
+import logger from "@/lib/logger";
 
 const PATHS = {
   USER_BALANCE: "/openApi/swap/v3/user/balance",
@@ -90,9 +91,9 @@ export class BingxProvider implements ProviderInterface {
               );
             })
             .catch((error) => {
-              console.error(
-                `Error fetching position history for symbol ${symbol}:`,
-                error,
+              logger.error(
+                { err: error, symbol },
+                "Error fetching position history",
               );
               return [];
             }),
@@ -227,7 +228,7 @@ export class BingxProvider implements ProviderInterface {
       !filledOrdersResult?.data?.fill_orders ||
       filledOrdersResult.data.fill_orders.length === 0
     ) {
-      console.log("No filled orders found");
+      logger.debug("No filled orders found");
       return [];
     }
 
