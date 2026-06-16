@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import connectDB from "@/db/db";
 import { getNotebooksByFolderId } from "@/features/notebooks/server/db/notebooks-db";
 import { handleApiError, parseSearchParams } from "@/utils/server-api-utils";
 import {
@@ -21,6 +22,8 @@ export async function GET(
   try {
     const { folderId } = await params;
     const { page, limit, coin } = parseSearchParams(request, notebooksSchema);
+
+    await connectDB();
     const data = await getNotebooksByFolderId({ page, limit, coin, folderId });
     return NextResponse.json(data);
   } catch (err) {
