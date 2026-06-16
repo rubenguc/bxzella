@@ -321,7 +321,14 @@
       "notebook_template_not_found": "Plantilla de cuaderno no encontrada",
       "error_creating_notebook_template": "Error al crear plantilla de cuaderno",
       "error_updating_notebook_template": "Error al actualizar plantilla de cuaderno",
-      "error_deleting_notebook_template": "Error al eliminar plantilla de cuaderno"
+      "error_deleting_notebook_template": "Error al eliminar plantilla de cuaderno",
+      "search_templates": "Buscar plantillas",
+      "no_templates_found": "No se encontraron plantillas",
+      "no_templates_yet": "Todav\u00eda no hay plantillas",
+      "use_template": "Usar Plantilla",
+      "no_content": "Sin contenido",
+      "select_a_template": "Seleccion\u00e1 una plantilla",
+      "template_title_placeholder": "Ingres\u00e1 el t\u00edtulo de la plantilla"
     }
   },
   "playbook_details": {

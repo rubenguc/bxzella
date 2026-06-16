@@ -1,14 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { TriangleAlert } from "lucide-react";
+import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useToggle } from "react-use";
 import { toast } from "sonner";
-import { ConfirmDialog } from "@/components/confirm-dialog";
 import { TextEditor } from "@/components/text-editor/text-editor";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,25 +26,29 @@ import {
   deleteNotebookTemplateAction,
   updateNotebookTemplateAction,
 } from "../server/actions/notebooks-template-actions";
+import { NotebookTemplatePreview } from "./notebook-template-preview";
 
 interface NotebookTemplatesFormProps {
   selectedNotebookTemplate: NotebookTemplateDocument | null;
   onSaved: () => void;
+  onUseTemplate?: (template: NotebookTemplateDocument) => void;
 }
 
 export function NotebookTemplatesForm({
   selectedNotebookTemplate,
   onSaved,
+  onUseTemplate,
 }: NotebookTemplatesFormProps) {
   const tCommon = useTranslations("common_messages");
   const t = useTranslations("notebooks.notebook_templates");
   const queryClient = useQueryClient();
 
   const { editorRef, setEditorValue } = useEditorText();
-  const [isOpen, setIsOpen] = useToggle(false);
-  const [isDeleting, setIsDeleting] = useToggle(false);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const isEdit = !!selectedNotebookTemplate;
+
   const form = useForm<NotebooksTemplateForm>({
     resolver: zodResolver(notebooksTemplateValidationSchema),
     defaultValues: {
@@ -68,7 +69,10 @@ export function NotebookTemplatesForm({
         contentPlainText: selectedNotebookTemplate.contentPlainText ?? "",
       });
       setEditorValue(selectedNotebookTemplate.content);
+    } else {
+      form.reset({ title: "", content: "", contentPlainText: "" });
     }
+    setIsEditing(false);
   }, [selectedNotebookTemplate]);
 
   const onSubmit = async (data: NotebooksTemplateForm) => {
@@ -90,22 +94,21 @@ export function NotebookTemplatesForm({
     });
 
     toast.success(t("notebook_template_saved"));
-    form.reset({
-      title: "",
-      content: "",
-    });
-    onSaved();
+
+    if (!isEdit) {
+      form.reset({ title: "", content: "" });
+      onSaved();
+    } else {
+      setIsEditing(false);
+    }
   };
 
   const onDelete = async () => {
-    setIsDeleting(true);
     const response = await deleteNotebookTemplateAction(
       selectedNotebookTemplate?._id as string,
     );
 
     if (response?.error) {
-      setIsDeleting(false);
-
       return toast.error(response.message);
     }
 
@@ -118,110 +121,102 @@ export function NotebookTemplatesForm({
     });
 
     toast.success(t("notebook_template_delete"));
-    form.reset({
-      title: "",
-      content: "",
-    });
+    form.reset({ title: "", content: "" });
     onSaved();
-    setIsDeleting(false);
   };
 
-  return (
-    <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="h-full flex flex-col"
-        >
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("title")}</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+  const onCancelEdit = () => {
+    if (selectedNotebookTemplate) {
+      form.reset({
+        title: selectedNotebookTemplate.title,
+        content: selectedNotebookTemplate.content,
+        contentPlainText: selectedNotebookTemplate.contentPlainText ?? "",
+      });
+      setEditorValue(selectedNotebookTemplate.content);
+    }
+    setIsEditing(false);
+  };
 
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem className="gap-0 flex flex-col flex-1 mt-2">
-                <FormControl>
-                  <TextEditor
-                    ref={editorRef}
-                    initialValue={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="flex items-center">
-            {isEdit && (
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={setIsOpen}
-                disabled={form.formState.isSubmitting || isDeleting}
-                aria-label={t("delete")}
-              >
-                {t("delete")}
-              </Button>
-            )}
-            <Button
-              type="submit"
-              className="ml-auto mt-3"
-              disabled={form.formState.isSubmitting || isDeleting}
-              aria-label={t("save")}
-            >
-              {t("save")}
-            </Button>
-          </div>
-        </form>
-      </Form>
-
-      <ConfirmDialog
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        handleConfirm={onDelete}
-        title={
-          <span className="text-destructive">
-            <TriangleAlert
-              className="stroke-destructive mr-1 inline-block"
-              size={18}
-            />
-            {t("delete_template")}
-          </span>
+  // Preview mode — delegate to NotebookTemplatePreview (only for existing templates)
+  if (isEdit && !isEditing) {
+    return (
+      <NotebookTemplatePreview
+        template={selectedNotebookTemplate}
+        onEdit={() => setIsEditing(true)}
+        onUseTemplate={
+          onUseTemplate
+            ? () => onUseTemplate(selectedNotebookTemplate)
+            : undefined
         }
-        desc={
-          <div className="space-y-4">
-            <p className="mb-2">
-              {tCommon("are_your_sure_want_to_delete")}{" "}
-              <span className="font-bold">
-                {selectedNotebookTemplate?.title}
-              </span>
-              ?
-              <br />
-              {tCommon("this_cannot_be_undone")}
-            </p>
-
-            <Alert variant="destructive">
-              <AlertTitle>{tCommon("warning")}</AlertTitle>
-              <AlertDescription>{tCommon("be_carefull")}</AlertDescription>
-            </Alert>
-          </div>
-        }
-        confirmText={tCommon("delete")}
-        isLoading={isDeleting}
-        disabled={isDeleting}
-        destructive
+        onDelete={onDelete}
       />
-    </>
+    );
+  }
+
+  // Create & Edit modes — same form layout
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="h-full flex flex-col"
+      >
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("title")}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={
+                    !isEdit ? t("template_title_placeholder") : undefined
+                  }
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem className="gap-0 flex flex-col flex-1 mt-2">
+              <FormControl>
+                <TextEditor
+                  ref={editorRef}
+                  initialValue={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <div className="flex items-center gap-2 mt-3">
+          {isEdit && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onCancelEdit}
+            >
+              <X className="size-3.5 mr-1.5" />
+              {tCommon("cancel")}
+            </Button>
+          )}
+
+          <Button
+            type="submit"
+            size="sm"
+            className={isEdit ? "ml-auto" : "ml-auto mt-3"}
+            disabled={form.formState.isSubmitting}
+          >
+            {t("save")}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
