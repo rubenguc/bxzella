@@ -16,10 +16,12 @@ export async function getNotebookTemplates({
   page,
   limit,
   userId,
+  sortBy,
 }: {
   userId: string;
   page?: number;
   limit?: number;
+  sortBy?: Record<string, 1 | -1>;
 }): Promise<PaginationResponse<NotebookTemplateDocument>> {
   return await getPaginatedData(
     NotebookTemplateModel,
@@ -27,9 +29,7 @@ export async function getNotebookTemplates({
     {
       page,
       limit,
-      sortBy: {
-        updatedAt: -1,
-      },
+      sortBy: sortBy || { updatedAt: -1 },
     },
   );
 }

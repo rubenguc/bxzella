@@ -4,6 +4,7 @@ import { limitParamValidation, pageParamValidation } from "@/utils/zod-utils";
 export const notebooksTemplateSearchParamsSchema = z.object({
   page: pageParamValidation(),
   limit: limitParamValidation(),
+  sort: z.string().optional(),
 });
 
 export const notebooksTemplateValidationSchema = z.object({

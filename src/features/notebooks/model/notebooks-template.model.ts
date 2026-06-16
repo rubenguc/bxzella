@@ -7,6 +7,7 @@ export const NotebookTemplateSchema = new Schema<NotebookTemplate>(
     title: { type: String, required: true },
     content: { type: String, required: true },
     contentPlainText: { type: String, default: "" },
+    lastTimeUsed: { type: Date },
   },
   {
     timestamps: true,
