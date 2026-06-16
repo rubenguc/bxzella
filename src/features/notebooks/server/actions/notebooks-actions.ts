@@ -9,6 +9,7 @@ import {
   updateNotebookByTradeId,
 } from "../db/notebooks-db";
 import { getNotebookTradesFolderByAccountId } from "../db/notebooks-folder-db";
+import { updateNotebookTemplate } from "../db/notebooks-template-db";
 
 function extractPlainTextFromLexicalContent(lexicalContent: string): string {
   try {
@@ -40,6 +41,7 @@ export async function updateNotebookByTradeIdAction(
   content: string,
   accountId: string,
   coin: Coin,
+  notebookTemplateId?: string,
 ) {
   try {
     await connectDB();
@@ -58,6 +60,13 @@ export async function updateNotebookByTradeIdAction(
       coin,
       folderId: notebookFolder._id,
     });
+
+    // If a template was used, update its lastTimeUsed to now (UTC)
+    if (notebookTemplateId) {
+      await updateNotebookTemplate(notebookTemplateId, {
+        lastTimeUsed: new Date(),
+      });
+    }
 
     // Convert Mongoose document to plain JSON object with stringified IDs
     return {
