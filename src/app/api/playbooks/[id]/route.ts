@@ -18,8 +18,6 @@ export async function GET(
 
     await connectDB();
 
-    await connectDB();
-
     const data = await getTradesStatisticByPlaybookId({
       playbookId: id,
       accountId,

@@ -27,6 +27,9 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
 
   const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
+    null,
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
@@ -44,6 +47,7 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
       content,
       selectedAccount!._id,
       coin,
+      selectedTemplateId || undefined,
     );
 
     setIsSaving(false);
@@ -76,6 +80,7 @@ export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
         <NotebookTemplatesRecentlyList
           onSelectTemplate={(notebookTemplate) => {
             setEditorValue(notebookTemplate.content);
+            setSelectedTemplateId(notebookTemplate._id);
           }}
         />
       </div>

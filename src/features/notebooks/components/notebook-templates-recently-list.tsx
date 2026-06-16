@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import { useToggle } from "react-use";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { usePagination } from "@/hooks/use-pagination";
 import type { NotebookTemplateDocument } from "../interfaces/notebooks-template-interfaces";
 import { getNotebookTemplates } from "../services/notebooks-template-service";
 import { NotebookTemplatesDialog } from "./notebook-templates-dialog";
@@ -18,11 +17,14 @@ export const NotebookTemplatesRecentlyList = ({
 }: NotebookTemplatesRecentlyListProps) => {
   const t = useTranslations("notebooks.notebook_templates");
 
-  const { limit, page } = usePagination({});
-
   const { data, isLoading } = useQuery({
     queryKey: ["notebook-templates-recently"],
-    queryFn: () => getNotebookTemplates({ page, limit }),
+    queryFn: () =>
+      getNotebookTemplates({
+        page: 0,
+        limit: 5,
+        sort: "-lastTimeUsed",
+      }),
   });
 
   const [isOpen, toggle] = useToggle(false);
@@ -31,7 +33,7 @@ export const NotebookTemplatesRecentlyList = ({
 
   return (
     <>
-      <div className="flex items-center gap-2 flex-nowrap">
+      <div className="flex items-center gap-2 flex-nowrap overflow-auto">
         <span className="text-muted-foreground text-sm">
           {t("recently_used_templates")}
         </span>
@@ -62,7 +64,11 @@ export const NotebookTemplatesRecentlyList = ({
         )}
       </div>
 
-      <NotebookTemplatesDialog open={isOpen} onClose={toggle} />
+      <NotebookTemplatesDialog
+        open={isOpen}
+        onClose={toggle}
+        onUseTemplate={onSelectTemplate}
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import connectDB from "@/db/db";
 import { getNotebookByTradeId } from "@/features/notebooks/server/db/notebooks-db";
 import { handleApiError } from "@/utils/server-api-utils";
 
@@ -8,6 +9,8 @@ export async function GET(
 ) {
   try {
     const { tradeId } = await params;
+
+    await connectDB();
     const data = await getNotebookByTradeId(tradeId);
     return NextResponse.json(data);
   } catch (err) {

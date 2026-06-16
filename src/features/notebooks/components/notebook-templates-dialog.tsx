@@ -1,7 +1,5 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { useToggle } from "react-use";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import type { NotebookTemplateDocument } from "../interfaces/notebooks-template-interfaces";
 import { NotebookTemplatesForm } from "./notebook-templates-form";
@@ -11,61 +9,74 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 export interface NotebookTemplatesDialogProps {
   open: boolean;
   onClose: () => void;
+  onUseTemplate?: (template: NotebookTemplateDocument) => void;
 }
 
 export function NotebookTemplatesDialog({
   onClose,
   open,
+  onUseTemplate,
 }: NotebookTemplatesDialogProps) {
   const t = useTranslations("notebooks.notebook_templates");
 
-  const [isCreating, setIsCreating] = useToggle(false);
-
   const [selectedTemplate, setSelectedTemplate] =
     useState<NotebookTemplateDocument | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
-  const onSelectedNotebookTemplate = (template: NotebookTemplateDocument) => {
-    setIsCreating(true);
+  const onSelectTemplate = (template: NotebookTemplateDocument) => {
     setSelectedTemplate(template);
+    setShowForm(true);
   };
 
-  const onSaveNotebookTemplate = () => {
-    setIsCreating(false);
+  const onCreateNew = () => {
     setSelectedTemplate(null);
+    setShowForm(true);
+  };
+
+  const onSaved = () => {
+    setSelectedTemplate(null);
+    setShowForm(false);
+  };
+
+  const _onUseTemplate = (template: NotebookTemplateDocument) => {
+    onUseTemplate?.(template);
+    _onClose();
   };
 
   const _onClose = () => {
-    setIsCreating(false);
     setSelectedTemplate(null);
+    setShowForm(false);
     onClose();
   };
 
   return (
     <Dialog open={open} onOpenChange={_onClose}>
       <DialogContent
-        className="w-full sm:max-w-4/5 bg-card p-0 min-h-[26.25rem]"
+        className="w-dvw md:max-w-5xl! h-dvh md:h-auto max-h-dvh! bg-card p-0! md:p-0"
         aria-describedby={undefined}
       >
         <VisuallyHidden>
           <DialogTitle />
         </VisuallyHidden>
-        <div className="flex">
-          <div className="flex-1/3 p-6">
+        <div className="flex flex-col md:flex-row h-full md:min-h-[40rem] overflow-hidden">
+          <div className="w-full md:w-72 shrink-0 p-4 pt-12 md:pt-4 border-b md:border-b-0 md:border-r overflow-y-auto">
             <NotebookTemplatesList
-              onSelectTemplate={onSelectedNotebookTemplate}
+              onSelectTemplate={onSelectTemplate}
+              onCreateNew={onCreateNew}
             />
           </div>
-          <div className="flex-2/3 p-6 bg-sidebar">
-            {!isCreating ? (
+          <div className="flex-1 p-4 md:p-6 bg-sidebar min-w-0 overflow-y-auto">
+            {!showForm ? (
               <div className="flex flex-1 items-center justify-center h-full">
-                <Button onClick={setIsCreating}>
-                  {t("create_new_template")}
-                </Button>
+                <p className="text-sm text-muted-foreground">
+                  {t("select_a_template")}
+                </p>
               </div>
             ) : (
               <NotebookTemplatesForm
                 selectedNotebookTemplate={selectedTemplate}
-                onSaved={onSaveNotebookTemplate}
+                onSaved={onSaved}
+                onUseTemplate={selectedTemplate ? _onUseTemplate : undefined}
               />
             )}
           </div>

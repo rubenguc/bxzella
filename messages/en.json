@@ -341,7 +341,14 @@
       "notebook_template_not_found": "notebook_template_not_found",
       "error_creating_notebook_template": "Error creating notebook template",
       "error_updating_notebook_template": "Error updating notebook template",
-      "error_deleting_notebook_template": "Error deleting notebook template"
+      "error_deleting_notebook_template": "Error deleting notebook template",
+      "search_templates": "Search templates",
+      "no_templates_found": "No templates found",
+      "no_templates_yet": "No templates yet",
+      "use_template": "Use Template",
+      "no_content": "No content",
+      "select_a_template": "Select a template",
+      "template_title_placeholder": "Enter template title"
     }
   },
   "daily-journal": {

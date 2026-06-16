@@ -20,8 +20,6 @@ export async function GET(
 
     await connectDB();
 
-    await connectDB();
-
     const timezone = await getTimeZoneFromHeader(headers);
 
     const data = await getPlaybookRulesCompletionByPlaybookId(

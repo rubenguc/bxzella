@@ -132,20 +132,22 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       <LexicalComposer initialConfig={editorConfig}>
         <ToolbarPlugin />
         <div className="flex flex-1 relative">
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable
-                className="flex-1 p-2 mt-3 outline-0! relative"
-                aria-placeholder={"Enter some text..."}
-                placeholder={
-                  <p className="text-[#999] overflow-hidden absolute text-ellipsis top-[15px] left-[10px] text-[15px] select-none inline-block pointer-events-none">
-                    {"Enter some text..."}
-                  </p>
-                }
-              />
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
+          <div className="flex-1 relative">
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable
+                  className="p-2 mt-3 outline-0! relative"
+                  aria-placeholder={"Enter some text..."}
+                  placeholder={
+                    <p className="text-[#999] overflow-hidden absolute text-ellipsis top-[15px] left-[10px] text-[15px] select-none inline-block pointer-events-none">
+                      {"Enter some text..."}
+                    </p>
+                  }
+                />
+              }
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+          </div>
         </div>
         <HistoryPlugin />
         <SetValuePlugin initialValue={initialValue as string} />

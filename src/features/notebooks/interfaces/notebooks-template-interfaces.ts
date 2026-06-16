@@ -5,6 +5,7 @@ export interface NotebookTemplate {
   title: string;
   content: string;
   contentPlainText: string;
+  lastTimeUsed?: Date;
 }
 
 export interface NotebookTemplateDocument extends NotebookTemplate {
@@ -17,6 +18,7 @@ export interface NotebookTemplateDocument extends NotebookTemplate {
 export interface GetNotebookTemplatesParams {
   page?: number;
   limit?: number;
+  sort?: string;
 }
 
 export type GetNotebookTemplatesResponse = Promise<
