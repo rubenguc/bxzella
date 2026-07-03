@@ -1,14 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
-export const Route = createFileRoute('/')({ component: Home })
+import { authClient } from '../lib/auth-client'
+import { checkAdminExists } from '../lib/server-utils'
 
-function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-    </div>
-  )
+export const Route = createFileRoute('/')({
+  beforeLoad: async () => {
+    const { exists } = await checkAdminExists()
+    if (!exists) {
+      throw redirect({ to: '/setup' })
+    }
+  },
+  component: Index,
+})
+
+function Index() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    authClient.getSession().then(({ data }) => {
+      if (data?.user) {
+        navigate({ to: '/dashboard' })
+      } else {
+        navigate({ to: '/login' })
+      }
+    })
+  }, [navigate])
+
+  return null
 }
