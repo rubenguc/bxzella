@@ -103,6 +103,28 @@
     "api_key_creation_screenshot": "API Key creation interface",
     "api_configuration_screenshot": "API Key configuration interface with permissions"
   },
+  "auth": {
+    "sign_in_title": "Sign In",
+    "email_or_username": "Email or Username",
+    "email_placeholder": "admin@example.com",
+    "password": "Password",
+    "sign_in_button": "Sign In",
+    "signing_in": "Signing in...",
+    "credential_required": "Email or username is required",
+    "password_required": "Password is required",
+    "sign_in_error": "Error signing in",
+    "setup_title": "Initial Setup",
+    "setup_description": "Create the first admin user to get started.",
+    "username": "Username",
+    "username_placeholder": "admin",
+    "email": "Email",
+    "setup_button": "Create Admin",
+    "creating_admin": "Creating admin...",
+    "username_min_length": "Username must be at least 3 characters",
+    "email_invalid": "Invalid email address",
+    "password_min_length": "Password must be at least 8 characters",
+    "setup_error": "Error creating admin"
+  },
   "errors": {
     "server_error": "Server error",
     "incorrect_api_key_error": "Incorrect API key",

@@ -103,6 +103,28 @@
     "api_key_creation_screenshot": "Interfaz de creaci\u00f3n de Clave API",
     "api_configuration_screenshot": "Interfaz de configuraci\u00f3n de Clave API con permisos"
   },
+  "auth": {
+    "sign_in_title": "Iniciar sesión",
+    "email_or_username": "Email o Username",
+    "email_placeholder": "admin@ejemplo.com",
+    "password": "Contraseña",
+    "sign_in_button": "Ingresar",
+    "signing_in": "Ingresando...",
+    "credential_required": "Email o username es requerido",
+    "password_required": "Contraseña es requerida",
+    "sign_in_error": "Error al iniciar sesión",
+    "setup_title": "Setup inicial",
+    "setup_description": "Crea el primer usuario administrador para comenzar.",
+    "username": "Nombre de usuario",
+    "username_placeholder": "admin",
+    "email": "Correo electrónico",
+    "setup_button": "Crear admin",
+    "creating_admin": "Creando admin...",
+    "username_min_length": "El username debe tener al menos 3 caracteres",
+    "email_invalid": "Correo electrónico inválido",
+    "password_min_length": "La contraseña debe tener al menos 8 caracteres",
+    "setup_error": "Error al crear el admin"
+  },
   "errors": {
     "server_error": "Error del servidor",
     "incorrect_api_key_error": "Clave API incorrecta",
