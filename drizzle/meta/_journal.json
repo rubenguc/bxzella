@@ -8,6 +8,13 @@
       "when": 1783090814386,
       "tag": "0000_striped_thena",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783094965849,
+      "tag": "0001_marvelous_mantis",
+      "breakpoints": true
     }
   ]
 }
