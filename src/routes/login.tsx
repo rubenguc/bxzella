@@ -7,8 +7,8 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle,
 } from '#/components/ui/card'
+import { FieldError, toError } from '#/components/form/field-error'
 
 export const Route = createFileRoute('/login')({
   beforeLoad: async () => {
@@ -19,11 +19,6 @@ export const Route = createFileRoute('/login')({
   },
   component: Login,
 })
-
-function FieldError({ error }: { error: string | undefined }) {
-  if (!error) return null
-  return <p className="text-sm text-destructive mt-1">{error}</p>
-}
 
 function Login() {
   const form = useLoginForm()
@@ -36,7 +31,6 @@ function Login() {
             <img src="/logo.png" alt="BXZella" width={40} height={40} />
             <span className="text-xl font-bold">BXZella</span>
           </div>
-          <CardTitle>{m['auth.sign_in_title']()}</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -71,7 +65,7 @@ function Login() {
                   <FieldError
                     error={
                       field.state.meta.isTouched
-                        ? field.state.meta.errors.join(', ')
+                        ? field.state.meta.errors.map(toError).filter(Boolean).join(', ')
                         : undefined
                     }
                   />
@@ -103,7 +97,7 @@ function Login() {
                   <FieldError
                     error={
                       field.state.meta.isTouched
-                        ? field.state.meta.errors.join(', ')
+                        ? field.state.meta.errors.map(toError).filter(Boolean).join(', ')
                         : undefined
                     }
                   />
@@ -116,12 +110,13 @@ function Login() {
                 errors: state.errors,
                 isSubmitting: state.isSubmitting,
                 canSubmit: state.canSubmit,
+                submissionAttempts: state.submissionAttempts,
               })}
-              children={({ errors, isSubmitting, canSubmit }) => (
+              children={({ errors, isSubmitting, canSubmit, submissionAttempts }) => (
                 <>
-                  {errors.length > 0 && (
+                  {errors.length > 0 && submissionAttempts > 0 && (
                     <p className="text-sm text-destructive">
-                      {errors.join(', ')}
+                      {errors.map(toError).filter(Boolean).join(', ')}
                     </p>
                   )}
 

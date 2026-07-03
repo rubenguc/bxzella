@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { m } from '#/paraglide/messages'
 import { authClient } from '#/lib/auth-client'
+import { toAuthErrorMessage } from '#/lib/auth-errors'
 
 const loginSchema = z.object({
   credential: z.string().min(1, m['auth.credential_required']()),
@@ -17,8 +18,9 @@ export function useLoginForm() {
     },
     validators: {
       onChange: loginSchema,
+      onMount: loginSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
       const signIn = value.credential.includes('@')
         ? authClient.signIn.email({
             email: value.credential,
@@ -32,9 +34,13 @@ export function useLoginForm() {
       const { error } = await signIn
 
       if (error) {
-        return {
-          form: error.message || error.code || m['auth.sign_in_error'](),
-        }
+        formApi.setErrorMap({
+          onSubmit: {
+            form: toAuthErrorMessage(error as { code?: string; message?: string; status?: number }),
+            fields: {},
+          },
+        })
+        return
       }
 
       window.location.href = '/dashboard'

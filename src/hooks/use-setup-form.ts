@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { m } from '#/paraglide/messages'
 import { authClient } from '#/lib/auth-client'
+import { toAuthErrorMessage } from '#/lib/auth-errors'
 
 const setupSchema = z.object({
   username: z.string().min(3, m['auth.username_min_length']()),
@@ -22,8 +23,9 @@ export function useSetupForm() {
     },
     validators: {
       onChange: setupSchema,
+      onMount: setupSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
       const { error } = await authClient.signUp.email({
         name: value.username,
         email: value.email,
@@ -33,9 +35,13 @@ export function useSetupForm() {
       })
 
       if (error) {
-        return {
-          form: error.message || error.code || m['auth.setup_error'](),
-        }
+        formApi.setErrorMap({
+          onSubmit: {
+            form: toAuthErrorMessage(error as { code?: string; message?: string; status?: number }, m['auth.setup_error']),
+            fields: {},
+          },
+        })
+        return
       }
 
       navigate({ to: '/login' })

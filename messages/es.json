@@ -123,7 +123,17 @@
     "username_min_length": "El username debe tener al menos 3 caracteres",
     "email_invalid": "Correo electrónico inválido",
     "password_min_length": "La contraseña debe tener al menos 8 caracteres",
-    "setup_error": "Error al crear el admin"
+    "setup_error": "Error al crear el admin",
+    "error_invalid_credentials": "Email o contraseña inválidos",
+    "error_user_not_found": "Usuario no encontrado",
+    "error_email_not_verified": "Email no verificado",
+    "error_user_already_exists": "El usuario ya existe",
+    "error_invalid_email": "Email inválido",
+    "error_invalid_password": "Contraseña inválida",
+    "error_password_too_short": "Contraseña muy corta",
+    "error_password_too_long": "Contraseña muy larga",
+    "error_failed_to_create_user": "Error al crear el usuario",
+    "error_server": "Error del servidor, intente nuevamente"
   },
   "errors": {
     "server_error": "Error del servidor",
