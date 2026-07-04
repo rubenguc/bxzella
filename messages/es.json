@@ -234,7 +234,17 @@
     "account_already_exists": "La cuenta ya existe",
     "error_creating_account": "Error al crear la cuenta",
     "error_updating_account": "Error al actualizar la cuenta",
-    "error_deleting_account": "Error al eliminar la cuenta"
+    "error_deleting_account": "Error al eliminar la cuenta",
+    "edit_description": "Actualiza los detalles de tu cuenta de exchange",
+    "add_description": "Conecta tu cuenta de exchange para empezar a rastrear operaciones",
+    "name_placeholder": "Mi Cuenta de Trading",
+    "api_key_placeholder": "Ingresa tu clave API",
+    "secret_key_placeholder": "Ingresa tu clave secreta",
+    "select_provider": "Selecciona un proveedor",
+    "no_accounts_description": "No hay cuentas aún. Agrega una para empezar.",
+    "api_keys_encrypted_info": "Tus claves API están encriptadas y almacenadas de forma segura. Las operaciones se sincronizarán automáticamente.",
+    "delete_account_warning": "Todas las operaciones sincronizadas de esta cuenta también se eliminarán.",
+    "save_changes_action": "Guardar Cambios"
   },
   "info": {
     "create_key_tutorial": {

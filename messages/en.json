@@ -234,7 +234,17 @@
     "account_already_exists": "Account already exists",
     "error_creating_account": "Error creating account",
     "error_updating_account": "Error updating account",
-    "error_deleting_account": "Error deleting account"
+    "error_deleting_account": "Error deleting account",
+    "edit_description": "Update your exchange account details",
+    "add_description": "Connect your exchange account to start tracking trades",
+    "name_placeholder": "My Trading Account",
+    "api_key_placeholder": "Enter your API key",
+    "secret_key_placeholder": "Enter your secret key",
+    "select_provider": "Select a provider",
+    "no_accounts_description": "No accounts yet. Add one to get started.",
+    "api_keys_encrypted_info": "Your API keys are encrypted and stored securely. Trades will be synced automatically.",
+    "delete_account_warning": "All trades synced for this account will also be deleted.",
+    "save_changes_action": "Save Changes"
   },
   "info": {
     "create_key_tutorial": {
