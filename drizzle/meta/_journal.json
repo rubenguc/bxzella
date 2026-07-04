@@ -15,6 +15,13 @@
       "when": 1783094965849,
       "tag": "0001_marvelous_mantis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783171773392,
+      "tag": "0002_absent_betty_ross",
+      "breakpoints": true
     }
   ]
 }
