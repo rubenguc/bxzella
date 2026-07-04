@@ -1,6 +1,8 @@
 import crypto from 'node:crypto'
 import axios from 'axios'
 
+import { logger } from '#/lib/logger'
+
 import type { ProviderInterface } from '#/features/exchange-providers/interface'
 import type {
   Coin,
@@ -19,6 +21,8 @@ import type {
 } from '#/features/exchange-providers/bingx/types'
 
 const HOST = process.env.BINGX_HOST ?? 'open-api.bingx.com'
+
+const log = logger.child({ name: 'BingxProvider' })
 
 // ── Signing ────────────────────────────────────────────
 
@@ -84,6 +88,7 @@ export class BingxProvider implements ProviderInterface {
         secretKey: this.secretKey,
         path: '/openApi/swap/v3/user/balance',
       })
+      log.debug({ method: 'areApiKeysValid', payload: {}, response: data }, 'provider response')
       return data.code === 0
     } catch {
       return false
@@ -96,6 +101,8 @@ export class BingxProvider implements ProviderInterface {
       secretKey: this.secretKey,
       path: '/openApi/swap/v2/user/positions',
     })) as UserPositionResponse
+
+    log.debug({ method: 'getOpenPositions', payload: {}, response }, 'provider response')
 
     return response.data.map((position) => ({
       symbol: position.symbol,
@@ -167,6 +174,8 @@ export class BingxProvider implements ProviderInterface {
       payload: { symbol, interval, startTime, limit: 500 },
     })) as KLineResponse
 
+    log.debug({ method: 'getKLine', payload: { symbol, interval, startTime, limit: 500 }, response }, 'provider response')
+
     return mapKLineData(response.data)
   }
 
@@ -199,12 +208,16 @@ export class BingxProvider implements ProviderInterface {
   private async fetchFilledOrders({ lastSyncTime }: GetPositionHistoryProps) {
     const { startTs, endTs } = this.getTimeRangeForFetchFilledOrders(lastSyncTime)
 
-    return makeRequest({
+    const response = (await makeRequest({
       apiKey: this.apiKey,
       secretKey: this.secretKey,
       path: '/openApi/swap/v2/trade/allFillOrders',
       payload: { startTs, endTs },
-    }) as Promise<UserFillOrdersResponse>
+    })) as UserFillOrdersResponse
+
+    log.debug({ method: 'fetchFilledOrders', payload: { startTs, endTs }, response }, 'provider response')
+
+    return response
   }
 
   private async fetchPositionHistory({
@@ -216,12 +229,16 @@ export class BingxProvider implements ProviderInterface {
   }): Promise<UserPositionHistoryResponse> {
     const { startTs, endTs } = this.getTimeRangeForFetchPositionsHistory(lastSyncTime)
 
-    return makeRequest({
+    const response = (await makeRequest({
       apiKey: this.apiKey,
       secretKey: this.secretKey,
       path: '/openApi/swap/v1/trade/positionHistory',
       payload: { startTs, endTs, symbol },
-    })
+    })) as UserPositionHistoryResponse
+
+    log.debug({ method: 'fetchPositionHistory', payload: { startTs, endTs, symbol }, response }, 'provider response')
+
+    return response
   }
 
   private processFilledOrders(filledOrdersResult: UserFillOrdersResponse): string[] {

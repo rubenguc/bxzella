@@ -6,6 +6,10 @@
  *   if (!result.success) return setError(result.error)
  *   // result.data is typed
  */
+import { logger } from '#/lib/logger'
+
+const log = logger.child({ name: 'server-action' })
+
 export type ActionResult<T = void> =
   | { success: true; data: T }
   | { success: false; error: string }
@@ -28,6 +32,8 @@ export async function wrapAction<T>(
   } catch (err) {
     const message = err instanceof Error ? err.message : 'server_error'
     const error = errorMap?.[message] ?? message
+
+    log.error({ err, error: message }, 'server action failed')
 
     return { success: false, error }
   }

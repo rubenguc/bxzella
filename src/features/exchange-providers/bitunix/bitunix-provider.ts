@@ -1,6 +1,8 @@
 import crypto from "node:crypto";
 import axios from "axios";
 
+import { logger } from "#/lib/logger";
+
 import type { ProviderInterface } from "#/features/exchange-providers/interface";
 import type {
   Coin,
@@ -16,6 +18,8 @@ import type {
 } from "#/features/exchange-providers/bitunix/types";
 
 const HOST = process.env.BITUNIX_HOST ?? "fapi.bitunix.com";
+
+const log = logger.child({ name: "BitunixProvider" });
 
 // ── Signing ────────────────────────────────────────────
 
@@ -113,6 +117,8 @@ export class BitunixProvider implements ProviderInterface {
         params: { marginCoin: _coin ?? "USDT" },
       });
 
+      log.debug({ method: "areApiKeysValid", payload: { marginCoin: _coin ?? "USDT" }, response: data }, "provider response");
+
       return data.code === 0;
     } catch (err) {
       return false;
@@ -125,6 +131,8 @@ export class BitunixProvider implements ProviderInterface {
       secretKey: this.secretKey,
       path: "/api/v1/futures/position/get_pending_positions",
     })) as OpenPositionResponse;
+
+    log.debug({ method: "getOpenPositions", payload: {}, response }, "provider response");
 
     return response.data.map((position) => ({
       symbol: formatSymbol(position.symbol),
@@ -151,6 +159,8 @@ export class BitunixProvider implements ProviderInterface {
       path: "/api/v1/futures/position/get_history_positions",
       params,
     })) as HistoryPositionResponse;
+
+    log.debug({ method: "getPositionHistory", payload: params, response }, "provider response");
 
     return response.data.positionList.map((bitunixPosition) => {
       const realizedPNL = parseFloat(bitunixPosition.realizedPNL);
@@ -199,6 +209,8 @@ export class BitunixProvider implements ProviderInterface {
         limit: 200,
       },
     })) as { code: number; data: KLine[] };
+
+    log.debug({ method: "getKLine", payload: { symbol, interval, startTime, endTime, limit: 200 }, response }, "provider response");
 
     return response.data;
   }
