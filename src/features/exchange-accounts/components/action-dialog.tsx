@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { Globe, Key } from "lucide-react";
+import { Globe, Key, Loader2 } from "lucide-react";
 
 import { m } from "#/paraglide/messages";
 import {
@@ -111,7 +111,10 @@ export function AccountsActionDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
+      <DialogContent
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -275,7 +278,14 @@ export function AccountsActionDialog({
             form="account-form"
             className="min-w-[120px]"
           >
-            {m["accounts.save_changes_action"]()}
+            {form.state.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {m["accounts.saving_action"]()}
+              </>
+            ) : (
+              m["accounts.save_changes_action"]()
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

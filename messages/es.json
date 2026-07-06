@@ -73,6 +73,7 @@
     "warning": "Advertencia",
     "be_carefull": "Por favor, ten cuidado, esta operaci\u00f3n no se puede revertir.",
     "delete": "Eliminar",
+    "deleting_action": "Eliminando...",
     "edit": "Editar",
     "cancel": "Cancelar",
     "continue": "Continuar",
@@ -244,7 +245,8 @@
     "no_accounts_description": "No hay cuentas aún. Agrega una para empezar.",
     "api_keys_encrypted_info": "Tus claves API están encriptadas y almacenadas de forma segura. Las operaciones se sincronizarán automáticamente.",
     "delete_account_warning": "Todas las operaciones sincronizadas de esta cuenta también se eliminarán.",
-    "save_changes_action": "Guardar Cambios"
+    "save_changes_action": "Guardar Cambios",
+    "saving_action": "Guardando..."
   },
   "info": {
     "create_key_tutorial": {
