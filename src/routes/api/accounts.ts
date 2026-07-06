@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { authMiddleware } from '#/lib/api-middleware'
 import { apiHandler } from '#/lib/api-error'
-import { getAccountsByUserId } from '#/features/exchange-accounts/db'
+import { getAccountsByUserId } from '#/features/exchange-accounts/queries'
 
 export const Route = createFileRoute('/api/accounts')({
   server: {

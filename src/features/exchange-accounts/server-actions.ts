@@ -16,7 +16,7 @@ import {
   getAccountByIdAndUserId,
   getAccountByProviderAndApiKey,
   updateAccount as updateAccountDb,
-} from "#/features/exchange-accounts/db";
+} from "#/features/exchange-accounts/queries";
 
 // ── Helpers ────────────────────────────────────────────
 
