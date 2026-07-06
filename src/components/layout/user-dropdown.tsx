@@ -52,7 +52,7 @@ export function UserDropdown() {
         <DropdownMenuTrigger asChild>
           <SidebarMenuItem>
             <SidebarMenuButton className="cursor-pointer">
-              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
+              <div className="flex size-4 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium">
                 {initials}
               </div>
               <span>{displayName || 'User'}</span>

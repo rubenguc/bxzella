@@ -20,6 +20,14 @@ function DashboardLayout() {
   const navigate = useNavigate()
   const { data: session, isPending } = authClient.useSession()
 
+  const defaultOpen =
+    typeof document !== 'undefined'
+      ? document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('sidebar_state='))
+          ?.split('=')[1] === '1'
+      : true
+
   useEffect(() => {
     if (!isPending && !session?.user) {
       navigate({ to: '/login' })
@@ -30,7 +38,7 @@ function DashboardLayout() {
   if (!session?.user) return null
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
