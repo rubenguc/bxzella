@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useForm } from "@tanstack/react-form";
+import { useSelector } from "@tanstack/react-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { Globe, Key, Loader2 } from "lucide-react";
 
@@ -98,6 +99,8 @@ export function AccountsActionDialog({
       onOpenChange(false);
     },
   });
+
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting);
 
   const handleOpenChange = useCallback(
     (state: boolean) => {
@@ -273,12 +276,12 @@ export function AccountsActionDialog({
 
         <DialogFooter>
           <Button
-            disabled={form.state.isSubmitting}
+            disabled={isSubmitting}
             type="submit"
             form="account-form"
             className="min-w-[120px]"
           >
-            {form.state.isSubmitting ? (
+            {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 {m["accounts.saving_action"]()}
