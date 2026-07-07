@@ -74,6 +74,7 @@
     "be_carefull": "Please be carefull, this operation can not be rolled back.",
     "delete": "Delete",
     "deleting_action": "Deleting...",
+    "loading": "Loading...",
     "edit": "Edit",
     "cancel": "Cancel",
     "continue": "Continue",
@@ -246,7 +247,8 @@
     "api_keys_encrypted_info": "Your API keys are encrypted and stored securely. Trades will be synced automatically.",
     "delete_account_warning": "All trades synced for this account will also be deleted.",
     "save_changes_action": "Save Changes",
-    "saving_action": "Saving..."
+    "saving_action": "Saving...",
+    "select_account": "Select an account"
   },
   "info": {
     "create_key_tutorial": {

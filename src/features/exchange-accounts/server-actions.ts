@@ -4,12 +4,16 @@ import { z } from "zod";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "#/lib/auth";
 import { wrapAction } from "#/lib/server-action";
+import { logger } from "#/lib/logger";
+import { encrypt, hashApiKey } from "#/lib/crypto";
 import {
   accountSchema,
   accountUpdateSchema,
 } from "#/features/exchange-accounts/validation";
-import { encrypt, hashApiKey } from "#/lib/crypto";
+
+const log = logger.child({ name: "exchange-accounts" });
 import { getProvider } from "#/features/exchange-providers/get-provider";
+import { syncPositions, deleteTradesByAccountId } from "#/features/trades/repository";
 import {
   createAccount as createAccountDb,
   deleteAccount as deleteAccountDb,
@@ -54,7 +58,7 @@ export const createAccountAction = createServerFn({ method: "POST" })
       );
       if (existing) throw new Error("account_already_exists");
 
-      await createAccountDb({
+      const account = await createAccountDb({
         name,
         userId,
         apiKey: encrypt(apiKey),
@@ -65,8 +69,10 @@ export const createAccountAction = createServerFn({ method: "POST" })
         earliestTradeDatePerCoin: {},
       });
 
-      // TODO: add initial syncPositions() call
-      // await syncPositions(account.id)
+      // Fire-and-forget: initial sync for USDT positions
+      syncPositions(account.id, "USDT").catch((err) => {
+        log.error({ err, accountId: account.id }, "initial syncPositions failed");
+      });
     });
   });
 
@@ -95,8 +101,7 @@ export const deleteAccountAction = createServerFn({ method: "POST" })
       const userId = await getUserId();
       await verifyOwnership(id, userId);
 
-      // TODO: deleteTradesByAccountId(id) when trades feature exists
-
+      await deleteTradesByAccountId(id);
       await deleteAccountDb(id);
     });
   });

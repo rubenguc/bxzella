@@ -88,3 +88,41 @@ export async function deleteAccount(id: string) {
     .returning()
   return row
 }
+
+// ── Trades sync helpers ─────────────────────────────────
+
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0]
+
+export async function updateLastSyncPerCoin(
+  id: string,
+  coin: string,
+  syncTime: number,
+  tx?: Tx,
+) {
+  const account = await getAccountById(id)
+  if (!account) return
+
+  const conn = tx ?? db
+  account.lastSyncPerCoin[coin] = syncTime
+  await conn
+    .update(exchangeAccount)
+    .set({ lastSyncPerCoin: account.lastSyncPerCoin })
+    .where(eq(exchangeAccount.id, id))
+}
+
+export async function updateEarliestTradeDatePerCoin(
+  id: string,
+  coin: string,
+  date: string,
+  tx?: Tx,
+) {
+  const account = await getAccountById(id)
+  if (!account) return
+
+  const conn = tx ?? db
+  account.earliestTradeDatePerCoin[coin] = date
+  await conn
+    .update(exchangeAccount)
+    .set({ earliestTradeDatePerCoin: account.earliestTradeDatePerCoin })
+    .where(eq(exchangeAccount.id, id))
+}

@@ -16,6 +16,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardTradesRouteImport } from './routes/dashboard/trades'
 import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboard/exchange-accounts'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
+import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
+import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const SetupRoute = SetupRouteImport.update({
@@ -54,6 +56,16 @@ const ApiAccountsRoute = ApiAccountsRouteImport.update({
   path: '/api/accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTradesIndexRoute = ApiTradesIndexRouteImport.update({
+  id: '/api/trades/',
+  path: '/api/trades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
+  id: '/api/trades/sync',
+  path: '/api/trades/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -69,6 +81,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/api/trades/': typeof ApiTradesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -79,6 +93,8 @@ export interface FileRoutesByTo {
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/api/trades': typeof ApiTradesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -90,6 +106,8 @@ export interface FileRoutesById {
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/api/trades/': typeof ApiTradesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -102,6 +120,8 @@ export interface FileRouteTypes {
     | '/dashboard/exchange-accounts'
     | '/dashboard/trades'
     | '/api/auth/$'
+    | '/api/trades/sync'
+    | '/api/trades/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -112,6 +132,8 @@ export interface FileRouteTypes {
     | '/dashboard/exchange-accounts'
     | '/dashboard/trades'
     | '/api/auth/$'
+    | '/api/trades/sync'
+    | '/api/trades'
   id:
     | '__root__'
     | '/'
@@ -122,6 +144,8 @@ export interface FileRouteTypes {
     | '/dashboard/exchange-accounts'
     | '/dashboard/trades'
     | '/api/auth/$'
+    | '/api/trades/sync'
+    | '/api/trades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,6 +155,8 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   ApiAccountsRoute: typeof ApiAccountsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiTradesSyncRoute: typeof ApiTradesSyncRoute
+  ApiTradesIndexRoute: typeof ApiTradesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,6 +210,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/trades/': {
+      id: '/api/trades/'
+      path: '/api/trades'
+      fullPath: '/api/trades/'
+      preLoaderRoute: typeof ApiTradesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/trades/sync': {
+      id: '/api/trades/sync'
+      path: '/api/trades/sync'
+      fullPath: '/api/trades/sync'
+      preLoaderRoute: typeof ApiTradesSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -215,6 +255,8 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   ApiAccountsRoute: ApiAccountsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiTradesSyncRoute: ApiTradesSyncRoute,
+  ApiTradesIndexRoute: ApiTradesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

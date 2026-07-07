@@ -1,6 +1,11 @@
+import { ZodError } from 'zod'
 import { logger } from '#/lib/logger'
 
 const log = logger.child({ name: 'api-error' })
+
+function isZodError(err: unknown): err is ZodError {
+  return err instanceof ZodError
+}
 
 /**
  * Wraps an API route handler with consistent error handling.
@@ -25,6 +30,17 @@ export function apiHandler(
     try {
       return await fn(ctx)
     } catch (err) {
+      if (isZodError(err)) {
+        log.warn({ err, label }, 'api validation error')
+        return new Response(
+          JSON.stringify({ error: 'validation_error', details: err.issues }),
+          {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
+      }
+
       log.error({ err, label }, 'api handler failed')
       return new Response(JSON.stringify({ error: 'server_error' }), {
         status: 500,

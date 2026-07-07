@@ -8,20 +8,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "6432:5432"
     volumes:
       - ./volumes/postgres:/var/lib/postgresql
-
-  pgadmin:
-    container_name: bxzella-pgadmin
-    image: dpage/pgadmin4:9.16
-    restart: always
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "5050:80"
-    depends_on:
-      - db
-    volumes:
-      - ./volumes/pgadmin:/var/lib/pgadmin
