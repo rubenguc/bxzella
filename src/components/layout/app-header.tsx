@@ -17,8 +17,8 @@ export function AppHeader({ title }: AppHeaderProps) {
         </span>
       )}
       <div className="ml-auto flex items-center space-x-4">
-        <CoinSelector />
         <DateRangeSelector />
+        <CoinSelector />
         <AccountSelector />
       </div>
     </header>
