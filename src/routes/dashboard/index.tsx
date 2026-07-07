@@ -1,25 +1,25 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { m } from '#/paraglide/messages'
-import { useUserConfig } from '#/store/user-config'
-import { getDashboardStats } from '#/features/dashboard/service'
-import { NetPNL } from '#/features/dashboard/components/net-pnl'
-import { ProfitFactor } from '#/features/dashboard/components/profit-factor'
-import { TradeWinPercentage } from '#/features/dashboard/components/trade-win-percentage'
-import { AvgWinLoss } from '#/features/dashboard/components/avg-win-loss'
-import { StatisticsSkeleton } from '#/features/dashboard/components/statistics-skeleton'
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { m } from "#/paraglide/messages";
+import { useUserConfig } from "#/store/user-config";
+import { getDashboardStats } from "#/features/dashboard/service";
+import { NetPNL } from "#/features/dashboard/components/net-pnl";
+import { ProfitFactor } from "#/features/dashboard/components/profit-factor";
+import { TradeWinPercentage } from "#/features/dashboard/components/trade-win-percentage";
+import { AvgWinLoss } from "#/features/dashboard/components/avg-win-loss";
+import { StatisticsSkeleton } from "#/features/dashboard/components/statistics-skeleton";
 
-export const Route = createFileRoute('/dashboard/home')({
+export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
-})
+});
 
 function DashboardHome() {
-  const { selectedAccount, startDate, endDate, coin } = useUserConfig()
+  const { selectedAccount, startDate, endDate, coin } = useUserConfig();
 
   const { data, isLoading } = useQuery({
     queryKey: [
-      'dashboard-stats',
+      "dashboard-stats",
       selectedAccount?.id,
       startDate?.toISOString(),
       endDate?.toISOString(),
@@ -28,22 +28,22 @@ function DashboardHome() {
     queryFn: () =>
       getDashboardStats({
         accountId: selectedAccount!.id,
-        startDate: format(startDate!, 'yyyy-MM-dd'),
-        endDate: format(endDate!, 'yyyy-MM-dd'),
+        startDate: format(startDate!, "yyyy-MM-dd"),
+        endDate: format(endDate!, "yyyy-MM-dd"),
         coin,
       }),
     enabled: !!selectedAccount && !!startDate && !!endDate,
-  })
+  });
 
   if (!selectedAccount) {
     return (
       <p className="text-center text-xl text-muted-foreground">
-        {m['accounts.select_account']()}
+        {m["accounts.select_account"]()}
       </p>
-    )
+    );
   }
 
-  if (isLoading || !data) return <StatisticsSkeleton />
+  if (isLoading || !data) return <StatisticsSkeleton />;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -64,5 +64,5 @@ function DashboardHome() {
         avgLoss={data.avgWinLoss.avgLoss}
       />
     </div>
-  )
+  );
 }

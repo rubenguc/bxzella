@@ -13,8 +13,8 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardTradesRouteImport } from './routes/dashboard/trades'
-import { Route as DashboardHomeRouteImport } from './routes/dashboard/home'
 import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboard/exchange-accounts'
 import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
@@ -42,14 +42,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardTradesRoute = DashboardTradesRouteImport.update({
   id: '/trades',
   path: '/trades',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardHomeRoute = DashboardHomeRouteImport.update({
-  id: '/home',
-  path: '/home',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardExchangeAccountsRoute =
@@ -92,22 +92,21 @@ export interface FileRoutesByFullPath {
   '/api/accounts': typeof ApiAccountsRoute
   '/api/dashboard': typeof ApiDashboardRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
-  '/dashboard/home': typeof DashboardHomeRoute
   '/dashboard/trades': typeof DashboardTradesRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades/': typeof ApiTradesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
   '/api/dashboard': typeof ApiDashboardRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
-  '/dashboard/home': typeof DashboardHomeRoute
   '/dashboard/trades': typeof DashboardTradesRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades': typeof ApiTradesIndexRoute
@@ -121,8 +120,8 @@ export interface FileRoutesById {
   '/api/accounts': typeof ApiAccountsRoute
   '/api/dashboard': typeof ApiDashboardRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
-  '/dashboard/home': typeof DashboardHomeRoute
   '/dashboard/trades': typeof DashboardTradesRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades/': typeof ApiTradesIndexRoute
@@ -137,22 +136,21 @@ export interface FileRouteTypes {
     | '/api/accounts'
     | '/api/dashboard'
     | '/dashboard/exchange-accounts'
-    | '/dashboard/home'
     | '/dashboard/trades'
+    | '/dashboard/'
     | '/api/auth/$'
     | '/api/trades/sync'
     | '/api/trades/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
     | '/login'
     | '/setup'
     | '/api/accounts'
     | '/api/dashboard'
     | '/dashboard/exchange-accounts'
-    | '/dashboard/home'
     | '/dashboard/trades'
+    | '/dashboard'
     | '/api/auth/$'
     | '/api/trades/sync'
     | '/api/trades'
@@ -165,8 +163,8 @@ export interface FileRouteTypes {
     | '/api/accounts'
     | '/api/dashboard'
     | '/dashboard/exchange-accounts'
-    | '/dashboard/home'
     | '/dashboard/trades'
+    | '/dashboard/'
     | '/api/auth/$'
     | '/api/trades/sync'
     | '/api/trades/'
@@ -214,18 +212,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/trades': {
       id: '/dashboard/trades'
       path: '/trades'
       fullPath: '/dashboard/trades'
       preLoaderRoute: typeof DashboardTradesRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/home': {
-      id: '/dashboard/home'
-      path: '/home'
-      fullPath: '/dashboard/home'
-      preLoaderRoute: typeof DashboardHomeRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/exchange-accounts': {
@@ -275,14 +273,14 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteRouteChildren {
   DashboardExchangeAccountsRoute: typeof DashboardExchangeAccountsRoute
-  DashboardHomeRoute: typeof DashboardHomeRoute
   DashboardTradesRoute: typeof DashboardTradesRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardExchangeAccountsRoute: DashboardExchangeAccountsRoute,
-  DashboardHomeRoute: DashboardHomeRoute,
   DashboardTradesRoute: DashboardTradesRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

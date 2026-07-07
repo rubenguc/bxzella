@@ -15,7 +15,7 @@ export async function getDashboardStats({
   endDate,
   coin,
 }: GetDashboardStatsParams): Promise<DashboardStats> {
-  const rows = await db.execute(sql`
+  const result = await db.execute(sql`
     SELECT
       COUNT(*)::int AS "totalTrades",
       COUNT(*) FILTER (WHERE net_profit::numeric > 0)::int AS "totalWin",
@@ -31,13 +31,24 @@ export async function getDashboardStats({
       AND update_time <= ${endDate}::timestamp
   `)
 
-  const raw = rows[0] as {
-    totalTrades: number
-    totalWin: number
-    totalLoss: number
-    sumWin: number
-    sumLoss: number
-    netPnL: number
+  const raw = result.rows?.[0] as
+    | {
+        totalTrades: number
+        totalWin: number
+        totalLoss: number
+        sumWin: number
+        sumLoss: number
+        netPnL: number
+      }
+    | undefined
+
+  if (!raw) {
+    return {
+      netPnL: { value: 0, totalTrades: 0 },
+      profitFactor: { value: 0, sumWin: 0, sumLoss: 0 },
+      tradeWin: { value: 0, totalWin: 0, totalLoss: 0 },
+      avgWinLoss: { value: 0, avgWin: 0, avgLoss: 0 },
+    }
   }
 
   const totalTrades = raw.totalTrades ?? 0
