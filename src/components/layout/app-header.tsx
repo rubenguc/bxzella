@@ -1,7 +1,8 @@
 import { SidebarTrigger } from '#/components/ui/sidebar'
 import { AccountSelector } from '#/components/layout/account-selector'
-
 import { CoinSelector } from '#/components/layout/coin-selector'
+import { DateRangeSelector } from '#/components/date-range-selector'
+
 interface AppHeaderProps {
   title?: string
 }
@@ -17,6 +18,7 @@ export function AppHeader({ title }: AppHeaderProps) {
       )}
       <div className="ml-auto flex items-center space-x-4">
         <CoinSelector />
+        <DateRangeSelector />
         <AccountSelector />
       </div>
     </header>
