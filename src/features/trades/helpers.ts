@@ -17,6 +17,13 @@ export function resolveEarliestTradeDate(
  * Transforms a raw symbol (e.g. "BTC-USDT" or "NCSK1000USDT") into a
  * human-readable short form ("BTC", "1000USDT").
  */
+/**
+ * Returns true if the position side indicates a long position.
+ */
+export function checkLongPosition(positionSide: string): boolean {
+  return positionSide?.toLowerCase() === 'long'
+}
+
 export function transformSymbol(symbol: string): string {
   if (symbol.includes('2USD')) {
     return symbol

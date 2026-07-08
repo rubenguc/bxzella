@@ -7,35 +7,39 @@ import { parseSearchParams } from '#/lib/parse-search-params'
 import {
   accountIdParamValidation,
   coinParamValidation,
-  dateParamValidation,
 } from '#/lib/zod-utils'
 import { adjustDateToUTC } from '#/lib/adjust-date-to-utc'
-import { getDashboardStats } from '#/features/dashboard/repository'
+import { getDailyPnl as getDailyPnlRepo } from '#/features/dashboard/repository'
 
-const dashboardSearchParamsSchema = z.object({
+const dailyPnlSearchParamsSchema = z.object({
   accountId: accountIdParamValidation(),
-  startDate: dateParamValidation({ field: 'startDate' }),
-  endDate: dateParamValidation({ field: 'endDate' }),
   coin: coinParamValidation(),
+  month: z.string().regex(/^\d{4}-\d{2}$/, 'Month must be in yyyy-MM format'),
 })
 
-export const Route = createFileRoute('/api/dashboard')({
+export const Route = createFileRoute('/api/dashboard/daily-pnl')({
   server: {
     middleware: [authMiddleware],
     handlers: {
-      GET: apiHandler('GET /api/dashboard', async ({ request }) => {
-        const { accountId, startDate, endDate, coin } = parseSearchParams(
+      GET: apiHandler('GET /api/dashboard/daily-pnl', async ({ request }) => {
+        const { accountId, coin, month } = parseSearchParams(
           request,
-          dashboardSearchParamsSchema,
+          dailyPnlSearchParamsSchema,
         )
 
         const offset = Number(request.headers.get('Timezone')) || 0
 
-        const data = await getDashboardStats({
+        // Month range in user's timezone
+        const startDate = `${month}-01`
+        const [year, m] = month.split('-').map(Number)
+        const lastDay = new Date(year, m, 0).getDate()
+        const endDate = `${month}-${String(lastDay).padStart(2, '0')}`
+
+        const data = await getDailyPnlRepo({
           accountId,
+          coin,
           startDate: adjustDateToUTC(startDate, offset, false),
           endDate: adjustDateToUTC(endDate, offset, true),
-          coin,
         })
 
         return new Response(JSON.stringify(data), {

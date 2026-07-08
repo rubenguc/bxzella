@@ -26,6 +26,12 @@ export function SyncButton({ accountId, coin }: Props) {
         queryClient.invalidateQueries({
           queryKey: ["trades", accountId, coin],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["dashboard-stats"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["daily-pnl"],
+        });
       }
       return result;
     },

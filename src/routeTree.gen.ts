@@ -20,6 +20,9 @@ import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
 import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
 import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
+import { Route as ApiDashboardRecentTradesRouteImport } from './routes/api/dashboard/recent-trades'
+import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
+import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const SetupRoute = SetupRouteImport.update({
@@ -78,6 +81,23 @@ const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
   path: '/api/trades/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDashboardRecentTradesRoute =
+  ApiDashboardRecentTradesRouteImport.update({
+    id: '/recent-trades',
+    path: '/recent-trades',
+    getParentRoute: () => ApiDashboardRoute,
+  } as any)
+const ApiDashboardOpenPositionsRoute =
+  ApiDashboardOpenPositionsRouteImport.update({
+    id: '/open-positions',
+    path: '/open-positions',
+    getParentRoute: () => ApiDashboardRoute,
+  } as any)
+const ApiDashboardDailyPnlRoute = ApiDashboardDailyPnlRouteImport.update({
+  id: '/daily-pnl',
+  path: '/daily-pnl',
+  getParentRoute: () => ApiDashboardRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -90,11 +110,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
+  '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
+  '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades/': typeof ApiTradesIndexRoute
 }
@@ -103,11 +126,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
+  '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
+  '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades': typeof ApiTradesIndexRoute
 }
@@ -118,11 +144,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/dashboard': typeof ApiDashboardRoute
+  '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/trades': typeof DashboardTradesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
+  '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
+  '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/api/trades/': typeof ApiTradesIndexRoute
 }
@@ -139,6 +168,9 @@ export interface FileRouteTypes {
     | '/dashboard/trades'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/dashboard/daily-pnl'
+    | '/api/dashboard/open-positions'
+    | '/api/dashboard/recent-trades'
     | '/api/trades/sync'
     | '/api/trades/'
   fileRoutesByTo: FileRoutesByTo
@@ -152,6 +184,9 @@ export interface FileRouteTypes {
     | '/dashboard/trades'
     | '/dashboard'
     | '/api/auth/$'
+    | '/api/dashboard/daily-pnl'
+    | '/api/dashboard/open-positions'
+    | '/api/dashboard/recent-trades'
     | '/api/trades/sync'
     | '/api/trades'
   id:
@@ -166,6 +201,9 @@ export interface FileRouteTypes {
     | '/dashboard/trades'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/dashboard/daily-pnl'
+    | '/api/dashboard/open-positions'
+    | '/api/dashboard/recent-trades'
     | '/api/trades/sync'
     | '/api/trades/'
   fileRoutesById: FileRoutesById
@@ -176,7 +214,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
   ApiAccountsRoute: typeof ApiAccountsRoute
-  ApiDashboardRoute: typeof ApiDashboardRoute
+  ApiDashboardRoute: typeof ApiDashboardRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiTradesSyncRoute: typeof ApiTradesSyncRoute
   ApiTradesIndexRoute: typeof ApiTradesIndexRoute
@@ -261,6 +299,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTradesSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/dashboard/recent-trades': {
+      id: '/api/dashboard/recent-trades'
+      path: '/recent-trades'
+      fullPath: '/api/dashboard/recent-trades'
+      preLoaderRoute: typeof ApiDashboardRecentTradesRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
+    '/api/dashboard/open-positions': {
+      id: '/api/dashboard/open-positions'
+      path: '/open-positions'
+      fullPath: '/api/dashboard/open-positions'
+      preLoaderRoute: typeof ApiDashboardOpenPositionsRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
+    '/api/dashboard/daily-pnl': {
+      id: '/api/dashboard/daily-pnl'
+      path: '/daily-pnl'
+      fullPath: '/api/dashboard/daily-pnl'
+      preLoaderRoute: typeof ApiDashboardDailyPnlRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -287,13 +346,29 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
   DashboardRouteRouteChildren,
 )
 
+interface ApiDashboardRouteChildren {
+  ApiDashboardDailyPnlRoute: typeof ApiDashboardDailyPnlRoute
+  ApiDashboardOpenPositionsRoute: typeof ApiDashboardOpenPositionsRoute
+  ApiDashboardRecentTradesRoute: typeof ApiDashboardRecentTradesRoute
+}
+
+const ApiDashboardRouteChildren: ApiDashboardRouteChildren = {
+  ApiDashboardDailyPnlRoute: ApiDashboardDailyPnlRoute,
+  ApiDashboardOpenPositionsRoute: ApiDashboardOpenPositionsRoute,
+  ApiDashboardRecentTradesRoute: ApiDashboardRecentTradesRoute,
+}
+
+const ApiDashboardRouteWithChildren = ApiDashboardRoute._addFileChildren(
+  ApiDashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
   ApiAccountsRoute: ApiAccountsRoute,
-  ApiDashboardRoute: ApiDashboardRoute,
+  ApiDashboardRoute: ApiDashboardRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiTradesSyncRoute: ApiTradesSyncRoute,
   ApiTradesIndexRoute: ApiTradesIndexRoute,

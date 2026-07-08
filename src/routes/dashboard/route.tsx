@@ -9,6 +9,7 @@ import { checkAdminExists } from '#/lib/server-utils'
 import { m } from '#/paraglide/messages'
 
 const PAGE_TITLES: Record<string, () => string> = {
+  '': m['sidebar.home'],
   home: m['sidebar.home'],
   'exchange-accounts': m['sidebar.accounts'],
   trades: m['sidebar.trades'],

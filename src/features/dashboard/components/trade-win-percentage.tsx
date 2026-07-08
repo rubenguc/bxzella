@@ -20,13 +20,13 @@ export function TradeWinPercentage({
 
     const RADIAN = Math.PI / 180
     const angleRad = index === 0 ? 180 * RADIAN : 0 * RADIAN
-    const x = cx + outerRadius * 0.9 * Math.cos(angleRad) - 12
+    const edgeX = cx + outerRadius * 0.9 * Math.cos(angleRad)
 
     return (
-      <foreignObject x={x} y={50} width={24} height={24}>
-        <div style={{ display: 'inline-block', pointerEvents: 'auto' }}>
+      <foreignObject x={edgeX - 30} y={50} width={60} height={24}>
+        <div className="flex justify-center items-center h-full">
           <Badge
-            className={`px-1.5 py-[1px] w-[22px] rounded-full ${
+            className={`px-1.5 py-[1px] rounded-full whitespace-nowrap ${
               index === 0
                 ? 'text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900'
                 : 'text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900'
@@ -45,7 +45,7 @@ export function TradeWinPercentage({
       popoverInfo={m['statistics.trade_win_percentage_info']()}
       content={<p className="text-xl">{value.toFixed(1)}%</p>}
       rightContent={
-        <ResponsiveContainer className="-mt-3" width="100%" height={100}>
+        <ResponsiveContainer className="-mt-3" width="100%" height={80}>
           <PieChart>
             <Pie
               data={[

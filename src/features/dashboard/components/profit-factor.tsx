@@ -19,7 +19,7 @@ export function ProfitFactor({ value, sumWin, sumLoss }: ProfitFactorProps) {
       popoverInfo={m['statistics.profit_factor_info']()}
       content={<p className="text-xl">{value.toFixed(2)}</p>}
       rightContent={
-        <ResponsiveContainer className="-mt-6" width="100%" height={100}>
+        <ResponsiveContainer className="-mt-4" width="100%" height={80}>
           <PieChart>
             <Pie
               data={[

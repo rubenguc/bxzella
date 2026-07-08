@@ -23,6 +23,23 @@ export async function getTradesByAccountId(accountId: string) {
     .orderBy(trade.openTime);
 }
 
+export async function getRecentTrades(
+  accountId: string,
+  coin?: Coin,
+  limit = 10,
+) {
+  const filters = coin
+    ? and(eq(trade.accountId, accountId), eq(trade.coin, coin))
+    : eq(trade.accountId, accountId);
+
+  return db
+    .select()
+    .from(trade)
+    .where(filters)
+    .orderBy(desc(trade.updateTime))
+    .limit(limit);
+}
+
 export async function getTradesPaginated(
   accountId: string,
   page: number,
