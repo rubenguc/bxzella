@@ -159,8 +159,9 @@ export function TradeChart({
       },
     ];
 
-    // Clear previous price lines before adding new ones
-    priceLinesRef.current.forEach((pl) => pl.remove());
+    // Safely clear previous price lines — they may be orphaned if the chart was
+    // re-created or the series invalidated them internally on setData.
+    priceLinesRef.current.forEach((pl) => pl?.remove?.());
     priceLinesRef.current = [];
 
     createSeriesMarkers(series, markers);
