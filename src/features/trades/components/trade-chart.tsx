@@ -126,6 +126,11 @@ export function TradeChart({
     const chart = chartRef.current;
     const series = seriesRef.current;
 
+    // Clear previous price lines BEFORE setData — lightweight-charts invalidates
+    // existing price lines when new data is applied, making .remove() fail.
+    priceLinesRef.current.forEach((pl) => pl.remove());
+    priceLinesRef.current = [];
+
     const chartData = data
       .map((d) => ({
         time: Math.floor(d.time / 1000) as Time,
@@ -158,10 +163,6 @@ export function TradeChart({
         text: `Close @ ${formatDecimal(avgClosePrice, { precision: 6 })}`,
       },
     ];
-
-    // Clear previous price lines before adding new ones
-    priceLinesRef.current.forEach((pl) => pl.remove());
-    priceLinesRef.current = [];
 
     createSeriesMarkers(series, markers);
 
