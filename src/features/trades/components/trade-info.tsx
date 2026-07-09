@@ -1,6 +1,7 @@
 import type { Trade } from "#/features/trades/schema";
 import { m } from "#/paraglide/messages";
 import { formatDecimal } from "#/lib/format-decimal";
+import { Profit } from "#/components/Profit";
 import { Info } from "lucide-react";
 import {
   Popover,
@@ -55,11 +56,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
           <span className="text-sm text-muted-foreground">
             {m["trade_info.position_pnl"]()}
           </span>
-          <span
-            className={`text-xl font-bold ${isWin ? "text-green-500" : "text-red-500"}`}
-          >
-            {formatDecimal(Number(trade.netProfit), { precision: 2, suffix: trade.coin })}
-          </span>
+          <Profit netProfit={trade.netProfit} />
         </div>
       </div>
 

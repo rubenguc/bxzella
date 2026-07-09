@@ -5,7 +5,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -20,8 +19,9 @@ import {
 import { Eye } from "lucide-react";
 import { m } from "#/paraglide/messages";
 import type { DailyPnlTrade } from "#/features/dashboard/types";
+import { formatDate } from "#/lib/date-utils";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
-import { formatDecimal } from "#/lib/format-decimal";
+import { Profit } from "#/components/Profit";
 
 interface DailyPnlTradeListProps {
   trades: DailyPnlTrade[];
@@ -73,7 +73,7 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
         accessorKey: "openTime",
         cell: ({ row }) => (
           <div className="text-muted-foreground">
-            {format(new Date(row.original.openTime), "yyyy-MM-dd HH:mm")}
+            {formatDate(row.original.openTime)}
           </div>
         ),
         meta: { className: "text-center" },
@@ -81,14 +81,7 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
       {
         header: m["trade_info.position_pnl"](),
         accessorKey: "netProfit",
-        cell: ({ row }) => {
-          const pnl = Number(row.original.netProfit);
-          return (
-            <span className={`font-semibold ${pnl >= 0 ? "text-green-500" : "text-red-500"}`}>
-              {formatDecimal(pnl, { precision: 4, suffix: "USDT" })}
-            </span>
-          );
-        },
+        cell: ({ row }) => <Profit netProfit={row.original.netProfit} />,
         meta: { className: "text-center" },
       },
       {

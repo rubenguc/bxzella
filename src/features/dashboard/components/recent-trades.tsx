@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
 
 import {
   Table,
@@ -23,7 +22,8 @@ import { m } from "#/paraglide/messages";
 import type { Trade } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatDate } from "#/lib/date-utils";
+import { Profit } from "#/components/Profit";
 import { getRecentTrades } from "#/features/dashboard/service";
 import { Eye } from "lucide-react";
 
@@ -37,7 +37,7 @@ export function RecentTrades() {
         accessorKey: "openTime",
         cell: ({ row }) => (
           <span className="font-medium">
-            {format(new Date(row.original.openTime), "yyyy-MM-dd HH:mm")}
+            {formatDate(row.original.openTime)}
           </span>
         ),
         meta: { className: "text-center" },
@@ -47,7 +47,7 @@ export function RecentTrades() {
         accessorKey: "updateTime",
         cell: ({ row }) => (
           <span className="font-medium">
-            {format(new Date(row.original.updateTime), "yyyy-MM-dd HH:mm")}
+            {formatDate(row.original.updateTime)}
           </span>
         ),
         meta: { className: "text-center" },
@@ -91,14 +91,7 @@ export function RecentTrades() {
       {
         header: m["trade_info.position_pnl"](),
         accessorKey: "netProfit",
-        cell: ({ row }) => {
-          const pnl = Number(row.original.netProfit);
-          return (
-            <span className={pnl >= 0 ? "text-green-500" : "text-red-500"}>
-              {formatDecimal(pnl, { precision: 4 })} USDT
-            </span>
-          );
-        },
+        cell: ({ row }) => <Profit netProfit={row.original.netProfit} />,
         meta: { className: "text-center" },
       },
       {
