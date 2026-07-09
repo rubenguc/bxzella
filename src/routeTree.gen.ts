@@ -24,7 +24,6 @@ import { Route as ApiNotebookTemplatesIndexRouteImport } from './routes/api/note
 import { Route as DashboardTradesPositionIdRouteImport } from './routes/dashboard/trades/$positionId'
 import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
 import { Route as ApiTradesPositionIdRouteImport } from './routes/api/trades/$positionId'
-import { Route as ApiNotebookTemplatesIdRouteImport } from './routes/api/notebook-templates/$id'
 import { Route as ApiDashboardRecentTradesRouteImport } from './routes/api/dashboard/recent-trades'
 import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
 import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
@@ -109,11 +108,6 @@ const ApiTradesPositionIdRoute = ApiTradesPositionIdRouteImport.update({
   path: '/api/trades/$positionId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiNotebookTemplatesIdRoute = ApiNotebookTemplatesIdRouteImport.update({
-  id: '/api/notebook-templates/$id',
-  path: '/api/notebook-templates/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiDashboardRecentTradesRoute =
   ApiDashboardRecentTradesRouteImport.update({
     id: '/recent-trades',
@@ -157,7 +151,6 @@ export interface FileRoutesByFullPath {
   '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
-  '/api/notebook-templates/$id': typeof ApiNotebookTemplatesIdRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
@@ -179,7 +172,6 @@ export interface FileRoutesByTo {
   '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
-  '/api/notebook-templates/$id': typeof ApiNotebookTemplatesIdRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
@@ -203,7 +195,6 @@ export interface FileRoutesById {
   '/api/dashboard/daily-pnl': typeof ApiDashboardDailyPnlRoute
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
-  '/api/notebook-templates/$id': typeof ApiNotebookTemplatesIdRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
@@ -228,7 +219,6 @@ export interface FileRouteTypes {
     | '/api/dashboard/daily-pnl'
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
-    | '/api/notebook-templates/$id'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/trades/$positionId'
@@ -250,7 +240,6 @@ export interface FileRouteTypes {
     | '/api/dashboard/daily-pnl'
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
-    | '/api/notebook-templates/$id'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/trades/$positionId'
@@ -273,7 +262,6 @@ export interface FileRouteTypes {
     | '/api/dashboard/daily-pnl'
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
-    | '/api/notebook-templates/$id'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/trades/$positionId'
@@ -292,7 +280,6 @@ export interface RootRouteChildren {
   ApiDashboardRoute: typeof ApiDashboardRouteWithChildren
   ApiKlineRoute: typeof ApiKlineRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  ApiNotebookTemplatesIdRoute: typeof ApiNotebookTemplatesIdRoute
   ApiTradesPositionIdRoute: typeof ApiTradesPositionIdRoute
   ApiTradesSyncRoute: typeof ApiTradesSyncRoute
   ApiNotebookTemplatesIndexRoute: typeof ApiNotebookTemplatesIndexRoute
@@ -407,13 +394,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTradesPositionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/notebook-templates/$id': {
-      id: '/api/notebook-templates/$id'
-      path: '/api/notebook-templates/$id'
-      fullPath: '/api/notebook-templates/$id'
-      preLoaderRoute: typeof ApiNotebookTemplatesIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/dashboard/recent-trades': {
       id: '/api/dashboard/recent-trades'
       path: '/recent-trades'
@@ -495,7 +475,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiDashboardRoute: ApiDashboardRouteWithChildren,
   ApiKlineRoute: ApiKlineRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  ApiNotebookTemplatesIdRoute: ApiNotebookTemplatesIdRoute,
   ApiTradesPositionIdRoute: ApiTradesPositionIdRoute,
   ApiTradesSyncRoute: ApiTradesSyncRoute,
   ApiNotebookTemplatesIndexRoute: ApiNotebookTemplatesIndexRoute,

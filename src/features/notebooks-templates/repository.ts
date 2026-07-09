@@ -57,6 +57,20 @@ export async function updateNotebookTemplate(
   return updated
 }
 
+export async function updateTemplateLastUsed(
+  id: string,
+  userId: string,
+) {
+  const [updated] = await db
+    .update(notebookTemplate)
+    .set({ lastTimeUsed: new Date() })
+    .where(
+      and(eq(notebookTemplate.id, id), eq(notebookTemplate.userId, userId)),
+    )
+    .returning()
+  return updated
+}
+
 export async function deleteNotebookTemplate(
   id: string,
   userId: string,

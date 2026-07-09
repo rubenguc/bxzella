@@ -1,13 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 
 import { m } from "#/paraglide/messages";
 import { Button } from "#/components/ui/button";
 import { Badge } from "#/components/ui/badge";
 import { TextEditor, type TextEditorRef } from "#/components/text-editor/text-editor";
-import { getNotebookByTradeId, upsertNotebookByTradeId } from "#/features/notebooks/service";
-import { getNotebookTemplates } from "#/features/notebooks-templates/service";
+import { getNotebookByTradeId } from "#/features/notebooks/service";
+import { upsertNotebookAction } from "#/features/notebooks/server-actions";
+import { NotebookTemplatePicker } from "#/features/notebooks-templates/components/notebook-template-picker";
 import type { NotebookTemplate } from "#/features/notebooks-templates/schema";
 
 interface TradeNotebookProps {
@@ -21,7 +22,8 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
   const editorRef = useRef<TextEditorRef>(null);
 
   const [content, setContent] = useState("");
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [notebookTemplateId, setNotebookTemplateId] = useState<string | undefined>(undefined);
+  const [hasSetInitialContent, setHasSetInitialContent] = useState(false);
 
   const { data: notebook, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
@@ -29,24 +31,34 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
     enabled: !!tradeId,
   });
 
-  // Recently used templates
-  const { data: templatesData } = useQuery({
-    queryKey: ["notebook-templates-recently"],
-    queryFn: () => getNotebookTemplates(0, 5),
-  });
+  // Load existing notebook content into the editor on first load
+  useEffect(() => {
+    if (notebook?.content && !hasSetInitialContent) {
+      editorRef.current?.setInitialValue(notebook.content);
+      setContent(notebook.content);
+      setHasSetInitialContent(true);
+    }
+  }, [notebook, hasSetInitialContent]);
 
   const upsertMutation = useMutation({
     mutationFn: () =>
-      upsertNotebookByTradeId(tradeId, {
-        title: "Trade Notes",
-        content,
-        contentPlainText: content,
-        accountId,
-        coin,
+      upsertNotebookAction({
+        data: {
+          tradeId,
+          title: "Trade Notes",
+          content,
+          notebookTemplateId,
+          accountId,
+          coin,
+        },
       }),
-    onSuccess: () => {
-      toast.success("Saved");
-      queryClient.invalidateQueries({ queryKey: ["trade-notebook", tradeId] });
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success("Saved");
+        queryClient.invalidateQueries({ queryKey: ["trade-notebook", tradeId] });
+      } else {
+        toast.error(result.error);
+      }
     },
     onError: () => {
       toast.error("Error saving notes");
@@ -57,7 +69,7 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
     (template: NotebookTemplate) => {
       editorRef.current?.setInitialValue(template.content);
       setContent(template.content);
-      setSelectedTemplateId(template.id);
+      setNotebookTemplateId(template.id);
     },
     [],
   );
@@ -67,31 +79,14 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
   }, []);
 
   return (
-    <div className="relative space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="relative space-y-4 border-t pt-4">
+      <div className="flex items-center gap-2">
         <Badge variant="secondary" className="text-sm w-fit">
           {m["trade_info.notes"]()}
         </Badge>
       </div>
 
-      {/* Recently used templates */}
-      {templatesData && templatesData.data.length > 0 && (
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-muted-foreground text-xs">
-            {m["notebooks.notebook_templates.recently_used_templates"]()}
-          </span>
-          {templatesData.data.map((template) => (
-            <Button
-              key={template.id}
-              variant="outline"
-              size="sm"
-              onClick={() => insertTemplate(template)}
-            >
-              {template.title}
-            </Button>
-          ))}
-        </div>
-      )}
+      <NotebookTemplatePicker onSelectTemplate={insertTemplate} />
 
       <TextEditor
         ref={editorRef}
@@ -104,7 +99,9 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
           onClick={() => upsertMutation.mutate()}
           disabled={upsertMutation.isPending || isLoading}
         >
-          {upsertMutation.isPending ? "Saving..." : m["notebooks.notebook_detail.save"]()}
+          {upsertMutation.isPending
+            ? m["accounts.saving_action"]()
+            : m["notebooks.notebook_detail.save"]()}
         </Button>
       </div>
     </div>

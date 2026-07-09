@@ -86,33 +86,27 @@ function TradeDetails() {
           </TabsContent>
         </Tabs>
 
-        <div className="lg:w-7/10 space-y-4">
-          <Card className="py-3">
-            <CardContent className="flex flex-col flex-1 px-3 space-y-4">
-              <TradeChart
-                coin={coin}
-                symbol={data.symbol}
-                openTime={data.openTime as unknown as string}
-                updateTime={data.updateTime as unknown as string}
-                avgClosePrice={data.avgClosePrice ?? ""}
-                avgPrice={data.avgPrice}
-                positionSide={data.positionSide}
-                netProfit={data.netProfit}
-                accountId={selectedAccount!.id}
-              />
-            </CardContent>
-          </Card>
+        <Card className="lg:w-7/10 py-3">
+          <CardContent className="flex flex-col flex-1 px-3 space-y-4">
+            <TradeChart
+              coin={coin}
+              symbol={data.symbol}
+              openTime={data.openTime as unknown as string}
+              updateTime={data.updateTime as unknown as string}
+              avgClosePrice={data.avgClosePrice ?? ""}
+              avgPrice={data.avgPrice}
+              positionSide={data.positionSide}
+              netProfit={data.netProfit}
+              accountId={selectedAccount!.id}
+            />
 
-          <Card className="py-3">
-            <CardContent className="px-3">
-              <TradeNotebook
-                tradeId={data.id}
-                accountId={selectedAccount!.id}
-                coin={coin}
-              />
-            </CardContent>
-          </Card>
-        </div>
+            <TradeNotebook
+              tradeId={data.id}
+              accountId={selectedAccount!.id}
+              coin={coin}
+            />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

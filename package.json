@@ -27,6 +27,7 @@
     "@lexical/utils": "^0.46.0",
     "@neondatabase/serverless": "^1.0.2",
     "@paralleldrive/cuid2": "^3.3.0",
+    "@radix-ui/react-visually-hidden": "^1.2.7",
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/ai": "latest",
