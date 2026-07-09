@@ -11,6 +11,7 @@ import { TradeInfo } from "#/features/trades/components/trade-info";
 import { TradeChart } from "#/features/trades/components/trade-chart";
 import { TradeNotebook } from "#/features/trades/components/trade-notebook";
 import { useUserConfig } from "#/store/user-config";
+import { formatDate } from "#/lib/date-utils";
 import { fetchTradeById } from "#/features/trades/service";
 import { transformSymbol } from "#/features/trades/helpers";
 
@@ -44,12 +45,8 @@ function TradeDetails() {
     );
   }
 
-  const formattedOpenTime = data.openTime
-    ? new Date(data.openTime).toLocaleDateString()
-    : "";
-  const formattedUpdateTime = data.updateTime
-    ? new Date(data.updateTime).toLocaleDateString()
-    : "";
+  const formattedOpenTime = formatDate(data.openTime);
+  const formattedUpdateTime = formatDate(data.updateTime);
 
   return (
     <div>

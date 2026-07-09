@@ -1,4 +1,5 @@
 import { m } from "#/paraglide/messages";
+import { formatDate } from "#/lib/date-utils";
 import { usePagination } from "#/lib/use-pagination";
 import { Pagination } from "#/components/pagination";
 import { Button } from "#/components/ui/button";
@@ -96,12 +97,10 @@ export function TradesTable({ accountId, coin }: Props) {
                   {Number(t.realisedProfit).toFixed(2)}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
-                  {t.openTime ? new Date(t.openTime).toLocaleDateString() : "—"}
+                  {formatDate(t.openTime) || "—"}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
-                  {t.updateTime
-                    ? new Date(t.updateTime).toLocaleDateString()
-                    : "—"}
+                  {formatDate(t.updateTime) || "—"}
                 </TableCell>
                 <TableCell>
                   <Button variant="ghost" size="icon" asChild>
