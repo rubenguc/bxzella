@@ -6,7 +6,7 @@ import {
   getNotebookByTradeId,
   upsertNotebookByTradeId,
 } from '#/features/notebooks/repository'
-import { upsertNotebookSchema } from '#/features/notebooks/schemas'
+import { upsertNotebookSchema } from '#/features/notebooks/validation'
 
 export const Route = createFileRoute('/api/notebooks/trade/$tradeId')({
   server: {

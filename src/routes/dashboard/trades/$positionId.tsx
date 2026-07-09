@@ -9,6 +9,7 @@ import { Card, CardContent } from "#/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "#/components/ui/tabs";
 import { TradeInfo } from "#/features/trades/components/trade-info";
 import { TradeChart } from "#/features/trades/components/trade-chart";
+import { TradeNotebook } from "#/features/trades/components/trade-notebook";
 import { useUserConfig } from "#/store/user-config";
 import { fetchTradeById } from "#/features/trades/service";
 import { transformSymbol } from "#/features/trades/helpers";
@@ -76,12 +77,23 @@ function TradeDetails() {
         <Tabs className="lg:w-3/10 h-fit" defaultValue="info">
           <TabsList>
             <TabsTrigger value="info">{m["trade_info.info"]()}</TabsTrigger>
+            <TabsTrigger value="notes">{m["trade_info.notes"]()}</TabsTrigger>
           </TabsList>
           <TabsContent
             value="info"
             className="border rounded-xl py-2 px-4 bg-card"
           >
             <TradeInfo trade={data} />
+          </TabsContent>
+          <TabsContent
+            value="notes"
+            className="border rounded-xl py-2 px-4 bg-card"
+          >
+            <TradeNotebook
+              tradeId={data.id}
+              accountId={selectedAccount!.id}
+              coin={coin}
+            />
           </TabsContent>
         </Tabs>
 

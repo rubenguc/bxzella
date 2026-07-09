@@ -13,6 +13,7 @@ import { getLocale } from '#/paraglide/runtime'
 import { ThemeProvider } from '../components/theme-provider'
 
 import appCss from '../styles.css?url'
+import { Toaster } from 'sonner'
 
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -59,6 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider defaultTheme="system" storageKey="theme">
           {children}
+          <Toaster richColors closeButton />
         </ThemeProvider>
         <TanStackDevtools
           config={{

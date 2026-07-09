@@ -6,7 +6,7 @@ import {
   updateNotebookTemplate,
   deleteNotebookTemplate,
 } from '#/features/notebooks-templates/repository'
-import { notebookTemplateValidationSchema } from '#/features/notebooks-templates/schemas'
+import { notebookTemplateValidationSchema } from '#/features/notebooks-templates/validation'
 
 export const Route = createFileRoute('/api/notebook-templates/$id')({
   server: {

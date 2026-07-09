@@ -10,7 +10,7 @@ import {
 import {
   notebookTemplatesSearchParamsSchema,
   notebookTemplateValidationSchema,
-} from '#/features/notebooks-templates/schemas'
+} from '#/features/notebooks-templates/validation'
 
 export const Route = createFileRoute('/api/notebook-templates/')({
   server: {
