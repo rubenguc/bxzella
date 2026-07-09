@@ -77,7 +77,6 @@ function TradeDetails() {
         <Tabs className="lg:w-3/10 h-fit" defaultValue="info">
           <TabsList>
             <TabsTrigger value="info">{m["trade_info.info"]()}</TabsTrigger>
-            <TabsTrigger value="notes">{m["trade_info.notes"]()}</TabsTrigger>
           </TabsList>
           <TabsContent
             value="info"
@@ -85,33 +84,35 @@ function TradeDetails() {
           >
             <TradeInfo trade={data} />
           </TabsContent>
-          <TabsContent
-            value="notes"
-            className="border rounded-xl py-2 px-4 bg-card"
-          >
-            <TradeNotebook
-              tradeId={data.id}
-              accountId={selectedAccount!.id}
-              coin={coin}
-            />
-          </TabsContent>
         </Tabs>
 
-        <Card className="lg:w-7/10 py-3">
-          <CardContent className="flex flex-col flex-1 px-3 space-y-4">
-            <TradeChart
-              coin={coin}
-              symbol={data.symbol}
-              openTime={data.openTime as unknown as string}
-              updateTime={data.updateTime as unknown as string}
-              avgClosePrice={data.avgClosePrice ?? ""}
-              avgPrice={data.avgPrice}
-              positionSide={data.positionSide}
-              netProfit={data.netProfit}
-              accountId={selectedAccount!.id}
-            />
-          </CardContent>
-        </Card>
+        <div className="lg:w-7/10 space-y-4">
+          <Card className="py-3">
+            <CardContent className="flex flex-col flex-1 px-3 space-y-4">
+              <TradeChart
+                coin={coin}
+                symbol={data.symbol}
+                openTime={data.openTime as unknown as string}
+                updateTime={data.updateTime as unknown as string}
+                avgClosePrice={data.avgClosePrice ?? ""}
+                avgPrice={data.avgPrice}
+                positionSide={data.positionSide}
+                netProfit={data.netProfit}
+                accountId={selectedAccount!.id}
+              />
+            </CardContent>
+          </Card>
+
+          <Card className="py-3">
+            <CardContent className="px-3">
+              <TradeNotebook
+                tradeId={data.id}
+                accountId={selectedAccount!.id}
+                coin={coin}
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

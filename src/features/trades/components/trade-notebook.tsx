@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { toast } from "sonner";
 
 import { m } from "#/paraglide/messages";
 import { Button } from "#/components/ui/button";
-import { Textarea } from "#/components/ui/textarea";
 import { Badge } from "#/components/ui/badge";
+import { TextEditor, type TextEditorRef } from "#/components/text-editor/text-editor";
 import { getNotebookByTradeId, upsertNotebookByTradeId } from "#/features/notebooks/service";
 import { getNotebookTemplates } from "#/features/notebooks-templates/service";
 import type { NotebookTemplate } from "#/features/notebooks-templates/schema";
@@ -18,9 +18,10 @@ interface TradeNotebookProps {
 
 export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) {
   const queryClient = useQueryClient();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const editorRef = useRef<TextEditorRef>(null);
 
   const [content, setContent] = useState("");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
 
   const { data: notebook, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
@@ -34,13 +35,6 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
     queryFn: () => getNotebookTemplates(0, 5),
   });
 
-  // Load existing notebook content
-  useEffect(() => {
-    if (notebook?.content) {
-      setContent(notebook.content);
-    }
-  }, [notebook]);
-
   const upsertMutation = useMutation({
     mutationFn: () =>
       upsertNotebookByTradeId(tradeId, {
@@ -51,7 +45,7 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
         coin,
       }),
     onSuccess: () => {
-      toast.success(m["common_messages.loading"]());
+      toast.success("Saved");
       queryClient.invalidateQueries({ queryKey: ["trade-notebook", tradeId] });
     },
     onError: () => {
@@ -59,18 +53,26 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
     },
   });
 
-  const insertTemplate = (template: NotebookTemplate) => {
-    setContent(template.content);
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
+  const insertTemplate = useCallback(
+    (template: NotebookTemplate) => {
+      editorRef.current?.setInitialValue(template.content);
+      setContent(template.content);
+      setSelectedTemplateId(template.id);
+    },
+    [],
+  );
+
+  const handleEditorChange = useCallback((value: string) => {
+    setContent(value);
+  }, []);
 
   return (
     <div className="relative space-y-4">
-      <Badge variant="secondary" className="text-sm w-fit">
-        {m["trade_info.notes"]()}
-      </Badge>
+      <div className="flex items-center justify-between">
+        <Badge variant="secondary" className="text-sm w-fit">
+          {m["trade_info.notes"]()}
+        </Badge>
+      </div>
 
       {/* Recently used templates */}
       {templatesData && templatesData.data.length > 0 && (
@@ -91,13 +93,10 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
         </div>
       )}
 
-      <Textarea
-        ref={textareaRef}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder={m["trade_info.notes"]()}
-        className="min-h-[200px]"
-        disabled={upsertMutation.isPending}
+      <TextEditor
+        ref={editorRef}
+        onChange={handleEditorChange}
+        isLoading={upsertMutation.isPending}
       />
 
       <div className="flex justify-end">

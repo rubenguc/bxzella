@@ -22,6 +22,9 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.3.0",
+    "@lexical/link": "^0.46.0",
+    "@lexical/react": "^0.46.0",
+    "@lexical/utils": "^0.46.0",
     "@neondatabase/serverless": "^1.0.2",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-core": "^0.13.10",
@@ -55,6 +58,7 @@
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "highlight.js": "^11.11.1",
+    "lexical": "^0.46.0",
     "lightweight-charts": "^5.2.0",
     "lucide-react": "^0.577.0",
     "nitro": "npm:nitro-nightly@latest",
