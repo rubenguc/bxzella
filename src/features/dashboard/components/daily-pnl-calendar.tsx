@@ -9,7 +9,7 @@ import { Badge } from "#/components/ui/badge";
 import { getLocale } from "#/paraglide/runtime";
 import { m } from "#/paraglide/messages";
 import { useUserConfig } from "#/store/user-config";
-import { getDailyPnl } from "#/features/dashboard/daily-pnl-service";
+import { getDailyPnl } from "#/features/dashboard/service";
 import { formatDecimal } from "#/lib/format-decimal";
 import { DailyPnlCell } from "./daily-pnl-cell";
 import { DailyPnlWeekSummary } from "./daily-pnl-week-summary";

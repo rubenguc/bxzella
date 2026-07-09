@@ -24,7 +24,7 @@ import type { Trade } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
 import { formatDecimal } from "#/lib/format-decimal";
-import { getRecentTrades } from "#/features/dashboard/recent-trades-service";
+import { getRecentTrades } from "#/features/dashboard/service";
 import { Eye } from "lucide-react";
 
 export function RecentTrades() {

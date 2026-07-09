@@ -12,7 +12,8 @@ import {
   type SeriesMarker,
   type IPriceLine,
 } from "lightweight-charts";
-import { apiClient, Timezone } from "#/lib/api-client";
+import { Timezone } from "#/lib/api-client";
+import { fetchKline } from "#/features/trades/service";
 import { m } from "#/paraglide/messages";
 import { formatDecimal } from "#/lib/format-decimal";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
@@ -65,18 +66,8 @@ export function TradeChart({
 
   const { data, isLoading } = useQuery({
     queryKey: ["kline", symbol, openTime, timeframe],
-    queryFn: async () => {
-      const { data } = await apiClient.get<KLine[]>("/kline", {
-        params: {
-          accountId,
-          coin,
-          symbol,
-          startTime: openMs,
-          interval: timeframe,
-        },
-      });
-      return data;
-    },
+    queryFn: () =>
+      fetchKline(accountId, coin, symbol, openMs, timeframe),
     enabled: !!accountId,
   });
 

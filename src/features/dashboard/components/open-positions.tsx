@@ -21,7 +21,7 @@ import type { OpenPosition } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
 import { formatDecimal } from "#/lib/format-decimal";
-import { getOpenPositions } from "#/features/dashboard/open-positions-service";
+import { getOpenPositions } from "#/features/dashboard/service";
 
 const AUTO_REFRESH_INTERVAL = 10000;
 

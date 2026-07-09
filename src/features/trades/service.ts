@@ -1,6 +1,6 @@
 import { apiClient } from '#/lib/api-client'
 import type { PaginatedTradesResponse } from '#/features/trades/types'
-import type { Coin } from '#/features/exchange-providers/types'
+import type { Coin, KLine } from '#/features/exchange-providers/types'
 import type { Trade } from '#/features/trades/schema'
 
 export async function fetchTrades(
@@ -37,5 +37,18 @@ export async function fetchTradeById(
     `/trades/${positionId}`,
     { params: { exchangeAccountId: accountId } },
   )
+  return data
+}
+
+export async function fetchKline(
+  accountId: string,
+  coin: Coin,
+  symbol: string,
+  startTime: number,
+  interval: string,
+): Promise<KLine[]> {
+  const { data } = await apiClient.get<KLine[]>('/kline', {
+    params: { accountId, coin, symbol, startTime, interval },
+  })
   return data
 }
