@@ -1,6 +1,7 @@
 import { apiClient } from '#/lib/api-client'
 import type { PaginatedTradesResponse } from '#/features/trades/types'
 import type { Coin } from '#/features/exchange-providers/types'
+import type { Trade } from '#/features/trades/schema'
 
 export async function fetchTrades(
   accountId: string,
@@ -25,5 +26,16 @@ export async function syncTrades(
   }>('/trades/sync', {
     params: { exchangeAccountId: accountId, coin },
   })
+  return data
+}
+
+export async function fetchTradeById(
+  accountId: string,
+  positionId: string,
+): Promise<Trade> {
+  const { data } = await apiClient.get<Trade>(
+    `/trades/${positionId}`,
+    { params: { exchangeAccountId: accountId } },
+  )
   return data
 }

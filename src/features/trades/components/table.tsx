@@ -1,6 +1,9 @@
 import { m } from "#/paraglide/messages";
 import { usePagination } from "#/lib/use-pagination";
 import { Pagination } from "#/components/pagination";
+import { Button } from "#/components/ui/button";
+import { Link } from "@tanstack/react-router";
+import { Eye } from "lucide-react";
 import type { Coin } from "#/features/exchange-providers/types";
 import {
   Table,
@@ -68,6 +71,7 @@ export function TradesTable({ accountId, coin }: Props) {
               <TableHead>{m["trade_info.realised_pnl"]()}</TableHead>
               <TableHead>{m["trade_info.open_date"]()}</TableHead>
               <TableHead>{m["trade_info.closed_date"]()}</TableHead>
+              <TableHead className="w-0" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -98,6 +102,13 @@ export function TradesTable({ accountId, coin }: Props) {
                   {t.updateTime
                     ? new Date(t.updateTime).toLocaleDateString()
                     : "—"}
+                </TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to="/dashboard/trades/$positionId" params={{ positionId: t.positionId }}>
+                      <Eye className="h-4 w-4" />
+                    </Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

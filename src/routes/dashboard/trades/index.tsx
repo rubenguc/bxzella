@@ -5,7 +5,7 @@ import { SyncButton } from '#/features/trades/components/sync-button'
 import { TradesTable } from '#/features/trades/components/table'
 import { useUserConfig } from '#/store/user-config'
 
-export const Route = createFileRoute('/dashboard/trades')({
+export const Route = createFileRoute('/dashboard/trades/')({
   component: Trades,
 })
 

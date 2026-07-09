@@ -7,6 +7,8 @@ import {
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import {
   Table,
   TableBody,
@@ -15,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "#/components/ui/table";
+import { Eye } from "lucide-react";
 import { m } from "#/paraglide/messages";
 import type { DailyPnlTrade } from "#/features/dashboard/types";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
@@ -87,6 +90,21 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
           );
         },
         meta: { className: "text-center" },
+      },
+      {
+        header: "",
+        id: "actions",
+        cell: ({ row }) => (
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              to="/dashboard/trades/$positionId"
+              params={{ positionId: row.original.positionId }}
+            >
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+        ),
+        meta: { className: "text-center w-0" },
       },
     ],
     [],

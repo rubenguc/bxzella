@@ -17,12 +17,15 @@ import {
   TableRow,
 } from "#/components/ui/table";
 import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import type { Trade } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
 import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
 import { formatDecimal } from "#/lib/format-decimal";
 import { getRecentTrades } from "#/features/dashboard/recent-trades-service";
+import { Eye } from "lucide-react";
 
 export function RecentTrades() {
   const { selectedAccount, coin } = useUserConfig();
@@ -97,6 +100,21 @@ export function RecentTrades() {
           );
         },
         meta: { className: "text-center" },
+      },
+      {
+        header: "",
+        id: "actions",
+        cell: ({ row }) => (
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              to="/dashboard/trades/$positionId"
+              params={{ positionId: row.original.positionId }}
+            >
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+        ),
+        meta: { className: "text-center w-0" },
       },
     ],
     [],
