@@ -13,6 +13,7 @@ import {
   type IPriceLine,
 } from "lightweight-charts";
 import { apiClient, Timezone } from "#/lib/api-client";
+import { m } from "#/paraglide/messages";
 import { formatDecimal } from "#/lib/format-decimal";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
 import { getTime, parseISO } from "date-fns";
@@ -148,14 +149,14 @@ export function TradeChart({
         position: isLong ? "belowBar" : "aboveBar",
         color: "#2196F3",
         shape: isLong ? "arrowUp" : "arrowDown",
-        text: `Entry @ ${formatDecimal(avgPrice, { precision: 6 })}`,
+        text: `${m["trade_chart.entry_marker"]()} @ ${formatDecimal(avgPrice, { precision: 6 })}`,
       },
       {
         time: findBarTime(updateTime, chartData),
         position: isCloseAbove ? "aboveBar" : "belowBar",
         color: isWin ? "#22c55e" : "#ef4444",
         shape: isCloseAbove ? "arrowDown" : "arrowUp",
-        text: `Close @ ${formatDecimal(avgClosePrice, { precision: 6 })}`,
+        text: `${m["trade_chart.close_marker"]()} @ ${formatDecimal(avgClosePrice, { precision: 6 })}`,
       },
     ];
 
@@ -175,7 +176,7 @@ export function TradeChart({
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,
-        title: "Entry",
+        title: m["trade_chart.entry_marker"](),
       });
       priceLinesRef.current.push(pl);
     }
@@ -188,7 +189,7 @@ export function TradeChart({
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,
-        title: "Close",
+        title: m["trade_chart.close_marker"](),
       });
       priceLinesRef.current.push(pl);
     }
@@ -226,12 +227,12 @@ export function TradeChart({
       <div className="relative" ref={chartContainerRef}>
         {isLoading && !data && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-50 rounded-lg">
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">{m["trade_chart.loading"]()}</p>
           </div>
         )}
         {!isLoading && data && data.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center z-50 rounded-lg">
-            <p className="text-muted-foreground">No data available</p>
+            <p className="text-muted-foreground">{m["trade_chart.no_data"]()}</p>
           </div>
         )}
       </div>

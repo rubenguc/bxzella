@@ -418,6 +418,12 @@
     "winners": "Winners",
     "losers": "Losers"
   },
+  "trade_chart": {
+    "loading": "Loading...",
+    "no_data": "No data available",
+    "entry_marker": "Entry",
+    "close_marker": "Close"
+  },
   "trading-assistant": {
     "title": "Trading Assistant",
     "description": "Ask me about your trades, P&L analysis, or trading performance. I can analyze your data and provide insights.",
