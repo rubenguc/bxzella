@@ -1,63 +1,46 @@
-import { useTranslations } from "next-intl";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import type { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
-import { formatDecimal } from "@/utils/number-utils";
-import { StatisticCard } from "./statistic-card";
+import { m } from '#/paraglide/messages'
+import { useUserConfig } from '#/store/user-config'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { formatDecimal } from '#/lib/format-decimal'
+import { StatisticCard } from '#/features/dashboard/components/statistic-card'
 
 interface ProfitFactorProps {
-  profitFactor: TradeStatisticsResult["profitFactor"];
+  value: number
+  sumWin: number
+  sumLoss: number
 }
 
-export function ProfitFactor({ profitFactor }: ProfitFactorProps) {
-  const t = useTranslations("statistics");
-  const coin = useUserConfigStore((state) => state.coin);
+export function ProfitFactor({ value, sumWin, sumLoss }: ProfitFactorProps) {
+  const coin = useUserConfig((s) => s.coin)
 
   return (
     <StatisticCard
-      title={t("profit_factor") as string}
-      popoverInfo={t("profit_factor_info")}
-      content={
-        <p className="text-xl inline-block">
-          {formatDecimal(profitFactor?.value || 0)}
-        </p>
-      }
+      title={m['statistics.profit_factor']()}
+      popoverInfo={m['statistics.profit_factor_info']()}
+      content={<p className="text-xl">{value.toFixed(2)}</p>}
       rightContent={
-        <div className="col-span-1">
-          <ResponsiveContainer
-            className="-mt-6"
-            width="100%"
-            height="100%"
-            minHeight={100}
-          >
-            <PieChart>
-              <Pie
-                data={[
-                  {
-                    name: t("win"),
-                    value: profitFactor?.sumWin,
-                  },
-                  {
-                    name: t("lost"),
-                    value: profitFactor?.sumLoss,
-                  },
-                ]}
-                innerRadius="60%"
-                outerRadius="80%"
-                dataKey="value"
-              >
-                <Cell strokeWidth={0} fill={"var(--color-green-500)"} />
-                <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
-                <Tooltip
-                  formatter={(value) =>
-                    formatDecimal(value as string, { suffix: coin })
-                  }
-                />
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer className="-mt-4" width="100%" height={80}>
+          <PieChart>
+            <Pie
+              data={[
+                { name: m['statistics.win'](), value: sumWin },
+                { name: m['statistics.lost'](), value: sumLoss },
+              ]}
+              innerRadius="60%"
+              outerRadius="80%"
+              dataKey="value"
+            >
+              <Cell strokeWidth={0} fill="var(--color-green-500)" />
+              <Cell strokeWidth={0} fill="var(--color-red-500)" />
+              <Tooltip
+                formatter={(value: number) =>
+                  formatDecimal(value, { suffix: coin })
+                }
+              />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
       }
     />
-  );
+  )
 }

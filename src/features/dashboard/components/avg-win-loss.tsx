@@ -1,32 +1,29 @@
-import { useUserConfigStore } from "@/store/user-config-store";
-import { formatDecimal } from "@/utils/number-utils";
-import { useTranslations } from "next-intl";
-import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./statistic-card";
+import { m } from '#/paraglide/messages'
+import { useUserConfig } from '#/store/user-config'
+import { StatisticCard } from '#/features/dashboard/components/statistic-card'
 
 interface AvgWinLossProps {
-  avgWinLoss: TradeStatisticsResult["avgWinLoss"];
+  value: number
+  avgWin: number
+  avgLoss: number
 }
 
-export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
-  const t = useTranslations("statistics");
-  const coin = useUserConfigStore((state) => state.coin);
+export function AvgWinLoss({ value, avgWin, avgLoss }: AvgWinLossProps) {
+  const coin = useUserConfig((s) => s.coin)
 
-  const total = avgWinLoss.avgWin + avgWinLoss.avgLoss;
-  const avgWinPercentage = total > 0 ? (avgWinLoss.avgWin / total) * 100 : 0;
-  const avgLossPercentage = total > 0 ? (avgWinLoss.avgLoss / total) * 100 : 0;
+  const total = avgWin + avgLoss
+  const avgWinPercentage = total > 0 ? (avgWin / total) * 100 : 0
+  const avgLossPercentage = total > 0 ? (avgLoss / total) * 100 : 0
 
   return (
     <StatisticCard
-      title={t("avg_win_loss") as string}
-      popoverInfo={t("avg_win_loss_info")}
-      contentClassName="flex justify-between items-end"
+      title={m['statistics.avg_win_loss']()}
+      popoverInfo={m['statistics.avg_win_loss_info']()}
       content={
         <div className="flex justify-between items-end w-full">
-          <p className="text-xl">{formatDecimal(avgWinLoss?.value || 0)}</p>
+          <p className="text-xl">{value.toFixed(1)}%</p>
           <div className="flex flex-col gap-1 w-[70%]">
             <div
-              id="bar"
               className="h-1.5 rounded-full"
               style={{
                 background: `linear-gradient(to right, #22C55E ${avgWinPercentage}%, #EF4444 ${avgLossPercentage}%)`,
@@ -34,15 +31,15 @@ export function AvgWinLoss({ avgWinLoss }: AvgWinLossProps) {
             />
             <div className="flex justify-between">
               <span className="text-green-500 text-xs">
-                {formatDecimal(avgWinLoss.avgWin || 0, { suffix: coin })}
+                {avgWin.toFixed(2)} {coin}
               </span>
               <span className="text-red-500 text-xs">
-                {formatDecimal(avgWinLoss.avgLoss || 0, { suffix: coin })}
+                {avgLoss.toFixed(2)} {coin}
               </span>
             </div>
           </div>
         </div>
       }
     />
-  );
+  )
 }

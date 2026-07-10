@@ -1,92 +1,71 @@
-import { formatDecimal } from "@/utils/number-utils";
-import { useTranslations } from "next-intl";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { StatisticCard } from "./statistic-card";
-import { Badge } from "@/components/ui/badge";
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
+import { m } from '#/paraglide/messages'
+import { Badge } from '#/components/ui/badge'
+import { StatisticCard } from '#/features/dashboard/components/statistic-card'
 
 interface TradeWinPercentageProps {
-  tradeWin: TradeStatisticsResult["tradeWin"];
+  value: number
+  totalWin: number
+  totalLoss: number
 }
 
-export function TradeWinPercentage({ tradeWin }: TradeWinPercentageProps) {
-  const t = useTranslations("statistics");
-
+export function TradeWinPercentage({
+  value,
+  totalWin,
+  totalLoss,
+}: TradeWinPercentageProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderCustomLabel = (props: any) => {
-    const { cx, outerRadius, value, index } = props;
+    const { cx, outerRadius, value: labelValue, index } = props
 
-    const RADIAN = Math.PI / 180;
-    const angleRad = index === 0 ? 180 * RADIAN : 0 * RADIAN;
-
-    const x = cx + outerRadius * 0.9 * Math.cos(angleRad) - 12;
+    const RADIAN = Math.PI / 180
+    const angleRad = index === 0 ? 180 * RADIAN : 0 * RADIAN
+    const edgeX = cx + outerRadius * 0.9 * Math.cos(angleRad)
 
     return (
-      <foreignObject
-        x={x}
-        y={50}
-        width={24}
-        height={24}
-        style={{ textAlign: "center" }}
-      >
-        <div style={{ display: "inline-block", pointerEvents: "auto" }}>
+      <foreignObject x={edgeX - 30} y={50} width={60} height={24}>
+        <div className="flex justify-center items-center h-full">
           <Badge
-            className={`px-1.5 py-[1px] w-[22px] rounded-full ${
+            className={`px-1.5 py-[1px] rounded-full whitespace-nowrap ${
               index === 0
-                ? "text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900"
-                : "text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900"
+                ? 'text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900'
+                : 'text-red-800 dark:text-red-200 bg-red-100 dark:bg-red-900'
             }`}
           >
-            {value}
+            {labelValue}
           </Badge>
         </div>
       </foreignObject>
-    );
-  };
+    )
+  }
 
   return (
     <StatisticCard
-      title={t("trade_win_percentage") as string}
-      popoverInfo={t("trade_win_percentage_info")}
-      contentClassName="flex justify-between items-end"
-      content={
-        <p className="text-xl">{formatDecimal(tradeWin?.value || 0)}%</p>
-      }
+      title={m['statistics.trade_win_percentage']()}
+      popoverInfo={m['statistics.trade_win_percentage_info']()}
+      content={<p className="text-xl">{value.toFixed(1)}%</p>}
       rightContent={
-        <div className="col-span-1">
-          <ResponsiveContainer
-            className="-mt-3"
-            width="100%"
-            height="100%"
-            minHeight={100}
-          >
-            <PieChart>
-              <Pie
-                data={[
-                  {
-                    name: "wins",
-                    value: tradeWin?.totalWin || 0,
-                  },
-                  {
-                    name: "losses",
-                    value: tradeWin?.totalLoss || 0,
-                  },
-                ]}
-                startAngle={180}
-                endAngle={0}
-                innerRadius="60%"
-                outerRadius="80%"
-                dataKey="value"
-                label={renderCustomLabel}
-                labelLine={false}
-              >
-                <Cell strokeWidth={0} fill={"var(--color-green-500)"} />
-                <Cell strokeWidth={0} fill={"var(--color-red-500)"} />
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <ResponsiveContainer className="-mt-3" width="100%" height={80}>
+          <PieChart>
+            <Pie
+              data={[
+                { name: 'wins', value: totalWin },
+                { name: 'losses', value: totalLoss },
+              ]}
+              startAngle={180}
+              endAngle={0}
+              innerRadius="60%"
+              outerRadius="80%"
+              dataKey="value"
+              label={renderCustomLabel}
+              labelLine={false}
+            >
+              <Cell strokeWidth={0} fill="var(--color-green-500)" />
+              <Cell strokeWidth={0} fill="var(--color-red-500)" />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
       }
     />
-  );
+  )
 }

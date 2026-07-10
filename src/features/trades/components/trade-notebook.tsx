@@ -1,99 +1,108 @@
-import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import { TextEditor } from "@/components/text-editor/text-editor";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { NotebookTemplatesRecentlyList } from "@/features/notebooks/components/notebook-templates-recently-list";
-import { updateNotebookByTradeIdAction } from "@/features/notebooks/server/actions/notebooks-actions";
-import { getNotebookByTradeId } from "@/features/notebooks/services/notebooks-services";
-import { useEditorText } from "@/hooks/use-text-editor";
-import type { Coin } from "@/interfaces/global-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
-import { Badge } from "@/components/ui/badge";
 
-interface TradesNotebooksProps {
+import { m } from "#/paraglide/messages";
+import { Button } from "#/components/ui/button";
+import { Badge } from "#/components/ui/badge";
+import { TextEditor, type TextEditorRef } from "#/components/text-editor/text-editor";
+import { getNotebookByTradeId } from "#/features/notebooks/service";
+import { upsertNotebookAction } from "#/features/notebooks/server-actions";
+import { NotebookTemplatePicker } from "#/features/notebooks-templates/components/notebook-template-picker";
+import type { NotebookTemplate } from "#/features/notebooks-templates/schema";
+
+interface TradeNotebookProps {
   tradeId: string;
-  coin: Coin;
+  accountId: string;
+  coin: "VST" | "USDT" | "USDC";
 }
 
-export function TradeNotebook({ tradeId, coin }: TradesNotebooksProps) {
-  const t = useTranslations("trade_info");
-
-  const { selectedAccount } = useUserConfigStore();
-
-  const { editorRef, setEditorValue } = useEditorText();
+export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) {
+  const queryClient = useQueryClient();
+  const editorRef = useRef<TextEditorRef>(null);
 
   const [content, setContent] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
-    null,
-  );
+  const [notebookTemplateId, setNotebookTemplateId] = useState<string | undefined>(undefined);
+  const [hasSetInitialContent, setHasSetInitialContent] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data: notebook, isLoading } = useQuery({
     queryKey: ["trade-notebook", tradeId],
     queryFn: () => getNotebookByTradeId(tradeId),
     enabled: !!tradeId,
   });
 
-  const onSave = async () => {
-    if (!coin) return;
-
-    setIsSaving(true);
-
-    const response = await updateNotebookByTradeIdAction(
-      tradeId,
-      content,
-      selectedAccount!._id,
-      coin,
-      selectedTemplateId || undefined,
-    );
-
-    setIsSaving(false);
-
-    if (response.error) {
-      return toast.error(t(response.message));
-    }
-
-    toast.success("saved");
-  };
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: not needed
+  // Load existing notebook content into the editor on first load
   useEffect(() => {
-    if (!isLoading && data) {
-      setEditorValue(data.content);
+    if (notebook?.content && !hasSetInitialContent) {
+      editorRef.current?.setInitialValue(notebook.content);
+      setContent(notebook.content);
+      setHasSetInitialContent(true);
     }
-  }, [data, isLoading]);
+  }, [notebook, hasSetInitialContent]);
+
+  const upsertMutation = useMutation({
+    mutationFn: () =>
+      upsertNotebookAction({
+        data: {
+          tradeId,
+          content,
+          notebookTemplateId,
+          accountId,
+          coin,
+        },
+      }),
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success("Saved");
+        queryClient.invalidateQueries({ queryKey: ["trade-notebook", tradeId] });
+      } else {
+        toast.error(result.error);
+      }
+    },
+    onError: () => {
+      toast.error("Error saving notes");
+    },
+  });
+
+  const insertTemplate = useCallback(
+    (template: NotebookTemplate) => {
+      editorRef.current?.setInitialValue(template.content);
+      setContent(template.content);
+      setNotebookTemplateId(template.id);
+    },
+    [],
+  );
+
+  const handleEditorChange = useCallback((value: string) => {
+    setContent(value);
+  }, []);
 
   return (
-    <>
-      {isLoading && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black/30 flex justify-center items-center">
-          <Spinner />
-        </div>
-      )}
-
-      <Badge className="text-sm">{t("notes")}</Badge>
-
-      <div>
-        <NotebookTemplatesRecentlyList
-          onSelectTemplate={(notebookTemplate) => {
-            setEditorValue(notebookTemplate.content);
-            setSelectedTemplateId(notebookTemplate._id);
-          }}
-        />
+    <div className="relative space-y-4 border-t pt-4">
+      <div className="flex items-center gap-2">
+        <Badge variant="secondary" className="text-sm w-fit">
+          {m["trade_info.notes"]()}
+        </Badge>
       </div>
+
+      <NotebookTemplatePicker onSelectTemplate={insertTemplate} />
 
       <TextEditor
         ref={editorRef}
-        onChange={(value) => setContent(value || "")}
-        isLoading={isSaving}
+        onChange={handleEditorChange}
+        isLoading={upsertMutation.isPending}
       />
-      <Button className="ml-auto mt-3" onClick={onSave} disabled={isSaving}>
-        {isSaving && <Spinner data-icon="inline-start" />}
-        {t("save")}
-      </Button>
-    </>
+
+      <div className="flex justify-end">
+        <Button
+          onClick={() => upsertMutation.mutate()}
+          disabled={upsertMutation.isPending || isLoading}
+        >
+          {upsertMutation.isPending
+            ? m["accounts.saving_action"]()
+            : m["notebooks.notebook_detail.save"]()}
+        </Button>
+      </div>
+    </div>
   );
 }

@@ -1,9 +1,0 @@
-[data-slot="select-value"] {
-    display: none;
-}
-
-@media (width >= 48rem) {
-    [data-slot="select-value"] {
-        display: block;
-    }
-}

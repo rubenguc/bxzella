@@ -26,8 +26,8 @@ import {
   Undo,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "../ui/separator";
+import { Button } from "#/components/ui/button";
+import { Separator } from "#/components/ui/separator";
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -43,13 +43,11 @@ export default function ToolbarPlugin() {
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
-      // Update text format
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
       setIsUnderline(selection.hasFormat("underline"));
       setIsStrikethrough(selection.hasFormat("strikethrough"));
 
-      // Check if selection is within a link
       const anchorNode = selection.anchor.getNode();
       const focusNode = selection.focus.getNode();
       const anchorParent = anchorNode.getParent();
@@ -61,16 +59,11 @@ export default function ToolbarPlugin() {
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
-        editorState.read(
-          () => {
-            $updateToolbar();
-          },
-          { editor },
-        );
+        editorState.read(() => $updateToolbar(), { editor });
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
-        (_payload, _newEditor) => {
+        () => {
           $updateToolbar();
           return false;
         },
@@ -95,137 +88,51 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
+  const linkClickHandler = () => {
+    if (isLink) {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+    } else {
+      const url = window.prompt("Enter the URL:");
+      if (url) editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
+    }
+  };
+
   return (
-    <div className="flex overflow-scroll gap-1 h-fit" ref={toolbarRef}>
-      <Button
-        variant="ghost"
-        size="icon"
-        disabled={!canUndo}
-        onClick={() => {
-          editor.dispatchCommand(UNDO_COMMAND, undefined);
-        }}
-        aria-label="Undo"
-      >
-        <Undo />
+    <div className="flex overflow-x-auto gap-1 h-fit pb-2" ref={toolbarRef}>
+      <Button variant="ghost" size="icon" disabled={!canUndo} onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)} aria-label="Undo">
+        <Undo className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        disabled={!canRedo}
-        onClick={() => {
-          editor.dispatchCommand(REDO_COMMAND, undefined);
-        }}
-        aria-label="Redo"
-      >
-        <Redo />
+      <Button variant="ghost" size="icon" disabled={!canRedo} onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)} aria-label="Redo">
+        <Redo className="h-4 w-4" />
       </Button>
-      <Separator orientation="vertical" className="mx-1" />
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-        }}
-        className={`${isBold ? "bg-primary" : ""}`}
-        aria-label="Format Bold"
-      >
-        <Bold />
+      <Separator orientation="vertical" className="mx-1 h-6 self-center" />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")} className={isBold ? "bg-accent" : ""} aria-label="Bold">
+        <Bold className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-        }}
-        className={`${isItalic ? "bg-primary" : ""}`}
-        aria-label="Format Italics"
-      >
-        <Italic />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")} className={isItalic ? "bg-accent" : ""} aria-label="Italic">
+        <Italic className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
-        }}
-        className={`${isUnderline ? "bg-primary" : ""}`}
-        aria-label="Format Underline"
-      >
-        <Underline />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")} className={isUnderline ? "bg-accent" : ""} aria-label="Underline">
+        <Underline className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-        }}
-        className={`  ${isStrikethrough ? "bg-primary" : ""}`}
-        aria-label="Format Strikethrough"
-      >
-        <Strikethrough />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")} className={isStrikethrough ? "bg-accent" : ""} aria-label="Strikethrough">
+        <Strikethrough className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          if (isLink) {
-            editor.dispatchCommand(TOGGLE_LINK_COMMAND, null); // Remove link
-          } else {
-            const url = prompt("Enter the URL:");
-            if (url) {
-              editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);
-            }
-          }
-        }}
-        className={`${isLink ? "bg-primary" : ""}`}
-        aria-label={isLink ? "Remove Link" : "Insert Link"}
-      >
-        <Link />
+      <Button variant="ghost" size="icon" onClick={linkClickHandler} className={isLink ? "bg-accent" : ""} aria-label={isLink ? "Remove Link" : "Insert Link"}>
+        <Link className="h-4 w-4" />
       </Button>
-      <Separator orientation="vertical" className="mx-1" />
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-        }}
-        className=" "
-        aria-label="Left Align"
-      >
-        <AlignLeft />
+      <Separator orientation="vertical" className="mx-1 h-6 self-center" />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")} aria-label="Align Left">
+        <AlignLeft className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-        }}
-        className=" "
-        aria-label="Center Align"
-      >
-        <AlignCenter />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")} aria-label="Align Center">
+        <AlignCenter className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-        }}
-        className=" "
-        aria-label="Right Align"
-      >
-        <AlignRight />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")} aria-label="Align Right">
+        <AlignRight className="h-4 w-4" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-        }}
-        className=""
-        aria-label="Justify Align"
-      >
-        <AlignJustify />
+      <Button variant="ghost" size="icon" onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")} aria-label="Justify">
+        <AlignJustify className="h-4 w-4" />
       </Button>
     </div>
   );

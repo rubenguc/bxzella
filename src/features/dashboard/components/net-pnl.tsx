@@ -1,24 +1,29 @@
-import { useTranslations } from "next-intl";
-import { Profit } from "@/components/profit";
-import type { TradeStatisticsResult } from "@/features/trades/interfaces/trades-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
-import { StatisticCard } from "./statistic-card";
+import { m } from '#/paraglide/messages'
+import { useUserConfig } from '#/store/user-config'
+import { StatisticCard } from '#/features/dashboard/components/statistic-card'
 
 interface NetPNLProps {
-  netPnL: TradeStatisticsResult["netPnL"];
+  value: number
+  totalTrades: number
 }
 
-export function NetPNL({ netPnL }: NetPNLProps) {
-  const coin = useUserConfigStore((state) => state.coin);
-  const t = useTranslations("statistics");
+export function NetPNL({ value, totalTrades }: NetPNLProps) {
+  const coin = useUserConfig((s) => s.coin)
 
   return (
     <StatisticCard
-      title={t("net_pnl") as string}
-      popoverInfo={t("net_pnl_info")}
-      extraInfo={<span className="text-sm">{netPnL.totalTrades} Trades</span>}
-      contentClassName="flex justify-between items-end"
-      content={<Profit className="text-xl" amount={netPnL.value} coin={coin} />}
+      title={m['statistics.net_pnl']()}
+      popoverInfo={m['statistics.net_pnl_info']()}
+      extraInfo={
+        <span className="text-sm text-muted-foreground">
+          {totalTrades} Trades
+        </span>
+      }
+      content={
+        <p className={`text-xl ${value >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+          {value.toFixed(2)} {coin}
+        </p>
+      }
     />
-  );
+  )
 }
