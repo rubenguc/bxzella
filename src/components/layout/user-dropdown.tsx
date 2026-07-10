@@ -3,6 +3,7 @@ import { LogOut } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 import { authClient } from '#/lib/auth-client'
+import { useUserConfig } from '#/store/user-config'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +29,7 @@ import {
 
 export function UserDropdown() {
   const [logoutOpen, setLogoutOpen] = useState(false)
+  const cleanStore = useUserConfig((s) => s.cleanStore)
   const { data: session } = authClient.useSession()
   const user = session?.user
   const displayName = user?.name || user?.username
@@ -42,6 +44,7 @@ export function UserDropdown() {
 
   const confirmLogout = async () => {
     setLogoutOpen(false)
+    cleanStore()
     await authClient.signOut()
     window.location.href = '/login'
   }

@@ -33,16 +33,15 @@ interface UserConfig {
    */
   updateEarliestTradeDate: (date: string) => void
 
-  /** Resets all state to defaults (keeps the persisted account/coin). */
+    /** Resets all state to defaults. */
   cleanStore: () => void
 
   setTradeChartTimeframe: (timeframe: string) => void
 }
 
-const DEFAULT_STATE: Pick<
-  UserConfig,
-  'startDate' | 'endDate' | 'tradeChartTimeframe'
-> = {
+const DEFAULT_STATE = {
+  selectedAccount: null,
+  coin: 'USDT' as Coin,
   startDate: null,
   endDate: null,
   tradeChartTimeframe: '1h',
@@ -51,8 +50,6 @@ const DEFAULT_STATE: Pick<
 export const useUserConfig = create<UserConfig>()(
   persist(
     (set) => ({
-      selectedAccount: null,
-      coin: 'USDT',
       ...DEFAULT_STATE,
 
       setSelectedAccount: (account) =>
