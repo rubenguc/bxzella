@@ -11,7 +11,6 @@ CREATE TABLE "notebook_template" (
 --> statement-breakpoint
 CREATE TABLE "notebook" (
 	"id" text PRIMARY KEY NOT NULL,
-	"title" text NOT NULL,
 	"content" text,
 	"content_plain_text" text,
 	"trade_id" text,

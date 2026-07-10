@@ -36,7 +36,6 @@ export const upsertNotebookAction = createServerFn({ method: "POST" })
       };
 
       const result = await upsertNotebookByTradeId(tradeId, {
-        title: parsed.data.title,
         content: parsed.data.content,
         contentPlainText: parsed.data.content
           ? lexicalToPlainText(parsed.data.content)

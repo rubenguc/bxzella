@@ -8,7 +8,6 @@ export const notebook = pgTable(
   'notebook',
   {
     id: text('id').primaryKey().$defaultFn(() => createId()),
-    title: text('title').notNull(),
     content: text('content'),
     contentPlainText: text('content_plain_text'),
     tradeId: text('trade_id').references(() => trade.id, { onDelete: 'set null' }),

@@ -45,7 +45,6 @@ export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) 
       upsertNotebookAction({
         data: {
           tradeId,
-          title: "Trade Notes",
           content,
           notebookTemplateId,
           accountId,
