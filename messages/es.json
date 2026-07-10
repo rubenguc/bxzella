@@ -27,6 +27,7 @@
     "position": "Posici\u00f3n",
     "leverage": "Apalancamiento",
     "side": "Lado",
+    "side_leverage": "Lado / Apalancamiento",
     "long": "LONG",
     "short": "SHORT",
     "symbol": "S\u00edmbolo",

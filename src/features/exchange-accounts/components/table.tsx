@@ -13,6 +13,14 @@ import { ProviderImage } from '#/features/exchange-accounts/components/provider-
 import type { AccountItem } from '#/features/exchange-accounts/types'
 
 import { Button } from '#/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '#/components/ui/table'
 import { Edit, Trash } from 'lucide-react'
 import { Skeleton } from '#/components/ui/skeleton'
 
@@ -57,19 +65,22 @@ export function AccountsTable() {
         cell: (info) => (
           <div className="font-medium">{info.getValue()}</div>
         ),
+        meta: { className: 'text-center' } as const,
       }),
       columnHelper.accessor('provider', {
         header: () => m['accounts.provider'](),
         cell: (info) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2">
             <ProviderImage provider={info.getValue()} />
             <span className="capitalize">{info.getValue()}</span>
           </div>
         ),
+        meta: { className: 'text-center' } as const,
       }),
       columnHelper.display({
         id: 'actions',
         cell: ({ row }) => <RowActions row={row as { original: AccountItem }} />,
+        meta: { className: 'text-center' } as const,
       }),
     ],
     [],
@@ -103,32 +114,44 @@ export function AccountsTable() {
 
   return (
     <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-      <table className="w-full">
-        <thead>
+      <Table>
+        <TableHeader>
           {table.getHeaderGroups().map((hg) => (
-            <tr key={hg.id} className="border-b">
+            <TableRow key={hg.id}>
               {hg.headers.map((header) => (
-                <th key={header.id} className="text-left text-sm font-medium text-muted-foreground px-4 py-3">
+                <TableHead
+                  key={header.id}
+                  className={
+                    (header.column.columnDef.meta as { className?: string })?.className ??
+                    'text-center'
+                  }
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
+                </TableHead>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        <tbody>
+        </TableHeader>
+        <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="border-b last:border-0">
+            <TableRow key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-3 text-sm">
+                <TableCell
+                  key={cell.id}
+                  className={
+                    (cell.column.columnDef.meta as { className?: string })?.className ??
+                    'text-center'
+                  }
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                </TableCell>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }

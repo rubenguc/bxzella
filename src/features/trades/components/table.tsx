@@ -1,11 +1,18 @@
+import { useMemo } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Eye } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import { formatDate } from "#/lib/date-utils";
 import { usePagination } from "#/lib/use-pagination";
 import { Pagination } from "#/components/pagination";
 import { Button } from "#/components/ui/button";
-import { Link } from "@tanstack/react-router";
-import { Eye } from "lucide-react";
-import type { Coin } from "#/features/exchange-providers/types";
+import { Profit } from "#/components/Profit";
 import {
   Table,
   TableBody,
@@ -14,8 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from "#/components/ui/table";
-import { fetchTrades } from "#/features/trades/service";
+import type { TradeItem } from "#/features/trades/types";
 import { transformSymbol } from "#/features/trades/helpers";
+import { PositionSide } from "#/features/trades/components/position-side";
+import { fetchTrades } from "#/features/trades/service";
+import type { Coin } from "#/features/exchange-providers/types";
 
 interface Props {
   accountId: string;
@@ -42,6 +52,89 @@ export function TradesTable({ accountId, coin }: Props) {
     enabled: !!accountId,
   });
 
+  const columns = useMemo<ColumnDef<TradeItem>[]>(
+    () => [
+      {
+        header: m["trade_info.symbol"](),
+        accessorKey: "symbol",
+        cell: ({ row }) => (
+          <span className="font-medium">{transformSymbol(row.original.symbol)}</span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.side_leverage"](),
+        accessorKey: "positionSide",
+        cell: ({ row }) => (
+          <PositionSide
+            positionSide={row.original.positionSide}
+            leverage={row.original.leverage}
+          />
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.avg_entry_price"](),
+        accessorKey: "avgPrice",
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.avg_exit_price"](),
+        accessorKey: "avgClosePrice",
+        cell: ({ row }) => <>{row.original.avgClosePrice ?? "—"}</>,
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.position_pnl"](),
+        accessorKey: "netProfit",
+        cell: ({ row }) => <Profit netProfit={row.original.netProfit} />,
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.open_date"](),
+        accessorKey: "openTime",
+        cell: ({ row }) => (
+          <span className="text-xs text-muted-foreground">
+            {formatDate(row.original.openTime) || "—"}
+          </span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.closed_date"](),
+        accessorKey: "updateTime",
+        cell: ({ row }) => (
+          <span className="text-xs text-muted-foreground">
+            {formatDate(row.original.updateTime) || "—"}
+          </span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: "",
+        id: "actions",
+        cell: ({ row }) => (
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              to="/dashboard/trades/$positionId"
+              params={{ positionId: row.original.positionId }}
+            >
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+        ),
+        meta: { className: "text-center w-0" },
+      },
+    ],
+    [],
+  );
+
+  const table = useReactTable({
+    data: items,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   if (isLoading) {
     return (
       <div className="text-sm text-muted-foreground">
@@ -63,52 +156,37 @@ export function TradesTable({ accountId, coin }: Props) {
       <div className="rounded-xl border bg-card">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>{m["trade_info.symbol"]()}</TableHead>
-              <TableHead>{m["trade_info.side"]()}</TableHead>
-              <TableHead>{m["trade_info.leverage"]()}</TableHead>
-              <TableHead>{m["trade_info.avg_entry_price"]()}</TableHead>
-              <TableHead>{m["trade_info.avg_exit_price"]()}</TableHead>
-              <TableHead>{m["trade_info.realised_pnl"]()}</TableHead>
-              <TableHead>{m["trade_info.open_date"]()}</TableHead>
-              <TableHead>{m["trade_info.closed_date"]()}</TableHead>
-              <TableHead className="w-0" />
-            </TableRow>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className={
+                      (header.column.columnDef.meta as { className?: string })?.className ?? "text-center"
+                    }
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
           </TableHeader>
           <TableBody>
-            {items.map((t) => (
-              <TableRow key={t.id}>
-                <TableCell className="font-medium">{transformSymbol(t.symbol)}</TableCell>
-                <TableCell>
-                  {t.positionSide === "LONG" || t.positionSide === "long"
-                    ? m["trade_info.long"]()
-                    : m["trade_info.short"]()}
-                </TableCell>
-                <TableCell>{t.leverage}x</TableCell>
-                <TableCell>{t.avgPrice}</TableCell>
-                <TableCell>{t.avgClosePrice ?? "—"}</TableCell>
-                <TableCell
-                  className={
-                    Number(t.realisedProfit) >= 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }
-                >
-                  {Number(t.realisedProfit).toFixed(2)}
-                </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
-                  {formatDate(t.openTime) || "—"}
-                </TableCell>
-                <TableCell className="text-xs text-muted-foreground">
-                  {formatDate(t.updateTime) || "—"}
-                </TableCell>
-                <TableCell>
-                  <Button variant="ghost" size="icon" asChild>
-                    <Link to="/dashboard/trades/$positionId" params={{ positionId: t.positionId }}>
-                      <Eye className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </TableCell>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell
+                    key={cell.id}
+                    className={
+                      (cell.column.columnDef.meta as { className?: string })?.className ?? "text-center"
+                    }
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
