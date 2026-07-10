@@ -8,7 +8,6 @@ import {
   accountIdParamValidation,
   coinParamValidation,
 } from '#/lib/zod-utils'
-import { adjustDateToUTC } from '#/lib/adjust-date-to-utc'
 import { getDailyPnl as getDailyPnlRepo } from '#/features/dashboard/repository'
 
 const dailyPnlSearchParamsSchema = z.object({
@@ -38,8 +37,9 @@ export const Route = createFileRoute('/api/dashboard/daily-pnl')({
         const data = await getDailyPnlRepo({
           accountId,
           coin,
-          startDate: adjustDateToUTC(startDate, offset, false),
-          endDate: adjustDateToUTC(endDate, offset, true),
+          startDate,
+          endDate,
+          timezoneOffset: offset,
         })
 
         return new Response(JSON.stringify(data), {
