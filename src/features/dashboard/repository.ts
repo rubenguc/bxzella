@@ -106,6 +106,7 @@ interface GetDailyPnlParams {
   coin: string;
   startDate: string;
   endDate: string;
+  timezoneOffset: number;
 }
 
 export async function getDailyPnl({
@@ -113,11 +114,12 @@ export async function getDailyPnl({
   coin,
   startDate,
   endDate,
+  timezoneOffset,
 }: GetDailyPnlParams): Promise<DailyPnlEntry[]> {
   const result = await db.execute(sql`
     SELECT
-      update_time::date AS "date",
-      COALESCE(SUM(net_profit::numeric), 0) AS "netPnL",
+      local_date AS "date",
+      COALESCE(SUM(net_profit), 0) AS "netPnL",
       COUNT(*)::int AS "totalTrades",
       COALESCE(
         json_agg(
@@ -134,13 +136,26 @@ export async function getDailyPnl({
         ) FILTER (WHERE close_all_positions = true),
         '[]'::json
       ) AS "trades"
-    FROM "trade"
-    WHERE account_id = ${accountId}
-      AND coin = ${coin}
-      AND update_time >= ${startDate}::timestamp
-      AND update_time <= ${endDate}::timestamp
-    GROUP BY update_time::date
-    ORDER BY update_time::date ASC
+    FROM (
+      SELECT
+        (update_time + ${timezoneOffset} * INTERVAL '1 hour')::date AS local_date,
+        net_profit::numeric AS net_profit,
+        position_id,
+        symbol,
+        position_side,
+        leverage,
+        open_time,
+        update_time,
+        coin,
+        close_all_positions
+      FROM "trade"
+      WHERE account_id = ${accountId}
+        AND coin = ${coin}
+    ) sub
+    WHERE local_date >= ${startDate}::date
+      AND local_date <= ${endDate}::date
+    GROUP BY local_date
+    ORDER BY local_date ASC
   `);
 
   return (result.rows ?? []) as DailyPnlEntry[];

@@ -19,8 +19,9 @@ import {
 import { m } from "#/paraglide/messages";
 import type { OpenPosition } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
-import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
-import { formatDecimal } from "#/lib/format-decimal";
+import { transformSymbol } from "#/features/trades/helpers";
+import { PositionSide } from "#/features/trades/components/position-side";
+import { Profit } from "#/components/Profit";
 import { getOpenPositions } from "#/features/dashboard/service";
 
 const AUTO_REFRESH_INTERVAL = 10000;
@@ -46,29 +47,20 @@ export function OpenPositions() {
       {
         header: m["trade_info.position"](),
         accessorKey: "positionSide",
-        cell: ({ row }) => {
-          const isLong = checkLongPosition(row.original.positionSide);
-          return (
-            <span
-              className={`font-medium capitalize ${isLong ? "text-green-500" : "text-red-500"}`}
-            >
-              {row.original.positionSide.toLowerCase()} {row.original.leverage}x
-            </span>
-          );
-        },
+        cell: ({ row }) => (
+          <PositionSide
+            positionSide={row.original.positionSide}
+            leverage={row.original.leverage}
+          />
+        ),
         meta: { className: "text-center" },
       },
       {
         header: m["trade_info.realisedProfit"](),
         accessorKey: "realisedProfit",
-        cell: ({ row }) => {
-          const value = Number(row.original.realisedProfit);
-          return (
-            <span className={value >= 0 ? "text-green-500" : "text-red-500"}>
-              {formatDecimal(value, { precision: 4 })} USDT
-            </span>
-          );
-        },
+        cell: ({ row }) => (
+          <Profit netProfit={row.original.realisedProfit} />
+        ),
         meta: { className: "text-center" },
       },
       {
@@ -80,10 +72,8 @@ export function OpenPositions() {
           const ratio =
             margin > 0 ? ((unrealized / margin) * 100).toFixed(2) : "0.00";
           return (
-            <span
-              className={unrealized >= 0 ? "text-green-500" : "text-red-500"}
-            >
-              {formatDecimal(unrealized, { precision: 4 })} USDT ({ratio}%)
+            <span>
+              <Profit netProfit={unrealized} /> ({ratio}%)
             </span>
           );
         },

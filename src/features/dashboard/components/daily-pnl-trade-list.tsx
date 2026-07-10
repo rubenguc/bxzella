@@ -5,7 +5,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import {
@@ -20,7 +19,8 @@ import { Eye } from "lucide-react";
 import { m } from "#/paraglide/messages";
 import type { DailyPnlTrade } from "#/features/dashboard/types";
 import { formatDate } from "#/lib/date-utils";
-import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
+import { transformSymbol } from "#/features/trades/helpers";
+import { PositionSide } from "#/features/trades/components/position-side";
 import { Profit } from "#/components/Profit";
 
 interface DailyPnlTradeListProps {
@@ -41,30 +41,13 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
         meta: { className: "text-center" },
       },
       {
-        header: m["trade_info.position"](),
+        header: m["trade_info.side_leverage"](),
         accessorKey: "positionSide",
-        cell: ({ row }) => {
-          const isLong = checkLongPosition(row.original.positionSide);
-          return (
-            <Badge
-              variant="outline"
-              className={
-                isLong
-                  ? "border-green-500 text-green-500"
-                  : "border-red-500 text-red-500"
-              }
-            >
-              {row.original.positionSide}
-            </Badge>
-          );
-        },
-        meta: { className: "text-center" },
-      },
-      {
-        header: m["trade_info.leverage"](),
-        accessorKey: "leverage",
         cell: ({ row }) => (
-          <div className="text-muted-foreground">{row.original.leverage}x</div>
+          <PositionSide
+            positionSide={row.original.positionSide}
+            leverage={row.original.leverage}
+          />
         ),
         meta: { className: "text-center" },
       },

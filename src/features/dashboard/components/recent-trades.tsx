@@ -15,13 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "#/components/ui/table";
-import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import type { Trade } from "#/features/exchange-providers/types";
 import { useUserConfig } from "#/store/user-config";
-import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
+import { transformSymbol } from "#/features/trades/helpers";
+import { PositionSide } from "#/features/trades/components/position-side";
 import { formatDate } from "#/lib/date-utils";
 import { Profit } from "#/components/Profit";
 import { getRecentTrades } from "#/features/dashboard/service";
@@ -63,29 +63,14 @@ export function RecentTrades() {
         meta: { className: "text-center" },
       },
       {
-        header: m["trade_info.position"](),
+        header: m["trade_info.side_leverage"](),
         accessorKey: "positionSide",
-        cell: ({ row }) => {
-          const isLong = checkLongPosition(row.original.positionSide);
-          return (
-            <Badge
-              variant="outline"
-              className={
-                isLong
-                  ? "border-green-500 text-green-500"
-                  : "border-red-500 text-red-500"
-              }
-            >
-              {row.original.positionSide}
-            </Badge>
-          );
-        },
-        meta: { className: "text-center" },
-      },
-      {
-        header: m["trade_info.leverage"](),
-        accessorKey: "leverage",
-        cell: ({ row }) => <span>{row.original.leverage}x</span>,
+        cell: ({ row }) => (
+          <PositionSide
+            positionSide={row.original.positionSide}
+            leverage={row.original.leverage}
+          />
+        ),
         meta: { className: "text-center" },
       },
       {
