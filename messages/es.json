@@ -1,4 +1,5 @@
 {
+  "$schema": "https://inlang.com/schema/inlang-message-format",
   "sidebar": {
     "home": "Inicio",
     "trades": "Operaciones",
@@ -72,6 +73,8 @@
     "warning": "Advertencia",
     "be_carefull": "Por favor, ten cuidado, esta operaci\u00f3n no se puede revertir.",
     "delete": "Eliminar",
+    "deleting_action": "Eliminando...",
+    "loading": "Cargando...",
     "edit": "Editar",
     "cancel": "Cancelar",
     "continue": "Continuar",
@@ -101,6 +104,38 @@
     "api_management_screenshot": "Interfaz de Gesti\u00f3n de API mostrando configuraciones de API",
     "api_key_creation_screenshot": "Interfaz de creaci\u00f3n de Clave API",
     "api_configuration_screenshot": "Interfaz de configuraci\u00f3n de Clave API con permisos"
+  },
+  "auth": {
+    "sign_in_title": "Iniciar sesión",
+    "email_or_username": "Email o Username",
+    "email_placeholder": "admin@ejemplo.com",
+    "password": "Contraseña",
+    "sign_in_button": "Ingresar",
+    "signing_in": "Ingresando...",
+    "credential_required": "Email o username es requerido",
+    "password_required": "Contraseña es requerida",
+    "sign_in_error": "Error al iniciar sesión",
+    "setup_title": "Setup inicial",
+    "setup_description": "Crea el primer usuario administrador para comenzar.",
+    "username": "Nombre de usuario",
+    "username_placeholder": "admin",
+    "email": "Correo electrónico",
+    "setup_button": "Crear admin",
+    "creating_admin": "Creando admin...",
+    "username_min_length": "El username debe tener al menos 3 caracteres",
+    "email_invalid": "Correo electrónico inválido",
+    "password_min_length": "La contraseña debe tener al menos 8 caracteres",
+    "setup_error": "Error al crear el admin",
+    "error_invalid_credentials": "Email o contraseña inválidos",
+    "error_user_not_found": "Usuario no encontrado",
+    "error_email_not_verified": "Email no verificado",
+    "error_user_already_exists": "El usuario ya existe",
+    "error_invalid_email": "Email inválido",
+    "error_invalid_password": "Contraseña inválida",
+    "error_password_too_short": "Contraseña muy corta",
+    "error_password_too_long": "Contraseña muy larga",
+    "error_failed_to_create_user": "Error al crear el usuario",
+    "error_server": "Error del servidor, intente nuevamente"
   },
   "errors": {
     "server_error": "Error del servidor",
@@ -201,7 +236,19 @@
     "account_already_exists": "La cuenta ya existe",
     "error_creating_account": "Error al crear la cuenta",
     "error_updating_account": "Error al actualizar la cuenta",
-    "error_deleting_account": "Error al eliminar la cuenta"
+    "error_deleting_account": "Error al eliminar la cuenta",
+    "edit_description": "Actualiza los detalles de tu cuenta de exchange",
+    "add_description": "Conecta tu cuenta de exchange para empezar a rastrear operaciones",
+    "name_placeholder": "Mi Cuenta de Trading",
+    "api_key_placeholder": "Ingresa tu clave API",
+    "secret_key_placeholder": "Ingresa tu clave secreta",
+    "select_provider": "Selecciona un proveedor",
+    "no_accounts_description": "No hay cuentas aún. Agrega una para empezar.",
+    "api_keys_encrypted_info": "Tus claves API están encriptadas y almacenadas de forma segura. Las operaciones se sincronizarán automáticamente.",
+    "delete_account_warning": "Todas las operaciones sincronizadas de esta cuenta también se eliminarán.",
+    "save_changes_action": "Guardar Cambios",
+    "saving_action": "Guardando...",
+    "select_account": "Selecciona una cuenta"
   },
   "info": {
     "create_key_tutorial": {
@@ -370,6 +417,12 @@
     "winrate": "Tasa de Ganancia",
     "winners": "Ganadores",
     "losers": "Perdedores"
+  },
+  "trade_chart": {
+    "loading": "Cargando...",
+    "no_data": "No hay datos disponibles",
+    "entry_marker": "Entrada",
+    "close_marker": "Cierre"
   },
   "trading-assistant": {
     "title": "Asistente de Trading",

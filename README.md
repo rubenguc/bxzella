@@ -27,29 +27,15 @@ Follow these steps to set up and run the project locally.
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- npm, yarn, or pnpm
-- MongoDB instance (local or cloud-hosted)
-- Clerk account (for authentication)
+- npm, yarn, pnpm, or bun
+- PostgreSQL instance (local or cloud-hosted)
 
 ### Installation
 1. Config environment variables:
 ```bash
-# MongoDB Connection URI
-MONGODB_URI=your_mongodb_connection_string
-
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
-
 # Encryption Secret (for API keys)
 ENCRYPTION_SECRET=a_strong_random_secret_key_at_least_32_chars_long
-
-# BingX API Hosts
-VST_HOST=open-api-vst.bingx.com # Example host, verify with BingX documentation
-USDT_HOST=open-api.bingx.com   # Example host, verify with BingX documentation
-
-# Bitunix
-BITUNIX_HOST="https://fapi.bitunix.com"
+DATABASE_URL=your_db_url
 ```
 2. Install dependencies:
 ```bash
@@ -71,71 +57,3 @@ pnpm run dev
 # or
 bun run dev
 ```
-
-4. Run Mongo in Docker (Optional):
-- Create Key:
-```bash
-openssl rand -base64 756 > mongodb.key
-chmod 400 mongodb.key
-```
-
-- Open the hosts file:
-```
-Windows: C:\Windows\System32\drivers\etc\hosts
-Mac/Linux: /etc/hosts
-```
-- Add:
-```bash
-127.0.0.1 mongo
-```
-
-
-
-## Project Structure
-
-The project follows a typical Next.js application structure with a focus on organizing code by features. Here's a simplified view of the core directories:
-
-```
-bxzella/
-├── src/
-│   ├── app/                  # Next.js App Router pages and API routes
-│   │   ├── (dashboard)/      # Protected dashboard routes
-│   │   │   ├── accounts/     # Accounts page
-│   │   │   ├── layout.tsx    # Dashboard layout
-│   │   │   ├── page.tsx      # Dashboard homepage
-│   │   │   └── trades/       # Trades page
-│   │   ├── api/              # API endpoints (accounts, statistics, trades)
-│   │   ├── globals.css       # Global styles
-│   │   ├── layout.tsx        # Root layout
-│   │   ├── providers.tsx     # React Query provider
-│   │   └── sign-in/          # Clerk sign-in page
-│   ├── components/           # Reusable UI components
-│   │   ├── layout/           # Layout components (header, sidebar)
-│   │   ├── ui/               # Shadcn UI components
-│   │   └── ...
-│   ├── context/              # React contexts
-│   ├── db/                   # Database connection setup (MongoDB)
-│   ├── features/             # Feature-based organization
-│   │   ├── <feature>/        # Logic for each feature
-│   │   │   ├── components/   # UI components
-│   │   │   ├── context/      # React contexts
-│   │   │   ├── hooks/        # Custom React hooks
-│   │   │   ├── interfaces/   # TS Interfaces
-│   │   │   ├── model/        # Mongoose model
-│   │   │   ├── schemas/      # Validation schemas
-│   │   │   ├── server/       # Server-side logic
-│   │   │   │   ├── actions/  # Server actions
-│   │   │   │   └── db/       # Db queries
-│   │   │   ├── services/     # Apis calls for tanstack Query
-│   │   │   └── utils/     # Apis calls for tanstack Query
-│   ├── hooks/                # Custom React hooks
-│   ├── i18n/                 # Internationalization setup
-│   ├── lib/                  # Utility functions
-│   ├── store/                # Zustand store for user configuration
-│   └── utils/                # General utility functions
-├── messages/                 # Translation files
-└── ...                       # Other configuration files (tailwind, tsconfig, etc.)
-```
-
-### Resouces
-- [Template used](https://github.com/satnaing/shadcn-admin)

@@ -1,56 +1,13 @@
 services:
   db:
-    image: mongo
     container_name: bxzella-db
-    command: >
-      mongod --replSet rs0
-      --bind_ip_all
-      --keyFile /data/configdb/mongodb.key
-      --auth
+    image: postgres:18.4-bookworm
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "27017:27017"
+      - "6432:5432"
     volumes:
-      - ./volumes/mongo:/data/db
-      - ./mongodb.key:/data/configdb/mongodb.key
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
-    healthcheck:
-      test: mongosh --quiet "mongodb://localhost:27017/admin" --eval 'db.runCommand("ping").ok'
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  db-init:
-    image: mongo:latest
-    depends_on:
-      db:
-        condition: service_healthy
-    command: >
-      mongosh "mongodb://db:27017/admin"
-      -u "${MONGO_USERNAME}" -p "${MONGO_PASSWORD}"
-      --eval '
-        try {
-          rs.initiate({
-            _id: "rs0",
-            members: [{ _id: 0, host: "db:27017" }]
-          });
-          console.log("Replica Set iniciado con éxito");
-        } catch (e) {
-          console.log("El Replica Set ya estaba activo o requiere auth previa");
-        }
-      '
-
-  db-admin:
-    image: mongo-express
-    container_name: bxzella-db-admin
-    environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@db/?replicaSet=rs0&authSource=admin
-      - ME_CONFIG_BASICAUTH=false
-    ports:
-      - "8081:8081"
-    depends_on:
-      db:
-        condition: service_healthy
-
+      - ./volumes/postgres:/var/lib/postgresql

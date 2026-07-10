@@ -1,30 +1,28 @@
-import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { m } from "#/paraglide/messages";
+import { Card, CardContent, CardHeader } from "#/components/ui/card";
 import { OpenPositions } from "./open-positions";
 import { RecentTrades } from "./recent-trades";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "#/components/ui/tabs";
 
 export function Positions() {
-  const t = useTranslations("dashboard");
-
   return (
-    <Tabs defaultValue="open_positions">
-      <Card className="flex-1">
+    <Tabs defaultValue="open_positions" className="h-full">
+      <Card className="h-full flex flex-col">
         <CardHeader>
           <TabsList>
             <TabsTrigger value="open_positions">
-              {t("open_positions.open_positions")}
+              {m['dashboard.open_positions.open_positions']()}
             </TabsTrigger>
             <TabsTrigger value="recent_trades">
-              {t("recent_trades.recent_trades")}
+              {m['dashboard.recent_trades.recent_trades']()}
             </TabsTrigger>
           </TabsList>
         </CardHeader>
-        <CardContent>
-          <TabsContent value="open_positions">
+        <CardContent className="flex-1 min-h-0 overflow-y-auto">
+          <TabsContent value="open_positions" className="h-full">
             <OpenPositions />
           </TabsContent>
-          <TabsContent value="recent_trades">
+          <TabsContent value="recent_trades" className="h-full">
             <RecentTrades />
           </TabsContent>
         </CardContent>

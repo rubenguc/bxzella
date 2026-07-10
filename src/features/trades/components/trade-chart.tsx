@@ -1,36 +1,25 @@
+import { useRef, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getTime, parseISO } from "date-fns";
 import {
-  type CandlestickData,
-  CandlestickSeries,
-  type CandlestickSeriesOptions,
-  type CandlestickStyleOptions,
-  ColorType,
-  CrosshairMode,
   createChart,
+  CandlestickSeries,
   createSeriesMarkers,
-  type DeepPartial,
+  CrosshairMode,
+  LineStyle,
   type ISeriesApi,
-  type SeriesMarker,
-  type SeriesOptionsCommon,
+  type CandlestickData,
   type Time,
-  type WhitespaceData,
+  type SeriesMarker,
+  type IPriceLine,
 } from "lightweight-charts";
-import { useEffect, useRef } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
-import { getKLineData } from "@/features/providers/services/providers-service";
-import type { Coin } from "@/interfaces/global-interfaces";
-import { useUserConfigStore } from "@/store/user-config-store";
-import { Timezone } from "@/utils/date-utils";
-import { formatDecimal } from "@/utils/number-utils";
+import { Timezone } from "#/lib/api-client";
+import { fetchKline } from "#/features/trades/service";
+import { m } from "#/paraglide/messages";
+import { formatDecimal } from "#/lib/format-decimal";
+import type { Coin, KLine } from "#/features/exchange-providers/types";
+import { getTime, parseISO } from "date-fns";
+
+const TIME_FRAMES = ["1h", "4h", "1d"] as const;
 
 interface TradeChartProps {
   symbol: string;
@@ -41,15 +30,10 @@ interface TradeChartProps {
   positionSide: string;
   coin: Coin;
   netProfit: string;
+  accountId: string;
 }
 
-type ChartSeries = ISeriesApi<
-  "Candlestick",
-  Time,
-  CandlestickData<Time> | WhitespaceData<Time>,
-  CandlestickSeriesOptions,
-  DeepPartial<CandlestickStyleOptions & SeriesOptionsCommon>
->;
+type ChartSeries = ISeriesApi<"Candlestick", Time, CandlestickData<Time>>;
 
 const findBarTime = (isoString: string, seriesData: any[]) => {
   const targetMs = getTime(parseISO(isoString)) - Timezone;
@@ -61,212 +45,188 @@ const findBarTime = (isoString: string, seriesData: any[]) => {
   return closestBar ? closestBar.time : targetSeconds;
 };
 
-const TIME_FRAMES = ["1h", "4h", "1d"] as const;
-
 export function TradeChart({
   symbol,
   openTime,
-  coin,
   updateTime,
   avgPrice,
   avgClosePrice,
   positionSide,
+  coin,
   netProfit,
+  accountId,
 }: TradeChartProps) {
-  const { selectedAccount, tradeChartTimeframe, setTradeChartTimeframe } =
-    useUserConfigStore();
+  const [timeframe, setTimeframe] = useState<string>("1h");
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
+  const seriesRef = useRef<ChartSeries | null>(null);
+  const priceLinesRef = useRef<IPriceLine[]>([]);
+
+  const openMs = new Date(openTime).getTime();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["trade-chart", symbol, openTime, tradeChartTimeframe],
+    queryKey: ["kline", symbol, openTime, timeframe],
     queryFn: () =>
-      getKLineData({
-        coin,
-        symbol,
-        startTime: openTime,
-        accountId: selectedAccount!._id,
-        interval: tradeChartTimeframe,
-      }),
-    enabled: !!selectedAccount?._id || !!tradeChartTimeframe,
+      fetchKline(accountId, coin, symbol, openMs, timeframe),
+    enabled: !!accountId,
   });
 
-  const chartContainerRef = useRef<HTMLDivElement>(null);
-
-  const chartRef = useRef<any>(null);
-  const seriesRef = useRef<ChartSeries | null>(null);
-
+  // Create chart once
   useEffect(() => {
     if (!chartContainerRef.current) return;
-    const handleResize = () => {
-      chart.applyOptions({ width: chartContainerRef.current?.clientWidth });
-    };
 
-    const chart = createChart(chartContainerRef?.current, {
-      crosshair: {
-        mode: CrosshairMode.Normal,
+    const isDark = document.documentElement.classList.contains("dark");
+
+    const chart = createChart(chartContainerRef.current, {
+      crosshair: { mode: CrosshairMode.Normal },
+      layout: {
+        background: { color: "transparent" },
+        textColor: isDark ? "#9ca3af" : "#6b7280",
       },
       grid: {
-        horzLines: {
-          color: "#121212",
-        },
-        vertLines: {
-          color: "#121212",
-        },
+        vertLines: { color: isDark ? "#1f2937" : "#e5e7eb" },
+        horzLines: { color: isDark ? "#1f2937" : "#e5e7eb" },
       },
-      layout: {
-        textColor: "#646464",
-        background: { type: ColorType.VerticalGradient },
-      },
-      width: chartContainerRef?.current.clientWidth,
+      width: chartContainerRef.current.clientWidth,
       height: 400,
-    });
-
-    chart.timeScale().fitContent();
-    chart.timeScale().applyOptions({
-      timeVisible: true,
+      autoSize: true,
+      timeScale: { timeVisible: true },
     });
 
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#26a69a",
-      downColor: "#ef5350",
+      upColor: "#22c55e",
+      downColor: "#ef4444",
       borderVisible: false,
-      wickUpColor: "#26a69a",
-      wickDownColor: "#ef5350",
+      wickUpColor: "#22c55e",
+      wickDownColor: "#ef4444",
+      lastValueVisible: false,
+      priceLineVisible: false,
     });
 
     series.setData([]);
     chartRef.current = chart;
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      chart.remove();
-    };
-  }, []);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: not needed
-  useEffect(() => {
-    const chart = chartRef.current;
-    if (!data || data.length === 0 || !chart) return;
-
-    if (seriesRef.current) {
-      chart.removeSeries(seriesRef.current);
-      seriesRef.current = null;
-    }
-
-    const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#26a69a",
-      downColor: "#ef5350",
-      borderVisible: false,
-      wickUpColor: "#26a69a",
-      wickDownColor: "#ef5350",
-    });
     seriesRef.current = series;
 
-    const chartSeriesData = data
+    return () => chart.remove();
+  }, []);
+
+  // Update data when it loads
+  useEffect(() => {
+    if (!data || data.length === 0 || !seriesRef.current || !chartRef.current)
+      return;
+
+    const chart = chartRef.current;
+    const series = seriesRef.current;
+
+    const chartData = data
       .map((d) => ({
-        time: (d.time - Timezone) / 1000,
+        time: Math.floor(d.time / 1000) as Time,
         open: Number(d.open),
         high: Number(d.high),
         low: Number(d.low),
         close: Number(d.close),
       }))
-      .sort((a, b) => a.time - b.time) as {
-      time: Time;
-      open: number;
-      high: number;
-      low: number;
-      close: number;
-    }[];
+      .sort((a, b) => (a.time as number) - (b.time as number));
 
-    series.setData(chartSeriesData);
-
-    const markers: SeriesMarker<Time>[] = [];
-
-    const markerOpenTime = findBarTime(openTime, chartSeriesData);
-    const markerUpdateTime = findBarTime(updateTime, chartSeriesData);
+    series.setData(chartData);
 
     const isLong = positionSide === "LONG";
+    const isWin = Number(netProfit) > 0;
+    const isCloseAbove = Number(avgClosePrice) > Number(avgPrice);
 
-    const formattedOpenPrice = formatDecimal(avgPrice, {
-      showNumberSuffix: false,
-      precision: 6,
-    });
-    const formattedClosePrice = formatDecimal(avgClosePrice, {
-      showNumberSuffix: false,
-      precision: 6,
-    });
+    const markers: SeriesMarker<Time>[] = [
+      {
+        time: findBarTime(openTime, chartData),
+        position: isLong ? "belowBar" : "aboveBar",
+        color: "#2196F3",
+        shape: isLong ? "arrowUp" : "arrowDown",
+        text: `${m["trade_chart.entry_marker"]()} @ ${formatDecimal(avgPrice, { precision: 6 })}`,
+      },
+      {
+        time: findBarTime(updateTime, chartData),
+        position: isCloseAbove ? "aboveBar" : "belowBar",
+        color: isWin ? "#22c55e" : "#ef4444",
+        shape: isCloseAbove ? "arrowDown" : "arrowUp",
+        text: `${m["trade_chart.close_marker"]()} @ ${formatDecimal(avgClosePrice, { precision: 6 })}`,
+      },
+    ];
 
-    // open
-    markers.push({
-      time: markerOpenTime,
-      position: isLong ? "belowBar" : "aboveBar",
-      color: "#2196F3",
-      shape: isLong ? "arrowUp" : "arrowDown",
-      text: `Entry @ ${formattedOpenPrice}`,
-      price: Number(formattedOpenPrice),
-    });
-
-    const isWinning = Number(netProfit) > 0;
-    const isCloseAbove =
-      Number(formattedClosePrice) > Number(formattedOpenPrice);
-
-    // close
-    markers.push({
-      time: markerUpdateTime,
-      position: isCloseAbove ? "aboveBar" : "belowBar",
-      color: isWinning ? "#26a69a" : "#e91e63",
-      shape: isCloseAbove ? "arrowDown" : "arrowUp",
-      text: `Close @ ${formattedClosePrice}`,
-      price: Number(formattedClosePrice),
-    });
+    // Safely clear previous price lines — they may be orphaned if the chart was
+    // re-created or the series invalidated them internally on setData.
+    priceLinesRef.current.forEach((pl) => pl?.remove?.());
+    priceLinesRef.current = [];
 
     createSeriesMarkers(series, markers);
 
-    const candleDiff =
-      chartSeriesData.length > 1
-        ? (chartSeriesData[1].time as number) -
-          (chartSeriesData[0].time as number)
-        : 3600;
+    // Horizontal price lines
+    const entryPrice = Number(avgPrice);
+    if (entryPrice > 0) {
+      const pl = series.createPriceLine({
+        price: entryPrice,
+        color: "#9ca3af",
+        lineWidth: 1,
+        lineStyle: LineStyle.Dashed,
+        axisLabelVisible: true,
+        title: m["trade_chart.entry_marker"](),
+      });
+      priceLinesRef.current.push(pl);
+    }
 
-    const horizontalMargin = candleDiff * 50;
+    const closePrice = Number(avgClosePrice);
+    if (closePrice > 0) {
+      const pl = series.createPriceLine({
+        price: closePrice,
+        color: isWin ? "#22c55e" : "#ef4444",
+        lineWidth: 1,
+        lineStyle: LineStyle.Dashed,
+        axisLabelVisible: true,
+        title: m["trade_chart.close_marker"](),
+      });
+      priceLinesRef.current.push(pl);
+    }
+
+    // Zoom to show the trade period
+    const candleDiff =
+      chartData.length > 1
+        ? (chartData[1].time as number) - (chartData[0].time as number)
+        : 3600;
+    const margin = candleDiff * 50;
 
     requestAnimationFrame(() => {
       chart.timeScale().setVisibleRange({
-        from: (markerOpenTime as number) - horizontalMargin,
-        to: (markerOpenTime as number) + horizontalMargin,
+        from: (markers[0].time as number) - margin,
+        to: (markers[0].time as number) + margin,
       });
     });
   }, [data]);
 
   return (
-    <>
-      <Select
-        value={tradeChartTimeframe}
-        onValueChange={setTradeChartTimeframe}
-      >
-        <SelectTrigger className="w-fit max-w-48 ml-auto">
-          <SelectValue placeholder="TimeFrame" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {TIME_FRAMES.map((timeFrame) => (
-              <SelectItem key={timeFrame} value={timeFrame}>
-                {timeFrame}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+    <div className="space-y-2">
+      <div className="flex justify-end">
+        <select
+          value={timeframe}
+          onChange={(e) => setTimeframe(e.target.value)}
+          className="w-fit max-w-48 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+        >
+          {TIME_FRAMES.map((tf) => (
+            <option key={tf} value={tf}>
+              {tf}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="relative" ref={chartContainerRef}>
-        {!data && (
-          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-black/40">
-            {isLoading ? (
-              <Spinner className="size-7" />
-            ) : (
-              <p>no data available</p>
-            )}
+        {isLoading && !data && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-50 rounded-lg">
+            <p className="text-muted-foreground">{m["trade_chart.loading"]()}</p>
+          </div>
+        )}
+        {!isLoading && data && data.length === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center z-50 rounded-lg">
+            <p className="text-muted-foreground">{m["trade_chart.no_data"]()}</p>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -1,0 +1,35 @@
+{
+  "projectName": "bxzella",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "bun",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {
+    "drizzle": {
+      "database": "postgresql"
+    }
+  },
+  "envVarValues": {},
+  "git": false,
+  "install": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "biome",
+    "nitro",
+    "neon",
+    "tanstack-query",
+    "better-auth",
+    "table",
+    "t3env",
+    "shadcn",
+    "paraglide",
+    "form",
+    "drizzle",
+    "compiler",
+    "ai",
+    "store"
+  ]
+}

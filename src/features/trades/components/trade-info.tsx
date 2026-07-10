@@ -1,40 +1,24 @@
+import type { Trade } from "#/features/trades/schema";
+import { m } from "#/paraglide/messages";
+import { formatDecimal } from "#/lib/format-decimal";
+import { Profit } from "#/components/Profit";
 import { Info } from "lucide-react";
-import { useTranslations } from "next-intl";
-import type { PropsWithChildren } from "react";
-import { Profit } from "@/components/profit";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { formatDecimal } from "@/utils/number-utils";
-import {
-  calculatePercentageGain,
-  checkWin,
-  getRealPositionAmount,
-  getResultClass,
-} from "@/utils/trade-utils";
-import type { TradeDocument } from "../interfaces/trades-interfaces";
+} from "#/components/ui/popover";
 
 interface InfoRowProps {
   label: string;
   value: React.ReactNode;
-  className?: string;
   valueClassName?: string;
   tooltipInfo?: string;
 }
 
-export function InfoRow({
-  label,
-  value,
-  className,
-  valueClassName,
-  tooltipInfo,
-}: InfoRowProps) {
+function InfoRow({ label, value, valueClassName, tooltipInfo }: InfoRowProps) {
   return (
-    <div
-      className={`flex items-center justify-between text-sm lg:text-base ${className || ""}`}
-    >
+    <div className="flex items-center justify-between text-sm lg:text-base">
       <div className="flex items-center gap-1.5 text-sm">
         <p className="text-muted-foreground">{label}</p>
         {tooltipInfo && (
@@ -49,7 +33,7 @@ export function InfoRow({
         )}
       </div>
       {typeof value === "string" ? (
-        <p className={`${valueClassName || ""}`}>{value}</p>
+        <p className={valueClassName || ""}>{value}</p>
       ) : (
         value
       )}
@@ -57,150 +41,91 @@ export function InfoRow({
   );
 }
 
-export function TradeInfo({
-  trade,
-}: PropsWithChildren<{ trade: TradeDocument }>) {
-  const t = useTranslations("trade_info");
-
-  const {
-    _id = "",
-    symbol = "",
-    netProfit = "0",
-    leverage = 0,
-    avgPrice = "",
-    avgClosePrice = "",
-    realisedProfit = "",
-    isolated = true,
-    totalFunding = "",
-    positionCommission = "",
-    positionSide = "0",
-    positionAmt = "0",
-    coin = "USDT",
-  } = trade || {};
-
-  const isWin = checkWin(netProfit);
-
-  const entryAmount = formatDecimal(
-    getRealPositionAmount({
-      avgPrice,
-      positionAmt,
-      funding: totalFunding,
-      comission: positionCommission,
-      leverage,
-    }),
-    {
-      precision: 4,
-    },
-  );
-
-  const pnlRatio = calculatePercentageGain(
-    Number(entryAmount),
-    Number(realisedProfit),
-  );
-  const pnlRatioWithFee = calculatePercentageGain(
-    Number(entryAmount),
-    Number(netProfit),
-  );
+export function TradeInfo({ trade }: { trade: Trade }) {
+  const isWin = Number(trade.netProfit) > 0;
+  const isLong = trade.positionSide === "LONG";
 
   return (
-    <div className="flex flex-col gap-2 ">
-      <div className="flex gap-2 b rounded-xl py-2">
+    <div className="flex flex-col gap-2">
+      {/* PnL header */}
+      <div className="flex gap-2 rounded-xl py-2">
         <div
-          className={`w-1 h-12  rounded-xl ${isWin ? "bg-green-500" : "bg-red-500"}`}
+          className={`w-1 h-12 rounded-xl ${isWin ? "bg-green-500" : "bg-red-500"}`}
         />
         <div className="flex flex-col">
-          <span className="text-sm md:text-gray-300">{t("position_pnl")}</span>
-          <Profit
-            className="text-xl font-bold"
-            amount={Number(netProfit)}
-            coin={coin}
-          />
+          <span className="text-sm text-muted-foreground">
+            {m["trade_info.position_pnl"]()}
+          </span>
+          <Profit netProfit={trade.netProfit} />
         </div>
       </div>
 
       <InfoRow
-        label={t("realised_pnl")}
-        tooltipInfo={t("realised_pnl_info")}
-        value={<Profit amount={Number(realisedProfit)} coin={coin} />}
-        valueClassName={isWin ? "text-green-500" : "text-red-500"}
-      />
-
-      <InfoRow label={t("leverage")} value={`${leverage}x`} />
-
-      <InfoRow
-        label={t("side")}
-        value={positionSide === "LONG" ? t("long") : t("short")}
-        valueClassName={
-          positionSide === "LONG" ? "text-green-500" : "text-red-500"
-        }
-      />
-
-      <InfoRow
-        label={t("avg_entry_price")}
-        value={formatDecimal(avgPrice, {
-          showNumberSuffix: false,
-          precision: 6,
-        })}
-      />
-
-      <InfoRow
-        label={t("avg_exit_price")}
-        value={formatDecimal(avgClosePrice, {
-          showNumberSuffix: false,
-          precision: 6,
-        })}
-      />
-
-      <InfoRow label={t("isolated")} value={isolated ? t("yes") : t("no")} />
-
-      <InfoRow
-        label={t("total_funding")}
-        tooltipInfo={t("total_funding_info")}
+        label={m["trade_info.realised_pnl"]()}
+        tooltipInfo={m["trade_info.realised_pnl_info"]()}
         value={
-          <Profit amount={Number(totalFunding)} decimals={6} coin={coin} />
+          <span className={isWin ? "text-green-500" : "text-red-500"}>
+            {formatDecimal(Number(trade.realisedProfit), { precision: 2, suffix: trade.coin })}
+          </span>
         }
-        valueClassName={getResultClass(totalFunding)}
       />
 
       <InfoRow
-        label={t("position_commission")}
+        label={m["trade_info.leverage"]()}
+        value={`${trade.leverage}x`}
+      />
+
+      <InfoRow
+        label={m["trade_info.side"]()}
+        value={isLong ? m["trade_info.long"]() : m["trade_info.short"]()}
+        valueClassName={isLong ? "text-green-500" : "text-red-500"}
+      />
+
+      <InfoRow
+        label={m["trade_info.avg_entry_price"]()}
+        value={formatDecimal(trade.avgPrice, { precision: 6 })}
+      />
+
+      <InfoRow
+        label={m["trade_info.avg_exit_price"]()}
+        value={trade.avgClosePrice ? formatDecimal(trade.avgClosePrice, { precision: 6 }) : "—"}
+      />
+
+      <InfoRow
+        label={m["trade_info.isolated"]()}
+        value={trade.isolated ? m["trade_info.yes"]() : m["trade_info.no"]()}
+      />
+
+      <InfoRow
+        label={m["trade_info.total_funding"]()}
+        tooltipInfo={m["trade_info.total_funding_info"]()}
         value={
-          <Profit
-            amount={-Number(positionCommission)}
-            decimals={4}
-            coin={coin}
-          />
+          <span className={Number(trade.totalFunding) >= 0 ? "text-green-500" : "text-red-500"}>
+            {formatDecimal(Number(trade.totalFunding), { precision: 6, suffix: trade.coin })}
+          </span>
         }
-        valueClassName={getResultClass(positionCommission)}
       />
 
       <InfoRow
-        label={t("entry_amount")}
-        tooltipInfo={t("entry_amount_info")}
-        value={`${entryAmount} ${coin}`}
-      />
-
-      <InfoRow
-        label={t("pnl_ratio")}
+        label={m["trade_info.position_commission"]()}
         value={
-          <Profit amount={Number(pnlRatio)} decimals={2} coin="%" isApprox />
+          <span className="text-red-500">
+            {formatDecimal(-Number(trade.positionCommission), { precision: 4, suffix: trade.coin })}
+          </span>
         }
       />
 
       <InfoRow
-        label={t("pnl_ratio_after_fees")}
-        value={
-          <Profit
-            amount={Number(pnlRatioWithFee)}
-            decimals={2}
-            coin="%"
-            isApprox
-          />
-        }
+        label={m["trade_info.entry_amount"]()}
+        tooltipInfo={m["trade_info.entry_amount_info"]()}
+        value={`${formatDecimal(
+          Number(trade.avgPrice) * Number(trade.positionAmt) / trade.leverage,
+          { precision: 4 },
+        )} ${trade.coin}`}
       />
 
       <p className="text-xs text-muted-foreground mt-4">
-        * {t("not_exact_values_description")}
+        * {m["trade_info.not_exact_values_description"]()}
       </p>
     </div>
   );

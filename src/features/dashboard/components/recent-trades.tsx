@@ -1,135 +1,177 @@
-"use client";
-
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { ColumnDef } from "@tanstack/react-table";
 import {
-  type ColumnDef,
+  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
-import Link from "next/link";
-import {
-  useTranslations,
-  useTranslations as useTranslationsCommon,
-} from "next-intl";
-import { CustomTable } from "@/components/custom-table";
-import { Profit } from "@/components/profit";
-import { Badge } from "@/components/ui/badge";
-import type { TradeDocument } from "@/features/trades/interfaces/trades-interfaces";
-import { useMemo } from "react";
 
-import { transformTimeToLocalDate } from "@/utils/date-utils";
-import { checkLongPosition, transformSymbol } from "@/utils/trade-utils";
-import { useRecentTrades } from "../context/recent-trades-context";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "#/components/ui/table";
+import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
+import { Link } from "@tanstack/react-router";
+import { m } from "#/paraglide/messages";
+import type { Trade } from "#/features/exchange-providers/types";
+import { useUserConfig } from "#/store/user-config";
+import { checkLongPosition, transformSymbol } from "#/features/trades/helpers";
+import { formatDate } from "#/lib/date-utils";
+import { Profit } from "#/components/Profit";
+import { getRecentTrades } from "#/features/dashboard/service";
+import { Eye } from "lucide-react";
 
 export function RecentTrades() {
-  const { isLoading, recentTrades } = useRecentTrades();
+  const { selectedAccount, coin } = useUserConfig();
 
-  const t = useTranslations("dashboard.recent_trades");
-  const tInfo = useTranslations("trade_info");
-  const tCommon = useTranslationsCommon("common_messages");
+  const columns = useMemo<ColumnDef<Trade>[]>(
+    () => [
+      {
+        header: m["trade_info.open_date"](),
+        accessorKey: "openTime",
+        cell: ({ row }) => (
+          <span className="font-medium">
+            {formatDate(row.original.openTime)}
+          </span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.closed_date"](),
+        accessorKey: "updateTime",
+        cell: ({ row }) => (
+          <span className="font-medium">
+            {formatDate(row.original.updateTime)}
+          </span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.symbol"](),
+        accessorKey: "symbol",
+        cell: ({ row }) => (
+          <span className="font-medium">
+            {transformSymbol(row.original.symbol)}
+          </span>
+        ),
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.position"](),
+        accessorKey: "positionSide",
+        cell: ({ row }) => {
+          const isLong = checkLongPosition(row.original.positionSide);
+          return (
+            <Badge
+              variant="outline"
+              className={
+                isLong
+                  ? "border-green-500 text-green-500"
+                  : "border-red-500 text-red-500"
+              }
+            >
+              {row.original.positionSide}
+            </Badge>
+          );
+        },
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.leverage"](),
+        accessorKey: "leverage",
+        cell: ({ row }) => <span>{row.original.leverage}x</span>,
+        meta: { className: "text-center" },
+      },
+      {
+        header: m["trade_info.position_pnl"](),
+        accessorKey: "netProfit",
+        cell: ({ row }) => <Profit netProfit={row.original.netProfit} />,
+        meta: { className: "text-center" },
+      },
+      {
+        header: "",
+        id: "actions",
+        cell: ({ row }) => (
+          <Button variant="ghost" size="icon" asChild>
+            <Link
+              to="/dashboard/trades/$positionId"
+              params={{ positionId: row.original.positionId }}
+            >
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+        ),
+        meta: { className: "text-center w-0" },
+      },
+    ],
+    [],
+  );
 
-  const columns = useMemo<ColumnDef<TradeDocument>[]>(() => [
-    {
-      header: tInfo("open_date"),
-      accessorKey: "openTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.openTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("closed_date"),
-      accessorKey: "updateTime",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformTimeToLocalDate(row.original.updateTime)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("symbol"),
-      accessorKey: "symbol",
-      cell: ({ row }) => (
-        <div className="font-medium">
-          {transformSymbol(row.original.symbol)}
-        </div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("position"),
-      accessorKey: "positionSide",
-      cell: ({ row }) => {
-        const positionSide = row.original.positionSide;
-        const isLongPosition = checkLongPosition(positionSide);
-        return (
-          <Badge variant={isLongPosition ? "green-filled" : "red-filled"}>
-            {positionSide}
-          </Badge>
-        );
-      },
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("leverage"),
-      accessorKey: "leverage",
-      cell: ({ row }) => (
-        <div className="font-medium">{row.original.leverage}x</div>
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      header: tInfo("position_pnl"),
-      accessorKey: "netProfit",
-      cell: ({ row }) => (
-        <Profit
-          amount={Number(row.original.netProfit)}
-          coin={row.original.coin}
-        />
-      ),
-      meta: {
-        className: "text-center",
-      },
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => (
-        <Link
-          href={`/trades/details/${row.original.positionId}`}
-          className="data-[state=open]:bg-muted h-auto"
-          aria-label={tCommon("aria_view_details")}
-        >
-          <Eye className="w-4" />
-        </Link>
-      ),
-    },
-  ], [tInfo, tCommon]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["recent-trades", selectedAccount?.id, coin],
+    queryFn: () =>
+      getRecentTrades({
+        accountId: selectedAccount!.id,
+        coin,
+      }),
+    enabled: !!selectedAccount?.id,
+  });
 
   const table = useReactTable({
-    data: recentTrades,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
+  if (isLoading) {
+    return (
+      <p className="text-center text-muted-foreground py-8">
+        {m["common_messages.loading"]()}
+      </p>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <p className="text-center text-muted-foreground py-8">
+        {m["dashboard.recent_trades.no_recent_trades"]()}
+      </p>
+    );
+  }
+
   return (
-    <CustomTable
-      table={table}
-      columnsLength={columns.length}
-      noDataMessage={t("no_recent_trades")}
-      showSkeleton={!recentTrades || isLoading}
-    />
+    <Table>
+      <TableHeader className="sticky top-0 bg-card z-10">
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id} className="text-center">
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+              </TableHead>
+            ))}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.map((row) => (
+          <TableRow key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id} className="text-center">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
