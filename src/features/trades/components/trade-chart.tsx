@@ -15,7 +15,7 @@ import {
 import { Timezone } from "#/lib/api-client";
 import { fetchKline } from "#/features/trades/service";
 import { m } from "#/paraglide/messages";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
 import { getTime, parseISO } from "date-fns";
 
@@ -140,14 +140,14 @@ export function TradeChart({
         position: isLong ? "belowBar" : "aboveBar",
         color: "#2196F3",
         shape: isLong ? "arrowUp" : "arrowDown",
-        text: `${m["trade_chart.entry_marker"]()} @ ${formatDecimal(avgPrice, { precision: 6 })}`,
+        text: `${m["trade_chart.entry_marker"]()} @ ${formatAmount(avgPrice, { precision: 6 })}`,
       },
       {
         time: findBarTime(updateTime, chartData),
         position: isCloseAbove ? "aboveBar" : "belowBar",
         color: isWin ? "#22c55e" : "#ef4444",
         shape: isCloseAbove ? "arrowDown" : "arrowUp",
-        text: `${m["trade_chart.close_marker"]()} @ ${formatDecimal(avgClosePrice, { precision: 6 })}`,
+        text: `${m["trade_chart.close_marker"]()} @ ${formatAmount(avgClosePrice, { precision: 6 })}`,
       },
     ];
 

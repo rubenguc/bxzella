@@ -1,7 +1,7 @@
 import { m } from '#/paraglide/messages'
 import { useUserConfig } from '#/store/user-config'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
-import { formatDecimal } from '#/lib/format-decimal'
+import { formatAmount } from '#/lib/format-amount'
 import { StatisticCard } from '#/features/dashboard/components/statistic-card'
 
 interface ProfitFactorProps {
@@ -34,7 +34,7 @@ export function ProfitFactor({ value, sumWin, sumLoss }: ProfitFactorProps) {
               <Cell strokeWidth={0} fill="var(--color-red-500)" />
               <Tooltip
                 formatter={(value: number) =>
-                  formatDecimal(value, { suffix: coin })
+                  formatAmount(value, { suffix: coin })
                 }
               />
             </Pie>

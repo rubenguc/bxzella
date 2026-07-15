@@ -1,6 +1,6 @@
 import { m } from "#/paraglide/messages";
 import type { CalendarCell } from "#/features/dashboard/types";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 
 interface DailyPnlCellProps extends CalendarCell {
   onClick: () => void;
@@ -40,7 +40,7 @@ export function DailyPnlCell({
           {amount !== null ? (
             <>
               <div className="text-[9px] md:text-base lg:text-lg font-bold leading-tight">
-                {formatDecimal(amount, { suffix: "USDT" })}
+                {formatAmount(amount, { suffix: "USDT" })}
               </div>
               <div className="text-[10px] sm:text-xs leading-tight">
                 <span className="hidden sm:inline">{trades} {m['daily-journal.trades']().toLowerCase()}</span>

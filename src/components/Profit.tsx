@@ -1,4 +1,4 @@
-import { formatDecimal } from '#/lib/format-decimal'
+import { formatAmount } from '#/lib/format-amount'
 import { useUserConfig } from '@/store/user-config'
 
 interface ProfitProps {
@@ -14,7 +14,7 @@ export function Profit({ netProfit }: ProfitProps) {
     <span
       className={`font-semibold ${value >= 0 ? 'text-green-500' : 'text-red-500'}`}
     >
-      {formatDecimal(value, { precision: 4, suffix: coin })}
+      {formatAmount(value, { precision: 4, suffix: coin })}
     </span>
   )
 }

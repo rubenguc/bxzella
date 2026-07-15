@@ -1,6 +1,6 @@
 import type { Trade } from "#/features/trades/schema";
 import { m } from "#/paraglide/messages";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 import { Profit } from "#/components/Profit";
 import { Info } from "lucide-react";
 import {
@@ -65,7 +65,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         tooltipInfo={m["trade_info.realised_pnl_info"]()}
         value={
           <span className={isWin ? "text-green-500" : "text-red-500"}>
-            {formatDecimal(Number(trade.realisedProfit), { precision: 2, suffix: trade.coin })}
+            {formatAmount(Number(trade.realisedProfit), { precision: 2, suffix: trade.coin })}
           </span>
         }
       />
@@ -83,12 +83,12 @@ export function TradeInfo({ trade }: { trade: Trade }) {
 
       <InfoRow
         label={m["trade_info.avg_entry_price"]()}
-        value={formatDecimal(trade.avgPrice, { precision: 6 })}
+        value={formatAmount(trade.avgPrice, { precision: 6 })}
       />
 
       <InfoRow
         label={m["trade_info.avg_exit_price"]()}
-        value={trade.avgClosePrice ? formatDecimal(trade.avgClosePrice, { precision: 6 }) : "—"}
+        value={trade.avgClosePrice ? formatAmount(trade.avgClosePrice, { precision: 6 }) : "—"}
       />
 
       <InfoRow
@@ -101,7 +101,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         tooltipInfo={m["trade_info.total_funding_info"]()}
         value={
           <span className={Number(trade.totalFunding) >= 0 ? "text-green-500" : "text-red-500"}>
-            {formatDecimal(Number(trade.totalFunding), { precision: 6, suffix: trade.coin })}
+            {formatAmount(Number(trade.totalFunding), { precision: 6, suffix: trade.coin })}
           </span>
         }
       />
@@ -110,7 +110,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         label={m["trade_info.position_commission"]()}
         value={
           <span className="text-red-500">
-            {formatDecimal(-Number(trade.positionCommission), { precision: 4, suffix: trade.coin })}
+            {formatAmount(-Number(trade.positionCommission), { precision: 4, suffix: trade.coin })}
           </span>
         }
       />
@@ -118,7 +118,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
       <InfoRow
         label={m["trade_info.entry_amount"]()}
         tooltipInfo={m["trade_info.entry_amount_info"]()}
-        value={`${formatDecimal(
+        value={`${formatAmount(
           Number(trade.avgPrice) * Number(trade.positionAmt) / trade.leverage,
           { precision: 4 },
         )} ${trade.coin}`}
