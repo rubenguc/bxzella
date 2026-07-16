@@ -7,6 +7,7 @@ import {
   CrosshairMode,
   LineStyle,
   type ISeriesApi,
+  type ISeriesMarkersPluginApi,
   type CandlestickData,
   type Time,
   type SeriesMarker,
@@ -61,6 +62,7 @@ export function TradeChart({
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
   const seriesRef = useRef<ChartSeries | null>(null);
   const priceLinesRef = useRef<IPriceLine[]>([]);
+  const markersRef = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
 
   const openMs = new Date(openTime).getTime();
 
@@ -106,6 +108,7 @@ export function TradeChart({
     series.setData([]);
     chartRef.current = chart;
     seriesRef.current = series;
+    markersRef.current = createSeriesMarkers(series);
 
     return () => chart.remove();
   }, []);
@@ -151,12 +154,11 @@ export function TradeChart({
       },
     ];
 
-    // Safely clear previous price lines — they may be orphaned if the chart was
-    // re-created or the series invalidated them internally on setData.
-    priceLinesRef.current.forEach((pl) => pl?.remove?.());
+    // Clear previous price lines before creating new ones
+    priceLinesRef.current.forEach((pl) => series.removePriceLine(pl));
     priceLinesRef.current = [];
 
-    createSeriesMarkers(series, markers);
+    markersRef.current?.setMarkers(markers);
 
     // Horizontal price lines
     const entryPrice = Number(avgPrice);
@@ -167,7 +169,6 @@ export function TradeChart({
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,
-        title: m["trade_chart.entry_marker"](),
       });
       priceLinesRef.current.push(pl);
     }
@@ -180,7 +181,6 @@ export function TradeChart({
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,
-        title: m["trade_chart.close_marker"](),
       });
       priceLinesRef.current.push(pl);
     }
