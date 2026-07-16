@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "#/components/ui/dialog";
 import type { CalendarCell } from "#/features/dashboard/types";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 import { DailyPnlTradeList } from "./daily-pnl-trade-list";
 
 interface DailyPnlDialogProps {
@@ -31,7 +31,7 @@ export function DailyPnlDialog({ day, onClose }: DailyPnlDialogProps) {
           <span>{formattedDate}</span>
           <span className="text-muted-foreground">|</span>
           <span className={isPositive ? "text-green-500" : "text-red-500"}>
-            {m['dashboard.day_profits.net_pnl']()}: {formatDecimal(day.amount ?? 0, { suffix: "USDT" })}
+            {m['dashboard.day_profits.net_pnl']()}: {formatAmount(day.amount ?? 0, { suffix: "USDT" })}
           </span>
         </DialogTitle>
         <div className="overflow-auto">

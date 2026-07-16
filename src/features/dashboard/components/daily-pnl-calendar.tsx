@@ -10,7 +10,7 @@ import { getLocale } from "#/paraglide/runtime";
 import { m } from "#/paraglide/messages";
 import { useUserConfig } from "#/store/user-config";
 import { getDailyPnl } from "#/features/dashboard/service";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 import { DailyPnlCell } from "./daily-pnl-cell";
 import { DailyPnlWeekSummary } from "./daily-pnl-week-summary";
 import { DailyPnlDialog } from "./daily-pnl-dialog";
@@ -224,7 +224,7 @@ export function DailyPnlCalendar() {
                   : "text-red-500"
               }
             >
-              {formatDecimal(monthlySummary.totalNetProfit, { suffix: "USDT" })}
+              {formatAmount(monthlySummary.totalNetProfit, { suffix: "USDT" })}
             </span>
             <Badge variant="outline">{monthlySummary.daysTraded} {m['dashboard.day_profits.total_days']()}</Badge>
           </CardAction>

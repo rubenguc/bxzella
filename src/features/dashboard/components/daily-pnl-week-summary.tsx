@@ -1,7 +1,7 @@
 import { m } from "#/paraglide/messages";
 import type { WeekSummary } from "#/features/dashboard/types";
 import { Badge } from "#/components/ui/badge";
-import { formatDecimal } from "#/lib/format-decimal";
+import { formatAmount } from "#/lib/format-amount";
 
 interface DailyPnlWeekSummaryProps extends WeekSummary {}
 
@@ -18,7 +18,7 @@ export function DailyPnlWeekSummary({
         {m['dashboard.day_profits.week']()} {weekNumber}
       </div>
       <div className={`text-[10px] sm:text-xs font-bold ${profitClass}`}>
-        {formatDecimal(totalNetProfit, { suffix: "USDT" })}
+        {formatAmount(totalNetProfit, { suffix: "USDT" })}
       </div>
       <Badge variant="secondary" className="mt-1">
         {daysTraded} {m['dashboard.day_profits.total_days']()}

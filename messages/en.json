@@ -3,24 +3,12 @@
   "sidebar": {
     "home": "Home",
     "trades": "Trades",
-    "accounts": "Accounts",
-    "info": "Info",
-    "create-api-key": "Create API Key",
-    "playbooks": "Playbooks",
-    "trading-assistant": "Trading Assistant",
-    "": "Dashboard",
-    "settings": "Settings",
-    "notebooks": "Notebooks",
-    "coin-performance": "Coin Performance"
+    "accounts": "Accounts"
   },
   "header": {
-    "account": "Account",
-    "select_coin": "Select Coin",
     "light": "Light",
     "dark": "Dark",
-    "system": "System",
-    "log_out": "Log out",
-    "settings": "Settings"
+    "log_out": "Log out"
   },
   "trade_info": {
     "open_date": "Open Date",
@@ -31,39 +19,24 @@
     "long": "LONG",
     "short": "SHORT",
     "symbol": "Symbol",
-    "volume": "Volume",
     "closed_date": "Closed Date",
     "avg_entry_price": "Avg Entry Price",
     "avg_exit_price": "Avg Exit Price",
     "position_pnl": "Position PnL",
-    "position_pnl_info": "Shows your total gain after deducting all fees and costs from a closed trade. It reflects the actual amount of money you earned or lost.",
     "realised_pnl": "Realised PnL",
-    "realised_pnl_info": "Shows the total realized gain or loss from a closed trade. It's calculated as (exit price - entry price) \u00d7 position size, representing your final profit or loss.",
-    "result": "Result",
+    "realised_pnl_info": "Shows the total realized gain or loss from a closed trade. It's calculated as (exit price - entry price) × position size, representing your final profit or loss.",
     "isolated": "Isolated",
     "yes": "Yes",
     "no": "No",
     "total_funding": "Total Funding",
-    "total_funding_info": "Total Funding shows the cumulative funding fees paid or received for holding a perpetual position. It\u2019s calculated as (total open positions \u00d7 funding rate) and can be positive (paid) or negative (received).",
+    "total_funding_info": "Total Funding shows the cumulative funding fees paid or received for holding a perpetual position. It’s calculated as (total open positions × funding rate) and can be positive (paid) or negative (received).",
     "entry_amount": "Approx Entry Amount",
     "entry_amount_info": "Reflects the actual capital used for your position after deducting fees",
     "position_commission": "Position Commission",
-    "open_position_value": "Open position Value",
-    "close_position_value": "Close position Value",
-    "open_position_amount": "Open position Amount",
-    "close_position_amount": "Close position Amount",
     "not_exact_values_description": "We use the values that Bingx provides for his API, these values are approximations and may not match the exact values shown in your account",
     "info": "Info",
-    "playbooks": "Playbooks",
-    "playbook_data_updated": "Playbook data updated successfully",
-    "save_changes": "Save Changes",
-    "rules_followed": "Rules Followed",
-    "check_all": "Check All",
     "no_trades": "No trades",
-    "save": "Save",
     "notes": "Notes",
-    "pnl_ratio": "PnL Ratio",
-    "pnl_ratio_after_fees": "PnL Ratio (After Fees)",
     "no_trade_data": "No trade data available",
     "realisedProfit": "Realised Profit",
     "unrealizedProfit": "Unrealized Profit"
@@ -71,43 +44,19 @@
   "common_messages": {
     "are_your_sure_want_to_delete": "Are you sure you want to delete",
     "this_cannot_be_undone": "This cannot be undone.",
-    "warning": "Warning",
-    "be_carefull": "Please be carefull, this operation can not be rolled back.",
     "delete": "Delete",
     "deleting_action": "Deleting...",
     "loading": "Loading...",
     "edit": "Edit",
     "cancel": "Cancel",
-    "continue": "Continue",
-    "rows_per_page": "Rows per page",
     "page": "Page",
     "of": "of",
     "go_to_first_page": "Go to first page",
     "go_to_previous_page": "Go to previous page",
     "go_to_next_page": "Go to next page",
-    "go_to_last_page": "Go to last page",
-    "aria_previous_month": "Previous month",
-    "aria_next_month": "Next month",
-    "aria_close_dialog": "Close dialog",
-    "aria_close_sheet": "Close sheet",
-    "aria_toggle_sidebar": "Toggle sidebar",
-    "aria_menu_more": "More options",
-    "aria_select_icon": "Select icon",
-    "aria_drag_handle": "Drag to reorder",
-    "aria_info_tooltip": "More information",
-    "aria_back": "Go back",
-    "aria_view_details": "View details",
-    "aria_add_note": "Add note",
-    "aria_select_color": "Select color",
-    "aria_delete_rule": "Delete rule",
-    "aria_edit_rule_group": "Edit rule group",
-    "aria_delete_rule_group": "Delete rule group",
-    "api_management_screenshot": "API Management interface showing API settings",
-    "api_key_creation_screenshot": "API Key creation interface",
-    "api_configuration_screenshot": "API Key configuration interface with permissions"
+    "go_to_last_page": "Go to last page"
   },
   "auth": {
-    "sign_in_title": "Sign In",
     "email_or_username": "Email or Username",
     "email_placeholder": "admin@example.com",
     "password": "Password",
@@ -115,7 +64,6 @@
     "signing_in": "Signing in...",
     "credential_required": "Email or username is required",
     "password_required": "Password is required",
-    "sign_in_error": "Error signing in",
     "setup_title": "Initial Setup",
     "setup_description": "Create the first admin user to get started.",
     "username": "Username",
@@ -138,108 +86,46 @@
     "error_failed_to_create_user": "Failed to create user",
     "error_server": "Server error, please try again"
   },
-  "errors": {
-    "server_error": "Server error",
-    "incorrect_api_key_error": "Incorrect API key",
-    "incorrect_api_key_error_description": "Please check your API key and try again."
-  },
   "statistics": {
     "net_pnl": "Net PnL",
     "net_pnl_info": "The total profit or loss after fees and comissions have been deducted. It represents the actual gain or loss from trading activities.",
     "profit_factor": "Profit Factor",
     "profit_factor_info": "A metric that measures the profitability of a trading strategy by dividing total gains by total losses. A value above 1 indicates a profitable strategy, while below 1 suggests losses outweigh gains.",
     "trade_win_percentage": "Trade Win %",
-    "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader\u2019s strategy results in profitable outcomes.",
+    "trade_win_percentage_info": "The percentage of winning trades out of the total number of trades executed. It indicates how often a trader’s strategy results in profitable outcomes.",
     "avg_win_loss": "Avg win/loss trade %",
     "avg_win_loss_info": "The average gain from winning trades and the average loss from losing trades. It helps assess the typical size of profits versus losses per trade.",
     "win": "Win",
     "lost": "Lost",
-    "win_rate": "Win Rate",
-    "average_win": "Average win",
-    "average_loss": "Average loss",
     "profits_by_day": "Profits by Day",
-    "area_chart": "Area Chart",
-    "bar_chart": "Bar Chart",
     "no_data_to_show": "No data to show"
   },
   "dashboard": {
-    "please_select_account_to_fetch_data": "Please select an account to fetch data.",
     "last_sync_time": "Last Sync Time",
-    "last_sync_time_tooltip": "This time represents the last time the data was synced. If there's not new trades after this date this value won't change",
     "open_positions": {
       "open_positions": "Open Positions",
-      "open_positions_description": "currently open positions, these don't depend on the time range",
       "no_open_positions": "No open positions"
     },
     "recent_trades": {
       "recent_trades": "Recent Trades",
-      "no_recent_trades": "No recent trades",
-      "syncing_new_trades": "Syncing new trades...",
-      "new_trades_synced": "New trades synced"
+      "no_recent_trades": "No recent trades"
     },
     "day_profits": {
-      "day_profits": "Day Profits",
       "week": "Week",
       "total_days": "days",
       "monthly_stats": "Monthly Stats",
-      "net_pnl": "Net PnL",
-      "days": {
-        "sunday": "Sun",
-        "monday": "Mon",
-        "tuesday": "Tue",
-        "wednesday": "Wed",
-        "thursday": "Thu",
-        "friday": "Fri",
-        "saturday": "Sat"
-      },
-      "days_short": {
-        "sunday": "S",
-        "monday": "M",
-        "tuesday": "T",
-        "wednesday": "W",
-        "thursday": "T",
-        "friday": "F",
-        "saturday": "S"
-      }
+      "net_pnl": "Net PnL"
     }
-  },
-  "trades": {
-    "no_trades": "No trades",
-    "trades": "Trades",
-    "export": "Export",
-    "export_description": "Select the data you want to include and the export format.",
-    "include": "Include",
-    "export_as": "Export",
-    "notes": "Notes",
-    "json": "JSON",
-    "cancel": "Cancel",
-    "exporting": "Exporting..."
   },
   "accounts": {
     "add_account": "Add Account",
     "name": "Name",
-    "no_accounts": "No accounts",
     "add_new_account": "Add New Account",
     "edit_account": "Edit Account",
     "api_key": "API Key",
     "secret_key": "SECRET Key",
-    "save_changes": "Save Changes",
     "delete_account": "Delete Account and trades related to it",
-    "account_saved_message": "Account saved successfully",
-    "account_updated_message": "Account updated successfully",
-    "account_deleted_message": "Account deleted successfully",
-    "account_error_message": "An error occurred while saving the account",
-    "account_sync_trades_descriptions": "If the account ID associated with this account is not already registered, we will sync all your closed postions based on your filled positions based on your the last 30 days. This may take a while",
-    "create_api_key_info": "Don't you know how to create an API key? Follow this <link>guide</link> to learn how to create an API key.",
-    "invalid_api_keys": "Invalid API keys",
-    "invalid_account_data": "Invalid account data",
     "provider": "Provider",
-    "account_already_exists": "Account already exists",
-    "error_creating_account": "Error creating account",
-    "error_updating_account": "Error updating account",
-    "error_deleting_account": "Error deleting account",
-    "edit_description": "Update your exchange account details",
-    "add_description": "Connect your exchange account to start tracking trades",
     "name_placeholder": "My Trading Account",
     "api_key_placeholder": "Enter your API key",
     "secret_key_placeholder": "Enter your secret key",
@@ -251,90 +137,8 @@
     "saving_action": "Saving...",
     "select_account": "Select an account"
   },
-  "info": {
-    "create_key_tutorial": {
-      "create_bingx_api_key": "Creating a Bingx API Key",
-      "step_by_step_guide": "Step-by-step Guide",
-      "log_into_bingx": "Log into Bingx",
-      "log_into_bingx_description": "Access your <link>Bingx Account</link> and verify that your account meets all requirements for API access.",
-      "go_to_api_managment": "Go to API Management",
-      "go_to_api_managment_description": "Find the 'API Management' tab in your account settings.",
-      "initiate_api_key_creation": "Initiate API Key Creation",
-      "initiate_api_key_creation_description": "Click on 'Create API Key' button.",
-      "config_and_create_your_api_key": "Configure and create your API key",
-      "only_read_permission_needed": "Only the read permission is needed",
-      "add_ip_whitelisting": "Add IP Whitelisting, you can use a page like <link>this</link> to get the ip based on the domain.",
-      "complete_verification_steps_to_continue": "Complete the verification steps to continue",
-      "copy_api_and_secret_key": "Copy API and Secret Key",
-      "copy_api_and_secret_key_description": "Save the API and Secret Key in a secure location. Make sure to save them in this phase, if you don't do it now, <strong>you will not</strong> be able to get your secret key again."
-    }
-  },
   "settings": {
-    "settings": "Settings",
-    "theme": "Theme",
-    "language": "Language",
-    "en": "English",
-    "es": "Spanish"
-  },
-  "ai_summary": {
-    "week": "Week",
-    "model": "Model",
-    "no_summaries": "No summaries available",
-    "last_summaries": "Last summaries",
-    "last_summary": "Last summary",
-    "last": "Last",
-    "all": "All",
-    "no_week_data_to_summarize": "No week data to summarize",
-    "no_week_data_to_summarize_description": "This last summarize is based in your last week data. It seems that you haven't used the platform in the last week.",
-    "summary": "Summary"
-  },
-  "playbooks": {
-    "failed_to_create_playbook": "Failed to create playbook",
-    "failed_to_update_playbook": "Failed to update playbook",
-    "failed_to_delete_playbook": "Failed to delete playbook",
-    "playbook_not_found": "Playbook not found",
-    "playbook_deleted_message": "Playbook deleted successfully",
-    "playbooks_saved_message": "Playbooks saved successfully",
-    "add_playbook": "Add Playbook",
-    "edit_playbook": "Edit Playbook",
-    "delete_playbook": "Delete Playbook",
-    "add_icon": "Add Icon",
-    "name": "Name",
-    "description": "Description",
-    "rules": "Rules",
-    "rule_name": "Rule Name",
-    "add_group_rule": "Add Group Rule",
-    "entry_criteria": "Entry Criteria",
-    "exit_criteria": "Exit Criteria",
-    "add_rule": "Add Rule",
-    "save_changes": "Save Changes",
-    "cancel": "Cancel",
-    "continue": "Continue",
-    "trades": "Trades",
-    "edit": "Edit",
-    "delete": "Delete",
-    "see_details": "See details",
-    "back": "Back"
-  },
-  "playbook_details": {
-    "back": "Back",
-    "playbook_not_found": "Playbook not found",
-    "tabs": {
-      "overview": "Overview",
-      "playbook_rules": "Playbooks Rules",
-      "trades": "Trades"
-    },
-    "playbook_rules": {
-      "follow_rate": "Follow Rate"
-    },
-    "overview": {
-      "net_pnl": "Net PnL",
-      "trades": "Trades",
-      "win_rate": "Win Rate %",
-      "profit_factor": "Profit Factor",
-      "avg_winner": "Avg Winner",
-      "avg_loser": "Avg Loser"
-    }
+    "theme": "Theme"
   },
   "date_range_selector": {
     "today": "Today",
@@ -344,34 +148,7 @@
     "last_month": "Last Month"
   },
   "notebooks": {
-    "notebooks_folder": {
-      "sessions_recap": "Sessions Recap",
-      "daily_journal": "Daily Journal",
-      "trade_notes": "Trade Notes",
-      "add_folder": "Add Folder",
-      "add_new_folder": "Add new folder",
-      "edit_folder": "Edit Folder",
-      "name": "Name",
-      "select_color_label": "Select color label",
-      "cancel": "Cancel",
-      "save": "Save",
-      "folder_created": "Folder created successfully",
-      "error_creating_notebook_folder": "Error creating notebook folder",
-      "error_updating_notebook_folder": "Error updating notebook folder",
-      "error_deleting_notebook_folder": "Error deleting notebook folder",
-      "folder_deleted": "Folder deleted successfully",
-      "delete_folder": "Delete Folder",
-      "notebook_folder_not_found": "Notebook folder not found",
-      "all_notes": "All Notes"
-    },
-    "notebooks": {
-      "no_notebooks_to_show": "No notebooks to show",
-      "load_more": "Load More"
-    },
     "notebook_detail": {
-      "net_pnl": "Net PnL",
-      "created": "Created",
-      "last_updated": "Last Updated",
       "save": "Save"
     },
     "notebook_templates": {
@@ -400,48 +177,12 @@
     }
   },
   "daily-journal": {
-    "net_pnl": "Net PnL",
-    "view_notes": "View Notes",
-    "total_trades": "Total Trades",
-    "winrate": "Win Rate",
-    "winners": "Winners",
-    "losers": "Losers",
-    "profit_factor": "Profit Factor",
-    "commisions": "Commissions",
-    "trades": "Trades",
-    "no_more_entries": "No more entries to load"
-  },
-  "coin-performance": {
-    "net_pnl": "Net PnL",
-    "view_notes": "View Notes",
-    "total_trades": "Total Trades",
-    "winrate": "Winrate",
-    "winners": "Winners",
-    "losers": "Losers"
+    "trades": "Trades"
   },
   "trade_chart": {
     "loading": "Loading...",
     "no_data": "No data available",
     "entry_marker": "Entry",
     "close_marker": "Close"
-  },
-  "trading-assistant": {
-    "title": "Trading Assistant",
-    "description": "Ask me about your trades, P&L analysis, or trading performance. I can analyze your data and provide insights.",
-    "suggestions": {
-      "pnl_this_month": "Show my P&L this month",
-      "analyze_winning_trades": "Analyze my winning trades",
-      "win_rate": "What's my win rate?",
-      "recent_trade_notes": "Show recent trade notes"
-    },
-    "chat": {
-      "assistant_name": "Assistant",
-      "ai_avatar": "AI",
-      "analyzing": "Analyzing",
-      "analyzing_data": "Analyzing your data...",
-      "input_placeholder": "Ask about your trades...",
-      "error_title": "Something went wrong",
-      "error_default": "Failed to send message. Please try again."
-    }
   }
 }
