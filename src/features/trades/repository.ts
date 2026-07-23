@@ -99,7 +99,6 @@ export async function syncPositions(
   const provider = getProviderFromAccount(account);
   const lastSyncTime = account.lastSyncPerCoin[coin] ?? 0;
 
-  logger.debug({ lastSyncTime }, "syncPositions");
 
   const rawTrades = await provider.getPositionHistory({ coin, lastSyncTime });
   if (rawTrades.length === 0) {

@@ -6,6 +6,13 @@ export const env = createEnv({
     SERVER_URL: z.string().url().optional(),
     ENCRYPTION_KEY: z.string().min(32, 'ENCRYPTION_KEY must be at least 32 characters'),
     BETTER_AUTH_URL: z.string().url().optional(),
+    GEMINI_API_KEY: z.string().min(1, 'GEMINI_API_KEY es requerida'),
+    GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+    QSTASH_URL: z.string().url().optional(),
+    QSTASH_TOKEN: z.string().optional(),
+    QSTASH_CURRENT_SIGNING_KEY: z.string().optional(),
+    QSTASH_NEXT_SIGNING_KEY: z.string().optional(),
+    CRON_SECRET: z.string().optional(),
   },
 
   /**

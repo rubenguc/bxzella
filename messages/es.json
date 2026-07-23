@@ -3,7 +3,8 @@
   "sidebar": {
     "home": "Inicio",
     "trades": "Operaciones",
-    "accounts": "Cuentas"
+    "accounts": "Cuentas",
+    "ai_summary": "Resúmenes IA"
   },
   "header": {
     "light": "Claro",
@@ -184,5 +185,30 @@
     "no_data": "No hay datos disponibles",
     "entry_marker": "Entrada",
     "close_marker": "Cierre"
+  },
+  "errors": {
+    "server_error": "Error del servidor, intente nuevamente"
+  },
+  "ai_summary": {
+    "add_subscription": "Agregar Suscripción",
+    "add_new_subscription": "Nueva Suscripción de Resumen IA",
+    "add_description": "Seleccioná una cuenta y moneda para recibir resúmenes semanales generados por IA.",
+    "account": "Cuenta",
+    "coin": "Moneda",
+    "active": "Estado",
+    "active_label": "Activo",
+    "inactive_label": "Inactivo",
+    "no_subscriptions_description": "No hay suscripciones aún. Agregá una para empezar a recibir resúmenes IA.",
+    "delete_subscription": "Eliminar Suscripción",
+    "select_account": "Seleccioná una cuenta",
+    "select_coin": "Seleccioná una moneda",
+    "saving_action": "Guardando...",
+    "create_action": "Crear Suscripción",
+    "include_notebook": "Notebooks",
+    "include_notebook_description": "Incluye las entradas del notebook en el resumen IA",
+    "yes": "Sí",
+    "no": "No",
+    "invalid_subscription_data": "Datos de suscripción inválidos",
+    "subscription_already_exists": "Esta cuenta ya tiene una suscripción para esta moneda"
   }
 }

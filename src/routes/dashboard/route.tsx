@@ -13,6 +13,7 @@ const PAGE_TITLES: Record<string, () => string> = {
   home: m['sidebar.home'],
   'exchange-accounts': m['sidebar.accounts'],
   trades: m['sidebar.trades'],
+  'ai-summary-subscriptions': m['sidebar.ai_summary'],
 }
 
 export const Route = createFileRoute('/dashboard')({
