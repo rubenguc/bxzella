@@ -69,6 +69,10 @@ export const Route = createFileRoute('/api/cron/weekly-summary')({
 
         // Encolar un workflow por cada suscripción activa
         log.info({ total: activeSubscriptions.length }, 'Encolando workflows')
+        const isDevelop =
+          process.env.VERCEL_GIT_COMMIT_REF === 'develop' ||
+          process.env.NODE_ENV === 'development'
+
         const triggerPromises = activeSubscriptions.map((sub) =>
           client.trigger({
             url: `${BASE_URL}/api/jobs/ai-summary`,
@@ -78,6 +82,9 @@ export const Route = createFileRoute('/api/cron/weekly-summary')({
               coin: sub.coin,
               includeNotebook: sub.includeNotebook,
             },
+            headers: !isDevelop && process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+              ? { 'x-vercel-protection-bypass': process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+              : undefined,
             retries: 3,
           }),
         )
