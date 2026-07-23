@@ -7,29 +7,14 @@ import {
 } from '#/components/ui/select'
 import { useUserConfig } from '#/store/user-config'
 import type { Coin } from '#/features/exchange-providers/types'
+import { getCoinsForProvider } from '#/features/exchange-providers/coins'
 
-interface CoinMeta {
-  label: Coin
-  image: string
-  disabled: boolean
-}
+const ALL_COINS: Coin[] = ['USDT', 'VST']
 
-const COINS: CoinMeta[] = [
-  { label: 'USDT', image: '/assets/coins/USDT.webp', disabled: false },
-  { label: 'VST', image: '/assets/coins/VST.webp', disabled: false },
-]
-
-/** Returns coins available for a given provider. */
-function getCoinsForProvider(provider?: string): CoinMeta[] {
-  if (!provider) return [COINS[0]]
-  if (provider === 'bingx') return COINS
-  if (provider === 'bitunix') return COINS.filter((c) => c.label === 'USDT')
-  return [COINS[0]]
-}
-
-const coinMetaMap: Record<string, CoinMeta> = Object.fromEntries(
-  COINS.map((c) => [c.label, c]),
-)
+const coinMetaMap: Record<string, { label: Coin; image: string }> =
+  Object.fromEntries(
+    ALL_COINS.map((c) => [c, { label: c, image: `/assets/coins/${c}.webp` }]),
+  )
 
 export function CoinSelector() {
   const { coin, setCoin, selectedAccount } = useUserConfig()
@@ -49,11 +34,16 @@ export function CoinSelector() {
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {availableCoins.map((c) => (
-          <SelectItem key={c.label} value={c.label} disabled={c.disabled}>
+        {availableCoins.map((coin) => (
+          <SelectItem key={coin} value={coin}>
             <div className="flex items-center gap-1.5">
-              <img src={c.image} alt={c.label} width={20} height={20} />
-              <span>{c.label}</span>
+              <img
+                src={`/assets/coins/${coin}.webp`}
+                alt={coin}
+                width={20}
+                height={20}
+              />
+              <span>{coin}</span>
             </div>
           </SelectItem>
         ))}

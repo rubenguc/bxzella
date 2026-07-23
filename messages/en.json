@@ -3,7 +3,8 @@
   "sidebar": {
     "home": "Home",
     "trades": "Trades",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "ai_summary": "AI Summaries"
   },
   "header": {
     "light": "Light",
@@ -184,5 +185,30 @@
     "no_data": "No data available",
     "entry_marker": "Entry",
     "close_marker": "Close"
+  },
+  "errors": {
+    "server_error": "Server error, please try again"
+  },
+  "ai_summary": {
+    "add_subscription": "Add Subscription",
+    "add_new_subscription": "New AI Summary Subscription",
+    "add_description": "Select an account and coin to receive AI-generated weekly summaries.",
+    "account": "Account",
+    "coin": "Coin",
+    "active": "Status",
+    "active_label": "Active",
+    "inactive_label": "Inactive",
+    "no_subscriptions_description": "No subscriptions yet. Add one to start receiving AI summaries.",
+    "delete_subscription": "Delete Subscription",
+    "select_account": "Select an account",
+    "select_coin": "Select a coin",
+    "saving_action": "Saving...",
+    "create_action": "Create Subscription",
+    "include_notebook": "Notebooks",
+    "include_notebook_description": "Include notebook entries in the AI summary",
+    "yes": "Yes",
+    "no": "No",
+    "invalid_subscription_data": "Invalid subscription data",
+    "subscription_already_exists": "This account already has a subscription for this coin"
   }
 }

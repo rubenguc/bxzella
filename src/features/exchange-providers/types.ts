@@ -33,6 +33,14 @@ export const PROVIDER_LIST: ProviderInfo[] = Object.values(PROVIDER_INFO)
 
 export type Coin = 'VST' | 'USDT' | 'USDC'
 
+export const COINS: Coin[] = ['VST', 'USDT', 'USDC']
+
+export const COIN_LABELS: Record<Coin, string> = {
+  VST: 'VST',
+  USDT: 'USDT',
+  USDC: 'USDC',
+}
+
 export type ContractType = 'P' | 'S'
 
 export interface OpenPosition {
