@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { Link } from '@tanstack/react-router'
 
 import { useSubscriptions } from '#/features/ai-summary-subscriptions/context'
 import { useGetSubscriptions } from '#/features/ai-summary-subscriptions/hooks/use-ai-summary-subscriptions'
@@ -23,7 +24,7 @@ import {
 } from '#/components/ui/table'
 import { Badge } from '#/components/ui/badge'
 import { Switch } from '#/components/ui/switch'
-import { Trash } from 'lucide-react'
+import { Trash, Eye } from 'lucide-react'
 import { Skeleton } from '#/components/ui/skeleton'
 import { toggleSubscriptionAction } from '#/features/ai-summary-subscriptions/server-actions'
 import { useQueryClient } from '@tanstack/react-query'
@@ -43,6 +44,11 @@ function RowActions({ row }: { row: { original: SubscriptionWithAccount } }) {
 
   return (
     <div className="flex items-center justify-end gap-3">
+      <Button variant="ghost" size="icon" asChild>
+        <Link to="/dashboard/ai-summary-subscriptions/$subscriptionId" params={{ subscriptionId: row.original.id }}>
+          <Eye className="h-4 w-4" />
+        </Link>
+      </Button>
       <Switch
         checked={row.original.isActive}
         onCheckedChange={handleToggle}

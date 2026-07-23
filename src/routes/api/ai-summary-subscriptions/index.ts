@@ -4,7 +4,7 @@ import { authMiddleware } from '#/lib/api-middleware'
 import { apiHandler } from '#/lib/api-error'
 import { getSubscriptionsByUserId } from '#/features/ai-summary-subscriptions/repository'
 
-export const Route = createFileRoute('/api/ai-summary-subscriptions')({
+export const Route = createFileRoute('/api/ai-summary-subscriptions/')({
   server: {
     middleware: [authMiddleware],
     handlers: {

@@ -209,6 +209,13 @@
     "yes": "Sí",
     "no": "No",
     "invalid_subscription_data": "Datos de suscripción inválidos",
-    "subscription_already_exists": "Esta cuenta ya tiene una suscripción para esta moneda"
+    "subscription_already_exists": "Esta cuenta ya tiene una suscripción para esta moneda",
+    "view_analyses": "Ver",
+    "analyses_title": "Análisis",
+    "analyses_empty": "Todavía no hay análisis. El cron semanal los generará los domingos.",
+    "analyses_loading": "Cargando análisis…",
+    "analyses_page": "Página {page}",
+    "analyses_previous": "Anterior",
+    "analyses_next": "Siguiente"
   }
 }

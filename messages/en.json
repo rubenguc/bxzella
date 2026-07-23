@@ -209,6 +209,13 @@
     "yes": "Yes",
     "no": "No",
     "invalid_subscription_data": "Invalid subscription data",
-    "subscription_already_exists": "This account already has a subscription for this coin"
+    "subscription_already_exists": "This account already has a subscription for this coin",
+    "view_analyses": "View",
+    "analyses_title": "Analyses",
+    "analyses_empty": "No analyses yet. The weekly cron will generate them on Sundays.",
+    "analyses_loading": "Loading analyses…",
+    "analyses_page": "Page {page}",
+    "analyses_previous": "Previous",
+    "analyses_next": "Next"
   }
 }

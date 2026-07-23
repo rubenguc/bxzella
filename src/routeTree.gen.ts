@@ -18,12 +18,13 @@ import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboar
 import { Route as DashboardAiSummarySubscriptionsRouteImport } from './routes/dashboard/ai-summary-subscriptions'
 import { Route as ApiKlineRouteImport } from './routes/api/kline'
 import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
-import { Route as ApiAiSummarySubscriptionsRouteImport } from './routes/api/ai-summary-subscriptions'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
 import { Route as DashboardTradesIndexRouteImport } from './routes/dashboard/trades/index'
 import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
 import { Route as ApiNotebookTemplatesIndexRouteImport } from './routes/api/notebook-templates/index'
+import { Route as ApiAiSummarySubscriptionsIndexRouteImport } from './routes/api/ai-summary-subscriptions/index'
 import { Route as DashboardTradesPositionIdRouteImport } from './routes/dashboard/trades/$positionId'
+import { Route as DashboardAiSummarySubscriptionsSubscriptionIdRouteImport } from './routes/dashboard/ai-summary-subscriptions/$subscriptionId'
 import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
 import { Route as ApiTradesPositionIdRouteImport } from './routes/api/trades/$positionId'
 import { Route as ApiJobsAiSummaryRouteImport } from './routes/api/jobs/ai-summary'
@@ -33,6 +34,7 @@ import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard
 import { Route as ApiCronWeeklySummaryRouteImport } from './routes/api/cron/weekly-summary'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiNotebooksTradeTradeIdRouteImport } from './routes/api/notebooks/trade/$tradeId'
+import { Route as ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport } from './routes/api/ai-summary-subscriptions/$subscriptionId/analyses'
 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
@@ -81,12 +83,6 @@ const ApiDashboardRoute = ApiDashboardRouteImport.update({
   path: '/api/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAiSummarySubscriptionsRoute =
-  ApiAiSummarySubscriptionsRouteImport.update({
-    id: '/api/ai-summary-subscriptions',
-    path: '/api/ai-summary-subscriptions',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const ApiAccountsRoute = ApiAccountsRouteImport.update({
   id: '/api/accounts',
   path: '/api/accounts',
@@ -108,11 +104,23 @@ const ApiNotebookTemplatesIndexRoute =
     path: '/api/notebook-templates/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiAiSummarySubscriptionsIndexRoute =
+  ApiAiSummarySubscriptionsIndexRouteImport.update({
+    id: '/api/ai-summary-subscriptions/',
+    path: '/api/ai-summary-subscriptions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardTradesPositionIdRoute =
   DashboardTradesPositionIdRouteImport.update({
     id: '/trades/$positionId',
     path: '/trades/$positionId',
     getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAiSummarySubscriptionsSubscriptionIdRoute =
+  DashboardAiSummarySubscriptionsSubscriptionIdRouteImport.update({
+    id: '/$subscriptionId',
+    path: '/$subscriptionId',
+    getParentRoute: () => DashboardAiSummarySubscriptionsRoute,
   } as any)
 const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
   id: '/api/trades/sync',
@@ -162,6 +170,12 @@ const ApiNotebooksTradeTradeIdRoute =
     path: '/api/notebooks/trade/$tradeId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute =
+  ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport.update({
+    id: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
+    path: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -169,10 +183,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsRoute
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
-  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRoute
+  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -183,10 +196,13 @@ export interface FileRoutesByFullPath {
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
+  '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
   '/dashboard/trades/': typeof DashboardTradesIndexRoute
+  '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
 }
 export interface FileRoutesByTo {
@@ -194,10 +210,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsRoute
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
-  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRoute
+  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -208,10 +223,13 @@ export interface FileRoutesByTo {
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
+  '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates': typeof ApiNotebookTemplatesIndexRoute
   '/api/trades': typeof ApiTradesIndexRoute
   '/dashboard/trades': typeof DashboardTradesIndexRoute
+  '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
 }
 export interface FileRoutesById {
@@ -221,10 +239,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/api/accounts': typeof ApiAccountsRoute
-  '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsRoute
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
-  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRoute
+  '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -235,10 +252,13 @@ export interface FileRoutesById {
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
+  '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
+  '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
   '/dashboard/trades/': typeof DashboardTradesIndexRoute
+  '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
 }
 export interface FileRouteTypes {
@@ -249,7 +269,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup'
     | '/api/accounts'
-    | '/api/ai-summary-subscriptions'
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
@@ -263,10 +282,13 @@ export interface FileRouteTypes {
     | '/api/jobs/ai-summary'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
+    | '/dashboard/ai-summary-subscriptions/$subscriptionId'
     | '/dashboard/trades/$positionId'
+    | '/api/ai-summary-subscriptions/'
     | '/api/notebook-templates/'
     | '/api/trades/'
     | '/dashboard/trades/'
+    | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -274,7 +296,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup'
     | '/api/accounts'
-    | '/api/ai-summary-subscriptions'
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
@@ -288,10 +309,13 @@ export interface FileRouteTypes {
     | '/api/jobs/ai-summary'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
+    | '/dashboard/ai-summary-subscriptions/$subscriptionId'
     | '/dashboard/trades/$positionId'
+    | '/api/ai-summary-subscriptions'
     | '/api/notebook-templates'
     | '/api/trades'
     | '/dashboard/trades'
+    | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
   id:
     | '__root__'
@@ -300,7 +324,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup'
     | '/api/accounts'
-    | '/api/ai-summary-subscriptions'
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
@@ -314,10 +337,13 @@ export interface FileRouteTypes {
     | '/api/jobs/ai-summary'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
+    | '/dashboard/ai-summary-subscriptions/$subscriptionId'
     | '/dashboard/trades/$positionId'
+    | '/api/ai-summary-subscriptions/'
     | '/api/notebook-templates/'
     | '/api/trades/'
     | '/dashboard/trades/'
+    | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
   fileRoutesById: FileRoutesById
 }
@@ -327,7 +353,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
   ApiAccountsRoute: typeof ApiAccountsRoute
-  ApiAiSummarySubscriptionsRoute: typeof ApiAiSummarySubscriptionsRoute
   ApiDashboardRoute: typeof ApiDashboardRouteWithChildren
   ApiKlineRoute: typeof ApiKlineRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -335,8 +360,10 @@ export interface RootRouteChildren {
   ApiJobsAiSummaryRoute: typeof ApiJobsAiSummaryRoute
   ApiTradesPositionIdRoute: typeof ApiTradesPositionIdRoute
   ApiTradesSyncRoute: typeof ApiTradesSyncRoute
+  ApiAiSummarySubscriptionsIndexRoute: typeof ApiAiSummarySubscriptionsIndexRoute
   ApiNotebookTemplatesIndexRoute: typeof ApiNotebookTemplatesIndexRoute
   ApiTradesIndexRoute: typeof ApiTradesIndexRoute
+  ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute: typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   ApiNotebooksTradeTradeIdRoute: typeof ApiNotebooksTradeTradeIdRoute
 }
 
@@ -405,13 +432,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/ai-summary-subscriptions': {
-      id: '/api/ai-summary-subscriptions'
-      path: '/api/ai-summary-subscriptions'
-      fullPath: '/api/ai-summary-subscriptions'
-      preLoaderRoute: typeof ApiAiSummarySubscriptionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/accounts': {
       id: '/api/accounts'
       path: '/api/accounts'
@@ -440,12 +460,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotebookTemplatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai-summary-subscriptions/': {
+      id: '/api/ai-summary-subscriptions/'
+      path: '/api/ai-summary-subscriptions'
+      fullPath: '/api/ai-summary-subscriptions/'
+      preLoaderRoute: typeof ApiAiSummarySubscriptionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/trades/$positionId': {
       id: '/dashboard/trades/$positionId'
       path: '/trades/$positionId'
       fullPath: '/dashboard/trades/$positionId'
       preLoaderRoute: typeof DashboardTradesPositionIdRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/ai-summary-subscriptions/$subscriptionId': {
+      id: '/dashboard/ai-summary-subscriptions/$subscriptionId'
+      path: '/$subscriptionId'
+      fullPath: '/dashboard/ai-summary-subscriptions/$subscriptionId'
+      preLoaderRoute: typeof DashboardAiSummarySubscriptionsSubscriptionIdRouteImport
+      parentRoute: typeof DashboardAiSummarySubscriptionsRoute
     }
     '/api/trades/sync': {
       id: '/api/trades/sync'
@@ -510,11 +544,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotebooksTradeTradeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai-summary-subscriptions/$subscriptionId/analyses': {
+      id: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      path: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      fullPath: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      preLoaderRoute: typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface DashboardAiSummarySubscriptionsRouteChildren {
+  DashboardAiSummarySubscriptionsSubscriptionIdRoute: typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
+}
+
+const DashboardAiSummarySubscriptionsRouteChildren: DashboardAiSummarySubscriptionsRouteChildren =
+  {
+    DashboardAiSummarySubscriptionsSubscriptionIdRoute:
+      DashboardAiSummarySubscriptionsSubscriptionIdRoute,
+  }
+
+const DashboardAiSummarySubscriptionsRouteWithChildren =
+  DashboardAiSummarySubscriptionsRoute._addFileChildren(
+    DashboardAiSummarySubscriptionsRouteChildren,
+  )
+
 interface DashboardRouteRouteChildren {
-  DashboardAiSummarySubscriptionsRoute: typeof DashboardAiSummarySubscriptionsRoute
+  DashboardAiSummarySubscriptionsRoute: typeof DashboardAiSummarySubscriptionsRouteWithChildren
   DashboardExchangeAccountsRoute: typeof DashboardExchangeAccountsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardTradesPositionIdRoute: typeof DashboardTradesPositionIdRoute
@@ -522,7 +578,8 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardAiSummarySubscriptionsRoute: DashboardAiSummarySubscriptionsRoute,
+  DashboardAiSummarySubscriptionsRoute:
+    DashboardAiSummarySubscriptionsRouteWithChildren,
   DashboardExchangeAccountsRoute: DashboardExchangeAccountsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardTradesPositionIdRoute: DashboardTradesPositionIdRoute,
@@ -555,7 +612,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
   ApiAccountsRoute: ApiAccountsRoute,
-  ApiAiSummarySubscriptionsRoute: ApiAiSummarySubscriptionsRoute,
   ApiDashboardRoute: ApiDashboardRouteWithChildren,
   ApiKlineRoute: ApiKlineRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
@@ -563,8 +619,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiJobsAiSummaryRoute: ApiJobsAiSummaryRoute,
   ApiTradesPositionIdRoute: ApiTradesPositionIdRoute,
   ApiTradesSyncRoute: ApiTradesSyncRoute,
+  ApiAiSummarySubscriptionsIndexRoute: ApiAiSummarySubscriptionsIndexRoute,
   ApiNotebookTemplatesIndexRoute: ApiNotebookTemplatesIndexRoute,
   ApiTradesIndexRoute: ApiTradesIndexRoute,
+  ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute:
+    ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute,
   ApiNotebooksTradeTradeIdRoute: ApiNotebooksTradeTradeIdRoute,
 }
 export const routeTree = rootRouteImport

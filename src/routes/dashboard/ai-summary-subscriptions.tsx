@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useLocation } from '@tanstack/react-router'
 import { SubscriptionsProvider } from '#/features/ai-summary-subscriptions/context'
 import { SubscriptionsHeader } from '#/features/ai-summary-subscriptions/components/header'
 import { SubscriptionsTable } from '#/features/ai-summary-subscriptions/components/table'
@@ -9,11 +9,23 @@ export const Route = createFileRoute('/dashboard/ai-summary-subscriptions')({
 })
 
 function AiSummarySubscriptions() {
+  const { pathname } = useLocation()
+  const isDetail = pathname !== '/dashboard/ai-summary-subscriptions'
+
+  if (isDetail) {
+    return (
+      <SubscriptionsProvider>
+        <Outlet />
+      </SubscriptionsProvider>
+    )
+  }
+
   return (
     <SubscriptionsProvider>
       <SubscriptionsHeader />
       <SubscriptionsTable />
       <SubscriptionsDialogs />
+      <Outlet />
     </SubscriptionsProvider>
   )
 }
