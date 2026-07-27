@@ -1,6 +1,7 @@
-import { and, desc, eq, sql, count } from "drizzle-orm";
+import { and, desc, eq, sql, count, between, inArray } from "drizzle-orm";
 import { db } from "#/db/index";
-import { trade, type NewTrade } from "#/features/trades/schema";
+import { trade, type Trade, type NewTrade } from "#/features/trades/schema";
+import { notebook } from "#/features/notebooks/schema";
 import { resolveEarliestTradeDate } from "#/features/trades/helpers";
 import { getProviderFromAccount } from "#/features/exchange-providers/get-provider";
 import {
@@ -174,4 +175,75 @@ export async function deleteTradeByPositionId(
     .where(
       and(eq(trade.accountId, accountId), eq(trade.positionId, positionId)),
     );
+}
+
+// ── Export ─────────────────────────────────────────────
+
+export async function getAllTradesByAccountAndCoin(
+  accountId: string,
+  coin: Coin,
+): Promise<Trade[]> {
+  return db
+    .select()
+    .from(trade)
+    .where(and(eq(trade.accountId, accountId), eq(trade.coin, coin)))
+    .orderBy(desc(trade.updateTime))
+}
+
+export async function getTradesByDateRange(
+  accountId: string,
+  coin: Coin,
+  startDate: Date,
+  endDate: Date,
+): Promise<Trade[]> {
+  const start = new Date(startDate)
+  start.setHours(0, 0, 0, 0)
+
+  const end = new Date(endDate)
+  end.setHours(23, 59, 59, 999)
+
+  return db
+    .select()
+    .from(trade)
+    .where(
+      and(
+        eq(trade.accountId, accountId),
+        eq(trade.coin, coin),
+        between(trade.updateTime, start, end),
+      ),
+    )
+    .orderBy(desc(trade.updateTime))
+}
+
+export async function getTradesTopN(
+  accountId: string,
+  coin: Coin,
+  limit: number,
+): Promise<Trade[]> {
+  return db
+    .select()
+    .from(trade)
+    .where(and(eq(trade.accountId, accountId), eq(trade.coin, coin)))
+    .orderBy(desc(trade.updateTime))
+    .limit(limit)
+}
+
+export async function getNotebookPlainTextByTradeIds(
+  tradeIds: string[],
+): Promise<Map<string, string | null>> {
+  if (tradeIds.length === 0) return new Map()
+
+  const rows = await db
+    .select({
+      tradeId: notebook.tradeId,
+      contentPlainText: notebook.contentPlainText,
+    })
+    .from(notebook)
+    .where(inArray(notebook.tradeId, tradeIds))
+
+  const map = new Map<string, string | null>()
+  for (const row of rows) {
+    if (row.tradeId) map.set(row.tradeId, row.contentPlainText)
+  }
+  return map
 }
