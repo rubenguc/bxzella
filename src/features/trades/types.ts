@@ -15,3 +15,26 @@ export interface PaginatedTradesResponse extends PaginatedResponse<TradeItem> {
   syncTime: number
   earliestTradeDate: string
 }
+
+/** Trade export item (includes notebook content). */
+export interface TradeExportItem {
+  positionId: string
+  symbol: string
+  positionSide: string
+  isolated: boolean
+  openTime: Date
+  updateTime: Date
+  avgPrice: string
+  avgClosePrice: string | null
+  realisedProfit: string
+  netProfit: string
+  positionAmt: string
+  closePositionAmt: string | null
+  leverage: number
+  closeAllPositions: boolean
+  positionCommission: string | null
+  totalFunding: string | null
+  type: string
+  coin: string
+  notebookContentPlainText: string | null
+}

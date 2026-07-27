@@ -189,6 +189,24 @@
   "errors": {
     "server_error": "Server error, please try again"
   },
+  "trade_export": {
+    "title": "Export Trades",
+    "scope_all": "All",
+    "scope_custom": "Custom",
+    "date_range": "By date",
+    "quantity": "By quantity",
+    "download": "Download",
+    "exporting": "Exporting...",
+    "custom": "Custom",
+    "today": "Today",
+    "this_week": "This Week",
+    "this_month": "This Month",
+    "last_30_days": "Last 30 Days",
+    "last_month": "Last Month",
+    "select_range": "Select range",
+    "include_notebooks": "Include notebooks",
+    "export_button": "Export"
+  },
   "ai_summary": {
     "add_subscription": "Add Subscription",
     "add_new_subscription": "New AI Summary Subscription",
@@ -209,6 +227,13 @@
     "yes": "Yes",
     "no": "No",
     "invalid_subscription_data": "Invalid subscription data",
-    "subscription_already_exists": "This account already has a subscription for this coin"
+    "subscription_already_exists": "This account already has a subscription for this coin",
+    "view_analyses": "View",
+    "analyses_title": "Analyses",
+    "analyses_empty": "No analyses yet. The weekly cron will generate them on Sundays.",
+    "analyses_loading": "Loading analyses…",
+    "analyses_page": "Page {page}",
+    "analyses_previous": "Previous",
+    "analyses_next": "Next"
   }
 }

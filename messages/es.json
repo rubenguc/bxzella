@@ -189,6 +189,24 @@
   "errors": {
     "server_error": "Error del servidor, intente nuevamente"
   },
+  "trade_export": {
+    "title": "Exportar Trades",
+    "scope_all": "Todos",
+    "scope_custom": "Personalizado",
+    "date_range": "Por fecha",
+    "quantity": "Por cantidad",
+    "download": "Descargar",
+    "exporting": "Exportando...",
+    "custom": "Personalizado",
+    "today": "Hoy",
+    "this_week": "Esta semana",
+    "this_month": "Este mes",
+    "last_30_days": "Últimos 30 días",
+    "last_month": "Mes pasado",
+    "select_range": "Seleccionar rango",
+    "include_notebooks": "Incluir notebooks",
+    "export_button": "Exportar"
+  },
   "ai_summary": {
     "add_subscription": "Agregar Suscripción",
     "add_new_subscription": "Nueva Suscripción de Resumen IA",
@@ -209,6 +227,13 @@
     "yes": "Sí",
     "no": "No",
     "invalid_subscription_data": "Datos de suscripción inválidos",
-    "subscription_already_exists": "Esta cuenta ya tiene una suscripción para esta moneda"
+    "subscription_already_exists": "Esta cuenta ya tiene una suscripción para esta moneda",
+    "view_analyses": "Ver",
+    "analyses_title": "Análisis",
+    "analyses_empty": "Todavía no hay análisis. El cron semanal los generará los domingos.",
+    "analyses_loading": "Cargando análisis…",
+    "analyses_page": "Página {page}",
+    "analyses_previous": "Anterior",
+    "analyses_next": "Siguiente"
   }
 }

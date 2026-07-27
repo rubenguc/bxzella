@@ -2,7 +2,6 @@ import { and, eq, desc, sql } from 'drizzle-orm'
 import { db } from '#/db/index'
 import {
   aiSummaryAnalysis,
-  type AiSummaryAnalysis,
   type NewAiSummaryAnalysis,
 } from '#/features/ai-summary-analyses/schema'
 
