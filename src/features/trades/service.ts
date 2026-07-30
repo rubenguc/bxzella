@@ -8,9 +8,10 @@ export async function fetchTrades(
   coin: Coin,
   page = 0,
   limit = 20,
+  symbol?: string,
 ): Promise<PaginatedTradesResponse> {
   const { data } = await apiClient.get<PaginatedTradesResponse>('/trades', {
-    params: { exchangeAccountId: accountId, coin, page, limit },
+    params: { exchangeAccountId: accountId, coin, page, limit, symbol },
   })
   return data
 }

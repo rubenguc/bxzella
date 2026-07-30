@@ -11,6 +11,7 @@ export const tradesSearchParamsSchema = z.object({
   page: pageParamValidation(),
   limit: limitParamValidation(),
   coin: coinParamValidation(),
+  symbol: z.string().optional(),
 })
 
 export type TradesSearchParams = z.infer<typeof tradesSearchParamsSchema>

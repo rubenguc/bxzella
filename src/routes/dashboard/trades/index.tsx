@@ -18,12 +18,11 @@ function Trades() {
         <TradesToolbar
           accountId={selectedAccount.id}
           coin={coin}
-          accountName={selectedAccount.name}
         />
       )}
 
       {selectedAccount ? (
-        <TradesTable accountId={selectedAccount.id} coin={coin} />
+        <TradesTable accountId={selectedAccount.id} coin={coin} accountName={selectedAccount.name} />
       ) : (
         <div className="text-sm text-muted-foreground">
           {m['accounts.select_account']()}
