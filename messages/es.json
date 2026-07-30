@@ -103,6 +103,7 @@
   },
   "dashboard": {
     "last_sync_time": "Última Hora de Sincronización",
+    "trades_synced": "{count} nuevo(s) trade(s) sincronizado(s)",
     "open_positions": {
       "open_positions": "Posiciones Abiertas",
       "no_open_positions": "No hay posiciones abiertas"

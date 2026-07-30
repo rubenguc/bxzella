@@ -103,6 +103,7 @@
   },
   "dashboard": {
     "last_sync_time": "Last Sync Time",
+    "trades_synced": "{count} new trade(s) synced",
     "open_positions": {
       "open_positions": "Open Positions",
       "no_open_positions": "No open positions"

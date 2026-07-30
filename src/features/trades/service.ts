@@ -18,11 +18,12 @@ export async function fetchTrades(
 export async function syncTrades(
   accountId: string,
   coin: Coin,
-): Promise<{ synced: boolean; syncTime: number; earliestTradeDate: string }> {
+): Promise<{ synced: boolean; syncTime: number; earliestTradeDate: string; newTradesCount: number }> {
   const { data } = await apiClient.get<{
     synced: boolean
     syncTime: number
     earliestTradeDate: string
+    newTradesCount: number
   }>('/trades/sync', {
     params: { exchangeAccountId: accountId, coin },
   })

@@ -91,10 +91,11 @@ export async function syncPositions(
   synced: boolean;
   syncTime: number;
   earliestTradeDate: string;
+  newTradesCount: number;
 }> {
   const account = await getAccountById(accountId);
   if (!account) {
-    return { synced: false, syncTime: 0, earliestTradeDate: "" };
+    return { synced: false, syncTime: 0, earliestTradeDate: "", newTradesCount: 0 };
   }
 
   const provider = getProviderFromAccount(account);
@@ -103,11 +104,24 @@ export async function syncPositions(
 
   const rawTrades = await provider.getPositionHistory({ coin, lastSyncTime });
   if (rawTrades.length === 0) {
-    return { synced: false, syncTime: 0, earliestTradeDate: "" };
+    return { synced: false, syncTime: 0, earliestTradeDate: "", newTradesCount: 0 };
   }
 
   const syncTime = Date.now();
   const dbRows = rawTrades.map((t) => ({ ...t, accountId }) as NewTrade);
+
+  // Count new trades before upsert
+  const existingRows = await db
+    .select({ positionId: trade.positionId })
+    .from(trade)
+    .where(
+      and(
+        eq(trade.accountId, accountId),
+        inArray(trade.positionId, rawTrades.map((t) => t.positionId)),
+      ),
+    );
+
+  const newTradesCount = rawTrades.length - existingRows.length;
 
   await db.transaction(async (tx) => {
     await upsertTrades(dbRows, tx);
@@ -124,7 +138,7 @@ export async function syncPositions(
     }
   }
 
-  return { synced: true, syncTime, earliestTradeDate };
+  return { synced: true, syncTime, earliestTradeDate, newTradesCount };
 }
 
 // ── Mutations ──────────────────────────────────────────
