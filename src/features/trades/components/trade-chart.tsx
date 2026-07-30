@@ -143,14 +143,14 @@ export function TradeChart({
         position: isLong ? "belowBar" : "aboveBar",
         color: "#2196F3",
         shape: isLong ? "arrowUp" : "arrowDown",
-        text: `${m["trade_chart.entry_marker"]()} @ ${formatAmount(avgPrice, { precision: 6 })}`,
+        text: `${m["trade_chart.entry_marker"]()} @ ${formatAmount(avgPrice, { precision: 6, compact: false })}`,
       },
       {
         time: findBarTime(updateTime, chartData),
         position: isCloseAbove ? "aboveBar" : "belowBar",
         color: isWin ? "#22c55e" : "#ef4444",
         shape: isCloseAbove ? "arrowDown" : "arrowUp",
-        text: `${m["trade_chart.close_marker"]()} @ ${formatAmount(avgClosePrice, { precision: 6 })}`,
+        text: `${m["trade_chart.close_marker"]()} @ ${formatAmount(avgClosePrice, { precision: 6, compact: false })}`,
       },
     ];
 

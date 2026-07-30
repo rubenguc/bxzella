@@ -65,7 +65,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         tooltipInfo={m["trade_info.realised_pnl_info"]()}
         value={
           <span className={isWin ? "text-green-500" : "text-red-500"}>
-            {formatAmount(Number(trade.realisedProfit), { precision: 2, suffix: trade.coin })}
+            {formatAmount(Number(trade.realisedProfit), { precision: 2, suffix: trade.coin, compact: false })}
           </span>
         }
       />
@@ -83,12 +83,12 @@ export function TradeInfo({ trade }: { trade: Trade }) {
 
       <InfoRow
         label={m["trade_info.avg_entry_price"]()}
-        value={formatAmount(trade.avgPrice, { precision: 6 })}
+        value={formatAmount(trade.avgPrice, { precision: 6, compact: false })}
       />
 
       <InfoRow
         label={m["trade_info.avg_exit_price"]()}
-        value={trade.avgClosePrice ? formatAmount(trade.avgClosePrice, { precision: 6 }) : "—"}
+        value={trade.avgClosePrice ? formatAmount(trade.avgClosePrice, { precision: 6, compact: false }) : "—"}
       />
 
       <InfoRow
@@ -101,7 +101,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         tooltipInfo={m["trade_info.total_funding_info"]()}
         value={
           <span className={Number(trade.totalFunding) >= 0 ? "text-green-500" : "text-red-500"}>
-            {formatAmount(Number(trade.totalFunding), { precision: 6, suffix: trade.coin })}
+            {formatAmount(Number(trade.totalFunding), { precision: 6, suffix: trade.coin, compact: false })}
           </span>
         }
       />
@@ -110,7 +110,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         label={m["trade_info.position_commission"]()}
         value={
           <span className="text-red-500">
-            {formatAmount(-Number(trade.positionCommission), { precision: 4, suffix: trade.coin })}
+            {formatAmount(-Number(trade.positionCommission), { precision: 4, suffix: trade.coin, compact: false })}
           </span>
         }
       />
@@ -120,7 +120,7 @@ export function TradeInfo({ trade }: { trade: Trade }) {
         tooltipInfo={m["trade_info.entry_amount_info"]()}
         value={`${formatAmount(
           Number(trade.avgPrice) * Number(trade.positionAmt) / trade.leverage,
-          { precision: 4 },
+          { precision: 4, compact: false },
         )} ${trade.coin}`}
       />
 
