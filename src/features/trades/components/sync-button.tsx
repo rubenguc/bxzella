@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 import { m } from "#/paraglide/messages";
 import { Button } from "#/components/ui/button";
 import { useUserConfig } from "#/store/user-config";
@@ -21,6 +22,9 @@ export function SyncButton({ accountId, coin }: Props) {
     queryKey: ["sync", accountId, coin],
     queryFn: async () => {
       const result = await syncTrades(accountId, coin);
+      if (result.synced && result.newTradesCount > 0) {
+        toast.success(m["dashboard.trades_synced"]({ count: String(result.newTradesCount) }));
+      }
       if (result.synced) {
         updateLastSyncTime(result.syncTime);
         queryClient.invalidateQueries({

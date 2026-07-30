@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/trades/")({
     middleware: [authMiddleware],
     handlers: {
       GET: apiHandler("GET /api/trades", async ({ request }) => {
-        const { exchangeAccountId, coin, page, limit } = parseSearchParams(
+        const { exchangeAccountId, coin, page, limit, symbol } = parseSearchParams(
           request,
           tradesSearchParamsSchema,
         );
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/api/trades/")({
           page,
           limit,
           coin,
+          symbol,
         );
 
         return new Response(

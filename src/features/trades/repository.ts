@@ -1,4 +1,4 @@
-import { and, desc, eq, sql, count, between, inArray } from "drizzle-orm";
+import { and, desc, eq, ilike, sql, count, between, inArray } from "drizzle-orm";
 import { db } from "#/db/index";
 import { trade, type Trade, type NewTrade } from "#/features/trades/schema";
 import { notebook } from "#/features/notebooks/schema";
@@ -46,22 +46,26 @@ export async function getTradesPaginated(
   page: number,
   limit: number,
   coin?: Coin,
+  symbol?: string,
 ) {
   const offset = page * limit;
 
-  const filters = coin
-    ? and(eq(trade.accountId, accountId), eq(trade.coin, coin))
-    : eq(trade.accountId, accountId);
+  const filters = [];
+  filters.push(eq(trade.accountId, accountId));
+  if (coin) filters.push(eq(trade.coin, coin));
+  if (symbol) filters.push(ilike(trade.symbol, `%${symbol}%`));
+
+  const where = and(...filters);
 
   const [rows, totalResult] = await Promise.all([
     db
       .select()
       .from(trade)
-      .where(filters)
+      .where(where)
       .orderBy(desc(trade.updateTime))
       .limit(limit)
       .offset(offset),
-    db.select({ total: count() }).from(trade).where(filters),
+    db.select({ total: count() }).from(trade).where(where),
   ]);
 
   const total = totalResult[0]?.total ?? 0;
@@ -91,10 +95,11 @@ export async function syncPositions(
   synced: boolean;
   syncTime: number;
   earliestTradeDate: string;
+  newTradesCount: number;
 }> {
   const account = await getAccountById(accountId);
   if (!account) {
-    return { synced: false, syncTime: 0, earliestTradeDate: "" };
+    return { synced: false, syncTime: 0, earliestTradeDate: "", newTradesCount: 0 };
   }
 
   const provider = getProviderFromAccount(account);
@@ -103,11 +108,24 @@ export async function syncPositions(
 
   const rawTrades = await provider.getPositionHistory({ coin, lastSyncTime });
   if (rawTrades.length === 0) {
-    return { synced: false, syncTime: 0, earliestTradeDate: "" };
+    return { synced: false, syncTime: 0, earliestTradeDate: "", newTradesCount: 0 };
   }
 
   const syncTime = Date.now();
   const dbRows = rawTrades.map((t) => ({ ...t, accountId }) as NewTrade);
+
+  // Count new trades before upsert
+  const existingRows = await db
+    .select({ positionId: trade.positionId })
+    .from(trade)
+    .where(
+      and(
+        eq(trade.accountId, accountId),
+        inArray(trade.positionId, rawTrades.map((t) => t.positionId)),
+      ),
+    );
+
+  const newTradesCount = rawTrades.length - existingRows.length;
 
   await db.transaction(async (tx) => {
     await upsertTrades(dbRows, tx);
@@ -124,7 +142,7 @@ export async function syncPositions(
     }
   }
 
-  return { synced: true, syncTime, earliestTradeDate };
+  return { synced: true, syncTime, earliestTradeDate, newTradesCount };
 }
 
 // ── Mutations ──────────────────────────────────────────

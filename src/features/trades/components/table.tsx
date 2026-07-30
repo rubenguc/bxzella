@@ -1,17 +1,19 @@
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo, useState, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
+import { Download, Eye, Search } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { m } from "#/paraglide/messages";
 import { formatDate } from "#/lib/date-utils";
+import { formatAmount } from "#/lib/format-amount";
 import { usePagination } from "#/lib/use-pagination";
 import { Pagination } from "#/components/pagination";
 import { Button } from "#/components/ui/button";
+import { Input } from "#/components/ui/input";
 import { Profit } from "#/components/Profit";
 import {
   Table,
@@ -27,12 +29,27 @@ import { PositionSide } from "#/features/trades/components/position-side";
 import { fetchTrades } from "#/features/trades/service";
 import type { Coin } from "#/features/exchange-providers/types";
 
+const ExportTradesDialog = lazy(() =>
+  import("./export-dialog").then((mod) => ({ default: mod.ExportTradesDialog })),
+);
+
 interface Props {
   accountId: string;
   coin: Coin;
+  accountName: string;
 }
 
-export function TradesTable({ accountId, coin }: Props) {
+export function TradesTable({ accountId, coin, accountName }: Props) {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchSymbol, setSearchSymbol] = useState("");
+  const [exportOpen, setExportOpen] = useState(false);
+
+  // Debounce: wait 300ms after the user stops typing
+  useEffect(() => {
+    const timer = setTimeout(() => setSearchSymbol(searchInput), 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
   const {
     items,
     page,
@@ -46,11 +63,17 @@ export function TradesTable({ accountId, coin }: Props) {
     firstPage,
     lastPage,
   } = usePagination({
-    queryKey: ["trades", accountId, coin] as const,
-    queryFn: (p, limit) => fetchTrades(accountId, coin, p, limit),
+    queryKey: ["trades", accountId, coin, searchSymbol] as const,
+    queryFn: (p, limit) =>
+      fetchTrades(accountId, coin, p, limit, searchSymbol || undefined),
     limit: 20,
     enabled: !!accountId,
   });
+
+  // Reset to first page when search changes
+  useEffect(() => {
+    goToPage(0);
+  }, [searchSymbol, goToPage]);
 
   const columns = useMemo<ColumnDef<TradeItem>[]>(
     () => [
@@ -76,12 +99,19 @@ export function TradesTable({ accountId, coin }: Props) {
       {
         header: m["trade_info.avg_entry_price"](),
         accessorKey: "avgPrice",
+        cell: ({ row }) => (
+          <span className="tabular-nums">{formatAmount(row.original.avgPrice, { compact: false, precision: 4 })}</span>
+        ),
         meta: { className: "text-center" },
       },
       {
         header: m["trade_info.avg_exit_price"](),
         accessorKey: "avgClosePrice",
-        cell: ({ row }) => <>{row.original.avgClosePrice ?? "—"}</>,
+        cell: ({ row }) => (
+          <span className="tabular-nums">
+            {row.original.avgClosePrice ? formatAmount(row.original.avgClosePrice, { compact: false, precision: 4 }) : "—"}
+          </span>
+        ),
         meta: { className: "text-center" },
       },
       {
@@ -153,6 +183,33 @@ export function TradesTable({ accountId, coin }: Props) {
 
   return (
     <div className="space-y-4">
+      {/* Search and Export row */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="relative flex-1 max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Input
+            placeholder="BTC, ETH..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Button variant="outline" onClick={() => setExportOpen(true)}>
+          <Download className="size-4 mr-2" />
+          {m["trade_export.export_button"]()}
+        </Button>
+      </div>
+
+      <Suspense fallback={null}>
+        <ExportTradesDialog
+          accountId={accountId}
+          coin={coin}
+          accountName={accountName}
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+        />
+      </Suspense>
+
       <div className="rounded-xl border bg-card">
         <Table>
           <TableHeader>
