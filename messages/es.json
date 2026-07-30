@@ -34,7 +34,7 @@
     "entry_amount": "Monto aproximado de entrada",
     "entry_amount_info": "Muestra el capital real utilizado para tu posición tras deducir comisiones.",
     "position_commission": "Comisión de posición",
-    "not_exact_values_description": "Utilizamos los valores que BingX proporciona a través de su API; estos valores son aproximaciones y pueden no coincidir con los valores exactos mostrados en tu cuenta.",
+    "not_exact_values_description": "Estos valores se basan en los datos de la API del exchange y son aproximaciones; pueden no coincidir con los valores exactos mostrados en tu cuenta.",
     "info": "Información",
     "no_trades": "Sin operaciones",
     "notes": "Notas",
