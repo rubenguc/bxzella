@@ -18,8 +18,8 @@ import { UserDropdown } from '#/components/layout/user-dropdown'
 
 const navItems = [
   { title: m['sidebar.home'](), url: '/dashboard', icon: House, exact: true },
-  { title: m['sidebar.accounts'](), url: '/dashboard/exchange-accounts', icon: Wallet },
   { title: m['sidebar.trades'](), url: '/dashboard/trades', icon: BookText },
+  { title: m['sidebar.accounts'](), url: '/dashboard/exchange-accounts', icon: Wallet },
   { title: m['sidebar.ai_summary'](), url: '/dashboard/ai-summary-subscriptions', icon: Sparkles },
 ]
 
