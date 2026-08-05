@@ -48,7 +48,7 @@
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/react-store": "latest",
-    "@tanstack/react-table": "latest",
+    "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-plugin": "^1.132.0",
     "@tanstack/store": "latest",
     "@tanstack/zod-form-adapter": "^0.42.1",
