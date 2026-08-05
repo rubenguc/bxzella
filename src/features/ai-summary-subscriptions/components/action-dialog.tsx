@@ -24,7 +24,7 @@ import { Button } from "#/components/ui/button";
 import { Label } from "#/components/ui/label";
 import { Switch } from "#/components/ui/switch";
 import { FieldError } from "#/components/form/field-error";
-import { COIN_LABELS, PROVIDER_INFO } from "#/features/exchange-providers/types";
+import { COIN_LABELS, PROVIDER_INFO, type Coin } from "#/features/exchange-providers/types";
 import { getCoinsForProvider } from "#/features/exchange-providers/coins";
 import type {
   SubscriptionWithAccount,
@@ -73,7 +73,7 @@ export function SubscriptionActionDialog({
   const form = useForm({
     defaultValues: {
       accountId: "",
-      coin: "USDT" as "USDT" | "VST" | "USDC",
+      coin: "USDT" as Coin,
       includeNotebook: true,
     },
     validators: {

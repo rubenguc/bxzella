@@ -5,6 +5,7 @@ import { z } from "zod";
 import { db } from "#/db/index";
 import { env } from "#/env";
 import { exchangeAccount } from "#/features/exchange-accounts/schema";
+import type { Coin } from "#/features/exchange-providers/types";
 import { notebook } from "#/features/notebooks/schema";
 import { trade } from "#/features/trades/schema";
 import { logger } from "#/lib/logger";
@@ -63,7 +64,7 @@ function getCurrentWeekRange() {
 
 async function getTradesWithNotebooks(
 	accountId: string,
-	coin: "USDT" | "VST" | "USDC",
+	coin: Coin,
 	includeNotebook: boolean,
 	timeframe: { from: Date; to: Date },
 ) {
@@ -131,7 +132,7 @@ export interface WeeklyFeedbackResult {
 
 export async function generateWeeklyFeedback(
 	accountId: string,
-	coin: "USDT" | "VST" | "USDC",
+	coin: Coin,
 	includeNotebook: boolean,
 ): Promise<WeeklyFeedbackResult> {
 	const timeframe = getCurrentWeekRange();

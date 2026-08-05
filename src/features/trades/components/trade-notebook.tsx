@@ -8,13 +8,14 @@ import { Badge } from "#/components/ui/badge";
 import { TextEditor, type TextEditorRef } from "#/components/text-editor/text-editor";
 import { getNotebookByTradeId } from "#/features/notebooks/service";
 import { upsertNotebookAction } from "#/features/notebooks/server-actions";
+import type { Coin } from "#/features/exchange-providers/types";
 import { NotebookTemplatePicker } from "#/features/notebooks-templates/components/notebook-template-picker";
 import type { NotebookTemplate } from "#/features/notebooks-templates/schema";
 
 interface TradeNotebookProps {
   tradeId: string;
   accountId: string;
-  coin: "VST" | "USDT" | "USDC";
+  coin: Coin;
 }
 
 export function TradeNotebook({ tradeId, accountId, coin }: TradeNotebookProps) {
