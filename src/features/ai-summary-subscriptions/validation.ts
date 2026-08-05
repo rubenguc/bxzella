@@ -1,8 +1,9 @@
 import { z } from 'zod'
+import { coinSchema } from '#/lib/zod-utils'
 
 export const createSubscriptionSchema = z.object({
   accountId: z.string().min(1, 'Account is required'),
-  coin: z.enum(['VST', 'USDT', 'USDC']),
+  coin: coinSchema,
   includeNotebook: z.boolean().optional().default(true),
 })
 

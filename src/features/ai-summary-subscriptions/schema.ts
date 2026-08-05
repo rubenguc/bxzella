@@ -4,6 +4,7 @@ import { relations } from 'drizzle-orm'
 
 import { user } from '#/db/schema'
 import { exchangeAccount } from '#/features/exchange-accounts/schema'
+import { COINS } from '#/features/exchange-providers/types'
 
 // ── Subscriptions ─────────────────────────────────────
 
@@ -22,7 +23,7 @@ export const aiSummarySubscription = pgTable(
       .notNull()
       .references(() => exchangeAccount.id, { onDelete: 'cascade' }),
 
-    coin: text('coin', { enum: ['VST', 'USDT', 'USDC'] as const }).notNull(),
+    coin: text('coin', { enum: COINS }).notNull(),
 
     isActive: boolean('is_active').notNull().default(true),
 

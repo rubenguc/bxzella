@@ -2,6 +2,7 @@ import { and, eq } from 'drizzle-orm'
 import { db } from '#/db/index'
 import { aiSummarySubscription } from '#/features/ai-summary-subscriptions/schema'
 import { exchangeAccount } from '#/features/exchange-accounts/schema'
+import type { Coin } from '#/features/exchange-providers/types'
 
 // ── Queries ────────────────────────────────────────────
 
@@ -49,7 +50,7 @@ export async function getSubscriptionByIdAndUserId(
 /** Check if a subscription already exists for this account + coin. */
 export async function getSubscriptionByAccountAndCoin(
   accountId: string,
-  coin: 'VST' | 'USDT' | 'USDC',
+  coin: Coin,
 ) {
   return db.query.aiSummarySubscription.findFirst({
     where: and(

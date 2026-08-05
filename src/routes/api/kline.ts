@@ -7,10 +7,11 @@ import { parseSearchParams } from "#/lib/parse-search-params";
 import { getAccountById } from "#/features/exchange-accounts/repository";
 import { getProviderFromAccount } from "#/features/exchange-providers/get-provider";
 import { getTime, subMilliseconds } from "date-fns";
+import { coinSchema } from "#/lib/zod-utils";
 
 const klineSearchParamsSchema = z.object({
   accountId: z.string().min(1, "accountId is required"),
-  coin: z.enum(["VST", "USDT", "USDC"]),
+  coin: coinSchema,
   symbol: z.string().min(1, "symbol is required"),
   startTime: z.coerce.number(),
   interval: z.string().default("1h"),

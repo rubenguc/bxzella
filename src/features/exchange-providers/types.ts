@@ -31,9 +31,9 @@ export const PROVIDER_LIST: ProviderInfo[] = Object.values(PROVIDER_INFO)
 
 // ── Shared domain types ───────────────────────────────
 
-export type Coin = 'VST' | 'USDT' | 'USDC'
+export const COINS = ['VST', 'USDT', 'USDC'] as const
 
-export const COINS: Coin[] = ['VST', 'USDT', 'USDC']
+export type Coin = (typeof COINS)[number]
 
 export const COIN_LABELS: Record<Coin, string> = {
   VST: 'VST',

@@ -17,7 +17,7 @@ const PAGE_SIZE = 10
 
 function JsonDisplay({ data, depth = 0 }: { data: unknown; depth?: number }) {
   if (data === null) {
-    return <span className="text-muted-foreground italic">null</span>
+    return <span className="text-foreground/50 italic">null</span>
   }
 
   if (typeof data === 'boolean') {
@@ -38,7 +38,7 @@ function JsonDisplay({ data, depth = 0 }: { data: unknown; depth?: number }) {
 
   if (Array.isArray(data)) {
     if (data.length === 0) {
-      return <span className="text-muted-foreground italic">(empty)</span>
+      return <span className="text-foreground/50 italic">(empty)</span>
     }
     return (
       <ul className="list-disc list-inside space-y-1">
@@ -54,7 +54,7 @@ function JsonDisplay({ data, depth = 0 }: { data: unknown; depth?: number }) {
   if (typeof data === 'object') {
     const entries = Object.entries(data as Record<string, unknown>)
     if (entries.length === 0) {
-      return <span className="text-muted-foreground italic">(empty)</span>
+      return <span className="text-foreground/50 italic">(empty)</span>
     }
 
     // Top-level keys render as titled sections; nested renders inline
@@ -64,7 +64,7 @@ function JsonDisplay({ data, depth = 0 }: { data: unknown; depth?: number }) {
           {entries.map(([key, value]) => (
             <div key={key}>
               <h4 className="font-semibold text-sm text-foreground capitalize">{key.replace(/_/g, ' ')}</h4>
-              <div className="mt-1 pl-2 text-sm text-muted-foreground">
+              <div className="mt-1 pl-2 text-sm text-foreground/90">
                 <JsonDisplay data={value} depth={depth + 1} />
               </div>
             </div>
@@ -129,7 +129,7 @@ export function AnalysesView({ subscriptionId }: AnalysesViewProps) {
 
   if (analyses.length === 0) {
     return (
-      <p className="text-muted-foreground text-sm py-8 text-center">
+      <p className="text-foreground/70 text-sm py-8 text-center">
         {m['ai_summary.analyses_empty']()}
       </p>
     )
@@ -153,13 +153,10 @@ export function AnalysesView({ subscriptionId }: AnalysesViewProps) {
                 }`}
               >
                 <div className="text-sm font-medium">
-                  {formatDate(analysis.weekStart)}
+                  {formatDate(analysis.weekStart)} - {formatDate(analysis.createdAt)}
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">
+                <div className="text-xs text-foreground/70 mt-0.5">
                   v{analysis.version}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {formatDate(analysis.createdAt)}
                 </div>
               </button>
             ))}
@@ -168,7 +165,7 @@ export function AnalysesView({ subscriptionId }: AnalysesViewProps) {
 
         {/* Pagination */}
         <div className="flex items-center justify-between pt-2 border-t shrink-0">
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-foreground/70">
             {totalPages > 1
               ? m['ai_summary.analyses_page']({ page: String(currentPage) })
               : `${total} ${total === 1 ? 'analysis' : 'analyses'}`}
@@ -212,7 +209,7 @@ export function AnalysesView({ subscriptionId }: AnalysesViewProps) {
             <JsonDisplay data={selected.analysis} />
           </div>
         ) : (
-          <div className="hidden md:flex items-center justify-center h-full text-sm text-muted-foreground">
+          <div className="hidden md:flex items-center justify-center h-full text-sm text-foreground/70">
             Select an analysis
           </div>
         )}

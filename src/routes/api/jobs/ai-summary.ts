@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { serve } from '@upstash/workflow/tanstack'
 import { generateWeeklyFeedback } from '#/features/ai-summary-subscriptions/ai-agent'
 import { upsertAnalysis } from '#/features/ai-summary-analyses/repository'
+import type { Coin } from '#/features/exchange-providers/types'
 import { logger } from '#/lib/logger'
 
 const log = logger.child({ name: 'jobs/ai-summary' })
@@ -11,7 +12,7 @@ export const Route = createFileRoute('/api/jobs/ai-summary')({
     handlers: serve<{
       id: string
       accountId: string
-      coin: 'USDT' | 'VST' | 'USDC'
+      coin: Coin
       includeNotebook: boolean
     }>(async (context) => {
       const { id, accountId, coin, includeNotebook } = context.requestPayload

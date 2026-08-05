@@ -4,6 +4,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "#/lib/auth";
 import { wrapAction } from "#/lib/server-action";
 import { logger } from "#/lib/logger";
+import { coinSchema } from "#/lib/zod-utils";
 import {
   getAllTradesByAccountAndCoin,
   getTradesByDateRange,
@@ -16,7 +17,7 @@ const log = logger.child({ name: "trades-export" });
 
 const exportTradesSchema = z.object({
   accountId: z.string().min(1),
-  coin: z.enum(["USDT", "USDC", "VST"]),
+  coin: coinSchema,
   scope: z.enum(["all", "custom"]),
   mode: z.enum(["dateRange", "quantity"]).optional(),
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),

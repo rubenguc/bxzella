@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { COINS } from '#/features/exchange-providers/types'
+
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 export function dateParamValidation({ field }: { field: string }) {
@@ -41,12 +43,8 @@ export function limitParamValidation({ max = 100, default: def = 20 } = {}) {
     })
 }
 
+export const coinSchema = z.enum(COINS)
+
 export function coinParamValidation() {
-  return z
-    .string()
-    .optional()
-    .transform((val) => (val ?? 'USDT'))
-    .refine((val) => val === 'VST' || val === 'USDT' || val === 'USDC', {
-      message: 'coin must be VST, USDT, or USDC',
-    })
+  return coinSchema.optional().default('USDT')
 }

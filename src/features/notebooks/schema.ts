@@ -2,6 +2,7 @@ import { pgTable, text, timestamp, index, uniqueIndex } from 'drizzle-orm/pg-cor
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import { exchangeAccount } from '#/features/exchange-accounts/schema'
+import { COINS } from '#/features/exchange-providers/types'
 import { trade } from '#/features/trades/schema'
 
 export const notebook = pgTable(
@@ -12,7 +13,7 @@ export const notebook = pgTable(
     contentPlainText: text('content_plain_text'),
     tradeId: text('trade_id').references(() => trade.id, { onDelete: 'set null' }),
     accountId: text('account_id').notNull().references(() => exchangeAccount.id, { onDelete: 'cascade' }),
-    coin: text('coin', { enum: ['VST', 'USDT', 'USDC'] }).notNull(),
+    coin: text('coin', { enum: COINS }).notNull(),
     startDate: timestamp('start_date', { withTimezone: true }),
     endDate: timestamp('end_date', { withTimezone: true }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
