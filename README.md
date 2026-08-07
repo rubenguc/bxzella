@@ -1,57 +1,61 @@
-
 <p align="center">
-<img src="public/logo.png" width="120" heigth="120" />
-<p align="center" style="color: #60A5FA; font-size: 4rem; font-weight: bold;">BXZella<p>
+  <img src="public/logo.png" width="120" height="120" alt="BXZella logo" />
+</p>
 
-BXZella is an **open-source** self-hosted platform that connects to your crypto exchange accounts and helps you track, analyze, and improve your trading performance. Sync your trades directly from the exchange, monitor key statistics, and keep your trading notes organized — all in one place.
+# BXZella
+
+An **open-source, self-hosted** crypto trading tracker. Connect your crypto exchange accounts, sync trades, analyze performance, and keep trading notebooks — all in one place, on your own infrastructure.
+
+## Quick start
+
+```bash
+bun install       # install dependencies
+cp .env.example .env   # then fill in DATABASE_URL and ENCRYPTION_KEY
+bun run dev       # dev server on http://localhost:3000
+```
+
+> **Prerequisites:** Node.js / bun, and a PostgreSQL instance (local or cloud-hosted).
 
 ## Features
 
-- **Multi-Exchange Support:** Connect BingX and Bitunix accounts via API keys.
-- **Dashboard:** Net PnL, Profit Factor, Win Rate, Avg Win/Loss, open positions, and recent trades at a glance.
-- **Daily PnL Calendar:** Visual calendar with daily profit/loss, weekly summaries, and monthly stats.
-- **Trade History:** Full trade history with entry/exit prices, leverage, PnL, and funding costs.
-- **Notebooks:** Write and organize trading strategies and notes.
-- **Multi-Account:** Manage multiple exchange accounts per coin.
-- **Authentication:** Email/password + username via Better Auth.
-- **Theming & i18n:** Light/dark/system themes and multi-language support.
+| Area | What you get |
+|------|--------------|
+| **Dashboard** | Net PnL, profit factor, win rate, avg win/loss, open positions, recent trades |
+| **Daily PnL calendar** | Daily profit/loss with weekly summaries and monthly stats |
+| **Trade history** | Entry/exit prices, leverage, PnL, and funding costs |
+| **Notebooks** | Write and organize trading strategies and notes |
+| **AI weekly analysis** | Auto-generated performance summaries for subscribed accounts |
+| **Multi-account** | Multiple exchange accounts per coin |
+| **Auth** | Email/password + username via Better Auth |
+| **Theming & i18n** | Light/dark/system themes, multi-language |
 
-## Supported Exchanges
+## Supported exchanges
 
-| Exchange | Coins        |
-| -------- | ------------ |
-| Bitunix  | USDT         |
-| BingX    | USDT, VST    |
+| Exchange | Coins   |
+|----------|---------|
+| Bitunix  | USDT    |
+| BingX    | USDT, VST |
 
-## Getting Started
+## Configuration
 
-### Prerequisites
+Copy `.env.example` to `.env` and set the required values. Required variables are marked **REQUIRED**; the rest are optional.
 
-- Node.js >= 18
-- npm / yarn / pnpm / bun
-- PostgreSQL instance (local or cloud-hosted)
+| Variable          | Required | Default                  | Description |
+|-------------------|----------|--------------------------|-------------|
+| `DATABASE_URL`    | **REQUIRED** | —                  | PostgreSQL connection string |
+| `ENCRYPTION_KEY`  | **REQUIRED** | —                  | 32+ char secret for encrypting API keys |
+| `BETTER_AUTH_URL` | —        | `http://localhost:3000`  | Better Auth callback URL |
+| `SERVER_URL`      | —        | —                        | Public server URL |
+| `LOG_LEVEL`       | —        | `info`                   | Log level (`debug`, `info`, `warn`, `error`) |
+| `USDT_HOST`       | —        | `open-api.bingx.com`     | BingX USDT API host |
+| `VST_HOST`        | —        | `open-api-vst.bingx.com` | BingX VST API host |
+| `BITUNIX_HOST`    | —        | `fapi.bitunix.com`       | Bitunix API host |
 
-### Environment Variables
+## Tech stack
 
-Copy `.env.example` to `.env` and configure:
+React 19 SPA on **TanStack Start** (Vite 8 + Nitro SSR), **PostgreSQL** via Drizzle, **Better Auth**, **Paraglide** i18n, deployed on Vercel.
 
-| Variable           | Required | Default                    | Description                            |
-| ------------------ | -------- | -------------------------- | -------------------------------------- |
-| `DATABASE_URL`     | ✅       | —                          | PostgreSQL connection string           |
-| `ENCRYPTION_KEY`   | ✅       | —                          | 32+ char secret for encrypting API keys |
-| `BETTER_AUTH_URL`  | —        | `http://localhost:3000`    | Better Auth callback URL               |
-| `SERVER_URL`       | —        | —                          | Public server URL                      |
-| `LOG_LEVEL`        | —        | `info`                     | Log level (`debug`, `info`, `warn`, `error`) |
-| `USDT_HOST`        | —        | `open-api.bingx.com`       | BingX USDT API host                    |
-| `VST_HOST`         | —        | `open-api-vst.bingx.com`   | BingX VST API host                     |
-| `BITUNIX_HOST`     | —        | `fapi.bitunix.com`         | Bitunix API host                       |
+## Next steps
 
-### Installation
-
-```bash
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-```
+- Open the app at `http://localhost:3000`, create an account, then add a BingX / Bitunix API key.
+- See [`AGENTS.md`](./AGENTS.md) for repository conventions when contributing.
