@@ -8,6 +8,7 @@ import {
 } from "lightweight-charts";
 import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
 import { m } from "#/paraglide/messages";
+import { CHART_COLORS, withAlpha } from "#/lib/chart-colors";
 import type { DayProfitEntry } from "#/features/dashboard/types";
 
 const CHART_MIN_HEIGHT = 300;
@@ -24,9 +25,13 @@ export function CumulativePnlChart({ dayProfits }: CumulativePnlChartProps) {
     if (!chartContainerRef.current || !hasData) return;
 
     const isDark = document.documentElement.classList.contains("dark");
-    const textColor = isDark ? "#9ca3af" : "#6b7280";
-    const borderColor = isDark ? "#1f2937" : "#e5e7eb";
-    const foregroundColor = isDark ? "#e5e7eb" : "#111827";
+    const textColor = isDark ? CHART_COLORS.text.dark : CHART_COLORS.text.light;
+    const borderColor = isDark
+      ? CHART_COLORS.border.dark
+      : CHART_COLORS.border.light;
+    const foregroundColor = isDark
+      ? CHART_COLORS.foreground.dark
+      : CHART_COLORS.foreground.light;
 
     const chart = createChart(chartContainerRef.current, {
       handleScroll: false,
@@ -68,12 +73,12 @@ export function CumulativePnlChart({ dayProfits }: CumulativePnlChartProps) {
 
     const series = chart.addSeries(BaselineSeries, {
       baseValue: { type: "price", price: 0 },
-      topLineColor: "#22c55e",
-      topFillColor1: "#22c55e40",
-      topFillColor2: "#22c55e05",
-      bottomLineColor: "#ef4444",
-      bottomFillColor1: "#ef444440",
-      bottomFillColor2: "#ef444405",
+      topLineColor: CHART_COLORS.green,
+      topFillColor1: withAlpha(CHART_COLORS.green, 0.25),
+      topFillColor2: withAlpha(CHART_COLORS.green, 0.02),
+      bottomLineColor: CHART_COLORS.red,
+      bottomFillColor1: withAlpha(CHART_COLORS.red, 0.25),
+      bottomFillColor2: withAlpha(CHART_COLORS.red, 0.02),
       baseLineColor: borderColor,
       baseLineWidth: 1,
       lineWidth: 2,
@@ -97,7 +102,7 @@ export function CumulativePnlChart({ dayProfits }: CumulativePnlChartProps) {
           time: lastPoint.time,
           position: "inBar",
           shape: "circle",
-          color: isPositive ? "#22c55e" : "#ef4444",
+          color: isPositive ? CHART_COLORS.green : CHART_COLORS.red,
           size: 2,
         },
       ]);

@@ -26,7 +26,7 @@ export function AvgWinLoss({ value, avgWin, avgLoss }: AvgWinLossProps) {
             <div
               className="h-1.5 rounded-full"
               style={{
-                background: `linear-gradient(to right, #22C55E ${avgWinPercentage}%, #EF4444 ${avgLossPercentage}%)`,
+                background: `linear-gradient(to right, var(--color-green-500) ${avgWinPercentage}%, var(--color-red-500) ${avgLossPercentage}%)`,
               }}
             />
             <div className="flex justify-between">

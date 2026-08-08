@@ -17,6 +17,7 @@ import { Timezone } from "#/lib/api-client";
 import { fetchKline } from "#/features/trades/service";
 import { m } from "#/paraglide/messages";
 import { formatAmount } from "#/lib/format-amount";
+import { CHART_COLORS } from "#/lib/chart-colors";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
 import { getTime, parseISO } from "date-fns";
 
@@ -83,11 +84,15 @@ export function TradeChart({
       crosshair: { mode: CrosshairMode.Normal },
       layout: {
         background: { color: "transparent" },
-        textColor: isDark ? "#9ca3af" : "#6b7280",
+        textColor: isDark ? CHART_COLORS.text.dark : CHART_COLORS.text.light,
       },
       grid: {
-        vertLines: { color: isDark ? "#1f2937" : "#e5e7eb" },
-        horzLines: { color: isDark ? "#1f2937" : "#e5e7eb" },
+        vertLines: {
+          color: isDark ? CHART_COLORS.border.dark : CHART_COLORS.border.light,
+        },
+        horzLines: {
+          color: isDark ? CHART_COLORS.border.dark : CHART_COLORS.border.light,
+        },
       },
       width: chartContainerRef.current.clientWidth,
       height: 400,
@@ -96,11 +101,11 @@ export function TradeChart({
     });
 
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: "#22c55e",
-      downColor: "#ef4444",
+      upColor: CHART_COLORS.green,
+      downColor: CHART_COLORS.red,
       borderVisible: false,
-      wickUpColor: "#22c55e",
-      wickDownColor: "#ef4444",
+      wickUpColor: CHART_COLORS.green,
+      wickDownColor: CHART_COLORS.red,
       lastValueVisible: false,
       priceLineVisible: false,
     });
@@ -136,19 +141,20 @@ export function TradeChart({
     const isLong = positionSide === "LONG";
     const isWin = Number(netProfit) > 0;
     const isCloseAbove = Number(avgClosePrice) > Number(avgPrice);
+    const isDark = document.documentElement.classList.contains("dark");
 
     const markers: SeriesMarker<Time>[] = [
       {
         time: findBarTime(openTime, chartData),
         position: isLong ? "belowBar" : "aboveBar",
-        color: "#2196F3",
+        color: CHART_COLORS.blue,
         shape: isLong ? "arrowUp" : "arrowDown",
         text: `${m["trade_chart.entry_marker"]()} @ ${formatAmount(avgPrice, { precision: 6, compact: false })}`,
       },
       {
         time: findBarTime(updateTime, chartData),
         position: isCloseAbove ? "aboveBar" : "belowBar",
-        color: isWin ? "#22c55e" : "#ef4444",
+        color: isWin ? CHART_COLORS.green : CHART_COLORS.red,
         shape: isCloseAbove ? "arrowDown" : "arrowUp",
         text: `${m["trade_chart.close_marker"]()} @ ${formatAmount(avgClosePrice, { precision: 6, compact: false })}`,
       },
@@ -165,7 +171,7 @@ export function TradeChart({
     if (entryPrice > 0) {
       const pl = series.createPriceLine({
         price: entryPrice,
-        color: "#9ca3af",
+        color: isDark ? CHART_COLORS.text.dark : CHART_COLORS.text.light,
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,
@@ -177,7 +183,7 @@ export function TradeChart({
     if (closePrice > 0) {
       const pl = series.createPriceLine({
         price: closePrice,
-        color: isWin ? "#22c55e" : "#ef4444",
+        color: isWin ? CHART_COLORS.green : CHART_COLORS.red,
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,

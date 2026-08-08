@@ -30,9 +30,13 @@ export default function ParaglideLocaleSwitcher() {
               cursor: 'pointer',
               padding: '0.35rem 0.75rem',
               borderRadius: '999px',
-              border: '1px solid #d1d5db',
-              background: locale === currentLocale ? '#0f172a' : 'transparent',
-              color: locale === currentLocale ? '#f8fafc' : 'inherit',
+              border: '1px solid var(--color-border)',
+              background:
+                locale === currentLocale ? 'var(--color-primary)' : 'transparent',
+              color:
+                locale === currentLocale
+                  ? 'var(--color-primary-foreground)'
+                  : 'inherit',
               fontWeight: locale === currentLocale ? 700 : 500,
               letterSpacing: '0.01em',
             }}
