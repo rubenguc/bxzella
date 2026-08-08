@@ -121,6 +121,7 @@
   },
   "accounts": {
     "add_account": "Add Account",
+    "add_description": "Create a new exchange account to start syncing trades.",
     "name": "Name",
     "add_new_account": "Add New Account",
     "edit_account": "Edit Account",
@@ -137,7 +138,8 @@
     "delete_account_warning": "All trades synced for this account will also be deleted.",
     "save_changes_action": "Save Changes",
     "saving_action": "Saving...",
-    "select_account": "Select an account"
+    "select_account": "Select an account",
+    "edit_description": "Update the name of your exchange account."
   },
   "settings": {
     "theme": "Theme"
