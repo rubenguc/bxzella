@@ -121,6 +121,7 @@
   },
   "accounts": {
     "add_account": "Agregar Cuenta",
+    "add_description": "Crea una nueva cuenta de exchange para comenzar a sincronizar operaciones.",
     "name": "Nombre",
     "add_new_account": "Agregar Nueva Cuenta",
     "edit_account": "Editar Cuenta",
@@ -137,7 +138,8 @@
     "delete_account_warning": "Todas las operaciones sincronizadas de esta cuenta también se eliminarán.",
     "save_changes_action": "Guardar Cambios",
     "saving_action": "Guardando...",
-    "select_account": "Selecciona una cuenta"
+    "select_account": "Selecciona una cuenta",
+    "edit_description": "Actualiza el nombre de tu cuenta de exchange."
   },
   "settings": {
     "theme": "Tema"
