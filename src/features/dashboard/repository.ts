@@ -133,7 +133,7 @@ export async function getDailyPnl({
             'netProfit', net_profit,
             'coin', coin
           ) ORDER BY update_time DESC
-        ) FILTER (WHERE close_all_positions = true),
+        ),
         '[]'::json
       ) AS "trades"
     FROM (
@@ -146,11 +146,11 @@ export async function getDailyPnl({
         leverage,
         open_time,
         update_time,
-        coin,
-        close_all_positions
+        coin
       FROM "trade"
       WHERE account_id = ${accountId}
         AND coin = ${coin}
+        AND close_all_positions = true
     ) sub
     WHERE local_date >= ${startDate}::date
       AND local_date <= ${endDate}::date
