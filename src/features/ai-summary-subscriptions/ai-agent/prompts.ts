@@ -1,6 +1,6 @@
 import type { Coin } from "#/features/exchange-providers/types";
 
-export const VERSION = "0.1";
+export const VERSION = "0.2";
 
 export const SYSTEM_PROMPT = `You are an expert trading analyst and coach. Your role is to analyze a trader's weekly activity — their trades, positions, and personal notes — to help them improve their performance.
 
