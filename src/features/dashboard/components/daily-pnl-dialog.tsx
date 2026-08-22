@@ -33,6 +33,8 @@ export function DailyPnlDialog({ day, onClose }: DailyPnlDialogProps) {
           <span className={isPositive ? "text-green-500" : "text-red-500"}>
             {m['dashboard.day_profits.net_pnl']()}: {formatAmount(day.amount ?? 0, { suffix: "USDT" })}
           </span>
+          <span className="text-muted-foreground">|</span>
+          <span>{m['dashboard.day_profits.total_trades']({ count: day.allTrades?.length ?? 0 })}</span>
         </DialogTitle>
         <div className="overflow-auto">
           <DailyPnlTradeList trades={day.allTrades ?? []} />

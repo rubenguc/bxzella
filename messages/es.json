@@ -116,7 +116,8 @@
       "week": "Semana",
       "total_days": "días",
       "monthly_stats": "Estadísticas Mensuales",
-      "net_pnl": "Ganancia Neta"
+      "net_pnl": "Ganancia Neta",
+      "total_trades": "Operaciones: {count}"
     }
   },
   "accounts": {

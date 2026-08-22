@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   type ColumnDef,
   flexRender,
@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "#/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { Pagination } from "#/components/pagination";
 import {
   Table,
   TableBody,
@@ -27,7 +28,25 @@ interface DailyPnlTradeListProps {
   trades: DailyPnlTrade[];
 }
 
+const PAGE_SIZE = 10;
+
 export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
+  const [page, setPage] = useState(0);
+
+  const totalPages = Math.max(1, Math.ceil(trades.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages - 1);
+  const pageTrades = useMemo(
+    () => trades.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE),
+    [trades, currentPage],
+  );
+  const hasNext = currentPage < totalPages - 1;
+  const hasPrev = currentPage > 0;
+
+  const nextPage = () => setPage((p) => Math.min(p + 1, totalPages - 1));
+  const prevPage = () => setPage((p) => Math.max(p - 1, 0));
+  const goToPage = (p: number) => setPage(Math.max(0, Math.min(p, totalPages - 1)));
+  const firstPage = () => setPage(0);
+  const lastPage = () => setPage(totalPages - 1);
   const columns = useMemo<ColumnDef<DailyPnlTrade>[]>(
     () => [
       {
@@ -87,7 +106,7 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
   );
 
   const table = useReactTable({
-    data: trades ?? [],
+    data: pageTrades,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -120,6 +139,21 @@ export function DailyPnlTradeList({ trades }: DailyPnlTradeListProps) {
           ))}
         </TableBody>
       </Table>
+      {totalPages > 1 && (
+        <div className="border-t px-4 py-2">
+          <Pagination
+            page={currentPage}
+            totalPages={totalPages}
+            hasNext={hasNext}
+            hasPrev={hasPrev}
+            onNext={nextPage}
+            onPrev={prevPage}
+            onFirst={firstPage}
+            onLast={lastPage}
+            onGoTo={goToPage}
+          />
+        </div>
+      )}
     </div>
   );
 }
