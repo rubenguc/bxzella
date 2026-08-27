@@ -505,7 +505,8 @@ export function StrategyDialog({ open, onOpenChange, currentRow }: Props) {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder={m['strategies.description_placeholder']()}
-                      rows={5}
+                      rows={4}
+                      className="min-h-24"
                     />
                   </div>
                 </>
