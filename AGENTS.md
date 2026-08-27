@@ -45,6 +45,7 @@ Env lives in `.env`, validated at runtime in `src/env.ts` (`ENCRYPTION_KEY` ≥ 
 
 - **Coins are centralized**: `COINS = ['VST','USDT','USDC'] as const` in `src/features/exchange-providers/types.ts`, `type Coin` derived from it, `coinSchema` in `src/lib/zod-utils.ts`. Never inline the union or a `z.enum([...])` literal.
 - **Biome wants tabs + double quotes**, but many files use 2-space/single-quote and are non-conformant. For small edits, match the surrounding file; don't reformat whole files unless asked.
+- **Mutations notify the user**: every DB-touching mutation (POST/PUT/DELETE/PATCH server actions or handlers) must show user feedback with `toast` from `sonner` — `toast.success(...)` / `toast.error(...)` — using an i18n message from `messages/*.json`. `Toaster` is already mounted in `src/routes/__root.tsx`; don't add another provider.
 - **`bunx tsc --noEmit` is dirty by default** (i18n message typing, unused vars, dashboard casts). Fix or judge only errors in code you touch.
 - **i18n**: `messages/` has `en.json` + `es.json`, but `project.inlang/settings.json` declares locales `['en','de']` — reconcile before adding a locale.
 - Don't commit `skills-lock.json` (personal agent-tooling artifact) unless asked.

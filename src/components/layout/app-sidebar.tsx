@@ -1,5 +1,5 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { House, BookText, Wallet, Sparkles } from 'lucide-react'
+import { House, BookText, Wallet, Sparkles, Target } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 import {
@@ -19,6 +19,7 @@ import { UserDropdown } from '#/components/layout/user-dropdown'
 const navItems = [
   { title: m['sidebar.home'](), url: '/dashboard', icon: House, exact: true },
   { title: m['sidebar.trades'](), url: '/dashboard/trades', icon: BookText },
+  { title: m['sidebar.strategies'](), url: '/dashboard/strategies', icon: Target },
   { title: m['sidebar.accounts'](), url: '/dashboard/exchange-accounts', icon: Wallet },
   { title: m['sidebar.ai_summary'](), url: '/dashboard/ai-summary-subscriptions', icon: Sparkles },
 ]

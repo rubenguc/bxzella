@@ -65,12 +65,6 @@ export const Route = createFileRoute("/api/kline")({
         const { startTime: finalStart, endTime: finalEnd } =
           calculateIdealStartTime(startTime, interval, timezone);
 
-        console.log({
-          startTime,
-          finalStart,
-          finalEnd,
-          interval,
-        });
 
         const account = await getAccountById(accountId);
         const provider = getProviderFromAccount(account!);

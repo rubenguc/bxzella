@@ -7,7 +7,8 @@ import * as notebooksSchema from '#/features/notebooks/schema'
 import * as notebooksTemplatesSchema from '#/features/notebooks-templates/schema'
 import * as aiSummarySubscriptionsSchema from '#/features/ai-summary-subscriptions/schema'
 import * as aiSummaryAnalysesSchema from '#/features/ai-summary-analyses/schema'
+import * as strategiesSchema from '#/features/strategies/schema'
 
 export const db = drizzle(process.env.DATABASE_URL!, {
-  schema: { ...schema, ...exchangeAccountsSchema, ...tradesSchema, ...notebooksSchema, ...notebooksTemplatesSchema, ...aiSummarySubscriptionsSchema, ...aiSummaryAnalysesSchema },
+  schema: { ...schema, ...exchangeAccountsSchema, ...tradesSchema, ...notebooksSchema, ...notebooksTemplatesSchema, ...aiSummarySubscriptionsSchema, ...aiSummaryAnalysesSchema, ...strategiesSchema },
 })

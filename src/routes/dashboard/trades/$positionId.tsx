@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "#/components/ui/tabs";
 import { TradeInfo } from "#/features/trades/components/trade-info";
 import { TradeChart } from "#/features/trades/components/trade-chart";
 import { TradeNotebook } from "#/features/trades/components/trade-notebook";
+import { TradeStrategyPanel } from "#/features/strategies/components/trade-strategy-panel";
 import { useUserConfig } from "#/store/user-config";
 import { formatDate } from "#/lib/date-utils";
 import { fetchTradeById } from "#/features/trades/service";
@@ -74,12 +75,23 @@ function TradeDetails() {
         <Tabs className="lg:w-3/10 h-fit" defaultValue="info">
           <TabsList>
             <TabsTrigger value="info">{m["trade_info.info"]()}</TabsTrigger>
+            <TabsTrigger value="strategy">{m["strategies.assign_strategy"]()}</TabsTrigger>
           </TabsList>
           <TabsContent
             value="info"
             className="border rounded-xl py-2 px-4 bg-card"
           >
             <TradeInfo trade={data} />
+          </TabsContent>
+          <TabsContent
+            value="strategy"
+            className="border rounded-xl py-4 px-4 bg-card"
+          >
+            <TradeStrategyPanel
+              tradeId={data.id}
+              positionId={positionId}
+              currentStrategyId={data.strategyId ?? null}
+            />
           </TabsContent>
         </Tabs>
 
