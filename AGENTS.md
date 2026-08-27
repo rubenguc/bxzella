@@ -20,7 +20,7 @@ Repo conventions for agent sessions in **BXZella** — an open-source, self-host
 | Typecheck | `bunx tsc --noEmit` | No `typecheck` script exists |
 | Lint / check | `bun run check` / `bun run lint` | Per-file: `bunx biome check <file>` |
 | Tests | `bun test` | Vitest (jsdom); **zero test files/suites exist** |
-| DB migrate | `bun run db:generate` → `db:migrate` / `db:push` | Studio: `db:studio`; `vercel-build` runs `db:push` |
+| DB migrate | `bun run db:generate` → `db:migrate` / `db:push` | Studio: `db:studio`; `vercel-build` runs `db:deploy` (`drizzle-kit migrate`) before `vite build` |
 
 Env lives in `.env`, validated at runtime in `src/env.ts` (`ENCRYPTION_KEY` ≥ 32 chars, `GEMINI_API_KEY` required, `DATABASE_URL`).
 
