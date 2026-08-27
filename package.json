@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "vercel-build": "drizzle-kit push && vite build",
+    "vercel-build": "bun run db:deploy && vite build",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -18,10 +18,14 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
+    "db:deploy": "drizzle-kit migrate",
     "db:pull": "drizzle-kit pull",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@faker-js/faker": "^10.3.0",
     "@lexical/link": "^0.46.0",
     "@lexical/react": "^0.46.0",

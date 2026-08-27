@@ -20,19 +20,28 @@ import { Route as ApiKlineRouteImport } from './routes/api/kline'
 import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
 import { Route as DashboardTradesIndexRouteImport } from './routes/dashboard/trades/index'
+import { Route as DashboardStrategiesIndexRouteImport } from './routes/dashboard/strategies/index'
 import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
+import { Route as ApiStrategiesIndexRouteImport } from './routes/api/strategies/index'
 import { Route as ApiNotebookTemplatesIndexRouteImport } from './routes/api/notebook-templates/index'
 import { Route as ApiAiSummarySubscriptionsIndexRouteImport } from './routes/api/ai-summary-subscriptions/index'
 import { Route as DashboardTradesPositionIdRouteImport } from './routes/dashboard/trades/$positionId'
+import { Route as DashboardStrategiesStrategyIdRouteImport } from './routes/dashboard/strategies/$strategyId'
 import { Route as DashboardAiSummarySubscriptionsSubscriptionIdRouteImport } from './routes/dashboard/ai-summary-subscriptions/$subscriptionId'
 import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
 import { Route as ApiTradesPositionIdRouteImport } from './routes/api/trades/$positionId'
+import { Route as ApiStrategiesTradeChecksRouteImport } from './routes/api/strategies/trade-checks'
+import { Route as ApiStrategiesOptionsRouteImport } from './routes/api/strategies/options'
+import { Route as ApiStrategiesStrategyIdRouteImport } from './routes/api/strategies/$strategyId'
 import { Route as ApiJobsAiSummaryRouteImport } from './routes/api/jobs/ai-summary'
 import { Route as ApiDashboardRecentTradesRouteImport } from './routes/api/dashboard/recent-trades'
 import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
 import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
 import { Route as ApiCronWeeklySummaryRouteImport } from './routes/api/cron/weekly-summary'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiStrategiesStrategyIdTradesRouteImport } from './routes/api/strategies/$strategyId/trades'
+import { Route as ApiStrategiesStrategyIdStatsRouteImport } from './routes/api/strategies/$strategyId/stats'
+import { Route as ApiStrategiesStrategyIdRulesRouteImport } from './routes/api/strategies/$strategyId/rules'
 import { Route as ApiNotebooksTradeTradeIdRouteImport } from './routes/api/notebooks/trade/$tradeId'
 import { Route as ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport } from './routes/api/ai-summary-subscriptions/$subscriptionId/analyses'
 
@@ -93,9 +102,20 @@ const DashboardTradesIndexRoute = DashboardTradesIndexRouteImport.update({
   path: '/trades/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardStrategiesIndexRoute =
+  DashboardStrategiesIndexRouteImport.update({
+    id: '/strategies/',
+    path: '/strategies/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const ApiTradesIndexRoute = ApiTradesIndexRouteImport.update({
   id: '/api/trades/',
   path: '/api/trades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStrategiesIndexRoute = ApiStrategiesIndexRouteImport.update({
+  id: '/api/strategies/',
+  path: '/api/strategies/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiNotebookTemplatesIndexRoute =
@@ -116,6 +136,12 @@ const DashboardTradesPositionIdRoute =
     path: '/trades/$positionId',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardStrategiesStrategyIdRoute =
+  DashboardStrategiesStrategyIdRouteImport.update({
+    id: '/strategies/$strategyId',
+    path: '/strategies/$strategyId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardAiSummarySubscriptionsSubscriptionIdRoute =
   DashboardAiSummarySubscriptionsSubscriptionIdRouteImport.update({
     id: '/$subscriptionId',
@@ -130,6 +156,22 @@ const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
 const ApiTradesPositionIdRoute = ApiTradesPositionIdRouteImport.update({
   id: '/api/trades/$positionId',
   path: '/api/trades/$positionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStrategiesTradeChecksRoute =
+  ApiStrategiesTradeChecksRouteImport.update({
+    id: '/api/strategies/trade-checks',
+    path: '/api/strategies/trade-checks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiStrategiesOptionsRoute = ApiStrategiesOptionsRouteImport.update({
+  id: '/api/strategies/options',
+  path: '/api/strategies/options',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStrategiesStrategyIdRoute = ApiStrategiesStrategyIdRouteImport.update({
+  id: '/api/strategies/$strategyId',
+  path: '/api/strategies/$strategyId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiJobsAiSummaryRoute = ApiJobsAiSummaryRouteImport.update({
@@ -164,6 +206,24 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStrategiesStrategyIdTradesRoute =
+  ApiStrategiesStrategyIdTradesRouteImport.update({
+    id: '/trades',
+    path: '/trades',
+    getParentRoute: () => ApiStrategiesStrategyIdRoute,
+  } as any)
+const ApiStrategiesStrategyIdStatsRoute =
+  ApiStrategiesStrategyIdStatsRouteImport.update({
+    id: '/stats',
+    path: '/stats',
+    getParentRoute: () => ApiStrategiesStrategyIdRoute,
+  } as any)
+const ApiStrategiesStrategyIdRulesRoute =
+  ApiStrategiesStrategyIdRulesRouteImport.update({
+    id: '/rules',
+    path: '/rules',
+    getParentRoute: () => ApiStrategiesStrategyIdRoute,
+  } as any)
 const ApiNotebooksTradeTradeIdRoute =
   ApiNotebooksTradeTradeIdRouteImport.update({
     id: '/api/notebooks/trade/$tradeId',
@@ -194,16 +254,25 @@ export interface FileRoutesByFullPath {
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
+  '/api/strategies/$strategyId': typeof ApiStrategiesStrategyIdRouteWithChildren
+  '/api/strategies/options': typeof ApiStrategiesOptionsRoute
+  '/api/strategies/trade-checks': typeof ApiStrategiesTradeChecksRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
+  '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
+  '/api/strategies/': typeof ApiStrategiesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
+  '/dashboard/strategies/': typeof DashboardStrategiesIndexRoute
   '/dashboard/trades/': typeof DashboardTradesIndexRoute
   '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
+  '/api/strategies/$strategyId/rules': typeof ApiStrategiesStrategyIdRulesRoute
+  '/api/strategies/$strategyId/stats': typeof ApiStrategiesStrategyIdStatsRoute
+  '/api/strategies/$strategyId/trades': typeof ApiStrategiesStrategyIdTradesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -221,16 +290,25 @@ export interface FileRoutesByTo {
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
+  '/api/strategies/$strategyId': typeof ApiStrategiesStrategyIdRouteWithChildren
+  '/api/strategies/options': typeof ApiStrategiesOptionsRoute
+  '/api/strategies/trade-checks': typeof ApiStrategiesTradeChecksRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
+  '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates': typeof ApiNotebookTemplatesIndexRoute
+  '/api/strategies': typeof ApiStrategiesIndexRoute
   '/api/trades': typeof ApiTradesIndexRoute
+  '/dashboard/strategies': typeof DashboardStrategiesIndexRoute
   '/dashboard/trades': typeof DashboardTradesIndexRoute
   '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
+  '/api/strategies/$strategyId/rules': typeof ApiStrategiesStrategyIdRulesRoute
+  '/api/strategies/$strategyId/stats': typeof ApiStrategiesStrategyIdStatsRoute
+  '/api/strategies/$strategyId/trades': typeof ApiStrategiesStrategyIdTradesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -250,16 +328,25 @@ export interface FileRoutesById {
   '/api/dashboard/open-positions': typeof ApiDashboardOpenPositionsRoute
   '/api/dashboard/recent-trades': typeof ApiDashboardRecentTradesRoute
   '/api/jobs/ai-summary': typeof ApiJobsAiSummaryRoute
+  '/api/strategies/$strategyId': typeof ApiStrategiesStrategyIdRouteWithChildren
+  '/api/strategies/options': typeof ApiStrategiesOptionsRoute
+  '/api/strategies/trade-checks': typeof ApiStrategiesTradeChecksRoute
   '/api/trades/$positionId': typeof ApiTradesPositionIdRoute
   '/api/trades/sync': typeof ApiTradesSyncRoute
   '/dashboard/ai-summary-subscriptions/$subscriptionId': typeof DashboardAiSummarySubscriptionsSubscriptionIdRoute
+  '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
+  '/api/strategies/': typeof ApiStrategiesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
+  '/dashboard/strategies/': typeof DashboardStrategiesIndexRoute
   '/dashboard/trades/': typeof DashboardTradesIndexRoute
   '/api/ai-summary-subscriptions/$subscriptionId/analyses': typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   '/api/notebooks/trade/$tradeId': typeof ApiNotebooksTradeTradeIdRoute
+  '/api/strategies/$strategyId/rules': typeof ApiStrategiesStrategyIdRulesRoute
+  '/api/strategies/$strategyId/stats': typeof ApiStrategiesStrategyIdStatsRoute
+  '/api/strategies/$strategyId/trades': typeof ApiStrategiesStrategyIdTradesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -280,16 +367,25 @@ export interface FileRouteTypes {
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
     | '/api/jobs/ai-summary'
+    | '/api/strategies/$strategyId'
+    | '/api/strategies/options'
+    | '/api/strategies/trade-checks'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/ai-summary-subscriptions/$subscriptionId'
+    | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions/'
     | '/api/notebook-templates/'
+    | '/api/strategies/'
     | '/api/trades/'
+    | '/dashboard/strategies/'
     | '/dashboard/trades/'
     | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
+    | '/api/strategies/$strategyId/rules'
+    | '/api/strategies/$strategyId/stats'
+    | '/api/strategies/$strategyId/trades'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -307,16 +403,25 @@ export interface FileRouteTypes {
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
     | '/api/jobs/ai-summary'
+    | '/api/strategies/$strategyId'
+    | '/api/strategies/options'
+    | '/api/strategies/trade-checks'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/ai-summary-subscriptions/$subscriptionId'
+    | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions'
     | '/api/notebook-templates'
+    | '/api/strategies'
     | '/api/trades'
+    | '/dashboard/strategies'
     | '/dashboard/trades'
     | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
+    | '/api/strategies/$strategyId/rules'
+    | '/api/strategies/$strategyId/stats'
+    | '/api/strategies/$strategyId/trades'
   id:
     | '__root__'
     | '/'
@@ -335,16 +440,25 @@ export interface FileRouteTypes {
     | '/api/dashboard/open-positions'
     | '/api/dashboard/recent-trades'
     | '/api/jobs/ai-summary'
+    | '/api/strategies/$strategyId'
+    | '/api/strategies/options'
+    | '/api/strategies/trade-checks'
     | '/api/trades/$positionId'
     | '/api/trades/sync'
     | '/dashboard/ai-summary-subscriptions/$subscriptionId'
+    | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions/'
     | '/api/notebook-templates/'
+    | '/api/strategies/'
     | '/api/trades/'
+    | '/dashboard/strategies/'
     | '/dashboard/trades/'
     | '/api/ai-summary-subscriptions/$subscriptionId/analyses'
     | '/api/notebooks/trade/$tradeId'
+    | '/api/strategies/$strategyId/rules'
+    | '/api/strategies/$strategyId/stats'
+    | '/api/strategies/$strategyId/trades'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -358,10 +472,14 @@ export interface RootRouteChildren {
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCronWeeklySummaryRoute: typeof ApiCronWeeklySummaryRoute
   ApiJobsAiSummaryRoute: typeof ApiJobsAiSummaryRoute
+  ApiStrategiesStrategyIdRoute: typeof ApiStrategiesStrategyIdRouteWithChildren
+  ApiStrategiesOptionsRoute: typeof ApiStrategiesOptionsRoute
+  ApiStrategiesTradeChecksRoute: typeof ApiStrategiesTradeChecksRoute
   ApiTradesPositionIdRoute: typeof ApiTradesPositionIdRoute
   ApiTradesSyncRoute: typeof ApiTradesSyncRoute
   ApiAiSummarySubscriptionsIndexRoute: typeof ApiAiSummarySubscriptionsIndexRoute
   ApiNotebookTemplatesIndexRoute: typeof ApiNotebookTemplatesIndexRoute
+  ApiStrategiesIndexRoute: typeof ApiStrategiesIndexRoute
   ApiTradesIndexRoute: typeof ApiTradesIndexRoute
   ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute: typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute
   ApiNotebooksTradeTradeIdRoute: typeof ApiNotebooksTradeTradeIdRoute
@@ -446,11 +564,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTradesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/strategies/': {
+      id: '/dashboard/strategies/'
+      path: '/strategies'
+      fullPath: '/dashboard/strategies/'
+      preLoaderRoute: typeof DashboardStrategiesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/api/trades/': {
       id: '/api/trades/'
       path: '/api/trades'
       fullPath: '/api/trades/'
       preLoaderRoute: typeof ApiTradesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/': {
+      id: '/api/strategies/'
+      path: '/api/strategies'
+      fullPath: '/api/strategies/'
+      preLoaderRoute: typeof ApiStrategiesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/notebook-templates/': {
@@ -474,6 +606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTradesPositionIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/strategies/$strategyId': {
+      id: '/dashboard/strategies/$strategyId'
+      path: '/strategies/$strategyId'
+      fullPath: '/dashboard/strategies/$strategyId'
+      preLoaderRoute: typeof DashboardStrategiesStrategyIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/ai-summary-subscriptions/$subscriptionId': {
       id: '/dashboard/ai-summary-subscriptions/$subscriptionId'
       path: '/$subscriptionId'
@@ -493,6 +632,27 @@ declare module '@tanstack/react-router' {
       path: '/api/trades/$positionId'
       fullPath: '/api/trades/$positionId'
       preLoaderRoute: typeof ApiTradesPositionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/trade-checks': {
+      id: '/api/strategies/trade-checks'
+      path: '/api/strategies/trade-checks'
+      fullPath: '/api/strategies/trade-checks'
+      preLoaderRoute: typeof ApiStrategiesTradeChecksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/options': {
+      id: '/api/strategies/options'
+      path: '/api/strategies/options'
+      fullPath: '/api/strategies/options'
+      preLoaderRoute: typeof ApiStrategiesOptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/$strategyId': {
+      id: '/api/strategies/$strategyId'
+      path: '/api/strategies/$strategyId'
+      fullPath: '/api/strategies/$strategyId'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/jobs/ai-summary': {
@@ -537,6 +697,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/strategies/$strategyId/trades': {
+      id: '/api/strategies/$strategyId/trades'
+      path: '/trades'
+      fullPath: '/api/strategies/$strategyId/trades'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdTradesRouteImport
+      parentRoute: typeof ApiStrategiesStrategyIdRoute
+    }
+    '/api/strategies/$strategyId/stats': {
+      id: '/api/strategies/$strategyId/stats'
+      path: '/stats'
+      fullPath: '/api/strategies/$strategyId/stats'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdStatsRouteImport
+      parentRoute: typeof ApiStrategiesStrategyIdRoute
+    }
+    '/api/strategies/$strategyId/rules': {
+      id: '/api/strategies/$strategyId/rules'
+      path: '/rules'
+      fullPath: '/api/strategies/$strategyId/rules'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdRulesRouteImport
+      parentRoute: typeof ApiStrategiesStrategyIdRoute
+    }
     '/api/notebooks/trade/$tradeId': {
       id: '/api/notebooks/trade/$tradeId'
       path: '/api/notebooks/trade/$tradeId'
@@ -573,7 +754,9 @@ interface DashboardRouteRouteChildren {
   DashboardAiSummarySubscriptionsRoute: typeof DashboardAiSummarySubscriptionsRouteWithChildren
   DashboardExchangeAccountsRoute: typeof DashboardExchangeAccountsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardStrategiesStrategyIdRoute: typeof DashboardStrategiesStrategyIdRoute
   DashboardTradesPositionIdRoute: typeof DashboardTradesPositionIdRoute
+  DashboardStrategiesIndexRoute: typeof DashboardStrategiesIndexRoute
   DashboardTradesIndexRoute: typeof DashboardTradesIndexRoute
 }
 
@@ -582,7 +765,9 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
     DashboardAiSummarySubscriptionsRouteWithChildren,
   DashboardExchangeAccountsRoute: DashboardExchangeAccountsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardStrategiesStrategyIdRoute: DashboardStrategiesStrategyIdRoute,
   DashboardTradesPositionIdRoute: DashboardTradesPositionIdRoute,
+  DashboardStrategiesIndexRoute: DashboardStrategiesIndexRoute,
   DashboardTradesIndexRoute: DashboardTradesIndexRoute,
 }
 
@@ -606,6 +791,24 @@ const ApiDashboardRouteWithChildren = ApiDashboardRoute._addFileChildren(
   ApiDashboardRouteChildren,
 )
 
+interface ApiStrategiesStrategyIdRouteChildren {
+  ApiStrategiesStrategyIdRulesRoute: typeof ApiStrategiesStrategyIdRulesRoute
+  ApiStrategiesStrategyIdStatsRoute: typeof ApiStrategiesStrategyIdStatsRoute
+  ApiStrategiesStrategyIdTradesRoute: typeof ApiStrategiesStrategyIdTradesRoute
+}
+
+const ApiStrategiesStrategyIdRouteChildren: ApiStrategiesStrategyIdRouteChildren =
+  {
+    ApiStrategiesStrategyIdRulesRoute: ApiStrategiesStrategyIdRulesRoute,
+    ApiStrategiesStrategyIdStatsRoute: ApiStrategiesStrategyIdStatsRoute,
+    ApiStrategiesStrategyIdTradesRoute: ApiStrategiesStrategyIdTradesRoute,
+  }
+
+const ApiStrategiesStrategyIdRouteWithChildren =
+  ApiStrategiesStrategyIdRoute._addFileChildren(
+    ApiStrategiesStrategyIdRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
@@ -617,10 +820,14 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCronWeeklySummaryRoute: ApiCronWeeklySummaryRoute,
   ApiJobsAiSummaryRoute: ApiJobsAiSummaryRoute,
+  ApiStrategiesStrategyIdRoute: ApiStrategiesStrategyIdRouteWithChildren,
+  ApiStrategiesOptionsRoute: ApiStrategiesOptionsRoute,
+  ApiStrategiesTradeChecksRoute: ApiStrategiesTradeChecksRoute,
   ApiTradesPositionIdRoute: ApiTradesPositionIdRoute,
   ApiTradesSyncRoute: ApiTradesSyncRoute,
   ApiAiSummarySubscriptionsIndexRoute: ApiAiSummarySubscriptionsIndexRoute,
   ApiNotebookTemplatesIndexRoute: ApiNotebookTemplatesIndexRoute,
+  ApiStrategiesIndexRoute: ApiStrategiesIndexRoute,
   ApiTradesIndexRoute: ApiTradesIndexRoute,
   ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute:
     ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute,

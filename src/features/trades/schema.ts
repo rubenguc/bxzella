@@ -2,6 +2,7 @@ import { boolean, doublePrecision, pgTable, text, timestamp, uniqueIndex, index 
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import { exchangeAccount } from '#/features/exchange-accounts/schema'
+import { strategy } from '#/features/strategies/schema'
 
 export const trade = pgTable(
   'trade',
@@ -26,6 +27,7 @@ export const trade = pgTable(
     totalFunding: text('total_funding'),
     type: text('type', { enum: ['P', 'S'] }).notNull(),
     coin: text('coin').notNull(),
+    strategyId: text('strategy_id').references(() => strategy.id, { onDelete: 'set null' }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
   },
@@ -34,6 +36,8 @@ export const trade = pgTable(
     index('trade_account_id_idx').on(table.accountId),
     index('trade_account_update_time_coin_idx').on(table.accountId, table.updateTime.desc(), table.coin),
     index('trade_account_symbol_coin_idx').on(table.accountId, table.symbol, table.coin),
+    index('trade_strategy_stats_idx').on(table.strategyId, table.accountId, table.coin, table.closeAllPositions),
+    index('trade_strategy_update_idx').on(table.strategyId, table.accountId, table.coin, table.updateTime.desc()),
   ],
 )
 
@@ -44,5 +48,9 @@ export const tradeRelations = relations(trade, ({ one }) => ({
   account: one(exchangeAccount, {
     fields: [trade.accountId],
     references: [exchangeAccount.id],
+  }),
+  strategy: one(strategy, {
+    fields: [trade.strategyId],
+    references: [strategy.id],
   }),
 }))
