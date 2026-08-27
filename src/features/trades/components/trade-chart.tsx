@@ -21,7 +21,7 @@ import { CHART_COLORS } from "#/lib/chart-colors";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
 import { getTime, parseISO } from "date-fns";
 
-const TIME_FRAMES = ["1h", "4h", "1d"] as const;
+const TIME_FRAMES = ["15m", "1h", "4h", "1d"] as const;
 
 interface TradeChartProps {
   symbol: string;
