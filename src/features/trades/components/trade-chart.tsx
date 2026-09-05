@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createChart,
@@ -20,6 +20,7 @@ import { formatAmount } from "#/lib/format-amount";
 import { CHART_COLORS } from "#/lib/chart-colors";
 import type { Coin, KLine } from "#/features/exchange-providers/types";
 import { getTime, parseISO } from "date-fns";
+import { useUserConfig } from "#/store/user-config";
 
 const TIME_FRAMES = ["15m", "1h", "4h", "1d"] as const;
 
@@ -58,7 +59,8 @@ export function TradeChart({
   netProfit,
   accountId,
 }: TradeChartProps) {
-  const [timeframe, setTimeframe] = useState<string>("1h");
+  const { tradeChartTimeframe: timeframe, setTradeChartTimeframe } =
+    useUserConfig();
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
   const seriesRef = useRef<ChartSeries | null>(null);
@@ -211,7 +213,7 @@ export function TradeChart({
       <div className="flex justify-end">
         <select
           value={timeframe}
-          onChange={(e) => setTimeframe(e.target.value)}
+          onChange={(e) => setTradeChartTimeframe(e.target.value)}
           className="w-fit max-w-48 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
         >
           {TIME_FRAMES.map((tf) => (
