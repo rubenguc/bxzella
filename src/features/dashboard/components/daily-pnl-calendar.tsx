@@ -242,7 +242,7 @@ export function DailyPnlCalendar() {
               <div className="grid grid-cols-7 gap-0.5 md:gap-1 content-start">
                 {daysOfWeek.map((day, i) => (
                   <div
-                    key={i}
+                    key={i.toString()}
                     className="h-8 border border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center"
                   >
                     <span className="font-medium text-xs sm:text-sm">
@@ -252,7 +252,7 @@ export function DailyPnlCalendar() {
                 ))}
                 {calendarData.map((item, index) => (
                   <DailyPnlCell
-                    key={index}
+                    key={index.toString()}
                     {...item}
                     onClick={() => setSelectedDay(item)}
                   />
@@ -262,7 +262,7 @@ export function DailyPnlCalendar() {
               <div className="grid gap-0.5 md:gap-1 content-start">
                 <div className="h-8" />
                 {weeklySummaries.map((summary, index) => (
-                  <DailyPnlWeekSummary key={index} {...summary} />
+                  <DailyPnlWeekSummary key={index.toString()} {...summary} />
                 ))}
               </div>
             </div>
@@ -278,7 +278,7 @@ export function DailyPnlCalendar() {
               ))}
               {calendarData.map((item, index) => (
                 <DailyPnlCell
-                  key={index}
+                  key={index.toString()}
                   {...item}
                   onClick={() => setSelectedDay(item)}
                 />

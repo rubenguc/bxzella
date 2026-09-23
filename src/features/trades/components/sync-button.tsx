@@ -6,11 +6,14 @@ import { Button } from "#/components/ui/button";
 import { useUserConfig } from "#/store/user-config";
 import { syncTrades } from "#/features/trades/service";
 import type { Coin } from "#/features/exchange-providers/types";
+import { format } from "date-fns";
 
 interface Props {
   accountId: string;
   coin: Coin;
 }
+
+const ACTUAL_MONTH_VALUE = format(new Date(), "yyyy-MM")
 
 export function SyncButton({ accountId, coin }: Props) {
   const { selectedAccount, updateLastSyncTime } = useUserConfig();
@@ -34,7 +37,7 @@ export function SyncButton({ accountId, coin }: Props) {
           queryKey: ["dashboard-stats"],
         });
         queryClient.invalidateQueries({
-          queryKey: ["daily-pnl"],
+          queryKey: ["daily-pnl",  selectedAccount?.id, coin, ACTUAL_MONTH_VALUE],
         });
       }
       return result;

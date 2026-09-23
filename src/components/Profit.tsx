@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { formatAmount } from '#/lib/format-amount'
 import { useUserConfig } from '@/store/user-config'
 
@@ -10,9 +11,14 @@ export function Profit({ netProfit }: ProfitProps) {
 
   const value = Number(netProfit)
 
+
+
   return (
     <span
-      className={`font-semibold ${value >= 0 ? 'text-green-500' : 'text-red-500'}`}
+      className={clsx('font-semibold', {
+        'text-green-500': value > 0,
+        'text-red-500': value < 0,
+      })}
     >
       {formatAmount(value, { precision: 4, suffix: coin })}
     </span>
