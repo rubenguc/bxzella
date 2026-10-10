@@ -9,50 +9,45 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SetupRouteImport } from './routes/setup'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboard/exchange-accounts'
-import { Route as DashboardAiSummarySubscriptionsRouteImport } from './routes/dashboard/ai-summary-subscriptions'
-import { Route as ApiKlineRouteImport } from './routes/api/kline'
-import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SetupRouteImport } from './routes/setup'
 import { Route as ApiAccountsRouteImport } from './routes/api/accounts'
-import { Route as DashboardTradesIndexRouteImport } from './routes/dashboard/trades/index'
-import { Route as DashboardStrategiesIndexRouteImport } from './routes/dashboard/strategies/index'
-import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
-import { Route as ApiStrategiesIndexRouteImport } from './routes/api/strategies/index'
-import { Route as ApiNotebookTemplatesIndexRouteImport } from './routes/api/notebook-templates/index'
+import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
+import { Route as ApiKlineRouteImport } from './routes/api/kline'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardAiSummarySubscriptionsRouteImport } from './routes/dashboard/ai-summary-subscriptions'
+import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboard/exchange-accounts'
 import { Route as ApiAiSummarySubscriptionsIndexRouteImport } from './routes/api/ai-summary-subscriptions/index'
-import { Route as DashboardTradesPositionIdRouteImport } from './routes/dashboard/trades/$positionId'
-import { Route as DashboardStrategiesStrategyIdRouteImport } from './routes/dashboard/strategies/$strategyId'
-import { Route as DashboardAiSummarySubscriptionsSubscriptionIdRouteImport } from './routes/dashboard/ai-summary-subscriptions/$subscriptionId'
-import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
-import { Route as ApiTradesPositionIdRouteImport } from './routes/api/trades/$positionId'
-import { Route as ApiStrategiesTradeChecksRouteImport } from './routes/api/strategies/trade-checks'
-import { Route as ApiStrategiesOptionsRouteImport } from './routes/api/strategies/options'
-import { Route as ApiStrategiesStrategyIdRouteImport } from './routes/api/strategies/$strategyId'
-import { Route as ApiJobsAiSummaryRouteImport } from './routes/api/jobs/ai-summary'
-import { Route as ApiDashboardRecentTradesRouteImport } from './routes/api/dashboard/recent-trades'
-import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
-import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
-import { Route as ApiCronWeeklySummaryRouteImport } from './routes/api/cron/weekly-summary'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as ApiStrategiesStrategyIdTradesRouteImport } from './routes/api/strategies/$strategyId/trades'
-import { Route as ApiStrategiesStrategyIdStatsRouteImport } from './routes/api/strategies/$strategyId/stats'
-import { Route as ApiStrategiesStrategyIdRulesRouteImport } from './routes/api/strategies/$strategyId/rules'
-import { Route as ApiNotebooksTradeTradeIdRouteImport } from './routes/api/notebooks/trade/$tradeId'
+import { Route as ApiCronWeeklySummaryRouteImport } from './routes/api/cron/weekly-summary'
+import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
+import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
+import { Route as ApiDashboardRecentTradesRouteImport } from './routes/api/dashboard/recent-trades'
+import { Route as ApiJobsAiSummaryRouteImport } from './routes/api/jobs/ai-summary'
+import { Route as ApiNotebookTemplatesIndexRouteImport } from './routes/api/notebook-templates/index'
+import { Route as ApiStrategiesIndexRouteImport } from './routes/api/strategies/index'
+import { Route as ApiStrategiesStrategyIdRouteImport } from './routes/api/strategies/$strategyId'
+import { Route as ApiStrategiesOptionsRouteImport } from './routes/api/strategies/options'
+import { Route as ApiStrategiesTradeChecksRouteImport } from './routes/api/strategies/trade-checks'
+import { Route as ApiTradesIndexRouteImport } from './routes/api/trades/index'
+import { Route as ApiTradesPositionIdRouteImport } from './routes/api/trades/$positionId'
+import { Route as ApiTradesSyncRouteImport } from './routes/api/trades/sync'
+import { Route as DashboardAiSummarySubscriptionsSubscriptionIdRouteImport } from './routes/dashboard/ai-summary-subscriptions/$subscriptionId'
+import { Route as DashboardStrategiesIndexRouteImport } from './routes/dashboard/strategies/index'
+import { Route as DashboardStrategiesStrategyIdRouteImport } from './routes/dashboard/strategies/$strategyId'
+import { Route as DashboardTradesIndexRouteImport } from './routes/dashboard/trades/index'
+import { Route as DashboardTradesPositionIdRouteImport } from './routes/dashboard/trades/$positionId'
 import { Route as ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport } from './routes/api/ai-summary-subscriptions/$subscriptionId/analyses'
+import { Route as ApiNotebooksTradeTradeIdRouteImport } from './routes/api/notebooks/trade/$tradeId'
+import { Route as ApiStrategiesStrategyIdRulesRouteImport } from './routes/api/strategies/$strategyId/rules'
+import { Route as ApiStrategiesStrategyIdStatsRouteImport } from './routes/api/strategies/$strategyId/stats'
+import { Route as ApiStrategiesStrategyIdTradesRouteImport } from './routes/api/strategies/$strategyId/trades'
 
-const SetupRoute = SetupRouteImport.update({
-  id: '/setup',
-  path: '/setup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -60,36 +55,14 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardExchangeAccountsRoute =
-  DashboardExchangeAccountsRouteImport.update({
-    id: '/exchange-accounts',
-    path: '/exchange-accounts',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const DashboardAiSummarySubscriptionsRoute =
-  DashboardAiSummarySubscriptionsRouteImport.update({
-    id: '/ai-summary-subscriptions',
-    path: '/ai-summary-subscriptions',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const ApiKlineRoute = ApiKlineRouteImport.update({
-  id: '/api/kline',
-  path: '/api/kline',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiDashboardRoute = ApiDashboardRouteImport.update({
-  id: '/api/dashboard',
-  path: '/api/dashboard',
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAccountsRoute = ApiAccountsRouteImport.update({
@@ -97,25 +70,69 @@ const ApiAccountsRoute = ApiAccountsRouteImport.update({
   path: '/api/accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardTradesIndexRoute = DashboardTradesIndexRouteImport.update({
-  id: '/trades/',
-  path: '/trades/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardStrategiesIndexRoute =
-  DashboardStrategiesIndexRouteImport.update({
-    id: '/strategies/',
-    path: '/strategies/',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const ApiTradesIndexRoute = ApiTradesIndexRouteImport.update({
-  id: '/api/trades/',
-  path: '/api/trades/',
+const ApiDashboardRoute = ApiDashboardRouteImport.update({
+  id: '/api/dashboard',
+  path: '/api/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiStrategiesIndexRoute = ApiStrategiesIndexRouteImport.update({
-  id: '/api/strategies/',
-  path: '/api/strategies/',
+const ApiKlineRoute = ApiKlineRouteImport.update({
+  id: '/api/kline',
+  path: '/api/kline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAiSummarySubscriptionsRoute =
+  DashboardAiSummarySubscriptionsRouteImport.update({
+    id: '/ai-summary-subscriptions',
+    path: '/ai-summary-subscriptions',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardExchangeAccountsRoute =
+  DashboardExchangeAccountsRouteImport.update({
+    id: '/exchange-accounts',
+    path: '/exchange-accounts',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const ApiAiSummarySubscriptionsIndexRoute =
+  ApiAiSummarySubscriptionsIndexRouteImport.update({
+    id: '/api/ai-summary-subscriptions/',
+    path: '/api/ai-summary-subscriptions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCronWeeklySummaryRoute = ApiCronWeeklySummaryRouteImport.update({
+  id: '/api/cron/weekly-summary',
+  path: '/api/cron/weekly-summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDashboardDailyPnlRoute = ApiDashboardDailyPnlRouteImport.update({
+  id: '/daily-pnl',
+  path: '/daily-pnl',
+  getParentRoute: () => ApiDashboardRoute,
+} as any)
+const ApiDashboardOpenPositionsRoute =
+  ApiDashboardOpenPositionsRouteImport.update({
+    id: '/open-positions',
+    path: '/open-positions',
+    getParentRoute: () => ApiDashboardRoute,
+  } as any)
+const ApiDashboardRecentTradesRoute =
+  ApiDashboardRecentTradesRouteImport.update({
+    id: '/recent-trades',
+    path: '/recent-trades',
+    getParentRoute: () => ApiDashboardRoute,
+  } as any)
+const ApiJobsAiSummaryRoute = ApiJobsAiSummaryRouteImport.update({
+  id: '/api/jobs/ai-summary',
+  path: '/api/jobs/ai-summary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiNotebookTemplatesIndexRoute =
@@ -124,38 +141,19 @@ const ApiNotebookTemplatesIndexRoute =
     path: '/api/notebook-templates/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiAiSummarySubscriptionsIndexRoute =
-  ApiAiSummarySubscriptionsIndexRouteImport.update({
-    id: '/api/ai-summary-subscriptions/',
-    path: '/api/ai-summary-subscriptions/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DashboardTradesPositionIdRoute =
-  DashboardTradesPositionIdRouteImport.update({
-    id: '/trades/$positionId',
-    path: '/trades/$positionId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const DashboardStrategiesStrategyIdRoute =
-  DashboardStrategiesStrategyIdRouteImport.update({
-    id: '/strategies/$strategyId',
-    path: '/strategies/$strategyId',
-    getParentRoute: () => DashboardRouteRoute,
-  } as any)
-const DashboardAiSummarySubscriptionsSubscriptionIdRoute =
-  DashboardAiSummarySubscriptionsSubscriptionIdRouteImport.update({
-    id: '/$subscriptionId',
-    path: '/$subscriptionId',
-    getParentRoute: () => DashboardAiSummarySubscriptionsRoute,
-  } as any)
-const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
-  id: '/api/trades/sync',
-  path: '/api/trades/sync',
+const ApiStrategiesIndexRoute = ApiStrategiesIndexRouteImport.update({
+  id: '/api/strategies/',
+  path: '/api/strategies/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiTradesPositionIdRoute = ApiTradesPositionIdRouteImport.update({
-  id: '/api/trades/$positionId',
-  path: '/api/trades/$positionId',
+const ApiStrategiesStrategyIdRoute = ApiStrategiesStrategyIdRouteImport.update({
+  id: '/api/strategies/$strategyId',
+  path: '/api/strategies/$strategyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStrategiesOptionsRoute = ApiStrategiesOptionsRouteImport.update({
+  id: '/api/strategies/options',
+  path: '/api/strategies/options',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStrategiesTradeChecksRoute =
@@ -164,52 +162,66 @@ const ApiStrategiesTradeChecksRoute =
     path: '/api/strategies/trade-checks',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiStrategiesOptionsRoute = ApiStrategiesOptionsRouteImport.update({
-  id: '/api/strategies/options',
-  path: '/api/strategies/options',
+const ApiTradesIndexRoute = ApiTradesIndexRouteImport.update({
+  id: '/api/trades/',
+  path: '/api/trades/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiStrategiesStrategyIdRoute = ApiStrategiesStrategyIdRouteImport.update({
-  id: '/api/strategies/$strategyId',
-  path: '/api/strategies/$strategyId',
+const ApiTradesPositionIdRoute = ApiTradesPositionIdRouteImport.update({
+  id: '/api/trades/$positionId',
+  path: '/api/trades/$positionId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiJobsAiSummaryRoute = ApiJobsAiSummaryRouteImport.update({
-  id: '/api/jobs/ai-summary',
-  path: '/api/jobs/ai-summary',
+const ApiTradesSyncRoute = ApiTradesSyncRouteImport.update({
+  id: '/api/trades/sync',
+  path: '/api/trades/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiDashboardRecentTradesRoute =
-  ApiDashboardRecentTradesRouteImport.update({
-    id: '/recent-trades',
-    path: '/recent-trades',
-    getParentRoute: () => ApiDashboardRoute,
+const DashboardAiSummarySubscriptionsSubscriptionIdRoute =
+  DashboardAiSummarySubscriptionsSubscriptionIdRouteImport.update({
+    id: '/$subscriptionId',
+    path: '/$subscriptionId',
+    getParentRoute: () => DashboardAiSummarySubscriptionsRoute,
   } as any)
-const ApiDashboardOpenPositionsRoute =
-  ApiDashboardOpenPositionsRouteImport.update({
-    id: '/open-positions',
-    path: '/open-positions',
-    getParentRoute: () => ApiDashboardRoute,
+const DashboardStrategiesIndexRoute =
+  DashboardStrategiesIndexRouteImport.update({
+    id: '/strategies/',
+    path: '/strategies/',
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
-const ApiDashboardDailyPnlRoute = ApiDashboardDailyPnlRouteImport.update({
-  id: '/daily-pnl',
-  path: '/daily-pnl',
-  getParentRoute: () => ApiDashboardRoute,
+const DashboardStrategiesStrategyIdRoute =
+  DashboardStrategiesStrategyIdRouteImport.update({
+    id: '/strategies/$strategyId',
+    path: '/strategies/$strategyId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardTradesIndexRoute = DashboardTradesIndexRouteImport.update({
+  id: '/trades/',
+  path: '/trades/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
-const ApiCronWeeklySummaryRoute = ApiCronWeeklySummaryRouteImport.update({
-  id: '/api/cron/weekly-summary',
-  path: '/api/cron/weekly-summary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiStrategiesStrategyIdTradesRoute =
-  ApiStrategiesStrategyIdTradesRouteImport.update({
-    id: '/trades',
-    path: '/trades',
+const DashboardTradesPositionIdRoute =
+  DashboardTradesPositionIdRouteImport.update({
+    id: '/trades/$positionId',
+    path: '/trades/$positionId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute =
+  ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport.update({
+    id: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
+    path: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiNotebooksTradeTradeIdRoute =
+  ApiNotebooksTradeTradeIdRouteImport.update({
+    id: '/api/notebooks/trade/$tradeId',
+    path: '/api/notebooks/trade/$tradeId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiStrategiesStrategyIdRulesRoute =
+  ApiStrategiesStrategyIdRulesRouteImport.update({
+    id: '/rules',
+    path: '/rules',
     getParentRoute: () => ApiStrategiesStrategyIdRoute,
   } as any)
 const ApiStrategiesStrategyIdStatsRoute =
@@ -218,23 +230,11 @@ const ApiStrategiesStrategyIdStatsRoute =
     path: '/stats',
     getParentRoute: () => ApiStrategiesStrategyIdRoute,
   } as any)
-const ApiStrategiesStrategyIdRulesRoute =
-  ApiStrategiesStrategyIdRulesRouteImport.update({
-    id: '/rules',
-    path: '/rules',
+const ApiStrategiesStrategyIdTradesRoute =
+  ApiStrategiesStrategyIdTradesRouteImport.update({
+    id: '/trades',
+    path: '/trades',
     getParentRoute: () => ApiStrategiesStrategyIdRoute,
-  } as any)
-const ApiNotebooksTradeTradeIdRoute =
-  ApiNotebooksTradeTradeIdRouteImport.update({
-    id: '/api/notebooks/trade/$tradeId',
-    path: '/api/notebooks/trade/$tradeId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiAiSummarySubscriptionsSubscriptionIdAnalysesRoute =
-  ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport.update({
-    id: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
-    path: '/api/ai-summary-subscriptions/$subscriptionId/analyses',
-    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -487,18 +487,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/setup': {
-      id: '/setup'
-      path: '/setup'
-      fullPath: '/setup'
-      preLoaderRoute: typeof SetupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -508,46 +501,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/exchange-accounts': {
-      id: '/dashboard/exchange-accounts'
-      path: '/exchange-accounts'
-      fullPath: '/dashboard/exchange-accounts'
-      preLoaderRoute: typeof DashboardExchangeAccountsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/ai-summary-subscriptions': {
-      id: '/dashboard/ai-summary-subscriptions'
-      path: '/ai-summary-subscriptions'
-      fullPath: '/dashboard/ai-summary-subscriptions'
-      preLoaderRoute: typeof DashboardAiSummarySubscriptionsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/api/kline': {
-      id: '/api/kline'
-      path: '/api/kline'
-      fullPath: '/api/kline'
-      preLoaderRoute: typeof ApiKlineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/dashboard': {
-      id: '/api/dashboard'
-      path: '/api/dashboard'
-      fullPath: '/api/dashboard'
-      preLoaderRoute: typeof ApiDashboardRouteImport
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/accounts': {
@@ -557,137 +522,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/trades/': {
-      id: '/dashboard/trades/'
-      path: '/trades'
-      fullPath: '/dashboard/trades/'
-      preLoaderRoute: typeof DashboardTradesIndexRouteImport
+    '/api/dashboard': {
+      id: '/api/dashboard'
+      path: '/api/dashboard'
+      fullPath: '/api/dashboard'
+      preLoaderRoute: typeof ApiDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/kline': {
+      id: '/api/kline'
+      path: '/api/kline'
+      fullPath: '/api/kline'
+      preLoaderRoute: typeof ApiKlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/strategies/': {
-      id: '/dashboard/strategies/'
-      path: '/strategies'
-      fullPath: '/dashboard/strategies/'
-      preLoaderRoute: typeof DashboardStrategiesIndexRouteImport
+    '/dashboard/ai-summary-subscriptions': {
+      id: '/dashboard/ai-summary-subscriptions'
+      path: '/ai-summary-subscriptions'
+      fullPath: '/dashboard/ai-summary-subscriptions'
+      preLoaderRoute: typeof DashboardAiSummarySubscriptionsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/api/trades/': {
-      id: '/api/trades/'
-      path: '/api/trades'
-      fullPath: '/api/trades/'
-      preLoaderRoute: typeof ApiTradesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/strategies/': {
-      id: '/api/strategies/'
-      path: '/api/strategies'
-      fullPath: '/api/strategies/'
-      preLoaderRoute: typeof ApiStrategiesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/notebook-templates/': {
-      id: '/api/notebook-templates/'
-      path: '/api/notebook-templates'
-      fullPath: '/api/notebook-templates/'
-      preLoaderRoute: typeof ApiNotebookTemplatesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/dashboard/exchange-accounts': {
+      id: '/dashboard/exchange-accounts'
+      path: '/exchange-accounts'
+      fullPath: '/dashboard/exchange-accounts'
+      preLoaderRoute: typeof DashboardExchangeAccountsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/api/ai-summary-subscriptions/': {
       id: '/api/ai-summary-subscriptions/'
       path: '/api/ai-summary-subscriptions'
       fullPath: '/api/ai-summary-subscriptions/'
       preLoaderRoute: typeof ApiAiSummarySubscriptionsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/trades/$positionId': {
-      id: '/dashboard/trades/$positionId'
-      path: '/trades/$positionId'
-      fullPath: '/dashboard/trades/$positionId'
-      preLoaderRoute: typeof DashboardTradesPositionIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/strategies/$strategyId': {
-      id: '/dashboard/strategies/$strategyId'
-      path: '/strategies/$strategyId'
-      fullPath: '/dashboard/strategies/$strategyId'
-      preLoaderRoute: typeof DashboardStrategiesStrategyIdRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
-    '/dashboard/ai-summary-subscriptions/$subscriptionId': {
-      id: '/dashboard/ai-summary-subscriptions/$subscriptionId'
-      path: '/$subscriptionId'
-      fullPath: '/dashboard/ai-summary-subscriptions/$subscriptionId'
-      preLoaderRoute: typeof DashboardAiSummarySubscriptionsSubscriptionIdRouteImport
-      parentRoute: typeof DashboardAiSummarySubscriptionsRoute
-    }
-    '/api/trades/sync': {
-      id: '/api/trades/sync'
-      path: '/api/trades/sync'
-      fullPath: '/api/trades/sync'
-      preLoaderRoute: typeof ApiTradesSyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/trades/$positionId': {
-      id: '/api/trades/$positionId'
-      path: '/api/trades/$positionId'
-      fullPath: '/api/trades/$positionId'
-      preLoaderRoute: typeof ApiTradesPositionIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/strategies/trade-checks': {
-      id: '/api/strategies/trade-checks'
-      path: '/api/strategies/trade-checks'
-      fullPath: '/api/strategies/trade-checks'
-      preLoaderRoute: typeof ApiStrategiesTradeChecksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/strategies/options': {
-      id: '/api/strategies/options'
-      path: '/api/strategies/options'
-      fullPath: '/api/strategies/options'
-      preLoaderRoute: typeof ApiStrategiesOptionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/strategies/$strategyId': {
-      id: '/api/strategies/$strategyId'
-      path: '/api/strategies/$strategyId'
-      fullPath: '/api/strategies/$strategyId'
-      preLoaderRoute: typeof ApiStrategiesStrategyIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/jobs/ai-summary': {
-      id: '/api/jobs/ai-summary'
-      path: '/api/jobs/ai-summary'
-      fullPath: '/api/jobs/ai-summary'
-      preLoaderRoute: typeof ApiJobsAiSummaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/dashboard/recent-trades': {
-      id: '/api/dashboard/recent-trades'
-      path: '/recent-trades'
-      fullPath: '/api/dashboard/recent-trades'
-      preLoaderRoute: typeof ApiDashboardRecentTradesRouteImport
-      parentRoute: typeof ApiDashboardRoute
-    }
-    '/api/dashboard/open-positions': {
-      id: '/api/dashboard/open-positions'
-      path: '/open-positions'
-      fullPath: '/api/dashboard/open-positions'
-      preLoaderRoute: typeof ApiDashboardOpenPositionsRouteImport
-      parentRoute: typeof ApiDashboardRoute
-    }
-    '/api/dashboard/daily-pnl': {
-      id: '/api/dashboard/daily-pnl'
-      path: '/daily-pnl'
-      fullPath: '/api/dashboard/daily-pnl'
-      preLoaderRoute: typeof ApiDashboardDailyPnlRouteImport
-      parentRoute: typeof ApiDashboardRoute
-    }
-    '/api/cron/weekly-summary': {
-      id: '/api/cron/weekly-summary'
-      path: '/api/cron/weekly-summary'
-      fullPath: '/api/cron/weekly-summary'
-      preLoaderRoute: typeof ApiCronWeeklySummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -697,11 +571,151 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/strategies/$strategyId/trades': {
-      id: '/api/strategies/$strategyId/trades'
+    '/api/cron/weekly-summary': {
+      id: '/api/cron/weekly-summary'
+      path: '/api/cron/weekly-summary'
+      fullPath: '/api/cron/weekly-summary'
+      preLoaderRoute: typeof ApiCronWeeklySummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/dashboard/daily-pnl': {
+      id: '/api/dashboard/daily-pnl'
+      path: '/daily-pnl'
+      fullPath: '/api/dashboard/daily-pnl'
+      preLoaderRoute: typeof ApiDashboardDailyPnlRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
+    '/api/dashboard/open-positions': {
+      id: '/api/dashboard/open-positions'
+      path: '/open-positions'
+      fullPath: '/api/dashboard/open-positions'
+      preLoaderRoute: typeof ApiDashboardOpenPositionsRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
+    '/api/dashboard/recent-trades': {
+      id: '/api/dashboard/recent-trades'
+      path: '/recent-trades'
+      fullPath: '/api/dashboard/recent-trades'
+      preLoaderRoute: typeof ApiDashboardRecentTradesRouteImport
+      parentRoute: typeof ApiDashboardRoute
+    }
+    '/api/jobs/ai-summary': {
+      id: '/api/jobs/ai-summary'
+      path: '/api/jobs/ai-summary'
+      fullPath: '/api/jobs/ai-summary'
+      preLoaderRoute: typeof ApiJobsAiSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notebook-templates/': {
+      id: '/api/notebook-templates/'
+      path: '/api/notebook-templates'
+      fullPath: '/api/notebook-templates/'
+      preLoaderRoute: typeof ApiNotebookTemplatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/': {
+      id: '/api/strategies/'
+      path: '/api/strategies'
+      fullPath: '/api/strategies/'
+      preLoaderRoute: typeof ApiStrategiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/$strategyId': {
+      id: '/api/strategies/$strategyId'
+      path: '/api/strategies/$strategyId'
+      fullPath: '/api/strategies/$strategyId'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/options': {
+      id: '/api/strategies/options'
+      path: '/api/strategies/options'
+      fullPath: '/api/strategies/options'
+      preLoaderRoute: typeof ApiStrategiesOptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/trade-checks': {
+      id: '/api/strategies/trade-checks'
+      path: '/api/strategies/trade-checks'
+      fullPath: '/api/strategies/trade-checks'
+      preLoaderRoute: typeof ApiStrategiesTradeChecksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/trades/': {
+      id: '/api/trades/'
+      path: '/api/trades'
+      fullPath: '/api/trades/'
+      preLoaderRoute: typeof ApiTradesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/trades/$positionId': {
+      id: '/api/trades/$positionId'
+      path: '/api/trades/$positionId'
+      fullPath: '/api/trades/$positionId'
+      preLoaderRoute: typeof ApiTradesPositionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/trades/sync': {
+      id: '/api/trades/sync'
+      path: '/api/trades/sync'
+      fullPath: '/api/trades/sync'
+      preLoaderRoute: typeof ApiTradesSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/ai-summary-subscriptions/$subscriptionId': {
+      id: '/dashboard/ai-summary-subscriptions/$subscriptionId'
+      path: '/$subscriptionId'
+      fullPath: '/dashboard/ai-summary-subscriptions/$subscriptionId'
+      preLoaderRoute: typeof DashboardAiSummarySubscriptionsSubscriptionIdRouteImport
+      parentRoute: typeof DashboardAiSummarySubscriptionsRoute
+    }
+    '/dashboard/strategies/': {
+      id: '/dashboard/strategies/'
+      path: '/strategies'
+      fullPath: '/dashboard/strategies/'
+      preLoaderRoute: typeof DashboardStrategiesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/strategies/$strategyId': {
+      id: '/dashboard/strategies/$strategyId'
+      path: '/strategies/$strategyId'
+      fullPath: '/dashboard/strategies/$strategyId'
+      preLoaderRoute: typeof DashboardStrategiesStrategyIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/trades/': {
+      id: '/dashboard/trades/'
       path: '/trades'
-      fullPath: '/api/strategies/$strategyId/trades'
-      preLoaderRoute: typeof ApiStrategiesStrategyIdTradesRouteImport
+      fullPath: '/dashboard/trades/'
+      preLoaderRoute: typeof DashboardTradesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/trades/$positionId': {
+      id: '/dashboard/trades/$positionId'
+      path: '/trades/$positionId'
+      fullPath: '/dashboard/trades/$positionId'
+      preLoaderRoute: typeof DashboardTradesPositionIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/api/ai-summary-subscriptions/$subscriptionId/analyses': {
+      id: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      path: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      fullPath: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
+      preLoaderRoute: typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/notebooks/trade/$tradeId': {
+      id: '/api/notebooks/trade/$tradeId'
+      path: '/api/notebooks/trade/$tradeId'
+      fullPath: '/api/notebooks/trade/$tradeId'
+      preLoaderRoute: typeof ApiNotebooksTradeTradeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/strategies/$strategyId/rules': {
+      id: '/api/strategies/$strategyId/rules'
+      path: '/rules'
+      fullPath: '/api/strategies/$strategyId/rules'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdRulesRouteImport
       parentRoute: typeof ApiStrategiesStrategyIdRoute
     }
     '/api/strategies/$strategyId/stats': {
@@ -711,26 +725,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiStrategiesStrategyIdStatsRouteImport
       parentRoute: typeof ApiStrategiesStrategyIdRoute
     }
-    '/api/strategies/$strategyId/rules': {
-      id: '/api/strategies/$strategyId/rules'
-      path: '/rules'
-      fullPath: '/api/strategies/$strategyId/rules'
-      preLoaderRoute: typeof ApiStrategiesStrategyIdRulesRouteImport
+    '/api/strategies/$strategyId/trades': {
+      id: '/api/strategies/$strategyId/trades'
+      path: '/trades'
+      fullPath: '/api/strategies/$strategyId/trades'
+      preLoaderRoute: typeof ApiStrategiesStrategyIdTradesRouteImport
       parentRoute: typeof ApiStrategiesStrategyIdRoute
-    }
-    '/api/notebooks/trade/$tradeId': {
-      id: '/api/notebooks/trade/$tradeId'
-      path: '/api/notebooks/trade/$tradeId'
-      fullPath: '/api/notebooks/trade/$tradeId'
-      preLoaderRoute: typeof ApiNotebooksTradeTradeIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/ai-summary-subscriptions/$subscriptionId/analyses': {
-      id: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
-      path: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
-      fullPath: '/api/ai-summary-subscriptions/$subscriptionId/analyses'
-      preLoaderRoute: typeof ApiAiSummarySubscriptionsSubscriptionIdAnalysesRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
