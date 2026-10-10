@@ -49,7 +49,7 @@ export function CumulativePnlChart({ dayProfits }: CumulativePnlChartProps) {
         horzLine: { color: "transparent" },
       },
       timeScale: {
-        timeVisible: true,
+        timeVisible: false,
         borderColor,
       },
       rightPriceScale: {
