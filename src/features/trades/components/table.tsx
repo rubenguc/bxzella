@@ -173,7 +173,7 @@ export function TradesTable({ accountId, coin, accountName }: Props) {
     );
   }
 
-  if (items.length === 0) {
+  if (items.length === 0 && searchInput.trim() === "") {
     return (
       <div className="text-sm text-muted-foreground">
         {m["trade_info.no_trades"]()}
