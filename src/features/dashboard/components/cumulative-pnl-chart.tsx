@@ -103,7 +103,7 @@ export function CumulativePnlChart({ dayProfits }: CumulativePnlChartProps) {
           position: "inBar",
           shape: "circle",
           color: isPositive ? CHART_COLORS.green : CHART_COLORS.red,
-          size: 2,
+          size: 0.6,
         },
       ]);
     }
