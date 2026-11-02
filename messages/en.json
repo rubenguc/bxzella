@@ -5,7 +5,20 @@
     "trades": "Trades",
     "strategies": "Strategies",
     "accounts": "Accounts",
-    "ai_summary": "AI Summaries"
+    "ai_summary": "AI Summaries",
+    "coin_performances": "Coin performances"
+  },
+  "coin_performances": {
+    "symbol": "Coin",
+    "general": "General",
+    "long": "Long",
+    "short": "Short",
+    "total_trades": "Total trades",
+    "win_rate": "Win rate",
+    "sort_by": "Sort by",
+    "min_trades": "Min trades",
+    "min_trades_all": "All",
+    "no_data": "No trades found for this account"
   },
   "strategies": {
     "create": "Create strategy",

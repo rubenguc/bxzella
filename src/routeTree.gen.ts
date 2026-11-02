@@ -18,9 +18,11 @@ import { Route as ApiDashboardRouteImport } from './routes/api/dashboard'
 import { Route as ApiKlineRouteImport } from './routes/api/kline'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAiSummarySubscriptionsRouteImport } from './routes/dashboard/ai-summary-subscriptions'
+import { Route as DashboardCoinPerformancesRouteImport } from './routes/dashboard/coin-performances'
 import { Route as DashboardExchangeAccountsRouteImport } from './routes/dashboard/exchange-accounts'
 import { Route as ApiAiSummarySubscriptionsIndexRouteImport } from './routes/api/ai-summary-subscriptions/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiCoinPerformancesIndexRouteImport } from './routes/api/coin-performances/index'
 import { Route as ApiCronWeeklySummaryRouteImport } from './routes/api/cron/weekly-summary'
 import { Route as ApiDashboardDailyPnlRouteImport } from './routes/api/dashboard/daily-pnl'
 import { Route as ApiDashboardOpenPositionsRouteImport } from './routes/api/dashboard/open-positions'
@@ -91,6 +93,12 @@ const DashboardAiSummarySubscriptionsRoute =
     path: '/ai-summary-subscriptions',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardCoinPerformancesRoute =
+  DashboardCoinPerformancesRouteImport.update({
+    id: '/coin-performances',
+    path: '/coin-performances',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardExchangeAccountsRoute =
   DashboardExchangeAccountsRouteImport.update({
     id: '/exchange-accounts',
@@ -108,6 +116,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCoinPerformancesIndexRoute =
+  ApiCoinPerformancesIndexRouteImport.update({
+    id: '/api/coin-performances/',
+    path: '/api/coin-performances/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiCronWeeklySummaryRoute = ApiCronWeeklySummaryRouteImport.update({
   id: '/api/cron/weekly-summary',
   path: '/api/cron/weekly-summary',
@@ -246,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
   '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
+  '/dashboard/coin-performances': typeof DashboardCoinPerformancesRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -263,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
+  '/api/coin-performances/': typeof ApiCoinPerformancesIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
   '/api/strategies/': typeof ApiStrategiesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
@@ -282,6 +298,7 @@ export interface FileRoutesByTo {
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
   '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
+  '/dashboard/coin-performances': typeof DashboardCoinPerformancesRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -299,6 +316,7 @@ export interface FileRoutesByTo {
   '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions': typeof ApiAiSummarySubscriptionsIndexRoute
+  '/api/coin-performances': typeof ApiCoinPerformancesIndexRoute
   '/api/notebook-templates': typeof ApiNotebookTemplatesIndexRoute
   '/api/strategies': typeof ApiStrategiesIndexRoute
   '/api/trades': typeof ApiTradesIndexRoute
@@ -320,6 +338,7 @@ export interface FileRoutesById {
   '/api/dashboard': typeof ApiDashboardRouteWithChildren
   '/api/kline': typeof ApiKlineRoute
   '/dashboard/ai-summary-subscriptions': typeof DashboardAiSummarySubscriptionsRouteWithChildren
+  '/dashboard/coin-performances': typeof DashboardCoinPerformancesRoute
   '/dashboard/exchange-accounts': typeof DashboardExchangeAccountsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -337,6 +356,7 @@ export interface FileRoutesById {
   '/dashboard/strategies/$strategyId': typeof DashboardStrategiesStrategyIdRoute
   '/dashboard/trades/$positionId': typeof DashboardTradesPositionIdRoute
   '/api/ai-summary-subscriptions/': typeof ApiAiSummarySubscriptionsIndexRoute
+  '/api/coin-performances/': typeof ApiCoinPerformancesIndexRoute
   '/api/notebook-templates/': typeof ApiNotebookTemplatesIndexRoute
   '/api/strategies/': typeof ApiStrategiesIndexRoute
   '/api/trades/': typeof ApiTradesIndexRoute
@@ -359,6 +379,7 @@ export interface FileRouteTypes {
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
+    | '/dashboard/coin-performances'
     | '/dashboard/exchange-accounts'
     | '/dashboard/'
     | '/api/auth/$'
@@ -376,6 +397,7 @@ export interface FileRouteTypes {
     | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions/'
+    | '/api/coin-performances/'
     | '/api/notebook-templates/'
     | '/api/strategies/'
     | '/api/trades/'
@@ -395,6 +417,7 @@ export interface FileRouteTypes {
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
+    | '/dashboard/coin-performances'
     | '/dashboard/exchange-accounts'
     | '/dashboard'
     | '/api/auth/$'
@@ -412,6 +435,7 @@ export interface FileRouteTypes {
     | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions'
+    | '/api/coin-performances'
     | '/api/notebook-templates'
     | '/api/strategies'
     | '/api/trades'
@@ -432,6 +456,7 @@ export interface FileRouteTypes {
     | '/api/dashboard'
     | '/api/kline'
     | '/dashboard/ai-summary-subscriptions'
+    | '/dashboard/coin-performances'
     | '/dashboard/exchange-accounts'
     | '/dashboard/'
     | '/api/auth/$'
@@ -449,6 +474,7 @@ export interface FileRouteTypes {
     | '/dashboard/strategies/$strategyId'
     | '/dashboard/trades/$positionId'
     | '/api/ai-summary-subscriptions/'
+    | '/api/coin-performances/'
     | '/api/notebook-templates/'
     | '/api/strategies/'
     | '/api/trades/'
@@ -478,6 +504,7 @@ export interface RootRouteChildren {
   ApiTradesPositionIdRoute: typeof ApiTradesPositionIdRoute
   ApiTradesSyncRoute: typeof ApiTradesSyncRoute
   ApiAiSummarySubscriptionsIndexRoute: typeof ApiAiSummarySubscriptionsIndexRoute
+  ApiCoinPerformancesIndexRoute: typeof ApiCoinPerformancesIndexRoute
   ApiNotebookTemplatesIndexRoute: typeof ApiNotebookTemplatesIndexRoute
   ApiStrategiesIndexRoute: typeof ApiStrategiesIndexRoute
   ApiTradesIndexRoute: typeof ApiTradesIndexRoute
@@ -550,6 +577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAiSummarySubscriptionsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/coin-performances': {
+      id: '/dashboard/coin-performances'
+      path: '/coin-performances'
+      fullPath: '/dashboard/coin-performances'
+      preLoaderRoute: typeof DashboardCoinPerformancesRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/exchange-accounts': {
       id: '/dashboard/exchange-accounts'
       path: '/exchange-accounts'
@@ -569,6 +603,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/coin-performances/': {
+      id: '/api/coin-performances/'
+      path: '/api/coin-performances'
+      fullPath: '/api/coin-performances/'
+      preLoaderRoute: typeof ApiCoinPerformancesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/cron/weekly-summary': {
@@ -752,6 +793,7 @@ const DashboardAiSummarySubscriptionsRouteWithChildren =
 
 interface DashboardRouteRouteChildren {
   DashboardAiSummarySubscriptionsRoute: typeof DashboardAiSummarySubscriptionsRouteWithChildren
+  DashboardCoinPerformancesRoute: typeof DashboardCoinPerformancesRoute
   DashboardExchangeAccountsRoute: typeof DashboardExchangeAccountsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardStrategiesStrategyIdRoute: typeof DashboardStrategiesStrategyIdRoute
@@ -763,6 +805,7 @@ interface DashboardRouteRouteChildren {
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAiSummarySubscriptionsRoute:
     DashboardAiSummarySubscriptionsRouteWithChildren,
+  DashboardCoinPerformancesRoute: DashboardCoinPerformancesRoute,
   DashboardExchangeAccountsRoute: DashboardExchangeAccountsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardStrategiesStrategyIdRoute: DashboardStrategiesStrategyIdRoute,
@@ -826,6 +869,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiTradesPositionIdRoute: ApiTradesPositionIdRoute,
   ApiTradesSyncRoute: ApiTradesSyncRoute,
   ApiAiSummarySubscriptionsIndexRoute: ApiAiSummarySubscriptionsIndexRoute,
+  ApiCoinPerformancesIndexRoute: ApiCoinPerformancesIndexRoute,
   ApiNotebookTemplatesIndexRoute: ApiNotebookTemplatesIndexRoute,
   ApiStrategiesIndexRoute: ApiStrategiesIndexRoute,
   ApiTradesIndexRoute: ApiTradesIndexRoute,

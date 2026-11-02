@@ -14,6 +14,7 @@ const PAGE_TITLES: Record<string, () => string> = {
   'exchange-accounts': m['sidebar.accounts'],
   trades: m['sidebar.trades'],
   strategies: m['sidebar.strategies'],
+  'coin-performances': m['sidebar.coin_performances'],
   'ai-summary-subscriptions': m['sidebar.ai_summary'],
 }
 
