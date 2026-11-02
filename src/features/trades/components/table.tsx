@@ -37,12 +37,21 @@ interface Props {
   accountId: string;
   coin: Coin;
   accountName: string;
+  /** Pre-fills the symbol search field, e.g. arriving from coin performances. */
+  initialSymbol?: string;
 }
 
-export function TradesTable({ accountId, coin, accountName }: Props) {
-  const [searchInput, setSearchInput] = useState("");
-  const [searchSymbol, setSearchSymbol] = useState("");
+export function TradesTable({ accountId, coin, accountName, initialSymbol }: Props) {
+  const [searchInput, setSearchInput] = useState(initialSymbol ?? "");
+  const [searchSymbol, setSearchSymbol] = useState(initialSymbol ?? "");
   const [exportOpen, setExportOpen] = useState(false);
+
+  // Keep the field in sync when the route search param changes (link, back/forward)
+  // without remounting the table.
+  useEffect(() => {
+    if (!initialSymbol) return;
+    setSearchInput(initialSymbol);
+  }, [initialSymbol]);
 
   // Debounce: wait 300ms after the user stops typing
   useEffect(() => {

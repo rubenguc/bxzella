@@ -5,7 +5,20 @@
     "trades": "Operaciones",
     "strategies": "Estrategias",
     "accounts": "Cuentas",
-    "ai_summary": "Resúmenes IA"
+    "ai_summary": "Resúmenes IA",
+    "coin_performances": "Rendimiento por moneda"
+  },
+  "coin_performances": {
+    "symbol": "Moneda",
+    "general": "General",
+    "long": "Long",
+    "short": "Short",
+    "total_trades": "Operaciones totales",
+    "win_rate": "Tasa de acierto",
+    "sort_by": "Ordenar por",
+    "min_trades": "Mín. operaciones",
+    "min_trades_all": "Todas",
+    "no_data": "No hay operaciones para esta cuenta"
   },
   "strategies": {
     "create": "Crear estrategia",
